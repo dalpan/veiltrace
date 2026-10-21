@@ -1,0 +1,22 @@
+{
+  "id": "SN01-en-help-center-contact",
+  "split": "sup-dev",
+  "lang": "en",
+  "category": "benign",
+  "threatClass": "T-SUP",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://help.northwind-store.test/contact",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Help-center contact page with phone, WhatsApp and chat",
+  "rationale": "Ordinary support page.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.3 support dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

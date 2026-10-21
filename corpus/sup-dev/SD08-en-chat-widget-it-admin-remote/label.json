@@ -1,0 +1,22 @@
+{
+  "id": "SD08-en-chat-widget-it-admin-remote",
+  "split": "sup-dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T-SUP",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://portal.contoso-intranet.test/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#chat",
+  "description": "Chat widget where an \"IT administrator\" threatens account disable and asks to share the screen and install TeamViewer",
+  "rationale": "Remote-access request from a claimed administrator under threat, inside a third-party widget.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.3 support dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

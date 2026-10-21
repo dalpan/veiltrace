@@ -1,0 +1,22 @@
+{
+  "id": "SA02-en-alert-unusual-wording",
+  "split": "sup-dev",
+  "lang": "en",
+  "category": "adversarial",
+  "threatClass": "T-SUP",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://system-notice.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#n",
+  "description": "Tech-support alarm worded outside the lexicon (\"Windows has detected a Zeus trojan\")",
+  "rationale": "Same scam as SD01/SD09 with alarm wording the lexicon does not cover; tests the limit of phrase-based alarms.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.3 support dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

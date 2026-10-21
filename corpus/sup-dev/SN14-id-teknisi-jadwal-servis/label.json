@@ -1,0 +1,22 @@
+{
+  "id": "SN14-id-teknisi-jadwal-servis",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "benign",
+  "threatClass": "T-SUP",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://layanan.internetku.test/jadwal",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Jadwal kunjungan teknisi ISP",
+  "rationale": "Pemberitahuan layanan tanpa arahan ke kontak luar.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.3 support dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

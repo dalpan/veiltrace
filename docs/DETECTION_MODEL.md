@@ -308,3 +308,44 @@ Modifiers as in §12.5 (`C.QUOTED`, `C.REPORTED`, `C.CODE_EXAMPLE` −2; `C.EDUC
 Corpus: 10 positive, 1 adversarial, 16 benign hard negatives (checkout, virtual account, invoice, utility bill, donations, news reports, awareness pages, return policy, top-up promo, gift-card shop, own-account transfer, marketplace safety tips, genuine prize notice); 13 EN, 14 ID (`corpus/pay-dev/README.md`). Same author as the rules; labels written before the first run; no rule was changed after it.
 
 TP 10 · FP 0 · TN 16 · FN 1 (`eval/results/pay-dev.md`). Miss: **PA01**, very informal Indonesian abbreviations ("tf dl 150rb ... buat bka akunnya"). Localization 10/10, 0 requests during scanning, 0 privacy-sentinel leaks (card-number-like sentinel typed into every field). ClickFix verdict `none` and credential verdict none/observed on all 27 pages. **Optimistic by construction; not real-world effectiveness.**
+
+## 14. EXPERIMENTAL fake-support and authority-impersonation detector (M5.3, `sup-0.1.0-exp`)
+
+**Status: experimental, development data only.** `analyzeSupport(snapshot)` (`src/core/support/`) returns its own `SupportResult` and changes none of `analyze()`, `analyzeCredentials()` or `analyzePayments()` (tested on every unit fixture and every sup-dev page). It has **not** passed a frozen evaluation (D-074).
+
+### 14.1 Inputs and privacy
+Block text only; never url, title, form fields or values. Phone numbers (9–15 digits) are matched but **never reported** (`text: ""`); other evidence has 5+ digit runs and `@handles` masked, and `parseScanReport` rejects any support evidence containing a 5+ digit run (D-075).
+
+### 14.2 Signals (EN + ID, including informal Indonesian; `src/core/support/lexicon.ts`)
+| Family | Ids | Notes |
+|---|---|---|
+| Direction | `SC.CONTACT`, `SA.REMOTE`, `SA.INSTALL` | call/contact/chat, hubungi/telp/japri/wa ke; AnyDesk/TeamViewer, share your screen, akses jarak jauh; install/dl/unduh + app/apk/aplikasi |
+| Channel | `SX.PHONE`, `SX.MOBILE`, `SX.MESSENGER` | Mobile = Indonesian 08…/+62 8… (a personal line). WhatsApp, Telegram, DM, japri |
+| Claim | `SI.SUPPORT`, `SI.BANK`, `SI.ADMIN`, `SI.SECURITY` | Claimed identity: **never verified and never escalates alone** |
+| Pressure | `SW.ALERT`, `ST.THREAT`, `SU.URGENCY` | Alert = a virus/hack/lock asserted about the reader's device ("your computer is infected", "hp kamu kena virus", "do not restart your computer") |
+| Context | `SH.UNASSERTED`, `C.NEGATION`, `C.REPORTED`, `C.EDUCATIONAL` | `SH.UNASSERTED` makes an alert conditional ("if/jika …") or attributed ("a pop-up that says …"). Negation distributes over "or/atau" lists |
+
+A **direction** is a block with a non-negated remote-access or install request, or a contact verb with a phone number or messenger in the same or an adjacent block, or a messenger name followed by a number ("WA 0812…").
+
+### 14.3 Decision table (all applicable rules are evaluated; the strongest wins)
+| Rule | Name | Condition | Classification |
+|---|---|---|---|
+| SR1 | FAKE_SYSTEM_ALERT_SUPPORT | An asserted device alert with any direction | manipulative |
+| SR2 | IMPERSONATED_REMOTE_ACCESS_OR_INSTALL | Remote/install + claim + (threat, urgency, untrusted placement or personal channel) | manipulative with threat, or remote with urgency or user content; else suspicious |
+| SR3 | SUPPORT_REDIRECT_UNDER_THREAT | Contact + claim + threat + (personal channel or urgency) | manipulative with personal channel and urgency; else suspicious |
+| SR4 | CLAIMED_SUPPORT_IN_USER_CONTENT | Contact from user content whose official claim is itself in user content | manipulative with threat or urgency; else suspicious |
+| SR5 | OBSERVED_SUPPORT_DIRECTION | Any other direction (help centers, contact pages, IT procedures) | observed (informational) |
+
+Rationale: support contacts, remote-support tools, account notices and claims of being "customer service" all exist on legitimate sites, so none of them alerts alone. **Observable indicators** are reported separately from **claims**: `page-rendered-system-alert` (browsers and operating systems do not alert inside web pages), `alert-in-overlay`, `remote-access-request`, `software-install-request`, `personal-channel-contact` (an official-sounding claim routed to a mobile number or messenger) and `claim-in-user-content`. None of them is a statement that an organization is fake; the limitation `claimed-identity-unverifiable` says so in the UI.
+
+Modifiers as in §12.5 (cap 2); no override. Confidence: high for manipulative/observed, medium for suspicious, minus one per modifier. Action risk is **high** for remote access and installs, **medium** for contact directions.
+
+### 14.4 Development results (sup-dev, 27 synthetic scenarios; NOT held-out)
+Corpus: 10 positive, 2 adversarial, 15 hard negatives; 14 EN, 13 ID including informal Indonesian (`corpus/sup-dev/README.md`). Same author as the rules; labels written before the first run.
+
+| Version | Change (dev evidence) | TP | FP | TN | FN |
+|---|---|---|---|---|---|
+| v0 (first run, 26 scenarios) | Initial rules | 11 | 1 | 14 | 0 |
+| **v1 (`sup-0.1.0-exp`)** | Negation distributes over "or/atau"; attributed alerts ("a pop-up that says …") are unasserted (fixes FP SN08, an awareness list). SA02 added afterwards. Rules evaluated together, strongest wins (found by an E2E markup test; no dev result changed) | **11** | **0** | **15** | **1** |
+
+Miss: **SA02**, a tech-support alarm worded outside the lexicon ("Windows has detected a Zeus trojan"). Precision 11/11 (CI 74.1–100), recall 11/12 (CI 64.6–98.5), hard-negative FPR 0/15 (CI 0–20.4), localization 11/11, exact class 25/27, 0 requests, 0 phone numbers or digit runs in results. ClickFix verdict `none`, credential and payment none/observed on all 27 pages. **Optimistic by construction; not real-world effectiveness.**

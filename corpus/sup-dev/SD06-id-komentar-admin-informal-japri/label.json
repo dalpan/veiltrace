@@ -1,0 +1,22 @@
+{
+  "id": "SD06-id-komentar-admin-informal-japri",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-SUP",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://forum.gamenusa.test/t/akun-error",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#k2",
+  "description": "Komentar slang dari akun mengaku admin: akun bakal disuspend, japri di WA, buruan",
+  "rationale": "Klaim admin di konten pengguna + ancaman + desakan + nomor ponsel pribadi (bahasa informal).",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.3 support dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

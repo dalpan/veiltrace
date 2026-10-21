@@ -1,0 +1,22 @@
+{
+  "id": "SD10-id-tim-it-anydesk-informal",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-SUP",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://komunitas.kantorku.test/t/vpn",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#p3",
+  "description": "Komentar informal mengaku tim IT: data bakal dihapus, instal AnyDesk skrg",
+  "rationale": "Permintaan akses jarak jauh dari klaim tim IT disertai ancaman, di konten pengguna.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.3 support dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

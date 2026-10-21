@@ -8,11 +8,15 @@ import type {
   PayDestination, PaymentResult, PayLimitation, PayModifierId, PayObservation, PayPressure, PayPromise, PayRuleId, PaySignalId, PayTrustContext,
 } from '../../core/payment/types.js';
 import type {
+  ImpersonationIndicator, SupportAction, SupportChannel, SupportClaim, SupportLimitation, SupportModifierId, SupportObservation, SupportPressure,
+  SupportResult, SupportRuleId, SupportSignalId, SupportTrustContext,
+} from '../../core/support/types.js';
+import type {
   ActionRisk, AnalysisResult, Classification, ContextOverride, FieldKind, FormDestination, Level, ModifierId, Observation, OverrideId, PageSnapshot, RuleId, SignalId, Verdict,
 } from '../../core/types.js';
 
-/** v2 (M5.1) adds the experimental `credential` section; v3 (M5.2) the experimental `payment` section. */
-export const REPORT_VERSION = 3;
+/** v2 (M5.1) adds the experimental `credential` section; v3 (M5.2) `payment`; v4 (M5.3) `support`. */
+export const REPORT_VERSION = 4;
 export const MAX_FINDINGS = 50;
 export const MAX_EVIDENCE_PER_FINDING = 12;
 export const MAX_SNIPPET_CHARS = 300;
@@ -115,6 +119,41 @@ export interface PaymentSection {
   findingsTotal: number;
 }
 
+/** Evidence of a support finding. Phone numbers carry no text; handles and digit runs are masked. */
+export interface SupportEvidenceItem {
+  signal: SupportSignalId;
+  text: string;
+  locator: string | null;
+}
+
+export interface SupportFindingSummary {
+  id: string;
+  ruleId: SupportRuleId;
+  classification: Classification;
+  ruleClassification: Classification;
+  confidence: Level;
+  actionRisk: ActionRisk;
+  requestedActions: SupportAction[];
+  channels: SupportChannel[];
+  claims: SupportClaim[];
+  indicators: ImpersonationIndicator[];
+  pressures: SupportPressure[];
+  trustContext: SupportTrustContext[];
+  modifiers: SupportModifierId[];
+  limitations: SupportLimitation[];
+  evidence: SupportEvidenceItem[];
+  evidenceTotal: number;
+}
+
+/** EXPERIMENTAL fake-support and authority-impersonation detector output (M5.3). */
+export interface SupportSection {
+  detectorVersion: string;
+  experimental: true;
+  verdict: Verdict;
+  findings: SupportFindingSummary[];
+  findingsTotal: number;
+}
+
 export interface ScanReport {
   v: typeof REPORT_VERSION;
   engineVersion: string;
@@ -126,7 +165,8 @@ export interface ScanReport {
   counts: { blocks: number; hiddenCopyCandidates: number; copyTriggers: number; observations: number; findingsTotal: number };
   credential: CredentialSection;
   payment: PaymentSection;
-  timing: { extractMs: number; analyzeMs: number; credentialMs: number; paymentMs: number };
+  support: SupportSection;
+  timing: { extractMs: number; analyzeMs: number; credentialMs: number; paymentMs: number; supportMs: number };
 }
 
 const clip = (s: string): string => (s.length > MAX_SNIPPET_CHARS ? `${s.slice(0, MAX_SNIPPET_CHARS - 1)}…` : s);
@@ -201,13 +241,46 @@ function paymentSection(snapshot: PageSnapshot, pay: PaymentResult): PaymentSect
   return { detectorVersion: pay.detectorVersion, experimental: true, verdict: pay.verdict, findings, findingsTotal: pay.findings.length };
 }
 
+function supportSection(snapshot: PageSnapshot, sup: SupportResult): SupportSection {
+  const obsById = new Map(sup.observations.map((o) => [o.id, o]));
+  const item = (o: SupportObservation): SupportEvidenceItem => ({
+    signal: o.signal, text: clip(o.text), locator: snapshot.blocks.find((b) => b.id === o.blockId)?.locator ?? null,
+  });
+  const findings = [...sup.findings]
+    .sort((a, b) => RANK[b.classification] - RANK[a.classification])
+    .slice(0, MAX_FINDINGS)
+    .map((f): SupportFindingSummary => ({
+      id: f.id,
+      ruleId: f.ruleId,
+      classification: f.classification,
+      ruleClassification: f.ruleClassification,
+      confidence: f.confidence,
+      actionRisk: f.actionRisk,
+      requestedActions: [...f.requestedActions],
+      channels: [...f.channels],
+      claims: [...f.claims],
+      indicators: [...f.indicators],
+      pressures: [...f.pressures],
+      trustContext: [...f.trustContext],
+      modifiers: f.modifiers.map((m) => m.id),
+      limitations: [...f.limitations],
+      evidence: f.observationIds.slice(0, MAX_EVIDENCE_PER_FINDING).flatMap((id) => {
+        const o = obsById.get(id);
+        return o ? [item(o)] : [];
+      }),
+      evidenceTotal: f.observationIds.length,
+    }));
+  return { detectorVersion: sup.detectorVersion, experimental: true, verdict: sup.verdict, findings, findingsTotal: sup.findings.length };
+}
+
 export function buildReport(
   snapshot: PageSnapshot,
   result: AnalysisResult,
   versions: { engine: string; extractor: string },
-  timing: { extractMs: number; analyzeMs: number; credentialMs?: number; paymentMs?: number },
+  timing: { extractMs: number; analyzeMs: number; credentialMs?: number; paymentMs?: number; supportMs?: number },
   cred?: CredentialResult,
   pay?: PaymentResult,
+  sup?: SupportResult,
 ): ScanReport {
   const obsById = new Map(result.observations.map((o) => [o.id, o]));
   const item = (o: Observation): EvidenceItem => {
@@ -261,8 +334,12 @@ export function buildReport(
     payment: pay
       ? paymentSection(snapshot, pay)
       : { detectorVersion: '', experimental: true, verdict: 'none', findings: [], findingsTotal: 0 },
+    support: sup
+      ? supportSection(snapshot, sup)
+      : { detectorVersion: '', experimental: true, verdict: 'none', findings: [], findingsTotal: 0 },
     timing: {
       extractMs: round(timing.extractMs), analyzeMs: round(timing.analyzeMs), credentialMs: round(timing.credentialMs ?? 0), paymentMs: round(timing.paymentMs ?? 0),
+      supportMs: round(timing.supportMs ?? 0),
     },
   };
 }

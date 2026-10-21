@@ -1,0 +1,22 @@
+{
+  "id": "SD04-id-cs-palsu-wa-akun-diblokir",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-SUP",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://notifikasi-akun.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#notice",
+  "description": "Halaman pemberitahuan: akun akan diblokir dalam 1 jam, hubungi CS resmi via WhatsApp nomor ponsel",
+  "rationale": "Klaim CS resmi + ancaman + urgensi + nomor ponsel pribadi.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.3 support dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

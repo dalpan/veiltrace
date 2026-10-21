@@ -1,0 +1,22 @@
+{
+  "id": "SN13-en-signin-alert-legit",
+  "split": "sup-dev",
+  "lang": "en",
+  "category": "benign",
+  "threatClass": "T-SUP",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://account.northwind.test/security",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Legitimate unusual sign-in notice",
+  "rationale": "Security notice pointing to settings and the official help center.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.3 support dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

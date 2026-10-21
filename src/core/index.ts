@@ -16,3 +16,7 @@ export type * from './credential/types.js';
 export { analyzePayments, PAY_DETECTOR_VERSION, PAY_RULES } from './payment/analyze.js';
 export { PAY_LEXICON } from './payment/lexicon.js';
 export type * from './payment/types.js';
+// EXPERIMENTAL fake-support and authority-impersonation detector (M5.3). Independent; changes no other detector's result.
+export { analyzeSupport, SUPPORT_DETECTOR_VERSION, SUPPORT_RULES } from './support/analyze.js';
+export { SUPPORT_LEXICON } from './support/lexicon.js';
+export type * from './support/types.js';

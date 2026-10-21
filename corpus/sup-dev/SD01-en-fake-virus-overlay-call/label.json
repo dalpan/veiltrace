@@ -1,0 +1,22 @@
+{
+  "id": "SD01-en-fake-virus-overlay-call",
+  "split": "sup-dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T-SUP",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://alert-center.example/scan",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": ".overlay",
+  "description": "Full-screen overlay claims the computer is infected and tells the reader to call a toll-free \"support\" number",
+  "rationale": "Classic tech-support scam: a page-rendered system alarm plus a phone direction.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.3 support dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

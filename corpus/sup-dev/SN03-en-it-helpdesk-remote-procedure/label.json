@@ -1,0 +1,22 @@
+{
+  "id": "SN03-en-it-helpdesk-remote-procedure",
+  "split": "sup-dev",
+  "lang": "en",
+  "category": "benign",
+  "threatClass": "T-SUP",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://intranet.contoso.test/it/remote-support",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Internal IT help page documenting a scheduled remote-support session",
+  "rationale": "Legitimate documented remote-support procedure without pressure.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.3 support dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "SN10-en-browser-warning-docs",
+  "split": "sup-dev",
+  "lang": "en",
+  "category": "benign",
+  "threatClass": "T-SUP",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://docs.example-browser.test/safe-browsing",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Browser documentation explaining real security warnings",
+  "rationale": "Explains warnings; no direction to contact or install.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.3 support dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

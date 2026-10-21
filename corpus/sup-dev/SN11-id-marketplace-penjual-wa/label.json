@@ -1,0 +1,22 @@
+{
+  "id": "SN11-id-marketplace-penjual-wa",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "benign",
+  "threatClass": "T-SUP",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://jualbeli.test/produk/sepeda",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Penjual membagikan nomor WA di diskusi produk, tanpa klaim atau ancaman",
+  "rationale": "Kontak biasa antar pengguna.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.3 support dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

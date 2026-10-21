@@ -1,0 +1,22 @@
+{
+  "id": "SA01-id-singkatan-ekstrem",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "adversarial",
+  "threatClass": "T-SUP",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://forum.hpnusa.test/t/lemot",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#z1",
+  "description": "Komentar dengan singkatan ekstrem: \"hp lo kena virus, tlp cs 0812.. cpt\"",
+  "rationale": "Alarm palsu dan arahan kontak dengan bahasa yang sangat informal; menguji batas lexicon.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.3 support dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

@@ -1,6 +1,8 @@
 // Popup controller and renderer. Page-derived strings are only ever inserted as text nodes.
 // UI language: English or Indonesian (i18n.ts); page evidence is shown in its original language.
-import type { CredEvidenceItem, CredFindingSummary, EvidenceItem, FindingSummary, PayEvidenceItem, PayFindingSummary, ScanReport } from '../content/report.js';
+import type {
+  CredEvidenceItem, CredFindingSummary, EvidenceItem, FindingSummary, PayEvidenceItem, PayFindingSummary, ScanReport, SupportEvidenceItem, SupportFindingSummary,
+} from '../content/report.js';
 import { classifyUrl, getTargetTab, runHighlight, runScan, type TargetTab, type UrlClass } from './adapter.js';
 import { detectLang, formatCount, MESSAGES, type HighlightKey, type Lang, type Messages } from './i18n.js';
 import { parseHighlightResult, parseScanReport } from './validate.js';
@@ -160,6 +162,60 @@ function renderPayment(r: ScanReport): Child[] {
   ];
 }
 
+function supportEvidenceItem(f: SupportFindingSummary, i: number, e: SupportEvidenceItem): HTMLElement {
+  const s = t().sup;
+  const hidden = e.signal === 'SX.PHONE' || e.signal === 'SX.MOBILE';
+  return evidenceRow(`sup:${f.id}:${i}`, `${s.signal[e.signal]} · ${t().source['visible-text']}`, hidden ? s.contactHidden : e.text, e.locator);
+}
+
+function supportFindingCard(f: SupportFindingSummary): HTMLElement {
+  const m = t();
+  const s = m.sup;
+  const demoted = f.classification !== f.ruleClassification;
+  const asks = [...f.requestedActions.map((x) => s.action[x]), ...f.channels.map((x) => s.channel[x])];
+  const pressure = [...f.pressures.map((x) => s.pressure[x]), ...f.trustContext.map((x) => m.cred.trust[x])];
+  return h('article', { class: 'card finding sup', 'data-rule': f.ruleId, 'data-classification': f.classification },
+    h('div', { class: 'category' }, s.category),
+    h('h4', {}, s.findingTitle[f.classification]),
+    h('div', { class: 'chips' },
+      h('span', { class: `chip ${f.classification}` }, m.classification[f.classification]),
+      h('span', { class: 'chip severity', 'data-severity': f.classification }, m.severity[f.classification]),
+      h('span', { class: 'chip', title: m.confidenceHelp }, m.confidence[f.confidence]),
+      h('span', { class: 'chip' }, s.ruleChip(f.ruleId)),
+      h('span', { class: 'chip experimental' }, m.cred.experimental),
+    ),
+    h('p', { class: 'explain' }, s.rule[f.ruleId]),
+    asks.length > 0 && h('p', { class: 'context asks' }, `${s.asksLabel}: ${asks.join(', ')}`),
+    f.claims.length > 0 && h('p', { class: 'context claims' }, `${s.claimsLabel}: ${f.claims.map((x) => s.claim[x]).join(', ')}`),
+    f.indicators.length > 0 && h('p', { class: 'context indicators' }, `${s.indicatorsLabel}: ${f.indicators.map((x) => s.indicator[x]).join(' · ')}`),
+    pressure.length > 0 && h('p', { class: 'context pressure' }, `${s.pressureLabel}: ${pressure.join(' · ')}`),
+    h('p', { class: 'risk' }, s.actionRisk[f.actionRisk]),
+    f.modifiers.length > 0 && h('p', { class: 'context' },
+      `${demoted ? m.loweredFrom(m.classification[f.ruleClassification]) : m.contextPrefix}${f.modifiers.map((x) => m.cred.modifier[x]).join(' ')}`),
+    h('ul', { class: 'evidence', 'aria-label': m.evidenceAria }, ...f.evidence.map((e, i) => supportEvidenceItem(f, i, e))),
+    f.evidenceTotal > f.evidence.length && h('p', { class: 'context', 'data-more': 'evidence' }, m.moreEvidence(f.evidenceTotal - f.evidence.length)),
+    ...f.limitations.map((l) => h('p', { class: 'limitation', 'data-limitation': l }, s.limitation[l])),
+  );
+}
+
+/** The experimental support section, laid out like the credential and payment sections. */
+function renderSupport(r: ScanReport): Child[] {
+  const s = t().sup;
+  const sec = r.support;
+  const head = s.headline[sec.verdict];
+  const alerting = sec.findings.filter((f) => f.classification !== 'observed_instruction');
+  const observed = sec.findings.filter((f) => f.classification === 'observed_instruction');
+  return [
+    h('div', { class: `card sup-summary tone-${head.tone}`, 'data-verdict': sec.verdict },
+      h('div', { class: 'category' }, `${s.category} · ${t().cred.experimental}`), h('h2', {}, head.title),
+      h('p', {}, head.detail + (r.status.complete ? '' : t().partialQualifier))),
+    ...alerting.map(supportFindingCard),
+    observed.length > 0 && h('details', { class: 'observed sup-observed' }, h('summary', {}, s.observedHeading(observed.length)), ...observed.map(supportFindingCard)),
+    sec.findingsTotal > sec.findings.length && h('p', { class: 'context', 'data-more': 'sup-findings' }, t().moreFindings(sec.findingsTotal - sec.findings.length)),
+    h('p', { class: 'limitation experimental-note' }, s.experimentalNote),
+  ];
+}
+
 const TIER: Record<ScanReport['verdict'], number> = { none: 0, observed_instruction: 1, suspicious_correlation: 2, manipulative_instruction: 3 };
 
 /** The experimental credential section: its own summary card, alert findings, collapsed observed requests, a note. */
@@ -227,9 +283,10 @@ function renderReport(r: ScanReport): Child[] {
     observed.length > 0 && h('details', { class: 'observed' }, h('summary', {}, m.observedHeading(observed.length)), ...observed.map(findingCard)),
     r.counts.findingsTotal > r.findings.length && h('p', { class: 'context', 'data-more': 'findings' }, m.moreFindings(r.counts.findingsTotal - r.findings.length)),
   ];
-  // Coverage applies to all detectors. Sections are ordered by verdict, most severe first (stable: command, credential, payment).
+  // Coverage applies to all detectors. Sections are ordered by verdict, most severe first (stable: command, credential, payment, support).
   const coverage = command.splice(1, 1);
-  const sections: Array<[number, Child[]]> = [[TIER[r.verdict], command], [TIER[r.credential.verdict], renderCredential(r)], [TIER[r.payment.verdict], renderPayment(r)]];
+  const sections: Array<[number, Child[]]> = [[TIER[r.verdict], command], [TIER[r.credential.verdict], renderCredential(r)], [TIER[r.payment.verdict], renderPayment(r)],
+    [TIER[r.support.verdict], renderSupport(r)]];
   const [first, ...rest] = sections.sort((a, b) => b[0] - a[0]).flatMap(([, parts]) => parts);
   return [first, ...coverage, ...rest];
 }

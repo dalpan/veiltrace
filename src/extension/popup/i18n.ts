@@ -3,6 +3,9 @@
 import type { ScanGap } from '../../core/coverage.js';
 import type { CredModifierId, CredPretextSignalId, CredRuleId, CredSignalId, SecretType, TrustContext } from '../../core/credential/types.js';
 import type { PayDestination, PayLimitation, PayPressure, PayPromise, PayRuleId, PaySignalId } from '../../core/payment/types.js';
+import type {
+  ImpersonationIndicator, SupportAction, SupportChannel, SupportClaim, SupportLimitation, SupportPressure, SupportRuleId, SupportSignalId,
+} from '../../core/support/types.js';
 import type { ActionRisk, Classification, FieldKind, FormDestination, Level, ModifierId, OverrideId, RuleId, SignalId, Verdict } from '../../core/types.js';
 
 export type Lang = 'en' | 'id';
@@ -100,6 +103,29 @@ export interface Messages {
     signal: Record<PaySignalId, string>;
     amountHidden: string;
     limitation: Record<PayLimitation, string>;
+    experimentalNote: string;
+    observedHeading: (n: number) => string;
+  };
+  /** M5.3: experimental fake-support and authority-impersonation detector. Trust, modifier and highlight labels are shared. */
+  sup: {
+    category: string;
+    headline: Record<Verdict, { title: string; detail: string; tone: 'danger' | 'warning' | 'neutral' }>;
+    findingTitle: Record<Classification, string>;
+    ruleChip: (id: SupportRuleId) => string;
+    rule: Record<SupportRuleId, string>;
+    action: Record<SupportAction, string>;
+    channel: Record<SupportChannel, string>;
+    claim: Record<SupportClaim, string>;
+    indicator: Record<ImpersonationIndicator, string>;
+    pressure: Record<SupportPressure, string>;
+    asksLabel: string;
+    claimsLabel: string;
+    indicatorsLabel: string;
+    pressureLabel: string;
+    actionRisk: Record<ActionRisk, string>;
+    signal: Record<SupportSignalId, string>;
+    contactHidden: string;
+    limitation: Record<SupportLimitation, string>;
     experimentalNote: string;
     observedHeading: (n: number) => string;
   };
@@ -322,6 +348,59 @@ const EN: Messages = {
     experimentalNote: 'Experimental: this check has not yet passed an independent evaluation. It reads only the page text, never form fields, card numbers, balances or what you typed.',
     observedHeading: (n) => `Payment requests without manipulation signs (${n})`,
   },
+  sup: {
+    category: 'Support & Authority Impersonation',
+    headline: {
+      manipulative_instruction: { tone: 'danger', title: 'Manipulative support or authority direction detected',
+        detail: 'This page shows signs of fake support: an alarm drawn by the web page, or someone presenting as support, a bank or an administrator who sends you to an outside contact, or asks for remote access or an install, under pressure. Do not call, install or give access.' },
+      suspicious_correlation: { tone: 'warning', title: 'Suspicious support or authority direction detected',
+        detail: 'This page directs you to contact someone, install software or allow remote access, together with signs often seen in support scams. Find the organization’s contact details yourself before you act.' },
+      observed_instruction: { tone: 'neutral', title: 'Support directions found, without signs of impersonation.',
+        detail: 'Help centers and contact pages look like this. Use contact details you found yourself.' },
+      none: { tone: 'neutral', title: 'No support or authority directions found in the analyzed content.',
+        detail: 'VeilTrace looked for directions to call or message support, install software or allow remote access.' },
+    },
+    findingTitle: { manipulative_instruction: 'Manipulative support direction', suspicious_correlation: 'Suspicious support direction', observed_instruction: 'Support direction' },
+    ruleChip: (id) => `Rule ${id}`,
+    rule: {
+      SR1: 'The web page claims your device is infected or locked and tells you to call, install or allow access. Browsers and operating systems do not show such alarms inside web pages.',
+      SR2: 'Someone presenting as support, a bank or an administrator asks you to install software or allow remote access, under pressure or from content the site may not control.',
+      SR3: 'Someone presenting as support, a bank or an administrator sends you to an outside contact together with a threat to your account or data.',
+      SR4: 'A comment or other user-posted content presents itself as official support and sends you to an outside contact.',
+      SR5: 'Directs you to contact support, install software or allow remote access, with no impersonation or pressure signs nearby.',
+    },
+    action: { contact: 'contact someone', 'remote-access': 'allow remote access', install: 'install software' },
+    channel: { phone: 'phone number', mobile: 'mobile number', messenger: 'messaging app' },
+    claim: { support: 'support or customer service', bank: 'a bank', administrator: 'an administrator', 'security-team': 'a security team' },
+    indicator: {
+      'page-rendered-system-alert': 'virus or lock alarm shown by the web page', 'remote-access-request': 'asks for remote access',
+      'software-install-request': 'asks you to install software', 'personal-channel-contact': 'official-sounding claim with a mobile number or messaging app',
+      'claim-in-user-content': 'official claim inside user-posted content', 'alert-in-overlay': 'alarm in an overlay covering the page',
+    },
+    pressure: { 'system-alert': 'device alarm', threat: 'threat to the account or data', urgency: 'deadline or urgency' },
+    asksLabel: 'Asks you to',
+    claimsLabel: 'Claims to be (not verified)',
+    indicatorsLabel: 'Observed indicators',
+    pressureLabel: 'Pressure',
+    actionRisk: {
+      high: 'Action risk: high. Installing software or allowing remote access can give a stranger control of your device.',
+      medium: 'Action risk: medium. Contacting a fake support line can lead to requests for money, codes or access.',
+    },
+    signal: {
+      'SC.CONTACT': 'Contact direction', 'SA.REMOTE': 'Remote access request', 'SA.INSTALL': 'Install request', 'SX.PHONE': 'Phone number',
+      'SX.MOBILE': 'Mobile number', 'SX.MESSENGER': 'Messaging app', 'SI.SUPPORT': 'Claimed support', 'SI.BANK': 'Claimed bank',
+      'SI.ADMIN': 'Claimed administrator', 'SI.SECURITY': 'Claimed security team', 'SW.ALERT': 'Device alarm', 'ST.THREAT': 'Threat',
+      'SU.URGENCY': 'Urgency', 'SH.UNASSERTED': 'Condition or attribution', 'C.NEGATION': 'Negation', 'C.REPORTED': 'Reported speech', 'C.EDUCATIONAL': 'Educational context',
+    },
+    contactHidden: '(contact number on the page; not shown)',
+    limitation: {
+      'claimed-identity-unverifiable': 'VeilTrace cannot verify who wrote this. A claim to be support, a bank or an administrator is not proof, and VeilTrace does not say the organization itself is fake.',
+      'trust-boundary-heuristic': 'Whether this content comes from the site or from others is estimated from the page structure.',
+      'contact-details-not-reported': 'Phone numbers are matched to understand the direction, but are never copied into the report.',
+    },
+    experimentalNote: 'Experimental: this check has not yet passed an independent evaluation. It reads only the page text, never form fields or what you typed, and never copies phone numbers.',
+    observedHeading: (n) => `Support directions without impersonation signs (${n})`,
+  },
   errors: {
     noPageTitle: 'No page to scan', noPageDetail: 'Open a web page, then click the VeilTrace button again.',
     restrictedTitle: 'This page cannot be scanned',
@@ -543,6 +622,59 @@ const ID: Messages = {
     },
     experimentalNote: 'Eksperimental: pemeriksaan ini belum lulus evaluasi independen. Hanya teks halaman yang dibaca, tidak pernah kolom formulir, nomor kartu, saldo, atau isian yang Anda ketik.',
     observedHeading: (n) => `Permintaan pembayaran tanpa tanda manipulasi (${n})`,
+  },
+  sup: {
+    category: 'Peniruan Dukungan & Otoritas',
+    headline: {
+      manipulative_instruction: { tone: 'danger', title: 'Arahan dukungan atau otoritas yang manipulatif terdeteksi',
+        detail: 'Halaman ini menunjukkan tanda dukungan palsu: alarm yang dibuat halaman web, atau pihak yang mengaku petugas, bank, atau admin yang mengarahkan Anda ke kontak luar, atau meminta akses jarak jauh atau instalasi, disertai tekanan. Jangan menelepon, menginstal, atau memberi akses.' },
+      suspicious_correlation: { tone: 'warning', title: 'Arahan dukungan atau otoritas yang mencurigakan terdeteksi',
+        detail: 'Halaman ini mengarahkan Anda menghubungi seseorang, menginstal perangkat lunak, atau memberi akses jarak jauh, disertai tanda yang sering muncul dalam penipuan berkedok dukungan. Cari sendiri kontak organisasinya sebelum bertindak.' },
+      observed_instruction: { tone: 'neutral', title: 'Arahan dukungan ditemukan, tanpa tanda peniruan.',
+        detail: 'Pusat bantuan dan halaman kontak memang seperti ini. Gunakan kontak yang Anda temukan sendiri.' },
+      none: { tone: 'neutral', title: 'Tidak ada arahan dukungan atau otoritas di konten yang dianalisis.',
+        detail: 'VeilTrace mencari arahan untuk menelepon atau mengirim pesan ke petugas, menginstal perangkat lunak, atau memberi akses jarak jauh.' },
+    },
+    findingTitle: { manipulative_instruction: 'Arahan dukungan yang manipulatif', suspicious_correlation: 'Arahan dukungan yang mencurigakan', observed_instruction: 'Arahan dukungan' },
+    ruleChip: (id) => `Aturan ${id}`,
+    rule: {
+      SR1: 'Halaman web mengklaim perangkat Anda terinfeksi atau terkunci lalu menyuruh Anda menelepon, menginstal, atau memberi akses. Browser dan sistem operasi tidak menampilkan alarm seperti itu di dalam halaman web.',
+      SR2: 'Pihak yang mengaku petugas, bank, atau admin meminta Anda menginstal perangkat lunak atau memberi akses jarak jauh, disertai tekanan atau dari konten yang mungkin tidak dikendalikan situs.',
+      SR3: 'Pihak yang mengaku petugas, bank, atau admin mengarahkan Anda ke kontak luar disertai ancaman terhadap akun atau data Anda.',
+      SR4: 'Komentar atau konten kiriman pengguna mengaku sebagai dukungan resmi dan mengarahkan Anda ke kontak luar.',
+      SR5: 'Mengarahkan Anda menghubungi petugas, menginstal perangkat lunak, atau memberi akses jarak jauh, tanpa tanda peniruan atau tekanan di sekitarnya.',
+    },
+    action: { contact: 'menghubungi seseorang', 'remote-access': 'memberi akses jarak jauh', install: 'menginstal perangkat lunak' },
+    channel: { phone: 'nomor telepon', mobile: 'nomor ponsel', messenger: 'aplikasi pesan' },
+    claim: { support: 'petugas atau layanan pelanggan', bank: 'pihak bank', administrator: 'admin', 'security-team': 'tim keamanan' },
+    indicator: {
+      'page-rendered-system-alert': 'alarm virus atau kunci yang dibuat halaman web', 'remote-access-request': 'meminta akses jarak jauh',
+      'software-install-request': 'meminta Anda menginstal perangkat lunak', 'personal-channel-contact': 'klaim resmi dengan nomor ponsel atau aplikasi pesan',
+      'claim-in-user-content': 'klaim resmi di dalam konten kiriman pengguna', 'alert-in-overlay': 'alarm di overlay yang menutupi halaman',
+    },
+    pressure: { 'system-alert': 'alarm perangkat', threat: 'ancaman terhadap akun atau data', urgency: 'tenggat atau desakan' },
+    asksLabel: 'Meminta Anda',
+    claimsLabel: 'Mengaku sebagai (belum terverifikasi)',
+    indicatorsLabel: 'Indikator teramati',
+    pressureLabel: 'Tekanan',
+    actionRisk: {
+      high: 'Risiko tindakan: tinggi. Menginstal perangkat lunak atau memberi akses jarak jauh dapat menyerahkan kendali perangkat kepada orang asing.',
+      medium: 'Risiko tindakan: sedang. Menghubungi layanan palsu dapat berujung pada permintaan uang, kode, atau akses.',
+    },
+    signal: {
+      'SC.CONTACT': 'Arahan menghubungi', 'SA.REMOTE': 'Permintaan akses jarak jauh', 'SA.INSTALL': 'Permintaan instalasi', 'SX.PHONE': 'Nomor telepon',
+      'SX.MOBILE': 'Nomor ponsel', 'SX.MESSENGER': 'Aplikasi pesan', 'SI.SUPPORT': 'Mengaku petugas', 'SI.BANK': 'Mengaku pihak bank',
+      'SI.ADMIN': 'Mengaku admin', 'SI.SECURITY': 'Mengaku tim keamanan', 'SW.ALERT': 'Alarm perangkat', 'ST.THREAT': 'Ancaman',
+      'SU.URGENCY': 'Desakan', 'SH.UNASSERTED': 'Pengandaian atau kutipan', 'C.NEGATION': 'Negasi', 'C.REPORTED': 'Kalimat dilaporkan', 'C.EDUCATIONAL': 'Konteks edukasi',
+    },
+    contactHidden: '(nomor kontak di halaman; tidak ditampilkan)',
+    limitation: {
+      'claimed-identity-unverifiable': 'VeilTrace tidak dapat memastikan siapa penulisnya. Pengakuan sebagai petugas, bank, atau admin bukan bukti, dan VeilTrace tidak menyatakan organisasinya palsu.',
+      'trust-boundary-heuristic': 'Apakah konten ini berasal dari situs atau dari pihak lain diperkirakan dari struktur halaman.',
+      'contact-details-not-reported': 'Nomor telepon dicocokkan untuk memahami arahan, tetapi tidak pernah disalin ke laporan.',
+    },
+    experimentalNote: 'Eksperimental: pemeriksaan ini belum lulus evaluasi independen. Hanya teks halaman yang dibaca, tidak pernah kolom formulir atau isian Anda, dan nomor telepon tidak pernah disalin.',
+    observedHeading: (n) => `Arahan dukungan tanpa tanda peniruan (${n})`,
   },
   errors: {
     noPageTitle: 'Tidak ada halaman untuk dipindai', noPageDetail: 'Buka sebuah halaman web, lalu klik tombol VeilTrace lagi.',

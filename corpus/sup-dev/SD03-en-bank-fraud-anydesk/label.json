@@ -1,0 +1,22 @@
+{
+  "id": "SD03-en-bank-fraud-anydesk",
+  "split": "sup-dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T-SUP",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://secure-verify.example/case",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "[role=dialog]",
+  "description": "Dialog from a claimed bank fraud department: account locked, install AnyDesk for a technician",
+  "rationale": "Remote-access request under a claimed bank identity and an account threat.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.3 support dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

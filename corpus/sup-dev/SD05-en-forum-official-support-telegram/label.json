@@ -1,0 +1,22 @@
+{
+  "id": "SD05-en-forum-official-support-telegram",
+  "split": "sup-dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T-SUP",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://forum.coinhelp.test/t/wallet-sync",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#c3",
+  "description": "Forum reply claiming to be official support and sending the reader to Telegram",
+  "rationale": "Official claim inside user content plus an outside messenger contact.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.3 support dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "SD07-id-kurir-apk-informal",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-SUP",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://jualbeli.test/chat/88",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m2",
+  "description": "Pesan dari \"kurir\" di kolom komentar: unduh aplikasi cek resi .apk",
+  "rationale": "Modus undangan/kurir APK: klaim kurir + permintaan instal di konten pengguna.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.3 support dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

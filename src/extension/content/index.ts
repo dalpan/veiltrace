@@ -4,6 +4,7 @@
 import { analyze } from '../../core/analyze.js';
 import { analyzeCredentials } from '../../core/credential/analyze.js';
 import { analyzePayments } from '../../core/payment/analyze.js';
+import { analyzeSupport } from '../../core/support/analyze.js';
 import { EXTRACTOR_VERSION, extractSnapshot } from '../../extract/extract.js';
 import { clearHighlight, highlight, type HighlightResult } from './highlight.js';
 import { buildReport, type ScanReport } from './report.js';
@@ -33,8 +34,11 @@ export function scan(options: { timeBudgetMs?: number } = {}): ScanReport {
   // Experimental payment-manipulation detector (M5.2): also independent; reads block text only.
   const pay = analyzePayments(snapshot);
   const t4 = performance.now();
+  // Experimental fake-support and impersonation detector (M5.3): also independent; reads block text only.
+  const sup = analyzeSupport(snapshot);
+  const t5 = performance.now();
   return buildReport(snapshot, result, { engine: result.engineVersion, extractor: EXTRACTOR_VERSION },
-    { extractMs: t1 - t0, analyzeMs: t2 - t1, credentialMs: t3 - t2, paymentMs: t4 - t3 }, cred, pay);
+    { extractMs: t1 - t0, analyzeMs: t2 - t1, credentialMs: t3 - t2, paymentMs: t4 - t3, supportMs: t5 - t4 }, cred, pay, sup);
 }
 
 export function show(locator: unknown, durationMs: number): HighlightResult {

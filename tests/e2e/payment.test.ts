@@ -19,8 +19,8 @@ describe('payment section in the popup', () => {
     expect(await popup.getAttribute('.pay-summary', 'data-verdict')).toBe('manipulative_instruction');
     expect(await popup.textContent('.pay-summary .category')).toBe('Payment Manipulation · Experimental');
     expect(await popup.textContent('.pay-summary h2')).toBe('Manipulative payment request detected');
-    // All three detectors are shown; the most severe section comes first.
-    expect(await section(popup)).toEqual(['pay-summary', 'summary', 'cred-summary']);
+    // All detectors are shown; the most severe section comes first.
+    expect(await section(popup)).toEqual(['pay-summary', 'summary', 'cred-summary', 'sup-summary']);
     expect(await popup.textContent('.summary .category')).toBe('Command Execution Manipulation');
     const card = popup.locator('article.finding.pay').first();
     expect(await card.getAttribute('data-rule')).toBe('PR1');

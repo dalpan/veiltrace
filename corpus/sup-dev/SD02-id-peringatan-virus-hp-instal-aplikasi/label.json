@@ -1,0 +1,22 @@
+{
+  "id": "SD02-id-peringatan-virus-hp-instal-aplikasi",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-SUP",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://cek-hp.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#alert",
+  "description": "Halaman peringatan palsu: HP terinfeksi, instal aplikasi pembersih segera",
+  "rationale": "Alarm sistem yang dibuat halaman web disertai permintaan instalasi.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.3 support dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

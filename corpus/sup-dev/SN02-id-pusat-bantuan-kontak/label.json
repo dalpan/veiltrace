@@ -1,0 +1,22 @@
+{
+  "id": "SN02-id-pusat-bantuan-kontak",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "benign",
+  "threatClass": "T-SUP",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://bantuan.belanjaku.test/kontak",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Pusat bantuan dengan call center dan WhatsApp resmi",
+  "rationale": "Halaman kontak resmi biasa.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.3 support dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

@@ -245,3 +245,12 @@ The payment detector reads block text only (no form fields, values, url or title
 
 ### D-073 · Accepted (pending owner review) · 2026-10-21 · One popup layout for three detectors; ScanReport v3
 The popup shows three sections with uniform names: Command Execution Manipulation, Credential Disclosure Manipulation and Payment Manipulation (the latter two marked Experimental), ordered by verdict with ties in that order. Every finding card shows its category, a **severity** chip derived one-to-one from its classification (manipulative → high, suspicious → medium, observed → informational), confidence, rule, a short explanation, evidence with Show on page, and limitations. There is no combined or weighted score. `ScanReport` v3 adds the `payment` section and `timing.paymentMs`; v2 reports are rejected.
+
+### D-074 · Accepted (pending owner review) · 2026-10-21 · Experimental fake-support and authority-impersonation detector (M5.3)
+A fourth independent detector `analyzeSupport()` (`sup-0.1.0-exp`, `src/core/support/`) reads the same `PageSnapshot` and changes no other detector's result. Rules SR1–SR5 require combinations of a direction (contact, remote access, install) with an asserted device alert, a threat, urgency, a personal channel or user-content placement; a claim of being support, a bank or an administrator never alerts alone. All applicable rules are evaluated and the strongest wins. Findings report **claims** (unverified) and **observable indicators** separately and never state that an organization is fake (DETECTION_MODEL.md §14). Development corpus `corpus/sup-dev` and `npm run eval:support` are separate from the frozen v1 harness.
+
+### D-075 · Accepted (pending owner review) · 2026-10-21 · Support detector privacy boundary
+Block text only. Phone numbers are never reported, `@handles` and 5+ digit runs are masked, and `parseScanReport` rejects support evidence with a phone text or any 5+ digit run. No new permission, storage or network use.
+
+### D-076 · Accepted (pending owner review) · 2026-10-21 · ScanReport v4 and the four-section popup
+`ScanReport` v4 adds the `support` section and `timing.supportMs`; v3 reports are rejected. The popup shows Command Execution, Credential Disclosure, Payment and Support & Authority Impersonation sections with the layout of D-073 (category, severity from classification, explanation, evidence with Show on page, limitations; no combined score), ordered by verdict with ties in that order. Support cards add "Claims to be (not verified)" and "Observed indicators" as separate lines.

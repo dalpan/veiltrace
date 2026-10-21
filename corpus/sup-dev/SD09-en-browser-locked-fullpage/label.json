@@ -1,0 +1,22 @@
+{
+  "id": "SD09-en-browser-locked-fullpage",
+  "split": "sup-dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T-SUP",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://pc-locked.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "main",
+  "description": "Full-page \"this PC has been blocked\" alert with a technician phone number",
+  "rationale": "Page-rendered lock alarm plus a phone direction.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.3 support dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

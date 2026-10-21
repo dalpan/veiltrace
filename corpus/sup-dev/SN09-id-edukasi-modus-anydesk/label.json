@@ -1,0 +1,22 @@
+{
+  "id": "SN09-id-edukasi-modus-anydesk",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "benign",
+  "threatClass": "T-SUP",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://edukasi.bank-nusantara.test/modus-remote",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Halaman edukasi bank tentang modus aplikasi remote",
+  "rationale": "Materi edukasi dengan larangan.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.3 support dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

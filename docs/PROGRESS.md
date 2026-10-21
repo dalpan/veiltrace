@@ -4,6 +4,21 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-21 · M5.3 Fake support and authority impersonation · **Implemented as experimental (development data only); manual Chrome validation pending**
+
+**Done**
+- **Detector** `sup-0.1.0-exp` (`src/core/support/`): directions (contact, remote access, install) × channel × claimed identity × device alert / threat / urgency × placement; rules SR1–SR5, strongest applicable rule wins; claims and observable indicators reported separately; EN + ID including informal Indonesian (DETECTION_MODEL.md §14; D-074). Phone numbers never reported (D-075).
+- **Extension:** fourth detector in the content script; `ScanReport` v4 with a validated `support` section; popup section "Support & Authority Impersonation · Experimental" with the shared layout (D-076).
+- **Corpus and eval:** `corpus/sup-dev` (27 scenarios: 10 positive, 2 adversarial, 15 hard negatives), `npm run eval:support` → `eval/results/sup-dev.{json,md}`.
+- **Tests:** `tests/support.test.ts` (21), `tests/browser/support.test.ts` (28), `tests/e2e/support.test.ts` (6), report/validation tests in `tests/extension.test.ts`.
+- **Fixed during testing:** awareness-list FP (negation over "or", attributed alerts); first-match rule order hiding a stronger rule (now strongest wins).
+
+**Verification:** typecheck and lint clean; unit 349/349, browser 176/176, E2E 57/57, verify:extension 31/31. sup-dev TP 11 · FP 0 · TN 15 · FN 1 (SA02, unusual alarm wording). cred-dev (14/0/20/2) and pay-dev (10/0/16/1) result files unchanged. ClickFix core, `corpus/test`, `eval/runs.md`, preregistration and `eval-freeze-v1` untouched. Permissions unchanged.
+
+**Next:** owner review; manual Chrome check of the four-section popup. **Blockers:** none. Release version still open (D-070).
+
+---
+
 ## 2026-10-21 · M5.2 Payment-manipulation detection, stage 1 · **Implemented as experimental (development data only); manual Chrome validation pending**
 
 **Done**

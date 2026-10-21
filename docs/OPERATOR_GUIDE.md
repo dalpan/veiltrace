@@ -83,3 +83,15 @@ A third section, **"Payment Manipulation · Experimental"** (detector `pay-0.1.0
 - **Privacy:** only page text is read, never form fields, card numbers or typed values. Amounts are matched but never shown or stored in the report.
 
 Known errors on the 27-scenario development set (same author as the rules; optimistic): very informal Indonesian abbreviations ("tf dl 150rb") are missed. Requests in images, in frames from other sites, or worded unusually are not seen.
+
+## 10. Experimental: fake support and authority impersonation (M5.3, development build)
+
+A fourth section, **"Support & Authority Impersonation · Experimental"** (detector `sup-0.1.0-exp`), looks for directions to call or message "support", install software or allow remote access, combined with impersonation signs. It has **not** passed an independent evaluation.
+
+- **Manipulative:** a virus or lock alarm drawn by the web page with a number to call or an app to install; a claimed bank, support or administrator asking for remote access or an install under threat; a claimed official with a threat, urgency and a mobile number or messaging app.
+- **Suspicious:** weaker combinations, such as an official claim inside a comment with an outside contact, or an install request from a claimed courier.
+- **Observed (collapsed):** help centers, contact pages and documented IT procedures. Not an alert.
+- Cards list **claims** ("Claims to be (not verified)") separately from **observed indicators** (facts about the page). VeilTrace never states that an organization is fake.
+- **Privacy:** only page text is read; phone numbers are never shown or stored in the report.
+
+Known errors on the 27-scenario development set (same author as the rules; optimistic): alarms worded outside the lexicon ("Windows has detected a Zeus trojan") are missed. Numbers shown only in images are not seen.

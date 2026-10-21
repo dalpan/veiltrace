@@ -23,8 +23,8 @@ describe('credential section in the popup', () => {
     expect(await card.locator('.requested').textContent()).toBe('Asks you to send: one-time code');
     expect(await card.locator('.indicators').textContent()).toBe('Indicators: claims to be support or an official · verification framing · in user-posted content');
     expect(await card.locator('[data-limitation="claimed-identity-unverifiable"]').count()).toBe(1);
-    // One note per experimental section (credential and payment).
-    expect(await popup.locator('.experimental-note').count()).toBe(2);
+    // One note per experimental section (credential, payment and support).
+    expect(await popup.locator('.experimental-note').count()).toBe(3);
     await card.locator('button:has-text("Show on page")').nth(2).click();
     await popup.waitForSelector('article.finding.cred .hl-status[data-result]');
     expect(await popup.getAttribute('article.finding.cred .hl-status[data-result]', 'data-result')).toBe('highlighted');

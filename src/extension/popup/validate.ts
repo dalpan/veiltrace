@@ -4,6 +4,7 @@ import type { ScanGap, ScanStatus } from '../../core/coverage.js';
 import type { HighlightResult, HighlightStatus } from '../content/highlight.js';
 import type {
   CredEvidenceItem, CredFindingSummary, CredentialSection, EvidenceItem, FindingSummary, PayEvidenceItem, PayFindingSummary, PaymentSection, ScanReport,
+  SupportEvidenceItem, SupportFindingSummary, SupportSection,
 } from '../content/report.js';
 import { MAX_EVIDENCE_PER_FINDING, MAX_FINDINGS, MAX_SNIPPET_CHARS, REPORT_VERSION } from '../content/report.js';
 import { isSafeLocator } from '../../extract/extract.js';
@@ -19,7 +20,7 @@ const EFFECTS = ['suppressed', 'capped-at-1'] as const;
 
 // Exact key sets: unknown fields (e.g. metadata added by a future engine) make the whole report invalid,
 // so the popup can never silently omit information it does not understand.
-const REPORT_KEYS = ['v', 'engineVersion', 'extractorVersion', 'verdict', 'findings', 'coverage', 'status', 'counts', 'credential', 'payment', 'timing'];
+const REPORT_KEYS = ['v', 'engineVersion', 'extractorVersion', 'verdict', 'findings', 'coverage', 'status', 'counts', 'credential', 'payment', 'support', 'timing'];
 const FINDING_KEYS = ['id', 'ruleId', 'ruleName', 'classification', 'ruleClassification', 'confidence', 'actionRisk', 'summary', 'modifiers', 'overrides', 'evidence', 'evidenceTotal'];
 const EVIDENCE_KEYS = ['signal', 'text', 'source', 'locator', 'deobfuscated'];
 const COVERAGE_KEYS = ['framesSkipped', 'truncated', 'closedShadowRootsSkipped', 'coreTruncated', 'partial'];
@@ -52,6 +53,19 @@ const PROMISES = ['refund', 'prize', 'account-unlock', 'release'] as const;
 const PAY_DESTINATIONS = ['personal-account', 'off-platform', 'gift-card', 'crypto'] as const;
 const PRESSURES = ['threat', 'urgency', 'claimed-authority'] as const;
 const PAY_LIMITS = ['claimed-identity-unverifiable', 'trust-boundary-heuristic', 'amount-not-reported'] as const;
+// M5.3 experimental support section.
+const SUP_FINDING_KEYS = ['id', 'ruleId', 'classification', 'ruleClassification', 'confidence', 'actionRisk', 'requestedActions', 'channels', 'claims',
+  'indicators', 'pressures', 'trustContext', 'modifiers', 'limitations', 'evidence', 'evidenceTotal'];
+const SUP_RULES = ['SR1', 'SR2', 'SR3', 'SR4', 'SR5'] as const;
+const SUP_SIGNALS = ['SC.CONTACT', 'SA.REMOTE', 'SA.INSTALL', 'SX.PHONE', 'SX.MOBILE', 'SX.MESSENGER', 'SI.SUPPORT', 'SI.BANK', 'SI.ADMIN', 'SI.SECURITY',
+  'SW.ALERT', 'ST.THREAT', 'SU.URGENCY', 'SH.UNASSERTED', 'C.NEGATION', 'C.REPORTED', 'C.EDUCATIONAL'] as const;
+const SUP_ACTIONS = ['contact', 'remote-access', 'install'] as const;
+const SUP_CHANNELS = ['phone', 'mobile', 'messenger'] as const;
+const SUP_CLAIMS = ['support', 'bank', 'administrator', 'security-team'] as const;
+const SUP_INDICATORS = ['page-rendered-system-alert', 'remote-access-request', 'software-install-request', 'personal-channel-contact', 'claim-in-user-content',
+  'alert-in-overlay'] as const;
+const SUP_PRESSURES = ['system-alert', 'threat', 'urgency'] as const;
+const SUP_LIMITS = ['claimed-identity-unverifiable', 'trust-boundary-heuristic', 'contact-details-not-reported'] as const;
 const HIGHLIGHT: readonly HighlightStatus[] = ['highlighted', 'invalid-locator', 'not-found', 'frame-inaccessible', 'not-visible'];
 
 type Obj = Record<string, unknown>;
@@ -200,6 +214,52 @@ function paymentSection(x: unknown): PaymentSection | null {
   return { detectorVersion: x.detectorVersion, experimental: true, verdict: x.verdict, findings, findingsTotal: x.findingsTotal };
 }
 
+function supportEvidence(x: unknown): SupportEvidenceItem | null {
+  if (!isObj(x) || !onlyKeys(x, ['signal', 'text', 'locator']) || !oneOf(x.signal, SUP_SIGNALS) || !str(x.text, MAX_SNIPPET_CHARS)) return null;
+  // Phone numbers and other long digit runs never cross the boundary.
+  if ((x.signal === 'SX.PHONE' || x.signal === 'SX.MOBILE') && x.text !== '') return null;
+  if (/\d{5,}/u.test(x.text)) return null;
+  return { signal: x.signal, text: x.text, locator: isSafeLocator(x.locator) ? x.locator : null };
+}
+
+function supportFinding(x: unknown): SupportFindingSummary | null {
+  if (!isObj(x) || !onlyKeys(x, SUP_FINDING_KEYS)) return null;
+  if (!str(x.id, 20) || !oneOf(x.ruleId, SUP_RULES) || !oneOf(x.classification, CLASSES) || !oneOf(x.ruleClassification, CLASSES) || !oneOf(x.confidence, LEVELS)
+    || !oneOf(x.actionRisk, RISKS)) return null;
+  const requestedActions = enumList(x.requestedActions, SUP_ACTIONS, SUP_ACTIONS.length);
+  const channels = enumList(x.channels, SUP_CHANNELS, SUP_CHANNELS.length);
+  const claims = enumList(x.claims, SUP_CLAIMS, SUP_CLAIMS.length);
+  const indicators = enumList(x.indicators, SUP_INDICATORS, SUP_INDICATORS.length);
+  const pressures = enumList(x.pressures, SUP_PRESSURES, SUP_PRESSURES.length);
+  const trustContext = enumList(x.trustContext, TRUST, TRUST.length);
+  const modifiers = enumList(x.modifiers, CRED_MODS, CRED_MODS.length);
+  const limitations = enumList(x.limitations, SUP_LIMITS, SUP_LIMITS.length);
+  if (!requestedActions || !channels || !claims || !indicators || !pressures || !trustContext || !modifiers || !limitations) return null;
+  if (!Array.isArray(x.evidence) || x.evidence.length === 0 || x.evidence.length > MAX_EVIDENCE_PER_FINDING || !num(x.evidenceTotal) || x.evidenceTotal < x.evidence.length) return null;
+  const evidence: SupportEvidenceItem[] = [];
+  for (const e of x.evidence) {
+    const v = supportEvidence(e);
+    if (!v) return null;
+    evidence.push(v);
+  }
+  return {
+    id: x.id, ruleId: x.ruleId, classification: x.classification, ruleClassification: x.ruleClassification, confidence: x.confidence, actionRisk: x.actionRisk,
+    requestedActions, channels, claims, indicators, pressures, trustContext, modifiers, limitations, evidence, evidenceTotal: x.evidenceTotal as number,
+  };
+}
+
+function supportSection(x: unknown): SupportSection | null {
+  if (!isObj(x) || !onlyKeys(x, SECTION_KEYS) || !str(x.detectorVersion, 40) || x.experimental !== true || !oneOf(x.verdict, VERDICTS)) return null;
+  if (!Array.isArray(x.findings) || x.findings.length > MAX_FINDINGS || !num(x.findingsTotal) || x.findingsTotal < x.findings.length) return null;
+  const findings: SupportFindingSummary[] = [];
+  for (const f of x.findings) {
+    const v = supportFinding(f);
+    if (!v) return null;
+    findings.push(v);
+  }
+  return { detectorVersion: x.detectorVersion, experimental: true, verdict: x.verdict, findings, findingsTotal: x.findingsTotal };
+}
+
 /** Returns a validated copy of the report, or null if anything is malformed. */
 export function parseScanReport(x: unknown): ScanReport | null {
   if (!isObj(x) || !onlyKeys(x, REPORT_KEYS) || x.v !== REPORT_VERSION || !str(x.engineVersion, 40) || !str(x.extractorVersion, 40) || !oneOf(x.verdict, VERDICTS)) return null;
@@ -218,12 +278,14 @@ export function parseScanReport(x: unknown): ScanReport | null {
   const n = x.counts;
   if (!isObj(n) || !num(n.blocks) || !num(n.hiddenCopyCandidates) || !num(n.copyTriggers) || !num(n.observations) || !num(n.findingsTotal)) return null;
   const t = x.timing;
-  if (!isObj(t) || !onlyKeys(t, ['extractMs', 'analyzeMs', 'credentialMs', 'paymentMs']) || !num(t.extractMs) || !num(t.analyzeMs) || !num(t.credentialMs)
-    || !num(t.paymentMs)) return null;
+  if (!isObj(t) || !onlyKeys(t, ['extractMs', 'analyzeMs', 'credentialMs', 'paymentMs', 'supportMs']) || !num(t.extractMs) || !num(t.analyzeMs)
+    || !num(t.credentialMs) || !num(t.paymentMs) || !num(t.supportMs)) return null;
   const credential = credentialSection(x.credential);
   if (!credential) return null;
   const payment = paymentSection(x.payment);
   if (!payment) return null;
+  const support = supportSection(x.support);
+  if (!support) return null;
   const status: ScanStatus = { complete: s.complete, reasons: s.reasons as ScanGap[] };
   return {
     v: REPORT_VERSION, engineVersion: x.engineVersion, extractorVersion: x.extractorVersion, verdict: x.verdict, findings,
@@ -235,7 +297,8 @@ export function parseScanReport(x: unknown): ScanReport | null {
     counts: { blocks: n.blocks, hiddenCopyCandidates: n.hiddenCopyCandidates, copyTriggers: n.copyTriggers, observations: n.observations, findingsTotal: n.findingsTotal },
     credential,
     payment,
-    timing: { extractMs: t.extractMs, analyzeMs: t.analyzeMs, credentialMs: t.credentialMs, paymentMs: t.paymentMs },
+    support,
+    timing: { extractMs: t.extractMs, analyzeMs: t.analyzeMs, credentialMs: t.credentialMs, paymentMs: t.paymentMs, supportMs: t.supportMs },
   };
 }
 
