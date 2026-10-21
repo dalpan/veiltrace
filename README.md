@@ -18,7 +18,7 @@ The popup is one dashboard: page threat summary, the four categories, advice, an
 **Honest status.**
 - The only held-out result is for CMD: 26 synthetic scenarios, run once, with recall 75.0%, precision 81.8% and hard-negative FPR 14.3%. All three are **below the research targets** ([docs/EVALUATION_RESULTS.md](docs/EVALUATION_RESULTS.md)).
 - CRED, PAY and SUP are measured only on development data written by the same author as the rules.
-- None of these numbers are real-world rates. Scanning is on demand, not real-time.
+- None of these numbers are real-world rates. Scanning is on demand by default; automatic scanning on page load is opt-in (badge only for manipulative pages).
 - Progress log: [docs/PROGRESS.md](docs/PROGRESS.md). Hackathon materials (Indonesian): [submission/](submission/).
 
 ## Install (unpacked, Chrome/Chromium ≥ 110)
@@ -65,7 +65,7 @@ const m1 = analyze(snapshot, { ruleset: 'm1' }); // M1 baseline model (engine 0.
 - It does not use AI or machine learning: every finding comes from explainable rules.
 
 ## Permissions
-`activeTab` and `scripting` only, with no host permissions and no install warning. Nothing runs until you click **Scan page**. Browser-protected pages (chrome://, the Web Store, other extensions) cannot be scanned.
+`activeTab` and `scripting` only, with no host permissions and no install warning. Nothing runs until you click **Scan page**, unless you turn on **automatic scanning** in the popup: Chrome then asks for permission to read websites (an optional permission that is removed again when you turn it off). Browser-protected pages (chrome://, the Web Store, other extensions) cannot be scanned.
 
 ## Documentation
 

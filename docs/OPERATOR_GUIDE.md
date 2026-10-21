@@ -103,3 +103,7 @@ From M5.4 the popup shows all four checks in one view:
 - **Detection categories:** one tile per check with its own result. Credential, payment and support checks are marked experimental.
 - **What to do:** short advice for each affected category. With no findings, a reminder that this is not a guarantee.
 - **Findings:** one list, most serious first (classification, then action risk, then confidence). Each card keeps classification, severity, confidence and action risk separate, and every evidence item has an id (E-nn) and **Show on page**. Findings from different checks that point at the same element are shown together as related findings; each keeps its own evidence and rule.
+
+## 12. Automatic scanning (opt-in, development build)
+
+In the popup footer, **Scan mode** shows MANUAL (default) or AUTO. Turning automatic scanning on asks Chrome for permission to read all websites; pages are still analyzed only on the device. VeilTrace then checks pages as they load and change, and puts a red **!** on the toolbar icon for manipulative content (suspicious results appear only when the popup is opened). Opening the popup shows the results immediately. It applies to pages opened or reloaded afterwards and can be turned off in the popup or in the browser's extension settings. Organization-wide enabling (a managed build with host permissions) is not available yet.

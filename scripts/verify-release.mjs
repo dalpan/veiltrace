@@ -51,8 +51,15 @@ export function verifyRelease(dir) {
   if (!ext) fail('extension manifest.json missing');
   else {
     if (JSON.stringify(ext.permissions) !== JSON.stringify(['activeTab', 'scripting'])) fail(`unexpected permissions: ${JSON.stringify(ext.permissions)}`);
-    for (const k of ['host_permissions', 'optional_host_permissions', 'content_scripts', 'background', 'externally_connectable', 'web_accessible_resources']) {
+    for (const k of ['host_permissions', 'content_scripts', 'externally_connectable', 'web_accessible_resources']) {
       if (ext[k] !== undefined) fail(`production manifest must not declare ${k}`);
+    }
+    // D-081: opt-in automatic scanning may only add these two, exactly.
+    if (ext.optional_host_permissions !== undefined && JSON.stringify(ext.optional_host_permissions) !== JSON.stringify(['http://*/*', 'https://*/*'])) {
+      fail(`unexpected optional_host_permissions: ${JSON.stringify(ext.optional_host_permissions)}`);
+    }
+    if (ext.background !== undefined && JSON.stringify(ext.background) !== JSON.stringify({ service_worker: 'background.js' })) {
+      fail(`unexpected background: ${JSON.stringify(ext.background)}`);
     }
     if (/TEST BUILD/.test(ext.name)) fail('test build packaged as release');
     if (!String(ext.content_security_policy?.extension_pages ?? '').includes("connect-src 'none'")) fail("CSP lacks connect-src 'none'");
@@ -81,8 +88,10 @@ export function verifyRelease(dir) {
   for (const [path, data] of entries) {
     if (!path.endsWith('.js')) continue;
     const code = data.toString('utf8');
-    for (const bad of ['fetch(', 'XMLHttpRequest', 'WebSocket', 'sendBeacon', 'eval(', 'new Function', 'URLSearchParams', 'sendMessage', 'onMessage']) {
-      if (code.includes(bad)) fail(`${path} contains ${bad}`);
+    // D-081: the one-way auto-scan channel may only send from auto.js and receive in background.js.
+    const channel = { 'auto.js': ['sendMessage'], 'background.js': ['onMessage'] }[path] ?? [];
+    for (const bad of ['fetch(', 'XMLHttpRequest', 'WebSocket', 'sendBeacon', 'eval(', 'new Function', 'URLSearchParams', 'sendMessage', 'onMessage', 'onConnect', 'onMessageExternal']) {
+      if (!channel.includes(bad) && code.includes(bad)) fail(`${path} contains ${bad}`);
     }
   }
   return { ok: errors.length === 0, errors, version: manifest.extensionVersion, releaseType: manifest.releaseType, artifact: manifest.artifact, source: manifest.source };

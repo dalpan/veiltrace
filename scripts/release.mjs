@@ -82,6 +82,7 @@ export async function release({ out = 'release', candidate = false } = {}) {
     toolchain: { node: process.versions.node, esbuild: toolVersion('esbuild') },
     permissions: extManifest.permissions,
     hostPermissions: extManifest.host_permissions ?? [],
+    optionalHostPermissions: extManifest.optional_host_permissions ?? [],
     files: files.map((f) => ({ path: f.path, size: f.data.length, sha256: sha256(f.data) })),
     artifact: { file: zipName, size: zip.length, sha256: sha256(zip) },
     sbom: { file: sbomName, sha256: sha256(sbomBytes), thirdPartyComponents: 0 },

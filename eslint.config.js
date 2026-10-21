@@ -63,7 +63,19 @@ export default defineConfig(
         { selector: "AssignmentExpression[left.property.name=/^(innerHTML|outerHTML|srcdoc)$/]", message: 'Render text with textContent / text nodes only.' },
         { selector: "CallExpression[callee.property.name=/^(insertAdjacentHTML|write|writeln|createContextualFragment|parseFromString)$/]", message: 'No HTML parsing sinks.' },
         { selector: "NewExpression[callee.name='Function']", message: 'No dynamic code.' },
-        { selector: "CallExpression[callee.object.name='chrome'][callee.property.name=/^(sendMessage|connect)$/], MemberExpression[property.name=/^(onMessage|onMessageExternal|onConnect|onConnectExternal)$/]", message: 'No extension messaging surface (D-035).' },
+        { selector: "CallExpression[callee.object.name='chrome'][callee.property.name=/^(sendMessage|connect)$/], MemberExpression[property.name=/^(onMessage|onMessageExternal|onConnect|onConnectExternal)$/]", message: 'No extension messaging surface (D-035); the auto-scan channel lives only in src/extension/auto/channel.ts (D-081).' },
+      ],
+    },
+  },
+  {
+    // D-081: the single, one-way auto-scan channel. Same rules as above, minus the messaging ban; still no onConnect/external.
+    files: ['src/extension/auto/channel.ts'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        { selector: "AssignmentExpression[left.property.name=/^(innerHTML|outerHTML|srcdoc)$/]", message: 'Render text with textContent / text nodes only.' },
+        { selector: "NewExpression[callee.name='Function']", message: 'No dynamic code.' },
+        { selector: "CallExpression[callee.property.name='connect'], MemberExpression[property.name=/^(onMessageExternal|onConnect|onConnectExternal)$/]", message: 'Only runtime.sendMessage / runtime.onMessage are allowed here (D-081).' },
       ],
     },
   },

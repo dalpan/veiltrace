@@ -62,6 +62,7 @@ describe('artifact verification', () => {
     const manifest = JSON.parse(readFileSync(join(dir, 'release-manifest.json'), 'utf8'));
     expect(manifest.permissions).toEqual(['activeTab', 'scripting']);
     expect(manifest.hostPermissions).toEqual([]);
+    expect(manifest.optionalHostPermissions).toEqual(['http://*/*', 'https://*/*']);
     expect(manifest.engine).toEqual({ default: '0.2.0', defaultRuleset: 'm4.1', baseline: { ruleset: 'm1', version: '0.1.0-m1', usedByExtension: false } });
     expect(manifest.source.commit).toMatch(/^[0-9a-f]{40}$|^unknown$/);
     expect(manifest.notice).toMatch(/do not establish authenticity/);
@@ -109,11 +110,14 @@ describe('artifact verification', () => {
     const manifest = JSON.parse(readFileSync(join(dir, 'release-manifest.json'), 'utf8'));
     const entries = readZip(readFileSync(join(dir, manifest.artifact.file)));
     const ext = JSON.parse(entries.get('manifest.json').toString());
-    entries.set('manifest.json', Buffer.from(JSON.stringify({ ...ext, name: 'VeilTrace (TEST BUILD)', host_permissions: ['https://*.test/*'] })));
+    entries.set('manifest.json', Buffer.from(JSON.stringify({ ...ext, name: 'VeilTrace (TEST BUILD)', host_permissions: ['https://*.test/*'],
+      optional_host_permissions: ['<all_urls>'], background: { service_worker: 'other.js' } })));
     const zip = writeZip([...entries].map(([path, data]) => ({ path, data })), 0);
     writeFileSync(join(dir, manifest.artifact.file), zip);
     const errors = verifyRelease(dir).errors.join(' ');
     expect(errors).toMatch(/must not declare host_permissions/);
     expect(errors).toMatch(/test build packaged as release/);
+    expect(errors).toMatch(/unexpected optional_host_permissions/);
+    expect(errors).toMatch(/unexpected background/);
   }, 60_000);
 });

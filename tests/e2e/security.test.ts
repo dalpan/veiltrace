@@ -97,13 +97,14 @@ describe('offline guarantees', () => {
 });
 
 describe('production build', () => {
-  it('manifests: production has exactly activeTab + scripting and no host permissions; test permissions stay in the test build', async () => {
+  it('manifests: production has exactly activeTab + scripting, no granted host permissions, and only the D-081 opt-in additions', async () => {
     const prod = JSON.parse(readFileSync(join(await extensionDir('prod'), 'manifest.json'), 'utf8'));
     const test = JSON.parse(readFileSync(join(await extensionDir('test'), 'manifest.json'), 'utf8'));
     expect(prod.permissions).toEqual(['activeTab', 'scripting']);
     expect(prod.host_permissions).toBeUndefined();
     expect(prod.content_scripts).toBeUndefined();
-    expect(prod.background).toBeUndefined();
+    expect(prod.optional_host_permissions).toEqual(['http://*/*', 'https://*/*']);
+    expect(prod.background).toEqual({ service_worker: 'background.js' });
     expect(prod.externally_connectable).toBeUndefined();
     expect(prod.web_accessible_resources).toBeUndefined();
     expect(prod.content_security_policy.extension_pages).toContain("connect-src 'none'");
@@ -112,10 +113,12 @@ describe('production build', () => {
     expect(test.host_permissions).toEqual(['https://*.test/*', 'https://*.example/*']);
     const prodPopup = readFileSync(join(await extensionDir('prod'), 'popup.js'), 'utf8');
     expect(prodPopup).not.toContain('URLSearchParams');
-    for (const f of ['popup.js', 'content.js']) {
+    // Messaging exists only in the D-081 channel: auto.js may send, background.js may receive; popup.js and content.js do neither.
+    const allowed: Record<string, string[]> = { 'popup.js': [], 'content.js': [], 'auto.js': ['sendMessage'], 'background.js': ['onMessage'] };
+    for (const [f, ok] of Object.entries(allowed)) {
       const code = readFileSync(join(await extensionDir('prod'), f), 'utf8');
-      for (const bad of ['fetch(', 'XMLHttpRequest', 'WebSocket', 'sendBeacon', 'eval(', 'new Function', 'innerHTML', 'onMessage', 'sendMessage']) {
-        expect(code.includes(bad), `${f}: ${bad}`).toBe(false);
+      for (const bad of ['fetch(', 'XMLHttpRequest', 'WebSocket', 'sendBeacon', 'eval(', 'new Function', 'innerHTML', 'onMessage', 'sendMessage', 'onConnect', 'runtime.connect', 'onMessageExternal']) {
+        if (!ok.includes(bad)) expect(code.includes(bad), `${f}: ${bad}`).toBe(false);
       }
     }
   });

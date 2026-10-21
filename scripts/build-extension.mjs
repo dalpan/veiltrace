@@ -1,5 +1,6 @@
 // Builds the Chromium MV3 extension.
-//   dist/extension       production: permissions exactly ["activeTab", "scripting"], no host permissions
+//   dist/extension       production: permissions exactly ["activeTab", "scripting"], no host permissions; optional host
+//                        permissions and a badge-only service worker for opt-in automatic scanning (D-081)
 //   dist/extension-test  e2e only (D-013): + host permissions for fictional test hosts, + ?tab= targeting
 // Test-only code is compiled out of the production popup (define __VT_TEST__=false + dead-code removal).
 import { build } from 'esbuild';
@@ -13,8 +14,11 @@ export async function buildExtension({ test = false, outdir = test ? 'dist/exten
   rmSync(outdir, { recursive: true, force: true });
   mkdirSync(join(outdir, 'icons'), { recursive: true });
   const common = { bundle: true, format: 'iife', platform: 'browser', target: 'chrome110', legalComments: 'none', minifySyntax: true, logLevel: 'warning' };
-  await build({ ...common, entryPoints: ['src/extension/popup/popup.ts'], outfile: join(outdir, 'popup.js'), define: { __VT_TEST__: String(test) } });
+  const define = { __VT_TEST__: String(test) };
+  await build({ ...common, entryPoints: ['src/extension/popup/popup.ts'], outfile: join(outdir, 'popup.js'), define });
   await build({ ...common, entryPoints: ['src/extension/content/index.ts'], outfile: join(outdir, 'content.js'), globalName: 'VeiltraceContent' });
+  await build({ ...common, entryPoints: ['src/extension/auto/content-auto.ts'], outfile: join(outdir, 'auto.js'), define });
+  await build({ ...common, entryPoints: ['src/extension/background/worker.ts'], outfile: join(outdir, 'background.js'), define });
   copyFileSync('src/extension/popup/popup.html', join(outdir, 'popup.html'));
   copyFileSync('src/extension/popup/popup.css', join(outdir, 'popup.css'));
   for (const [name, png] of Object.entries(icons())) writeFileSync(join(outdir, 'icons', name), png);

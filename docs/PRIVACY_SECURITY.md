@@ -9,7 +9,7 @@ Status: M0 commitments; verified for the core (M1), the extractor/harness (M2), 
 | P1 | No page content, URL, credential, cookie, clipboard content or history leaves the device. | (a) The build artifact contains no `fetch`, `XMLHttpRequest`, `WebSocket`, `EventSource`, `sendBeacon` or `importScripts` (CI grep on `dist/`). (b) A Playwright e2e test records all network requests during scan + render and asserts none originate from the extension. (c) The extension-page CSP sets `connect-src 'none'`. |
 | P2 | Page content is processed in memory and discarded when the popup closes. | No `storage` permission in the MVP. Review checklist item. |
 | P3 | No analytics, telemetry or crash reporting. | Same as P1. |
-| P4 | Analysis runs only after an explicit user gesture (toolbar click). | `activeTab` only. No `content_scripts` and no `host_permissions` in the manifest (CI manifest assertion). |
+| P4 | Analysis runs only after an explicit user gesture (toolbar click), unless the user has turned on automatic scanning (D-081). | `activeTab` by default. No `content_scripts` and no `host_permissions` in the manifest (CI manifest assertion). Automatic scanning needs the optional host permission, granted only through Chrome's dialog after a click in the popup, and is revoked when turned off. |
 | P5 | Settings persisted in future milestones contain no page-derived data. | Schema review when `storage` is introduced (M6). |
 
 ## 2. Permission strategy (least privilege)
@@ -103,3 +103,8 @@ Residual: the extractor runs in the page's **main world** in tests (`page.evalua
 | No credential storage, submission or interception | No storage API, no network API, no submit/click in the extractor (lint rule and bundle checks unchanged) |
 | Minimal permissions unchanged | Production manifest: `activeTab` + `scripting`, no host permissions, CSP `connect-src 'none'` (`verify:extension`) |
 | Unknown detector metadata cannot be silently dropped | `parseScanReport` validates the credential section with exact key sets and closed enums; unknown fields reject the report (unit tests) |
+
+## Automatic scanning (opt-in, D-081)
+- Off by default; the production extension installs with `{ permissions: ['activeTab','scripting'], origins: [] }` (tested).
+- When on, pages are analyzed in the tab's isolated world exactly as in manual mode. The only data that leaves the tab is `{verdict, actionable}` for the toolbar badge (unit-tested shape, validated by the receiver). Nothing is stored, logged or sent off the device, and form values are never read.
+- Turning it off unregisters the content script and removes the host permission (E2E-tested).

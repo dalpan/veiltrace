@@ -4,6 +4,7 @@ import type {
   CredEvidenceItem, CredFindingSummary, EvidenceItem, FindingSummary, PayEvidenceItem, PayFindingSummary, ScanReport, SupportEvidenceItem, SupportFindingSummary,
 } from '../content/report.js';
 import { classifyUrl, extensionVersion, getTargetTab, isTabView, runHighlight, runScan, type TargetTab, type UrlClass } from './adapter.js';
+import { autoEnabled, disableAuto, enableAuto } from '../auto/auto.js';
 import { aggregate, CATEGORIES, type Category, type Dashboard, type FindingGroup, type FindingRef } from './aggregate.js';
 import { detectLang, formatCount, MESSAGES, type HighlightKey, type Lang, type Messages } from './i18n.js';
 import { parseHighlightResult, parseScanReport } from './validate.js';
@@ -26,11 +27,14 @@ interface State {
   totalMs: number;
   /** Highlight outcome per evidence key, kept across language switches. */
   highlights: Map<string, HighlightKey>;
+  /** Opt-in automatic scanning (D-081) and the last outcome of a mode change. */
+  auto: boolean;
+  modeNote: 'denied' | 'failed' | null;
 }
 
 const state: State = {
   lang: detectLang(typeof chrome !== 'undefined' && chrome.i18n ? chrome.i18n.getUILanguage() : navigator.language),
-  phase: 'idle', tab: null, urlClass: 'unknown', report: null, error: null, scannedOnce: false, totalMs: 0, highlights: new Map(),
+  phase: 'idle', tab: null, urlClass: 'unknown', report: null, error: null, scannedOnce: false, totalMs: 0, highlights: new Map(), auto: false, modeNote: null,
 };
 
 const t = (): Messages => MESSAGES[state.lang];
@@ -344,6 +348,13 @@ function render(): void {
   $('scan-state').dataset.state = scanState;
   const version = extensionVersion();
   $('version').textContent = version ? `v${version}` : '';
+  $('mode').dataset.mode = state.auto ? 'automatic' : 'manual';
+  $('mode-title').textContent = m.auto.title;
+  $('mode-label').textContent = m.auto.modeLabel[state.auto ? 'automatic' : 'manual'];
+  $('mode-text').textContent = state.auto ? m.auto.automaticText : m.auto.manualText;
+  $('mode-consent').textContent = state.auto ? '' : m.auto.consent;
+  $('mode-toggle').textContent = state.auto ? m.auto.disable : m.auto.enable;
+  $('mode-status').textContent = state.modeNote ? m.auto[state.modeNote] : '';
   $('limits-summary').textContent = m.limitsSummary;
   $('limits').textContent = m.limitsText;
   $('meta').textContent = state.report && state.phase === 'done'
@@ -397,6 +408,26 @@ async function scan(): Promise<void> {
   }
 }
 
+/** Turning automatic scanning on asks Chrome for the optional host permission, so it must run straight from the click. */
+async function toggleMode(): Promise<void> {
+  const btn = $('mode-toggle') as HTMLButtonElement;
+  btn.disabled = true;
+  try {
+    if (state.auto) {
+      await disableAuto();
+      Object.assign(state, { auto: false, modeNote: null });
+    } else {
+      const on = await enableAuto();
+      Object.assign(state, { auto: on, modeNote: on ? null : 'denied' });
+    }
+  } catch {
+    state.modeNote = 'failed';
+  } finally {
+    btn.disabled = false;
+    render();
+  }
+}
+
 async function main(): Promise<void> {
   for (const l of ['en', 'id'] as const) {
     $(`lang-${l}`).addEventListener('click', () => {
@@ -405,7 +436,9 @@ async function main(): Promise<void> {
     });
   }
   $('scan').addEventListener('click', () => void scan());
+  $('mode-toggle').addEventListener('click', () => void toggleMode());
   if (await isTabView()) document.documentElement.classList.add('fluid');
+  state.auto = await autoEnabled();
   state.tab = await getTargetTab().catch(() => null);
   state.urlClass = classifyUrl(state.tab?.url);
   if (!state.tab) Object.assign(state, { phase: 'error', error: 'noPage' });
@@ -415,6 +448,8 @@ async function main(): Promise<void> {
     document.body.dataset.restricted = state.urlClass;
   }
   render();
+  // With automatic scanning on, opening the popup shows the current page's results without an extra click.
+  if (state.auto && state.phase === 'idle') await scan();
 }
 
 void main();

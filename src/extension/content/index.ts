@@ -17,8 +17,9 @@ function shadowRootAdapter(): ((el: Element) => ShadowRoot | null) | undefined {
   return (el: Element) => (el instanceof HTMLElement ? (fn(el) ?? null) : el.shadowRoot);
 }
 
-export function scan(options: { timeBudgetMs?: number } = {}): ScanReport {
-  clearHighlight();
+/** `keepHighlight`: automatic rescans (D-081) must not remove a highlight the user just asked for. */
+export function scan(options: { timeBudgetMs?: number; keepHighlight?: boolean } = {}): ScanReport {
+  if (!options.keepHighlight) clearHighlight();
   const getShadowRoot = shadowRootAdapter();
   const t0 = performance.now();
   const { snapshot } = extractSnapshot(document, {

@@ -4,6 +4,14 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-22 · Opt-in automatic scanning · **Implemented (D-081); manual Chrome validation pending**
+
+**Done:** popup "Scan mode" (MANUAL/AUTO) with consent text; optional host permission requested through Chrome's dialog; dynamic content script (`content.js` + `auto.js`) scanning on load and change with debounce, maximum wait, interval and scan caps; badge-only service worker (red "!" for manipulative pages); popup scans on open in automatic mode; turning it off unregisters and removes the permission. D-035 narrowed to one validated one-way channel; ESLint scope, bundle checks and `verify-release` policy updated. **Tests:** `tests/auto.test.ts` (4), `tests/e2e/auto.test.ts` (5), updated manifest/release/security tests.
+
+**Next:** owner tries it in Chrome (turn on, open a demo lure, see the badge). Then P1: real-world Indonesian dataset kit.
+
+---
+
 ## 2026-10-21 · P0 hackathon submission package · **Done (owner to fill team details and record the narrated video)**
 
 **Done:** pending CA03/popup fix committed; README introduction rewritten for judges; private GitHub repository `dalpan/veiltrace` created after a history audit (no secrets, keys, screenshots or release files), `main` and `eval-freeze-v1` pushed; `submission/PROPOSAL.md` (Indonesian, 5 pages as PDF) and `submission/VIDEO_SCRIPT.md`; slide deck (11 slides, Indonesian) as a private Slides artifact; automated silent demo video (`npm run submission:video`, 13 cards, about 90 s) (D-080).

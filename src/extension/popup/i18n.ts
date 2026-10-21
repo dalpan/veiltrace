@@ -114,6 +114,21 @@ export interface Messages {
     contactHidden: string;
     limitation: Record<SupportLimitation, string>;
   };
+  /** Opt-in automatic scanning (D-081). */
+  auto: {
+    actionTitle: string;
+    badgeTitle: string;
+    title: string;
+    /** Technical label in the header and the mode summary. */
+    modeLabel: Record<'manual' | 'automatic', string>;
+    manualText: string;
+    automaticText: string;
+    consent: string;
+    enable: string;
+    disable: string;
+    denied: string;
+    failed: string;
+  };
   /** M5.4: unified threat dashboard (all four detectors). */
   dash: {
     stateLabel: Record<'standby' | 'scanning' | 'complete' | 'partial' | 'error', string>;
@@ -365,6 +380,19 @@ const EN: Messages = {
       'trust-boundary-heuristic': 'Whether this content comes from the site or from others is estimated from the page structure.',
       'contact-details-not-reported': 'Phone numbers are matched to understand the direction, but are never copied into the report.',
     },
+  },
+  auto: {
+    actionTitle: 'VeilTrace: scan this page',
+    badgeTitle: 'VeilTrace: manipulative content found on this page. Click for details.',
+    title: 'Scan mode',
+    modeLabel: { manual: 'MANUAL', automatic: 'AUTO' },
+    manualText: 'Manual: VeilTrace reads a page only when you click Scan page.',
+    automaticText: 'Automatic: VeilTrace checks pages as they load and change, and marks the toolbar icon with "!" when it finds manipulative content.',
+    consent: 'Chrome will ask you to let VeilTrace read all websites. Pages are still analyzed only on this device: nothing is sent, stored or shared, and form values are never read. It applies to pages opened or reloaded afterwards, and you can turn it off here or in Chrome settings at any time.',
+    enable: 'Turn on automatic scanning',
+    disable: 'Turn off automatic scanning',
+    denied: 'Permission not granted. VeilTrace stays in manual mode.',
+    failed: 'The scan mode could not be changed. Try again.',
   },
   dash: {
     stateLabel: { standby: 'STANDBY', scanning: 'SCANNING', complete: 'SCAN COMPLETE', partial: 'PARTIAL SCAN', error: 'SCAN FAILED' },
@@ -636,6 +664,19 @@ const ID: Messages = {
       'trust-boundary-heuristic': 'Apakah konten ini berasal dari situs atau dari pihak lain diperkirakan dari struktur halaman.',
       'contact-details-not-reported': 'Nomor telepon dicocokkan untuk memahami arahan, tetapi tidak pernah disalin ke laporan.',
     },
+  },
+  auto: {
+    actionTitle: 'VeilTrace: pindai halaman ini',
+    badgeTitle: 'VeilTrace: konten manipulatif ditemukan di halaman ini. Klik untuk detail.',
+    title: 'Mode pemindaian',
+    modeLabel: { manual: 'MANUAL', automatic: 'OTOMATIS' },
+    manualText: 'Manual: VeilTrace membaca halaman hanya saat Anda menekan Pindai halaman.',
+    automaticText: 'Otomatis: VeilTrace memeriksa halaman saat dimuat dan berubah, dan memberi tanda "!" pada ikon toolbar jika menemukan konten manipulatif.',
+    consent: 'Chrome akan meminta izin agar VeilTrace dapat membaca semua situs. Halaman tetap dianalisis hanya di perangkat ini: tidak ada yang dikirim, disimpan, atau dibagikan, dan isian formulir tidak pernah dibaca. Berlaku untuk halaman yang dibuka atau dimuat ulang setelahnya, dan dapat dimatikan di sini atau di pengaturan Chrome kapan saja.',
+    enable: 'Aktifkan pemindaian otomatis',
+    disable: 'Matikan pemindaian otomatis',
+    denied: 'Izin tidak diberikan. VeilTrace tetap dalam mode manual.',
+    failed: 'Mode pemindaian tidak dapat diubah. Coba lagi.',
   },
   dash: {
     stateLabel: { standby: 'SIAGA', scanning: 'MEMINDAI', complete: 'PEMINDAIAN LENGKAP', partial: 'PEMINDAIAN SEBAGIAN', error: 'PEMINDAIAN GAGAL' },

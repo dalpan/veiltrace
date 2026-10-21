@@ -42,6 +42,13 @@
   </main>
 
   <footer>
+    <details id="mode" class="mode" data-mode="manual">
+      <summary><span id="mode-title">Scan mode</span> · <span id="mode-label" class="mode-chip">MANUAL</span></summary>
+      <p id="mode-text"></p>
+      <p id="mode-consent" class="mode-consent"></p>
+      <button id="mode-toggle" class="show" type="button">Turn on automatic scanning</button>
+      <p id="mode-status" class="mode-status" role="status" aria-live="polite"></p>
+    </details>
     <details class="limits">
       <summary id="limits-summary">What VeilTrace can and cannot see</summary>
       <p id="limits"></p>

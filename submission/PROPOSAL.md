@@ -48,6 +48,7 @@ Ciri bersamanya: umpan sering muncul di **situs yang sah**, misalnya kolom komen
    - keterbatasan, misalnya bahwa "klaim sebagai petugas tidak dapat diverifikasi".
 4. **Dashboard terpadu.** Popup menampilkan ringkasan ancaman halaman, status keempat kategori, saran tindakan sesuai kategori, dan daftar temuan yang diurutkan dari yang paling serius. VeilTrace **tidak pernah menyatakan halaman "aman"**; tanpa temuan pun, VeilTrace hanya menyatakan apa yang tidak ditemukan di bagian yang dapat diperiksa.
 5. **Dwibahasa.** Antarmuka dan deteksi tersedia dalam Bahasa Indonesia dan Inggris, termasuk bahasa informal yang umum dipakai penipu.
+6. **Manual atau otomatis, pilihan pengguna.** Bawaannya manual: VeilTrace hanya membaca halaman saat tombol Pindai ditekan. Pengguna dapat mengaktifkan **pemindaian otomatis** dari popup setelah membaca penjelasan persetujuan dan menyetujui dialog izin Chrome. Dalam mode ini, halaman diperiksa saat dimuat dan berubah, dan ikon VeilTrace diberi tanda **!** merah bila ditemukan konten manipulatif. Analisis tetap di perangkat, dan mode ini dapat dimatikan kapan saja.
 
 ## 4. Relevansi bagi pengamanan siber TNI AD
 
@@ -78,6 +79,7 @@ Kebaruan teknisnya adalah **korelasi kontekstual yang dapat dijelaskan**: tindak
 Purwarupa sudah berjalan sebagai ekstensi Chromium MV3:
 
 - **Empat detektor** dengan aturan terdokumentasi.
+- **Pemindaian otomatis opt-in** dengan penanda di ikon toolbar.
 - **Dashboard dwibahasa.**
 - **Tombol "Tunjukkan di halaman"**, termasuk di dalam shadow DOM dan frame dari situs yang sama.
 - **Pemindaian sebagian dilaporkan jujur**, misalnya ketika ada frame dari situs lain atau halaman sangat besar.
@@ -115,13 +117,13 @@ Ketiga target tidak tercapai. Hasil ini dipublikasikan beserta penyebab kegagala
 - **Detektor CRED, PAY, dan SUP** baru diukur pada data pengembangan yang ditulis oleh penulis yang sama dengan aturannya. Angkanya optimistis dan **bukan** tingkat akurasi di dunia nyata.
 - **Deteksi berbasis aturan** bisa terlewat oleh susunan kata yang tidak lazim. Contoh: bahasa slang di luar kosakata yang dikenal, atau alarm palsu dengan kalimat baru.
 - **Batas cakupan pemindaian:**
-  - Pemindaian saat ini dilakukan atas permintaan pengguna, belum otomatis.
+  - Pemindaian otomatis bersifat opt-in per pengguna; pengaktifan serentak oleh organisasi (build terkelola) belum tersedia.
   - VeilTrace tidak membaca gambar, video, atau frame dari situs lain.
   - Belum tersedia untuk browser di ponsel.
 
 ## 9. Rencana pengembangan
 
-1. **Mode otomatis opt-in**, yaitu pemindaian saat halaman dimuat dengan penanda di ikon toolbar. Mode ini diaktifkan oleh pengguna atau oleh kebijakan organisasi, tetap luring, dan bisa dicabut kapan saja. Mode manual tetap menjadi bawaan.
+1. **Mode otomatis untuk organisasi**: build terkelola yang dapat diaktifkan serentak lewat kebijakan Chrome/Edge, tetap luring dan tanpa pemantauan terpusat. Mode otomatis per pengguna sudah tersedia.
 2. **Dataset kasus nyata Indonesia.** Kasusnya dikumpulkan dari materi edukasi OJK, perbankan, dan berita, serta kiriman sukarela, lalu dilabeli oleh dua orang. Sebagian dikunci sebagai set uji sebelum aturan disesuaikan, supaya hasilnya jujur.
 3. **Pola khusus Indonesia**: penipuan rekrutmen ("jalur khusus", biaya masuk), pencatutan pangkat atau jabatan, dan lampiran `.apk` berkedok undangan atau resi.
 4. **Prototipe pemindai WhatsApp Web**, manual, lokal, dan tanpa menyimpan percakapan. Fitur ini memerlukan kajian privasi (UU PDP) dan ketentuan layanan terlebih dahulu.
