@@ -7,6 +7,8 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 ## 2026-10-22 · Held-out v2 run (owner request) · **Done: targets missed**
 One preregistered run at `29dda8e`: overall TP 11 · FP 5 · TN 23 · FN 21; recall 34.4%, precision 68.8%, hard-negative FPR 17.9% (docs/EVALUATION_RESULTS_V2.md). The rules overfit the author's wording; v2 is now spent. **Next:** class-level fixes measured on real-world data and a new blind set v3.
 
+PWA published at https://dalpan.github.io/veiltrace/ via `npm run deploy:pwa` (gh-pages branch, D-090); checked live in Chromium at phone width: service worker active, 0 external requests. **Blocker:** a real-phone install and share-from-WhatsApp test by the owner.
+
 ---
 
 ## 2026-10-22 · P2b web chat (WhatsApp Web prototype) and P2c managed build · **Implemented (D-088, D-089)**
