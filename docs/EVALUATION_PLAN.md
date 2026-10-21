@@ -125,6 +125,7 @@ Target corpus size by M4: dev ≥ 16 scenarios (≥ 8 neg), test ≥ 16 scenario
 - Source: public ClickFix reports with screenshots or HTML (vendor blogs, URLhaus tags), reconstructed and sanitized in an isolated VM per PRIVACY_SECURITY.md §5.
 - Negatives: a fixed list of ≥ 50 popular pages across categories (EN + ID news, docs, banking help, e-commerce), saved locally on a fixed date.
 - Report as **"field sample, n = X, collected on DATE"**. It is never merged with synthetic numbers.
+- Text-message field sample: `corpus/realworld` (D-082) with its README, two-annotator labelling, deterministic dev/test split and a hash-locked test half.
 
 ## 8. M4 research targets (approved, D-011)
 

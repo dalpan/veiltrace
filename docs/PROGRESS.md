@@ -4,6 +4,14 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-22 · P1 real-world field sample kit · **Tooling ready; no records yet (collection by others)**
+
+**Done:** `corpus/realworld` (D-082): record format, redaction tool, privacy guard in CI, deterministic dev/test split, two-annotator labels with Cohen's kappa and adjudication, hash lock for the test half, evaluation running all four detectors; `npm run realworld -- redact|add|label|agree|lock|eval`; English README and Indonesian contributor guide (`PANDUAN_KONTRIBUTOR.md`). **Tests:** `tests/realworld.test.ts` (10).
+
+**Next (owner):** recruit at least two annotators and contributors, collect redacted samples (aim: ≥ 100 malicious and ≥ 100 benign, Indonesian first), label independently, lock the test half before any evaluation. **Blockers:** needs people other than the rule author.
+
+---
+
 ## 2026-10-22 · Opt-in automatic scanning · **Implemented (D-081); manual Chrome validation pending**
 
 **Done:** popup "Scan mode" (MANUAL/AUTO) with consent text; optional host permission requested through Chrome's dialog; dynamic content script (`content.js` + `auto.js`) scanning on load and change with debounce, maximum wait, interval and scan caps; badge-only service worker (red "!" for manipulative pages); popup scans on open in automatic mode; turning it off unregisters and removes the permission. D-035 narrowed to one validated one-way channel; ESLint scope, bundle checks and `verify-release` policy updated. **Tests:** `tests/auto.test.ts` (4), `tests/e2e/auto.test.ts` (5), updated manifest/release/security tests.
