@@ -14,6 +14,8 @@ for (const id of ['D01-en-blog-security-check-overlay', 'D06-id-recipe-comment-l
 
 // Fictional demo site (docs/PRESENTER_GUIDE.md): http://localhost:8080/demo/ (also via 127.0.0.1 for the domain-invariance check).
 cpSync('demo/nusaverta', join(out, 'demo'), { recursive: true });
+// Realistic demo gallery (demo/scenes): http://localhost:8080/demo/scenes/
+cpSync('demo/scenes', join(out, 'demo', 'scenes'), { recursive: true });
 
 const page = (title, body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>${title}</title></head><body>${body}</body></html>\n`;
 
