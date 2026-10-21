@@ -2,7 +2,7 @@
   "split": "pay-dev",
   "note": "DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.",
   "detectorVersion": "pay-0.3.0-exp",
-  "extractorVersion": "0.2.0-m5",
+  "extractorVersion": "0.3.0",
   "metrics": {
     "scenarios": 35,
     "confusion": {
@@ -48,12 +48,12 @@
       ]
     },
     "localization": {
-      "k": 13,
+      "k": 15,
       "n": 15,
-      "value": 0.8667,
+      "value": 1,
       "ci95": [
-        0.6212,
-        0.9626
+        0.7961,
+        1
       ]
     },
     "classMatrix": [
@@ -386,7 +386,7 @@
       "findings": [
         "PR1:manipulative_instruction"
       ],
-      "localized": false,
+      "localized": true,
       "clickfixVerdict": "none",
       "credentialVerdict": "none",
       "partial": [],
@@ -404,7 +404,7 @@
       "findings": [
         "PR2:manipulative_instruction"
       ],
-      "localized": false,
+      "localized": true,
       "clickfixVerdict": "none",
       "credentialVerdict": "none",
       "partial": [],

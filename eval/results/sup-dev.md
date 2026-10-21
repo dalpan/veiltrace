@@ -1,13 +1,13 @@
 # Support-impersonation detector: development results (sup-dev)
 
-Detector sup-0.3.0-exp (EXPERIMENTAL), extractor 0.2.0-m5. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
+Detector sup-0.3.0-exp (EXPERIMENTAL), extractor 0.3.0. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
 
 TP 15 · FP 0 · TN 18 · FN 0
 
 - Precision: 100.0% (15/15; 95% CI 79.6%–100.0%)
 - Recall: 100.0% (15/15; 95% CI 79.6%–100.0%)
 - Hard-negative FPR: 0.0% (0/18; 95% CI 0.0%–17.6%)
-- Localization: 93.3% (14/15; 95% CI 70.2%–98.8%)
+- Localization: 100.0% (15/15; 95% CI 79.6%–100.0%)
 - Exact class agreement: 97.0% (32/33; 95% CI 84.7%–99.5%)
 - Requests during scanning: 0; privacy sentinel leaks: 0 (0 fields filled); phone numbers or digit runs in results: 0
 
@@ -38,7 +38,7 @@ TP 15 · FP 0 · TN 18 · FN 0
 | SD10-id-tim-it-anydesk-informal | malicious | manipulative | manipulative | SR2:manipulative_instruction | ✓ | none | none | none |
 | SD11-en-realistic-blue-alert-zeus | malicious | manipulative | manipulative | SR1:manipulative_instruction | ✓ | none | none | none |
 | SD12-id-realistic-bank-chat-remote-app | malicious | manipulative | manipulative | SR2:manipulative_instruction | ✓ | none | none | none |
-| SD13-id-catut-pangkat-ancaman-hukum | malicious | manipulative | manipulative | SR3:manipulative_instruction | ✗ | none | none | none |
+| SD13-id-catut-pangkat-ancaman-hukum | malicious | manipulative | manipulative | SR3:manipulative_instruction | ✓ | none | none | none |
 | SN01-en-help-center-contact | benign | observed | observed | SR5:observed_instruction |  | none | none | none |
 | SN02-id-pusat-bantuan-kontak | benign | observed | observed | SR5:observed_instruction |  | none | none | none |
 | SN03-en-it-helpdesk-remote-procedure | benign | observed | observed | SR5:observed_instruction |  | none | none | none |

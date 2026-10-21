@@ -7,6 +7,10 @@ import type { Verdict } from '../../core/types.js';
 import { aggregate } from '../popup/aggregate.js';
 
 declare const __VT_TEST__: boolean;
+declare const __VT_MANAGED__: boolean;
+
+/** Managed build (D-089): host access is granted by policy at install and automatic scanning cannot be turned off here. */
+export const MANAGED: boolean = typeof __VT_MANAGED__ !== 'undefined' && __VT_MANAGED__;
 
 export const AUTO_SCRIPT_ID = 'veiltrace-auto';
 /** Production: every http(s) page, as optional_host_permissions. TEST build: the fictional hosts it already holds (D-013). */
@@ -57,21 +61,30 @@ export async function autoEnabled(): Promise<boolean> {
   }
 }
 
+const SCRIPT = { id: AUTO_SCRIPT_ID, matches: AUTO_ORIGINS, js: ['content.js', 'auto.js'], runAt: 'document_idle' as const, allFrames: false };
+
+async function register(): Promise<void> {
+  const existing = await chrome.scripting.getRegisteredContentScripts({ ids: [AUTO_SCRIPT_ID] });
+  if (existing.length > 0) return;
+  // Firefox versions without persistAcrossSessions reject the option; registration then lasts for the browser session.
+  await chrome.scripting.registerContentScripts([{ ...SCRIPT, persistAcrossSessions: true }]).catch(() => chrome.scripting.registerContentScripts([SCRIPT]));
+}
+
+/** Managed build: make sure the automatic-scan script is registered (on install and on browser start). */
+export async function ensureManagedAuto(): Promise<void> {
+  if (MANAGED && (await chrome.permissions.contains({ origins: AUTO_ORIGINS }))) await register();
+}
+
 /** Must be called directly from a click: Chrome shows its own permission dialog. Returns whether auto mode is now on. */
 export async function enableAuto(): Promise<boolean> {
   const granted = await chrome.permissions.request({ origins: AUTO_ORIGINS });
   if (!granted) return false;
-  const existing = await chrome.scripting.getRegisteredContentScripts({ ids: [AUTO_SCRIPT_ID] });
-  if (existing.length === 0) {
-    const script = { id: AUTO_SCRIPT_ID, matches: AUTO_ORIGINS, js: ['content.js', 'auto.js'], runAt: 'document_idle' as const, allFrames: false };
-    // Firefox versions without persistAcrossSessions reject the option; registration then lasts for the browser session.
-    await chrome.scripting.registerContentScripts([{ ...script, persistAcrossSessions: true }])
-      .catch(() => chrome.scripting.registerContentScripts([script]));
-  }
+  await register();
   return true;
 }
 
 export async function disableAuto(): Promise<void> {
+  if (MANAGED) return;
   await chrome.scripting.unregisterContentScripts({ ids: [AUTO_SCRIPT_ID] }).catch(() => undefined);
   // The TEST build's fictional hosts are required permissions and cannot be removed; production removes the grant.
   if (!__VT_TEST__) await chrome.permissions.remove({ origins: AUTO_ORIGINS }).catch(() => false);

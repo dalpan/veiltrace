@@ -1,6 +1,6 @@
 # Evaluation: dev split
 
-Engine 0.3.0, extractor 0.2.0-m5. Synthetic fixtures; **not** real-world effectiveness.
+Engine 0.3.0, extractor 0.3.0. Synthetic fixtures; **not** real-world effectiveness.
 
 Composition: category:adversarial=7, category:ambiguous=1, category:benign=31, category:positive=17, hardNegative=32, lang:en=33, lang:id=23, total=56, truth:benign=32, truth:malicious=24
 
@@ -9,6 +9,7 @@ Composition: category:adversarial=7, category:ambiguous=1, category:benign=31, c
 | System | TP | FP | TN | FN | Precision | Recall | FPR | Hard-neg FPR | Localization |
 |---|---|---|---|---|---|---|---|---|---|
 | veiltrace | 23 | 0 | 32 | 1 | 100.0% (23/23; 95% CI 85.7%–100.0%) | 95.8% (23/24; 95% CI 79.8%–99.3%) | 0.0% (0/32; 95% CI 0.0%–10.7%) | 0.0% (0/32; 95% CI 0.0%–10.7%) | 100.0% (23/23; 95% CI 85.7%–100.0%) |
+| veiltrace-0.2.0 | 20 | 2 | 30 | 4 | 90.9% (20/22; 95% CI 72.2%–97.5%) | 83.3% (20/24; 95% CI 64.1%–93.3%) | 6.3% (2/32; 95% CI 1.7%–20.1%) | 6.3% (2/32; 95% CI 1.7%–20.1%) | 100.0% (20/20; 95% CI 83.9%–100.0%) |
 | veiltrace-m1 | 20 | 7 | 25 | 4 | 74.1% (20/27; 95% CI 55.3%–86.8%) | 83.3% (20/24; 95% CI 64.1%–93.3%) | 21.9% (7/32; 95% CI 11.0%–38.8%) | 21.9% (7/32; 95% CI 11.0%–38.8%) | 100.0% (20/20; 95% CI 83.9%–100.0%) |
 | B0 | 24 | 17 | 15 | 0 | 58.5% (24/41; 95% CI 43.4%–72.2%) | 100.0% (24/24; 95% CI 86.2%–100.0%) | 53.1% (17/32; 95% CI 36.4%–69.1%) | 53.1% (17/32; 95% CI 36.4%–69.1%) | 100.0% (24/24; 95% CI 86.2%–100.0%) |
 | A1-page+context | 20 | 9 | 23 | 4 | 69.0% (20/29; 95% CI 50.8%–82.7%) | 83.3% (20/24; 95% CI 64.1%–93.3%) | 28.1% (9/32; 95% CI 15.6%–45.4%) | 28.1% (9/32; 95% CI 15.6%–45.4%) | 100.0% (20/20; 95% CI 83.9%–100.0%) |

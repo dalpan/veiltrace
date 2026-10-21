@@ -141,6 +141,7 @@ export interface Messages {
     manualText: string;
     automaticText: string;
     consent: string;
+    managedText: string;
     enable: string;
     disable: string;
     denied: string;
@@ -422,6 +423,7 @@ const EN: Messages = {
     manualText: 'Manual: VeilTrace reads a page only when you click Scan page.',
     automaticText: 'Automatic: VeilTrace checks pages as they load and change, and marks the toolbar icon with "!" when it finds manipulative content.',
     consent: 'Chrome will ask you to let VeilTrace read all websites. Pages are still analyzed only on this device: nothing is sent, stored or shared, and form values are never read. It applies to pages opened or reloaded afterwards, and you can turn it off here or in Chrome settings at any time.',
+    managedText: 'Automatic scanning is turned on by your organization. Pages are still analyzed only on this device; nothing is reported to your organization or anyone else.',
     enable: 'Turn on automatic scanning',
     disable: 'Turn off automatic scanning',
     denied: 'Permission not granted. VeilTrace stays in manual mode.',
@@ -722,6 +724,7 @@ const ID: Messages = {
     manualText: 'Manual: VeilTrace membaca halaman hanya saat Anda menekan Pindai halaman.',
     automaticText: 'Otomatis: VeilTrace memeriksa halaman saat dimuat dan berubah, dan memberi tanda "!" pada ikon toolbar jika menemukan konten manipulatif.',
     consent: 'Chrome akan meminta izin agar VeilTrace dapat membaca semua situs. Halaman tetap dianalisis hanya di perangkat ini: tidak ada yang dikirim, disimpan, atau dibagikan, dan isian formulir tidak pernah dibaca. Berlaku untuk halaman yang dibuka atau dimuat ulang setelahnya, dan dapat dimatikan di sini atau di pengaturan Chrome kapan saja.',
+    managedText: 'Pemindaian otomatis diaktifkan oleh organisasi Anda. Halaman tetap dianalisis hanya di perangkat ini; tidak ada yang dilaporkan ke organisasi Anda atau pihak lain.',
     enable: 'Aktifkan pemindaian otomatis',
     disable: 'Matikan pemindaian otomatis',
     denied: 'Izin tidak diberikan. VeilTrace tetap dalam mode manual.',

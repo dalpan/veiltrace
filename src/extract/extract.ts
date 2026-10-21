@@ -3,8 +3,8 @@
 // See docs/ARCHITECTURE.md §3 for behavior and limits.
 import type { Block, BlockContext, CopyTrigger, FieldKind, FormDestination, FormField, FormInfo, HiddenCopyCandidate, PageSnapshot, PartialReason } from '../core/types.js';
 
-/** 0.2.0-m5 adds structural form fields (M5.1); block extraction is unchanged from 0.1.0-m2. */
-export const EXTRACTOR_VERSION = '0.2.0-m5';
+/** 0.2.0-m5 adds structural form fields (M5.1); 0.3.0 marks incoming web-chat messages as user content (D-088). */
+export const EXTRACTOR_VERSION = '0.3.0';
 
 export interface ExtractOptions {
   maxNodes?: number;
@@ -45,6 +45,15 @@ const SKIP_TAGS = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEMPLATE', 'HEAD', 'M
 const INLINE_DISPLAYS = new Set(['inline', 'inline-block', 'inline-flex', 'inline-grid', 'inline-table', 'contents', 'ruby', 'ruby-text']);
 const HEADINGS = new Set(['H1', 'H2', 'H3']);
 const UGC_TOKEN = /(?:^|[-_\s])(?:comments?|replies|reply|reviews?|post-body|user-content|ugc|forum-post)(?:[-_\s]|$)/i;
+/**
+ * Web chat clients (D-088). A conversation (a grid/log/list/feed that holds incoming messages) is one user-content
+ * container, so consecutive messages correlate like a comment thread; outside such a list, a single incoming message is.
+ * Markers: classes such as "message-in"/"incoming" and the per-message "data-pre-plain-text" attribute.
+ */
+const CHAT_IN_TOKEN = /(?:^|[-_\s])(?:message-in|msg-in|incoming(?:-message)?|chat-in|received-message|bubble-in)(?:[-_\s]|$)/i;
+const CHAT_IN = '[data-pre-plain-text], [class*="message-in"], [class*="msg-in"], [class*="incoming"], [class*="bubble-in"]';
+const CONVERSATION_ROLES = new Set(['grid', 'log', 'list', 'feed']);
+const CONVERSATION = '[role="grid"], [role="log"], [role="list"], [role="feed"]';
 const COPY_TOKEN = /(?:^|[-_\s])(?:copy|clipboard)(?:[-_\s]|$)/i;
 /** Never read values of fields whose name/id/autocomplete suggest secrets or personal data. */
 const SENSITIVE_FIELD = /pass|pwd|token|csrf|xsrf|auth|session|secret|otp|one-time|nonce|key|card|cc-|cvv|pin|ssn|nik|email|phone|tel/i;
@@ -239,6 +248,8 @@ function containerKind(el: Element, style: CSSStyleDeclaration, win: Window, coa
   if (coarse) return null;
   const tokens = `${el.id} ${typeof el.className === 'string' ? el.className : ''}`;
   if (UGC_TOKEN.test(tokens) || el.getAttribute('itemprop') === 'comment' || /Comment/.test(el.getAttribute('itemtype') ?? '')) return 'ugc';
+  if (role && CONVERSATION_ROLES.has(role) && el.querySelector(CHAT_IN)) return 'ugc';
+  if ((CHAT_IN_TOKEN.test(tokens) || el.hasAttribute('data-pre-plain-text')) && !el.parentElement?.closest(CONVERSATION)) return 'ugc';
   switch (tag) {
     case 'ARTICLE': return 'article';
     case 'SECTION': return 'section';

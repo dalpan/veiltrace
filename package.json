@@ -25,6 +25,7 @@
     "build:ext:test": "node scripts/build-extension.mjs --test",
     "build:pwa": "node scripts/build-pwa.mjs",
     "build:firefox": "node scripts/build-extension.mjs --firefox",
+    "build:managed": "node scripts/build-extension.mjs --managed",
     "test:unit": "vitest run --exclude 'tests/browser/**' --exclude 'tests/e2e/**'",
     "test:browser": "vitest run tests/browser",
     "test:e2e": "vitest run tests/e2e",

@@ -1,7 +1,7 @@
 // background.js: the service worker that exists only to show automatic-scan results on the toolbar icon (D-081).
 // It receives AutoSummary messages through the validated channel, sets a per-tab badge and title, and unregisters the
 // auto-scan content script when the host permission is removed. It reads no page content and keeps no state.
-import { AUTO_SCRIPT_ID, badgeFor } from '../auto/auto.js';
+import { AUTO_SCRIPT_ID, badgeFor, ensureManagedAuto } from '../auto/auto.js';
 import { onAutoSummary } from '../auto/channel.js';
 import { detectLang, MESSAGES } from '../popup/i18n.js';
 
@@ -12,6 +12,10 @@ onAutoSummary((tabId, s) => {
   void chrome.action.setBadgeBackgroundColor({ tabId, color: badge.color }).catch(() => undefined);
   void chrome.action.setTitle({ tabId, title: badge.text ? m.auto.badgeTitle : m.auto.actionTitle }).catch(() => undefined);
 });
+
+// Managed build (D-089): automatic scanning is on from installation and after every browser start.
+chrome.runtime.onInstalled.addListener(() => { void ensureManagedAuto().catch(() => undefined); });
+chrome.runtime.onStartup.addListener(() => { void ensureManagedAuto().catch(() => undefined); });
 
 chrome.permissions.onRemoved.addListener(() => {
   void chrome.scripting.unregisterContentScripts({ ids: [AUTO_SCRIPT_ID] }).catch(() => undefined);

@@ -3,7 +3,7 @@
   "note": "DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.",
   "detectorVersion": "cred-0.2.0-exp",
   "clickfixEngineVersion": "0.3.0",
-  "extractorVersion": "0.2.0-m5",
+  "extractorVersion": "0.3.0",
   "metrics": {
     "scenarios": 45,
     "confusion": {

@@ -14,9 +14,9 @@
     }
   ],
   "steps": [],
-  "evidenceWithin": "#msgs",
+  "evidenceWithin": ".app",
   "description": "Akun mengaku Dandim meminta transfer dana kegiatan ke rekening ajudan",
-  "rationale": "Pencatutan nama pejabat untuk meminta uang ke rekening pribadi dengan desakan.",
+  "rationale": "Pencatutan nama pejabat untuk meminta uang ke rekening pribadi dengan desakan. (evidenceWithin widened after the first run to the whole chat app: the contact name in the list and header is part of the claim; truth and expected class unchanged.)",
   "author": "Claude Code (AI assistant) for the VEILTRACE owner; P2 recruitment and rank-impersonation dev additions (same author as the rules), labels written before the first run",
   "created": "2026-10-22"
 }

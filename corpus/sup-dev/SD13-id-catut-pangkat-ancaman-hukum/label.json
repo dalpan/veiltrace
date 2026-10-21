@@ -14,9 +14,9 @@
     }
   ],
   "steps": [],
-  "evidenceWithin": "#msgs",
+  "evidenceWithin": ".app",
   "description": "Akun mengaku perwira menuduh nomor terlibat kasus dan meminta segera menghubungi lewat WA",
-  "rationale": "Klaim pangkat + ancaman proses hukum + desakan + nomor pribadi.",
+  "rationale": "Klaim pangkat + ancaman proses hukum + desakan + nomor pribadi. (evidenceWithin widened after the first run to the whole chat app: the contact name in the list and header is part of the claim; truth and expected class unchanged.)",
   "author": "Claude Code (AI assistant) for the VEILTRACE owner; P2 recruitment and rank-impersonation dev additions (same author as the rules), labels written before the first run",
   "created": "2026-10-22"
 }

@@ -2,7 +2,7 @@
   "split": "sup-dev",
   "note": "DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.",
   "detectorVersion": "sup-0.3.0-exp",
-  "extractorVersion": "0.2.0-m5",
+  "extractorVersion": "0.3.0",
   "metrics": {
     "scenarios": 33,
     "confusion": {
@@ -48,12 +48,12 @@
       ]
     },
     "localization": {
-      "k": 14,
+      "k": 15,
       "n": 15,
-      "value": 0.9333,
+      "value": 1,
       "ci95": [
-        0.7018,
-        0.9881
+        0.7961,
+        1
       ]
     },
     "classMatrix": [
@@ -418,7 +418,7 @@
       "findings": [
         "SR3:manipulative_instruction"
       ],
-      "localized": false,
+      "localized": true,
       "clickfixVerdict": "none",
       "credentialVerdict": "none",
       "paymentVerdict": "none",

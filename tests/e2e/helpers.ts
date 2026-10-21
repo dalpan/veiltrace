@@ -21,11 +21,11 @@ export interface Loaded {
 
 const built = new Map<string, Promise<string>>();
 
-export function extensionDir(kind: 'test' | 'prod'): Promise<string> {
+export function extensionDir(kind: 'test' | 'prod' | 'managed'): Promise<string> {
   if (!built.has(kind)) {
     // One directory per Vitest worker: test files run in parallel and each rebuilds (rm + write) its extension.
-    const outdir = join('dist/e2e', `w${process.env.VITEST_POOL_ID ?? process.pid}`, kind === 'test' ? 'extension-test' : 'extension');
-    built.set(kind, (buildExtension({ test: kind === 'test', outdir }) as Promise<string>).then((d) => realpathSync(d)));
+    const outdir = join('dist/e2e', `w${process.env.VITEST_POOL_ID ?? process.pid}`, `extension-${kind}`);
+    built.set(kind, (buildExtension({ test: kind === 'test', managed: kind === 'managed', outdir }) as Promise<string>).then((d) => realpathSync(d)));
   }
   return built.get(kind) as Promise<string>;
 }
@@ -36,7 +36,7 @@ export function extensionIdFor(dir: string): string {
 }
 
 /** `uiLang` pins the browser UI language (the popup follows chrome.i18n.getUILanguage()); tests must not depend on the host OS locale. */
-export async function launchExtension(kind: 'test' | 'prod', uiLang: 'en-US' | 'id' = 'en-US'): Promise<Loaded> {
+export async function launchExtension(kind: 'test' | 'prod' | 'managed', uiLang: 'en-US' | 'id' = 'en-US'): Promise<Loaded> {
   const dir = await extensionDir(kind);
   mkdirSync(join(tmpdir(), 'veiltrace-e2e'), { recursive: true });
   const context = await chromium.launchPersistentContext(mkdtempSync(join(tmpdir(), 'veiltrace-e2e', 'profile-')), {

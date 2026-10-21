@@ -4,7 +4,7 @@ import type {
   CredEvidenceItem, CredFindingSummary, EvidenceItem, FindingSummary, PayEvidenceItem, PayFindingSummary, ScanReport, SupportEvidenceItem, SupportFindingSummary,
 } from '../content/report.js';
 import { classifyUrl, extensionVersion, getTargetTab, isTabView, runHighlight, runScan, type TargetTab, type UrlClass } from './adapter.js';
-import { autoEnabled, disableAuto, enableAuto } from '../auto/auto.js';
+import { autoEnabled, disableAuto, enableAuto, MANAGED } from '../auto/auto.js';
 import { aggregate, CATEGORIES, type Category, type Dashboard, type FindingGroup, type FindingRef } from './aggregate.js';
 import { detectLang, formatCount, MESSAGES, type HighlightKey, type Lang, type Messages } from './i18n.js';
 import { parseHighlightResult, parseScanReport } from './validate.js';
@@ -351,9 +351,10 @@ function render(): void {
   $('mode').dataset.mode = state.auto ? 'automatic' : 'manual';
   $('mode-title').textContent = m.auto.title;
   $('mode-label').textContent = m.auto.modeLabel[state.auto ? 'automatic' : 'manual'];
-  $('mode-text').textContent = state.auto ? m.auto.automaticText : m.auto.manualText;
-  $('mode-consent').textContent = state.auto ? '' : m.auto.consent;
+  $('mode-text').textContent = MANAGED ? m.auto.managedText : state.auto ? m.auto.automaticText : m.auto.manualText;
+  $('mode-consent').textContent = state.auto || MANAGED ? '' : m.auto.consent;
   $('mode-toggle').textContent = state.auto ? m.auto.disable : m.auto.enable;
+  $('mode-toggle').hidden = MANAGED;
   $('mode-status').textContent = state.modeNote ? m.auto[state.modeNote] : '';
   $('limits-summary').textContent = m.limitsSummary;
   $('limits').textContent = m.limitsText;

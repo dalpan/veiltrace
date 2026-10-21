@@ -21,11 +21,21 @@ export function firefoxManifest(manifest) {
   };
 }
 
-export async function buildExtension({ test = false, firefox = false, outdir = firefox ? 'dist/extension-firefox' : test ? 'dist/extension-test' : 'dist/extension' } = {}) {
+/**
+ * Managed build for organizations (D-089): installed by enterprise policy (force-install), host access granted at install,
+ * automatic scanning on from the start. Results stay on the device: there is no reporting to the organization (D-048).
+ */
+export function managedManifest(manifest) {
+  const { optional_host_permissions: origins, ...rest } = manifest;
+  return { ...rest, name: 'VeilTrace (Managed)', host_permissions: origins };
+}
+
+export async function buildExtension({ test = false, firefox = false, managed = false,
+  outdir = managed ? 'dist/extension-managed' : firefox ? 'dist/extension-firefox' : test ? 'dist/extension-test' : 'dist/extension' } = {}) {
   rmSync(outdir, { recursive: true, force: true });
   mkdirSync(join(outdir, 'icons'), { recursive: true });
   const common = { bundle: true, format: 'iife', platform: 'browser', target: 'chrome110', legalComments: 'none', minifySyntax: true, logLevel: 'warning' };
-  const define = { __VT_TEST__: String(test) };
+  const define = { __VT_TEST__: String(test), __VT_MANAGED__: String(managed) };
   await build({ ...common, entryPoints: ['src/extension/popup/popup.ts'], outfile: join(outdir, 'popup.js'), define });
   await build({ ...common, entryPoints: ['src/extension/content/index.ts'], outfile: join(outdir, 'content.js'), globalName: 'VeiltraceContent' });
   await build({ ...common, entryPoints: ['src/extension/auto/content-auto.ts'], outfile: join(outdir, 'auto.js'), define });
@@ -39,11 +49,12 @@ export async function buildExtension({ test = false, firefox = false, outdir = f
     manifest.name = 'VeilTrace (TEST BUILD)';
     manifest.host_permissions = TEST_HOST_PERMISSIONS;
   }
-  writeFileSync(join(outdir, 'manifest.json'), JSON.stringify(firefox ? firefoxManifest(manifest) : manifest, null, 2) + '\n');
+  const final = managed ? managedManifest(manifest) : manifest;
+  writeFileSync(join(outdir, 'manifest.json'), JSON.stringify(firefox ? firefoxManifest(final) : final, null, 2) + '\n');
   return outdir;
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const test = process.argv.includes('--test');
-  console.log(`built ${await buildExtension({ test, firefox: process.argv.includes('--firefox') })}`);
+  console.log(`built ${await buildExtension({ test, firefox: process.argv.includes('--firefox'), managed: process.argv.includes('--managed') })}`);
 }

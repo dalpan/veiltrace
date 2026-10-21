@@ -24,7 +24,7 @@ const PAGE = html(`
   <form id="f2" action="/login"><label for="q">Search</label><input id="q" type="search"></form>
   <form id="f3" action="javascript:void(0)"><input id="z" type="password" aria-label="Pass"></form>`);
 
-describe('structural form fields (extractor 0.2.0-m5)', () => {
+describe('structural form fields (extractor 0.2.0-m5 and later)', () => {
   it('records kind, hints and page-authored labels, never values; hidden inputs and controls are skipped', async () => {
     const { page, context } = await openOffline(browser, { 'https://fields.test/': PAGE });
     await page.fill('#p', `typed-${SENTINEL}`);

@@ -4,6 +4,11 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-22 · P2b web chat (WhatsApp Web prototype) and P2c managed build · **Implemented (D-088, D-089)**
+Extractor 0.3.0 treats chat conversations as user content (dev results unchanged); managed build with automatic scanning from install, no reporting; policy templates in `deploy/`. **Next (owner):** try a real WhatsApp Web chat with VeilTrace (manual scan) and report whether incoming messages are recognized; decide on held-out v2 run timing and PWA hosting.
+
+---
+
 ## 2026-10-22 · P2a recruitment scams and rank impersonation · **Implemented (D-087)**
 Pay 0.3.0 and sup 0.3.0; six dev scenarios written before the change; pay-dev FN 0, sup-dev FN 0, no FP. **Next:** P2b WhatsApp Web prototype, P2c managed organizational build.
 

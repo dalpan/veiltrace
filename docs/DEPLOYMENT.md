@@ -70,3 +70,14 @@ Automation note: branded Google Chrome 155 ignores `--load-extension`, so the au
 
 ## 8. Untested
 Chrome on Windows/Linux, ChromeOS, Brave/Opera/Vivaldi, managed-policy installation end-to-end, CRX signing, update flows, and Firefox (M5).
+
+## 7. Managed build (D-089)
+`npm run build:managed` → `dist/extension-managed` ("VeilTrace (Managed)"): the same code and permissions, with `http://*/*` and `https://*/*` as install-time host access instead of an optional permission. Force-installed by policy, it registers automatic scanning on install and on every browser start; users see "turned on by your organization" and no switch. **Nothing is reported to the organization**: results stay on the device and the extension still has no network code (D-048, D-081).
+
+Deployment outline (not yet performed end to end):
+1. Pack and sign the managed build as a CRX with an organization-held key (`chrome --pack-extension=dist/extension-managed --pack-extension-key=<key.pem>`); keep the key offline and never commit it.
+2. Host the CRX and `deploy/update-manifest.xml` (filled in) on an internal HTTPS server.
+3. Push `deploy/chrome-extension-settings.json` (filled in) as the `ExtensionSettings` policy for Chrome or Edge (Group Policy, Intune or Google Admin).
+4. Verify on a pilot machine: `chrome://policy`, `chrome://extensions` (installed, not removable), a demo lure shows the "!" badge.
+
+Exact platform conditions for self-hosted force-install (domain join, cloud management, MDM) must be checked against current Chrome Enterprise and Microsoft Edge documentation (§3).

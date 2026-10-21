@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Self-hosted update manifest for the VeilTrace managed build (D-089). Serve over HTTPS from an internal host.
+     Replace <EXTENSION_ID>, <CRX_URL> and <VERSION>; the CRX must be signed with the organization's key (DEPLOYMENT.md §5). -->
+<gupdate xmlns="http://www.google.com/update2/response" protocol="2.0">
+  <app appid="<EXTENSION_ID>">
+    <updatecheck codebase="<CRX_URL>" version="<VERSION>" />
+  </app>
+</gupdate>

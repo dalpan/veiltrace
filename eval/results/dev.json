@@ -2,11 +2,15 @@
   "split": "dev",
   "engineVersion": "0.3.0",
   "baselineEngineVersion": "0.1.0-m1",
-  "extractorVersion": "0.2.0-m5",
+  "extractorVersion": "0.3.0",
   "systems": [
     {
       "id": "veiltrace",
-      "description": "Production engine 0.2.0 (ruleset m4.1): region-local windows (K=8) + negation + context modifiers + P1b/P2-A/R4-beta"
+      "description": "Production engine 0.3.0 (ruleset m5): m4.1 + own-voice verification gate + procedural dialogs (D-083)"
+    },
+    {
+      "id": "veiltrace-0.2.0",
+      "description": "Engine 0.2.0 (ruleset m4.1), the engine evaluated on held-out v1"
     },
     {
       "id": "veiltrace-m1",
@@ -156,6 +160,138 @@
             "ci95": [
               0.7225,
               1
+            ]
+          },
+          "fpr": {
+            "k": 0,
+            "n": 13,
+            "value": 0,
+            "ci95": [
+              0,
+              0.2281
+            ]
+          }
+        }
+      }
+    },
+    "veiltrace-0.2.0": {
+      "scenarios": 56,
+      "confusion": {
+        "tp": 20,
+        "fp": 2,
+        "tn": 30,
+        "fn": 4
+      },
+      "precision": {
+        "k": 20,
+        "n": 22,
+        "value": 0.9091,
+        "ci95": [
+          0.7219,
+          0.9747
+        ]
+      },
+      "recall": {
+        "k": 20,
+        "n": 24,
+        "value": 0.8333,
+        "ci95": [
+          0.6415,
+          0.9332
+        ]
+      },
+      "fpr": {
+        "k": 2,
+        "n": 32,
+        "value": 0.0625,
+        "ci95": [
+          0.0173,
+          0.2015
+        ]
+      },
+      "hardNegativeFpr": {
+        "k": 2,
+        "n": 32,
+        "value": 0.0625,
+        "ci95": [
+          0.0173,
+          0.2015
+        ]
+      },
+      "localization": {
+        "k": 20,
+        "n": 20,
+        "value": 1,
+        "ci95": [
+          0.8389,
+          1
+        ]
+      },
+      "classMatrix": [
+        [
+          7,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          22,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          6,
+          0
+        ],
+        [
+          0,
+          4,
+          2,
+          12
+        ]
+      ],
+      "exactClassAgreement": {
+        "k": 47,
+        "n": 56,
+        "value": 0.8393,
+        "ci95": [
+          0.7219,
+          0.9131
+        ]
+      },
+      "observedOnNegatives": 22,
+      "byLanguage": {
+        "en": {
+          "recall": {
+            "k": 12,
+            "n": 14,
+            "value": 0.8571,
+            "ci95": [
+              0.6006,
+              0.9599
+            ]
+          },
+          "fpr": {
+            "k": 2,
+            "n": 19,
+            "value": 0.1053,
+            "ci95": [
+              0.0294,
+              0.3139
+            ]
+          }
+        },
+        "id": {
+          "recall": {
+            "k": 8,
+            "n": 10,
+            "value": 0.8,
+            "ci95": [
+              0.4902,
+              0.9433
             ]
           },
           "fpr": {
@@ -722,6 +858,13 @@
           ],
           "localized": true
         },
+        "veiltrace-0.2.0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
         "veiltrace-m1": {
           "verdict": "manipulative_instruction",
           "rules": [
@@ -768,6 +911,13 @@
       "requestsDuringScan": 0,
       "outcomes": {
         "veiltrace": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "veiltrace-0.2.0": {
           "verdict": "manipulative_instruction",
           "rules": [
             "R1:manipulative_instruction"
@@ -826,6 +976,13 @@
           ],
           "localized": true
         },
+        "veiltrace-0.2.0": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
         "veiltrace-m1": {
           "verdict": "suspicious_correlation",
           "rules": [
@@ -872,6 +1029,13 @@
       "requestsDuringScan": 0,
       "outcomes": {
         "veiltrace": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "veiltrace-0.2.0": {
           "verdict": "suspicious_correlation",
           "rules": [
             "R4:suspicious_correlation"
@@ -930,6 +1094,13 @@
           ],
           "localized": true
         },
+        "veiltrace-0.2.0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
         "veiltrace-m1": {
           "verdict": "manipulative_instruction",
           "rules": [
@@ -976,6 +1147,13 @@
       "requestsDuringScan": 0,
       "outcomes": {
         "veiltrace": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "veiltrace-0.2.0": {
           "verdict": "manipulative_instruction",
           "rules": [
             "R1:manipulative_instruction"
@@ -1034,6 +1212,13 @@
           ],
           "localized": true
         },
+        "veiltrace-0.2.0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
         "veiltrace-m1": {
           "verdict": "manipulative_instruction",
           "rules": [
@@ -1080,6 +1265,13 @@
       "requestsDuringScan": 0,
       "outcomes": {
         "veiltrace": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "veiltrace-0.2.0": {
           "verdict": "manipulative_instruction",
           "rules": [
             "R1:manipulative_instruction"
@@ -1138,6 +1330,13 @@
           ],
           "localized": true
         },
+        "veiltrace-0.2.0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
         "veiltrace-m1": {
           "verdict": "manipulative_instruction",
           "rules": [
@@ -1190,6 +1389,13 @@
           ],
           "localized": true
         },
+        "veiltrace-0.2.0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "observed_instruction",
           "rules": [
@@ -1236,6 +1442,13 @@
       "requestsDuringScan": 0,
       "outcomes": {
         "veiltrace": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R1:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "veiltrace-0.2.0": {
           "verdict": "suspicious_correlation",
           "rules": [
             "R1:suspicious_correlation"
@@ -1294,6 +1507,13 @@
           ],
           "localized": true
         },
+        "veiltrace-0.2.0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "observed_instruction",
           "rules": [
@@ -1340,6 +1560,13 @@
       "requestsDuringScan": 0,
       "outcomes": {
         "veiltrace": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "veiltrace-0.2.0": {
           "verdict": "suspicious_correlation",
           "rules": [
             "R4:suspicious_correlation"
@@ -1398,6 +1625,13 @@
           ],
           "localized": true
         },
+        "veiltrace-0.2.0": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
         "veiltrace-m1": {
           "verdict": "suspicious_correlation",
           "rules": [
@@ -1448,6 +1682,11 @@
           "rules": [],
           "localized": null
         },
+        "veiltrace-0.2.0": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "none",
           "rules": [],
@@ -1486,6 +1725,13 @@
       "requestsDuringScan": 0,
       "outcomes": {
         "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "veiltrace-0.2.0": {
           "verdict": "observed_instruction",
           "rules": [
             "R5:observed_instruction"
@@ -1544,6 +1790,13 @@
           ],
           "localized": null
         },
+        "veiltrace-0.2.0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R4:observed_instruction"
+          ],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "suspicious_correlation",
           "rules": [
@@ -1590,6 +1843,13 @@
       "requestsDuringScan": 0,
       "outcomes": {
         "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "veiltrace-0.2.0": {
           "verdict": "observed_instruction",
           "rules": [
             "R5:observed_instruction"
@@ -1648,6 +1908,13 @@
           ],
           "localized": null
         },
+        "veiltrace-0.2.0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "observed_instruction",
           "rules": [
@@ -1694,6 +1961,13 @@
       "requestsDuringScan": 0,
       "outcomes": {
         "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R3:observed_instruction"
+          ],
+          "localized": null
+        },
+        "veiltrace-0.2.0": {
           "verdict": "observed_instruction",
           "rules": [
             "R3:observed_instruction"
@@ -1752,6 +2026,13 @@
           ],
           "localized": null
         },
+        "veiltrace-0.2.0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "observed_instruction",
           "rules": [
@@ -1802,6 +2083,11 @@
           "rules": [],
           "localized": null
         },
+        "veiltrace-0.2.0": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "none",
           "rules": [],
@@ -1848,6 +2134,11 @@
           "rules": [],
           "localized": null
         },
+        "veiltrace-0.2.0": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "none",
           "rules": [],
@@ -1886,6 +2177,13 @@
       "requestsDuringScan": 0,
       "outcomes": {
         "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "veiltrace-0.2.0": {
           "verdict": "observed_instruction",
           "rules": [
             "R5:observed_instruction"
@@ -1944,6 +2242,13 @@
           ],
           "localized": null
         },
+        "veiltrace-0.2.0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "observed_instruction",
           "rules": [
@@ -1994,6 +2299,11 @@
           "rules": [],
           "localized": null
         },
+        "veiltrace-0.2.0": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "none",
           "rules": [],
@@ -2032,6 +2342,13 @@
       "requestsDuringScan": 0,
       "outcomes": {
         "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R4:observed_instruction"
+          ],
+          "localized": null
+        },
+        "veiltrace-0.2.0": {
           "verdict": "observed_instruction",
           "rules": [
             "R4:observed_instruction"
@@ -2090,6 +2407,13 @@
           ],
           "localized": null
         },
+        "veiltrace-0.2.0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "suspicious_correlation",
           "rules": [
@@ -2136,6 +2460,13 @@
       "requestsDuringScan": 0,
       "outcomes": {
         "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "veiltrace-0.2.0": {
           "verdict": "observed_instruction",
           "rules": [
             "R5:observed_instruction"
@@ -2194,6 +2525,13 @@
           ],
           "localized": null
         },
+        "veiltrace-0.2.0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "observed_instruction",
           "rules": [
@@ -2244,6 +2582,11 @@
           "rules": [],
           "localized": null
         },
+        "veiltrace-0.2.0": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "none",
           "rules": [],
@@ -2290,6 +2633,11 @@
           "rules": [],
           "localized": null
         },
+        "veiltrace-0.2.0": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "none",
           "rules": [],
@@ -2332,6 +2680,11 @@
           "rules": [],
           "localized": null
         },
+        "veiltrace-0.2.0": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "none",
           "rules": [],
@@ -2370,6 +2723,13 @@
       "requestsDuringScan": 0,
       "outcomes": {
         "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
+        "veiltrace-0.2.0": {
           "verdict": "observed_instruction",
           "rules": [
             "R1:observed_instruction"
@@ -2428,6 +2788,13 @@
           ],
           "localized": null
         },
+        "veiltrace-0.2.0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "observed_instruction",
           "rules": [
@@ -2478,6 +2845,11 @@
           "rules": [],
           "localized": null
         },
+        "veiltrace-0.2.0": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "none",
           "rules": [],
@@ -2516,6 +2888,13 @@
       "requestsDuringScan": 0,
       "outcomes": {
         "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
+        "veiltrace-0.2.0": {
           "verdict": "observed_instruction",
           "rules": [
             "R1:observed_instruction"
@@ -2574,6 +2953,13 @@
           ],
           "localized": null
         },
+        "veiltrace-0.2.0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "observed_instruction",
           "rules": [
@@ -2626,6 +3012,13 @@
           ],
           "localized": null
         },
+        "veiltrace-0.2.0": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "suspicious_correlation",
           "rules": [
@@ -2672,6 +3065,13 @@
       "requestsDuringScan": 0,
       "outcomes": {
         "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R4:observed_instruction"
+          ],
+          "localized": null
+        },
+        "veiltrace-0.2.0": {
           "verdict": "observed_instruction",
           "rules": [
             "R4:observed_instruction"
@@ -2730,6 +3130,13 @@
           ],
           "localized": true
         },
+        "veiltrace-0.2.0": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
         "veiltrace-m1": {
           "verdict": "suspicious_correlation",
           "rules": [
@@ -2776,6 +3183,13 @@
       "requestsDuringScan": 0,
       "outcomes": {
         "veiltrace": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "veiltrace-0.2.0": {
           "verdict": "suspicious_correlation",
           "rules": [
             "R4:suspicious_correlation"
@@ -2834,6 +3248,13 @@
           ],
           "localized": null
         },
+        "veiltrace-0.2.0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "observed_instruction",
           "rules": [
@@ -2880,6 +3301,13 @@
       "requestsDuringScan": 0,
       "outcomes": {
         "veiltrace": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "veiltrace-0.2.0": {
           "verdict": "manipulative_instruction",
           "rules": [
             "R1:manipulative_instruction"
@@ -2938,6 +3366,13 @@
           ],
           "localized": true
         },
+        "veiltrace-0.2.0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
         "veiltrace-m1": {
           "verdict": "suspicious_correlation",
           "rules": [
@@ -2984,6 +3419,13 @@
       "requestsDuringScan": 0,
       "outcomes": {
         "veiltrace": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "veiltrace-0.2.0": {
           "verdict": "manipulative_instruction",
           "rules": [
             "R1:manipulative_instruction"
@@ -3042,6 +3484,13 @@
           ],
           "localized": null
         },
+        "veiltrace-0.2.0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "observed_instruction",
           "rules": [
@@ -3088,6 +3537,13 @@
       "requestsDuringScan": 0,
       "outcomes": {
         "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "veiltrace-0.2.0": {
           "verdict": "observed_instruction",
           "rules": [
             "R5:observed_instruction"
@@ -3146,6 +3602,13 @@
           ],
           "localized": null
         },
+        "veiltrace-0.2.0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "observed_instruction",
           "rules": [
@@ -3198,6 +3661,13 @@
           ],
           "localized": true
         },
+        "veiltrace-0.2.0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "observed_instruction",
           "rules": [
@@ -3244,6 +3714,13 @@
       "requestsDuringScan": 0,
       "outcomes": {
         "veiltrace": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "veiltrace-0.2.0": {
           "verdict": "manipulative_instruction",
           "rules": [
             "R1:manipulative_instruction"
@@ -3302,6 +3779,13 @@
           ],
           "localized": true
         },
+        "veiltrace-0.2.0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
         "veiltrace-m1": {
           "verdict": "manipulative_instruction",
           "rules": [
@@ -3354,6 +3838,13 @@
           ],
           "localized": null
         },
+        "veiltrace-0.2.0": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "suspicious_correlation",
           "rules": [
@@ -3400,6 +3891,13 @@
       "requestsDuringScan": 0,
       "outcomes": {
         "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
+        "veiltrace-0.2.0": {
           "verdict": "observed_instruction",
           "rules": [
             "R1:observed_instruction"
@@ -3458,6 +3956,13 @@
           ],
           "localized": null
         },
+        "veiltrace-0.2.0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
         "veiltrace-m1": {
           "verdict": "observed_instruction",
           "rules": [
@@ -3504,6 +4009,13 @@
       "requestsDuringScan": 0,
       "outcomes": {
         "veiltrace": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "veiltrace-0.2.0": {
           "verdict": "suspicious_correlation",
           "rules": [
             "R4:suspicious_correlation"

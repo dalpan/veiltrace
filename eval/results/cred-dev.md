@@ -1,6 +1,6 @@
 # Credential detector: development results (cred-dev)
 
-Detector cred-0.2.0-exp (EXPERIMENTAL), extractor 0.2.0-m5. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
+Detector cred-0.2.0-exp (EXPERIMENTAL), extractor 0.3.0. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
 
 TP 20 · FP 0 · TN 24 · FN 1
 

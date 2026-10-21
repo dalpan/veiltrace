@@ -1,0 +1,8 @@
+{
+  "_comment": "Chrome/Edge policy ExtensionSettings for the VeilTrace managed build (D-089). Replace <EXTENSION_ID> (derived from your signing key) and <UPDATE_URL> (your internal HTTPS update manifest). No reporting policy is needed: VeilTrace sends nothing anywhere.",
+  "<EXTENSION_ID>": {
+    "installation_mode": "force_installed",
+    "update_url": "<UPDATE_URL>",
+    "toolbar_pin": "force_pinned"
+  }
+}
