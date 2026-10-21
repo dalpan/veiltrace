@@ -1,0 +1,22 @@
+{
+  "id": "D52-id-realistic-blog-informal-steps",
+  "split": "dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://dapurbunda.test/resep/soto-ayam",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#hc",
+  "description": "Blog resep realistis dengan overlay verifikasi palsu berlangkah bahasa informal",
+  "rationale": "ClickFix dengan langkah informal (\"pencet\", \"terus\", \"abis itu\").",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; realistic dev additions (same author as the rules), labels written before the first run",
+  "created": "2026-10-22"
+}

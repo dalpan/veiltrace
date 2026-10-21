@@ -49,12 +49,23 @@ function isVerificationGate(c: Candidate): boolean {
   return other < GATE_MAX_OTHER_WORDS;
 }
 
-/** R4-β condition: single weak pretext family, evidence in an article outside dialogs/overlays, a code block in the region. */
-function isProceduralDoc(c: Candidate): boolean {
+/**
+ * R4-β condition: single weak pretext family, evidence in an article outside dialogs/overlays, a code block in the region.
+ * With `dialogs` (m5), evidence may instead sit in a dialog/overlay, provided the candidate has no human-verification pretext.
+ */
+function isProceduralDoc(c: Candidate, dialogs = false): boolean {
   if (c.rule.id !== 'R4' || c.weakFamilies.length !== 1 || c.concealedPayloads.length > 0) return false;
   const ev = blockEvidence(c);
-  if (ev.length === 0 || ev.some((b) => b.ctx?.dialog || b.ctx?.overlay || !b.ctx?.article)) return false;
+  if (ev.length === 0) return false;
+  const inArticle = ev.every((b) => !b.ctx?.dialog && !b.ctx?.overlay && b.ctx?.article);
+  const inDialog = dialogs && ev.every((b) => b.ctx?.dialog || b.ctx?.overlay) && !c.pretexts.some((p) => p.o.signal === 'P.HUMAN_VERIFY');
+  if (!inArticle && !inDialog) return false;
   return c.region.blocks.some((b) => b.ctx?.pre || b.ctx?.code);
+}
+
+/** m5: a human-verification pretext spoken by the dialog itself, not quoted, reported or shown as code. */
+function ownVoiceVerification(c: Candidate): boolean {
+  return c.pretexts.some((p) => p.o.signal === 'P.HUMAN_VERIFY' && !p.o.reported && !p.src.block?.ctx?.quote && !p.src.block?.ctx?.code && !p.src.block?.ctx?.pre);
 }
 
 function isCodeBlock(b: Block | undefined): boolean {
@@ -134,7 +145,7 @@ export function applyModifiers(
     });
   }
 
-  if (x.proceduralDocModifier && isProceduralDoc(c)) {
+  if (x.proceduralDocModifier && isProceduralDoc(c, x.proceduralDialogs === true)) {
     mods.push({
       id: 'C.PROCEDURAL', demoteBy: 1,
       reason: 'The instruction is a step in a procedural document (article with code) and its only pretext is a common troubleshooting or notice phrase.',
@@ -153,7 +164,7 @@ export function applyModifiers(
         id: 'O.CONCEALED_PAYLOAD', effect: 'suppressed', suppressed, evidence: c.concealedPayloads,
         reason: 'The same part of the page places hidden text on the clipboard, which a quotation, report or tutorial would not do.',
       });
-    } else if (x.verificationGateOverride && isVerificationGate(c)) {
+    } else if ((x.verificationGateOverride || x.ownVoiceGateOverride) && isVerificationGate(c) && (!x.ownVoiceGateOverride || x.verificationGateOverride || ownVoiceVerification(c))) {
       overrides.push({
         id: 'O.VERIFICATION_GATE', effect: x.verificationGateOverride === 'skip' ? 'suppressed' : 'capped-at-1', suppressed,
         evidence: c.pretexts.filter((p) => p.o.signal === 'P.HUMAN_VERIFY'),

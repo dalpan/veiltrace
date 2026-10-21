@@ -13,7 +13,7 @@ import type {
   PaymentResult, PayTrustContext,
 } from './types.js';
 
-export const PAY_DETECTOR_VERSION = 'pay-0.1.0-exp';
+export const PAY_DETECTOR_VERSION = 'pay-0.2.0-exp';
 
 /** Same clause and sentence breaks as the ClickFix binding, except that a period inside a number ("Rp 150.000") is not a break. */
 const CLAUSE_BREAK = /[,;:!?]|\.(?=\s|$)|(?<![\p{L}\p{N}_])(?:and|then|or|but|dan|lalu|kemudian|atau|tapi|tetapi)(?![\p{L}\p{N}_])/u;

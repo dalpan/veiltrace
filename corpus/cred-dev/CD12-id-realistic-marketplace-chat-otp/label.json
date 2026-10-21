@@ -1,0 +1,22 @@
+{
+  "id": "CD12-id-realistic-marketplace-chat-otp",
+  "split": "cred-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://belanjaku.test/p/sepatu-lari-x9",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#ch",
+  "description": "Halaman produk marketplace realistis dengan chat penjual yang meminta kode OTP untuk \"refund\"",
+  "rationale": "Penjual meminta pembeli mengirim OTP lewat chat: pola pengambilalihan akun.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; realistic dev additions (same author as the rules), labels written before the first run",
+  "created": "2026-10-22"
+}

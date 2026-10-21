@@ -5,8 +5,8 @@ import type { Lang, LexiconEntry, SignalId, Strength } from '../types.js';
 export const B = '(?<![\\p{L}\\p{N}_])';
 /** End boundary: not followed by a letter, digit or underscore. */
 export const E = '(?![\\p{L}\\p{N}_])';
-/** Separator between key names: "+", "plus", "and", "dan", "&", "-", or nothing. */
-export const SEP = '\\s*(?:\\+|plus|and|dan|&|-)?\\s*';
+/** Separator between key names: "+", "plus", "and", "dan", informal "sama"/"ama" ("Windows sama R"), "&", "-", or nothing. */
+export const SEP = '\\s*(?:\\+|plus|and|dan|sama|ama|&|-)?\\s*';
 export const APOS = "['’]";
 export const QUOTE = '["\'“”‘’«»]?';
 

@@ -12,13 +12,20 @@ import type {
   CredSourceRef, CredentialResult, SecretSignalId, SecretType, TrustContext,
 } from './types.js';
 
-export const CRED_DETECTOR_VERSION = 'cred-0.1.1-exp';
+export const CRED_DETECTOR_VERSION = 'cred-0.2.0-exp';
 
 /** Same clause/sentence breaks as the ClickFix negation and reported-speech binding (observe.ts). */
 const CLAUSE_BREAK = /[,;:.!?]|(?<![\p{L}\p{N}_])(?:and|then|or|but|dan|lalu|kemudian|atau|tapi|tetapi)(?![\p{L}\p{N}_])/u;
 const SENTENCE_BREAK = /[.!?]/u;
 /** Max normalized characters between a disclosure verb and the secret it asks for ("send me the 6-digit code"). */
 const REQUEST_MAX_GAP = 60;
+/** A secret named earlier in the same sentence can be the object of a later verb ("ada kode masuk ke hp kakak, tolong kirim ke sini"). */
+const REQUEST_MAX_GAP_BEFORE = 90;
+/**
+ * The sender is the site or a first person ("we will send you a code", "kode yang kami kirim", "sistem akan mengirim"): a notice,
+ * not a request to the reader. Matched on the text just before the verb.
+ */
+const SELF_SENDER = /(?:^|[\s,])(?:we|we['’]ll|we['’]ve|kami|sistem|system|aplikasi|akan\s+kami|yang\s+kami|sudah\s+kami|telah\s+kami)(?:\s+(?:will|have|has|just|already|are|akan|sudah|telah|baru(?:\s+saja)?|segera|otomatis))*\s*$/u;
 
 const TIERS: readonly Classification[] = ['observed_instruction', 'suspicious_correlation', 'manipulative_instruction'];
 const LEVELS: readonly Level[] = ['low', 'medium', 'high'];
@@ -179,6 +186,10 @@ function buildSources(s: PageSnapshot, regions: RegionInfo[]): Src[] {
 function bindContext(signals: Ob[], cues: Ob[]): void {
   for (const d of signals) {
     if (d.o.kind !== 'disclosure' || d.src.ref.type !== 'block') continue;
+    if (d.o.signal === 'D.SEND' && SELF_SENDER.test(d.src.norm.text.slice(Math.max(0, d.nStart - 30), d.nStart))) {
+      d.o.negated = true;
+      continue;
+    }
     const sameSrc = cues.filter((c) => c.src === d.src);
     const neg = sameSrc.filter((c) => c.o.signal === 'C.NEGATION' && c.nEnd <= d.nStart && d.nStart - c.nEnd <= NEGATION_MAX_GAP
       && !CLAUSE_BREAK.test(d.src.norm.text.slice(c.nEnd, d.nStart)));
@@ -210,8 +221,11 @@ function textUnits(signals: readonly Ob[]): Unit[] {
   for (const d of signals) {
     if (d.o.kind !== 'disclosure' || d.o.negated) continue;
     const text = d.src.norm.text;
-    const secrets = signals.filter((s) => s.src === d.src && s.o.kind === 'secret' && s.nStart >= d.nEnd
+    const after = signals.filter((s) => s.src === d.src && s.o.kind === 'secret' && s.nStart >= d.nEnd
       && s.nStart - d.nEnd <= REQUEST_MAX_GAP && !SENTENCE_BREAK.test(text.slice(d.nEnd, s.nStart)));
+    const before = after.length > 0 ? [] : signals.filter((s) => s.src === d.src && s.o.kind === 'secret' && s.nEnd <= d.nStart
+      && d.nStart - s.nEnd <= REQUEST_MAX_GAP_BEFORE && !SENTENCE_BREAK.test(text.slice(s.nEnd, d.nStart)));
+    const secrets = after.length > 0 ? after : before;
     if (secrets.length === 0) continue;
     units.push({
       action: d.o.signal === 'D.SEND' ? 'send' : 'enter', actionObs: d, secretObs: secrets,

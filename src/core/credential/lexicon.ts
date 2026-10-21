@@ -27,7 +27,7 @@ const SECRETS: CredLexiconEntry[] = [
 
   entry('cred.id.secret.password', 'S.PASSWORD', 'id', 'strong', `${B}(?:kata\\s+sandi|sandi|kata\\s+kunci)${E}`, ['kata sandi', 'sandi']),
   entry('cred.id.secret.otp', 'S.OTP', 'id', 'strong',
-    `${B}(?:kode\\s+(?:otp|verif(?:ikasi)?|keamanan|sms|aktivasi)|otp|kode\\s+(?:(?:yang|yg)\\s+)?(?:barusan\\s+|baru\\s+|tadi\\s+)?(?:masuk|dikirim|terkirim|nyampe|sampe)(?:\\s+(?:ke|di|lewat)\\s+(?:hp|ponsel|sms|nomor|wa|whatsapp)(?:\\s+(?:anda|kamu|mu|lu|lo|elu))?)?|kode\\s+(?:6|enam)\\s+digit)${E}`,
+    `${B}(?:kode\\s+(?:otp|verif(?:ikasi)?|keamanan|sms|aktivasi)|otp|kode\\s+(?:(?:yang|yg)\\s+)?(?:barusan\\s+|baru\\s+|tadi\\s+)?(?:masuk|dikirim|terkirim|nyampe|sampe)(?:\\s+(?:ke|di|lewat)\\s+(?:hp|ponsel|sms|nomor|wa|whatsapp)(?:\\s+(?:anda|kamu|mu|lu|lo|elu|kakak|kak|ka|bro|sis|gan|mas|mbak|bang))?)?|kode\\s+(?:6|enam)\\s+digit)${E}`,
     ['kode OTP', 'kode verifikasi', 'kode verif', 'kode yang masuk ke HP', 'kode yg barusan masuk', 'kode yang dikirim']),
   // Informal: the code described only as digits that just arrived ("angka yg barusan masuk ke hp lu", "6 angka dari sms tadi").
   entry('cred.id.secret.otp_digits', 'S.OTP', 'id', 'strong',

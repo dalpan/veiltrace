@@ -63,7 +63,7 @@ describe('artifact verification', () => {
     expect(manifest.permissions).toEqual(['activeTab', 'scripting']);
     expect(manifest.hostPermissions).toEqual([]);
     expect(manifest.optionalHostPermissions).toEqual(['http://*/*', 'https://*/*']);
-    expect(manifest.engine).toEqual({ default: '0.2.0', defaultRuleset: 'm4.1', baseline: { ruleset: 'm1', version: '0.1.0-m1', usedByExtension: false } });
+    expect(manifest.engine).toEqual({ default: '0.3.0', defaultRuleset: 'm5', baseline: { ruleset: 'm1', version: '0.1.0-m1', usedByExtension: false } });
     expect(manifest.source.commit).toMatch(/^[0-9a-f]{40}$|^unknown$/);
     expect(manifest.notice).toMatch(/do not establish authenticity/);
     expect(manifest.releaseType).toBe('development');

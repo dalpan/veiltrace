@@ -1,0 +1,22 @@
+{
+  "id": "PD11-id-realistic-chat-slang-admin-fee",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://web.obrolanku.test/chat/8812",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#msgs",
+  "description": "Tampilan chat web realistis: \"admin\" meminta tf biaya admin 50rb supaya saldo cair (bahasa gaul)",
+  "rationale": "Bayar dulu supaya dana cair, dari akun mengaku admin, dengan desakan.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; realistic dev additions (same author as the rules), labels written before the first run",
+  "created": "2026-10-22"
+}

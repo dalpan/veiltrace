@@ -1,0 +1,22 @@
+{
+  "id": "SN16-en-realistic-antivirus-product-page",
+  "split": "sup-dev",
+  "lang": "en",
+  "category": "benign",
+  "threatClass": "T-neg",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://www.greenshield-av.test/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Realistic antivirus product page: download the app; if a threat is found it is quarantined; contact support",
+  "rationale": "Product marketing with a download and a support line, no page-rendered alarm.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; realistic dev additions (same author as the rules), labels written before the first run",
+  "created": "2026-10-22"
+}

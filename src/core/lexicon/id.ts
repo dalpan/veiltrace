@@ -64,8 +64,8 @@ export const ID: LexiconEntry[] = [
 
   // P.HUMAN_VERIFY (strong pretext)
   entry('id.verify.human', 'P.HUMAN_VERIFY', 'id', 'strong',
-    `${B}(?:verifikasi|konfirmasi|buktikan)\\s+(?:bahwa\\s+)?(?:anda|kamu)\\s+(?:adalah\\s+)?(?:manusia|bukan\\s+(?:robot|bot))${E}`,
-    ['Verifikasi bahwa Anda manusia', 'buktikan Anda bukan robot']),
+    `${B}(?:verifikasi|konfirmasi|buktikan)\\s+(?:(?:dulu|dl|dong|ya)\\s+)?(?:bahwa\\s+)?(?:anda|kamu|km)\\s+(?:adalah\\s+)?(?:manusia|bukan\\s+(?:robot|bot))${E}`,
+    ['Verifikasi bahwa Anda manusia', 'buktikan Anda bukan robot', 'Konfirmasi dulu kamu bukan robot']),
   entry('id.verify.not_robot', 'P.HUMAN_VERIFY', 'id', 'strong', `${B}(?:saya|aku)\\s+bukan\\s+(?:robot|bot)${E}`,
     ['Saya bukan robot']),
   entry('id.verify.human_verification', 'P.HUMAN_VERIFY', 'id', 'strong',

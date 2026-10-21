@@ -4,6 +4,14 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-22 · Accuracy round 1 · **Dev improvements done (D-083); held-out v2 being authored blind**
+
+**Done:** 20 realistic dev scenarios (labels first, baseline recorded); engine 0.3.0 (ruleset m5) and cred/pay/sup 0.2.0. Dev before → after: ClickFix FP 2→0, FN 5→1; credential FN 2→1; payment FN 2→0; support FN 1→0 (DETECTION_MODEL.md §15). A separate author, blind to the rules, is writing `corpus/test-v2` (60 scenarios across the four categories).
+
+**Next:** lock test-v2 (hash manifest, preregistration) without opening it; continue accuracy work on dev; run test-v2 once, on owner request.
+
+---
+
 ## 2026-10-22 · P1 real-world field sample kit · **Tooling ready; no records yet (collection by others)**
 
 **Done:** `corpus/realworld` (D-082): record format, redaction tool, privacy guard in CI, deterministic dev/test split, two-annotator labels with Cohen's kappa and adjudication, hash lock for the test half, evaluation running all four detectors; `npm run realworld -- redact|add|label|agree|lock|eval`; English README and Indonesian contributor guide (`PANDUAN_KONTRIBUTOR.md`). **Tests:** `tests/realworld.test.ts` (10).

@@ -1,58 +1,58 @@
 {
   "split": "sup-dev",
   "note": "DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.",
-  "detectorVersion": "sup-0.1.0-exp",
+  "detectorVersion": "sup-0.2.0-exp",
   "extractorVersion": "0.2.0-m5",
   "metrics": {
-    "scenarios": 27,
+    "scenarios": 31,
     "confusion": {
-      "tp": 11,
+      "tp": 14,
       "fp": 0,
-      "tn": 15,
-      "fn": 1
+      "tn": 17,
+      "fn": 0
     },
     "precision": {
-      "k": 11,
-      "n": 11,
+      "k": 14,
+      "n": 14,
       "value": 1,
       "ci95": [
-        0.7412,
+        0.7847,
         1
       ]
     },
     "recall": {
-      "k": 11,
-      "n": 12,
-      "value": 0.9167,
+      "k": 14,
+      "n": 14,
+      "value": 1,
       "ci95": [
-        0.6461,
-        0.9851
+        0.7847,
+        1
       ]
     },
     "fpr": {
       "k": 0,
-      "n": 15,
+      "n": 17,
       "value": 0,
       "ci95": [
         0,
-        0.2039
+        0.1843
       ]
     },
     "hardNegativeFpr": {
       "k": 0,
-      "n": 15,
+      "n": 17,
       "value": 0,
       "ci95": [
         0,
-        0.2039
+        0.1843
       ]
     },
     "localization": {
-      "k": 11,
-      "n": 11,
+      "k": 14,
+      "n": 14,
       "value": 1,
       "ci95": [
-        0.7412,
+        0.7847,
         1
       ]
     },
@@ -65,7 +65,7 @@
       ],
       [
         1,
-        11,
+        13,
         0,
         0
       ],
@@ -77,59 +77,59 @@
       ],
       [
         0,
-        1,
         0,
-        9
+        0,
+        12
       ]
     ],
     "exactClassAgreement": {
-      "k": 25,
-      "n": 27,
-      "value": 0.9259,
+      "k": 30,
+      "n": 31,
+      "value": 0.9677,
       "ci95": [
-        0.7663,
-        0.9794
+        0.8381,
+        0.9943
       ]
     },
-    "observedOnNegatives": 11,
+    "observedOnNegatives": 13,
     "byLanguage": {
       "en": {
         "recall": {
-          "k": 5,
-          "n": 6,
-          "value": 0.8333,
-          "ci95": [
-            0.4365,
-            0.9699
-          ]
-        },
-        "fpr": {
-          "k": 0,
-          "n": 9,
-          "value": 0,
-          "ci95": [
-            0,
-            0.2991
-          ]
-        }
-      },
-      "id": {
-        "recall": {
-          "k": 6,
-          "n": 6,
+          "k": 7,
+          "n": 7,
           "value": 1,
           "ci95": [
-            0.6097,
+            0.6457,
             1
           ]
         },
         "fpr": {
           "k": 0,
-          "n": 6,
+          "n": 10,
           "value": 0,
           "ci95": [
             0,
-            0.3903
+            0.2775
+          ]
+        }
+      },
+      "id": {
+        "recall": {
+          "k": 7,
+          "n": 7,
+          "value": 1,
+          "ci95": [
+            0.6457,
+            1
+          ]
+        },
+        "fpr": {
+          "k": 0,
+          "n": 7,
+          "value": 0,
+          "ci95": [
+            0,
+            0.3543
           ]
         }
       }
@@ -167,11 +167,11 @@
       "truth": "malicious",
       "expectedClass": "manipulative_instruction",
       "hardNegative": false,
-      "predicted": "observed_instruction",
+      "predicted": "manipulative_instruction",
       "findings": [
-        "SR5:observed_instruction"
+        "SR1:manipulative_instruction"
       ],
-      "localized": null,
+      "localized": true,
       "clickfixVerdict": "none",
       "credentialVerdict": "none",
       "paymentVerdict": "none",
@@ -352,6 +352,44 @@
     },
     {
       "id": "SD10-id-tim-it-anydesk-informal",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "SR2:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SD11-en-realistic-blue-alert-zeus",
+      "lang": "en",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "SR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SD12-id-realistic-bank-chat-remote-app",
       "lang": "id",
       "category": "positive",
       "truth": "malicious",
@@ -630,6 +668,44 @@
     {
       "id": "SN15-en-desktop-app-download",
       "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "SR5:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SN16-en-realistic-antivirus-product-page",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "SR5:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SN17-id-realistic-isp-help-whatsapp",
+      "lang": "id",
       "category": "benign",
       "truth": "benign",
       "expectedClass": "observed_instruction",

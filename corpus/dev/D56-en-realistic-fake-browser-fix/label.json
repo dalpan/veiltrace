@@ -1,0 +1,22 @@
+{
+  "id": "D56-en-realistic-fake-browser-fix",
+  "split": "dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://docviewer-online.example/file/8812",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#fix",
+  "description": "Realistic fake \"document can't be displayed\" page telling the reader to fix it via PowerShell with a hidden payload",
+  "rationale": "Fake-fix ClickFix: error story + run steps + concealed clipboard.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; realistic dev additions (same author as the rules), labels written before the first run",
+  "created": "2026-10-22"
+}

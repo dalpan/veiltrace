@@ -18,7 +18,7 @@ describe('engine 0.2.0 in the popup', () => {
     expect(await card.locator('.risk').textContent()).toBe('Action risk: high. Following it would run code on your computer.');
     expect(await card.locator('.chip.severity').textContent()).toBe('Severity: informational');
     expect(await card.locator('.chip').nth(2).textContent()).toBe('Confidence: low');
-    expect(await popup.textContent('#meta')).toContain('Engine 0.2.0');
+    expect(await popup.textContent('#meta')).toContain('Engine 0.3.0');
     await shot(popup, '12-procedural-en');
   });
 
@@ -43,7 +43,7 @@ describe('engine 0.2.0 in the popup', () => {
     const o = ov.popup.locator('.override').first();
     expect(await o.locator('.context').first().textContent()).toContain('Tidak diturunkan:');
     expect(await o.locator('.context').nth(1).textContent()).toContain('Konteks yang dikesampingkan:');
-    expect(await ov.popup.textContent('#meta')).toContain('Engine 0.2.0');
+    expect(await ov.popup.textContent('#meta')).toContain('Engine 0.3.0');
     await shot(ov.popup, '14-override-id');
   });
 });

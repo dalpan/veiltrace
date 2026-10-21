@@ -14,7 +14,7 @@ import type {
   SupportPressure, SupportResult, SupportRuleId, SupportSignalId, SupportSignalKind, SupportTrustContext,
 } from './types.js';
 
-export const SUPPORT_DETECTOR_VERSION = 'sup-0.1.0-exp';
+export const SUPPORT_DETECTOR_VERSION = 'sup-0.2.0-exp';
 
 const CLAUSE_BREAK = /[,;:!?]|\.(?=\s|$)|(?<![\p{L}\p{N}_])(?:and|then|or|but|dan|lalu|kemudian|atau|tapi|tetapi)(?![\p{L}\p{N}_])/u;
 /** Negation distributes over a disjunction ("never install AnyDesk or share your screen"), so "or"/"atau" does not end its scope. */

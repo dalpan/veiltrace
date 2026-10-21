@@ -361,3 +361,22 @@ Lexicon additions (no rule, window or modifier changed): `S.OTP` for codes descr
 | **cred-0.1.1-exp** | 41 | **18** | **0** | **22** | **1** |
 
 Among the 36 original scenarios only CA03 changed (none → manipulative, CR1). Remaining miss: CA02 (blockquote markup). CN22 is predicted none instead of observed (the entry verb follows the code). 0 privacy-sentinel leaks. **Still development data by the same author; the informal vocabulary of real scams is wider than this list.**
+
+## 15. Accuracy round 1 (D-083): engine 0.3.0, cred/pay/sup 0.2.0 (development data only)
+
+**Method.** 20 new realistic dev scenarios (realistic CSS, fictional brands; 6 ClickFix, 4 per other detector, half hard negatives) were written with labels **before** any detector ran on them; a baseline was recorded; then the rules were changed; the held-out sets were not used. A new held-out set (v2) is being written by a separate author blind to the rules and will be locked before it is ever run.
+
+| Detector | Baseline (all dev, unchanged rules) | After | Remaining errors |
+|---|---|---|---|
+| ClickFix (56) | TP 19 · FP 2 · TN 30 · FN 5 (engine 0.2.0) | **TP 23 · FP 0 · TN 32 · FN 1** (engine 0.3.0) | FN D43 (lure quoted in a forum comment, no payload) |
+| Credential (45) | TP 19 · FP 0 · TN 24 · FN 2 | **TP 20 · FP 0 · TN 24 · FN 1** | FN CA02 (request in blockquote markup) |
+| Payment (31) | TP 11 · FP 0 · TN 18 · FN 2 | **TP 13 · FP 0 · TN 18 · FN 0** | none on dev |
+| Support (31) | TP 13 · FP 0 · TN 17 · FN 1 | **TP 14 · FP 0 · TN 17 · FN 0** | none on dev |
+
+**Changes.**
+- **ClickFix, ruleset `m5` (engine 0.3.0; `m4.1` = 0.2.0 stays selectable):** (1) *own-voice verification gate*: the P2-C cap (one tier at most) applies to a terse verification dialog only when a `P.HUMAN_VERIFY` pretext is in the dialog's own voice (not quoted, reported or code). This recovers planted reported/quoted framing (D10, D12, D50) while a quiz or tutorial that only quotes the lure (D37, D38, D55) is unaffected, which was the reason P2-C was rejected at M4.1. (2) *procedural dialogs*: R4-β also applies to a dialog/overlay that shows its command in a code block, stages no concealed payload and has no human-verification pretext (D39, D53). (3) Lexicon: informal key separators "sama/ama" and fillers in "konfirmasi dulu kamu bukan robot" (D44, D52). The lexicon is shared, so `m1`/`m4.1` outputs on new text may differ from earlier runs; recorded held-out v1 results are unchanged.
+- **Credential `cred-0.2.0-exp`:** a secret named earlier in the same sentence is the object of a later send verb (CD12); a first-person sender ("we will send you a code", "kode yang kami kirim") is a notice, not a request; informal address terms after "kode masuk ke hp".
+- **Payment `pay-0.2.0-exp`:** informal amounts ("50rb", "2jt"), "rek admin"/"dana sy" as personal destinations, "saldo … dicairin" as a promised release, "abis itu langsung cair" as a pay-to-receive condition, "buruan"/"sampe jam 12" as urgency, "kehapus permanen" as a threat (PD11, PA01).
+- **Support `sup-0.2.0-exp`:** detection-claim alarms ("has detected a Zeus trojan", "virus terdeteksi", "telah mendeteksi ancaman"), excluding clean statuses ("0 threats detected", "tidak ada ancaman terdeteksi") and without "is at risk" wording common in legitimate antivirus marketing (SA02, SD11).
+
+**Caveats.** Same author for rules and dev data, and some fixes target known dev misses: dev numbers are optimistic by construction. Only the blind, locked held-out v2 (and later the real-world field sample) can show whether this generalizes.

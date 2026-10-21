@@ -24,11 +24,12 @@ const PAGE_WIDE: AnalyzeOptions = { windowBlocks: Number.POSITIVE_INFINITY };
 const M1 = { ruleset: 'm1' } as const;
 
 /**
- * 'veiltrace' is the production engine (0.2.0). B0 and the ablations keep their M2 definitions on the M1
+ * 'veiltrace' is the production engine (0.3.0; 'veiltrace-0.2.0' is the held-out v1 engine). B0 and the ablations keep their M2 definitions on the M1
  * decision table (ruleset 'm1') so the baseline is unchanged by the M4.3A adoption (EVAL_PREREGISTRATION.md).
  */
 export const SYSTEMS: readonly SystemDef[] = [
-  { id: 'veiltrace', description: 'Production engine 0.2.0 (ruleset m4.1): region-local windows (K=8) + negation + context modifiers + P1b/P2-A/R4-beta', run: (s) => analyze(s) },
+  { id: 'veiltrace', description: 'Production engine 0.3.0 (ruleset m5): m4.1 + own-voice verification gate + procedural dialogs (D-083)', run: (s) => analyze(s) },
+  { id: 'veiltrace-0.2.0', description: 'Engine 0.2.0 (ruleset m4.1), the engine evaluated on held-out v1', run: (s) => analyze(s, { ruleset: 'm4.1' }) },
   { id: 'veiltrace-m1', description: 'M1 baseline engine 0.1.0-m1 (ruleset m1)', run: (s) => analyze(s, M1) },
   {
     id: 'B0', description: 'Baseline: page-level co-occurrence, same signals and M1 R1–R5 table, no negation, no context modifiers',

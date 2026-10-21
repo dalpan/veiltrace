@@ -1,5 +1,5 @@
 // Entry point: PageSnapshot → AnalysisResult. Pure and deterministic; never reads url or title.
-import { ENGINE_VERSION, ENGINE_VERSION_M1, MAX_AUX_CHARS, MAX_AUX_SOURCES, MAX_BLOCK_CHARS, MAX_BLOCKS } from './constants.js';
+import { ENGINE_VERSION, ENGINE_VERSION_M1, ENGINE_VERSION_M41, MAX_AUX_CHARS, MAX_AUX_SOURCES, MAX_BLOCK_CHARS, MAX_BLOCKS } from './constants.js';
 import { findCandidates, RULE_RANK, readingOrder, type Candidate } from './correlate.js';
 import { applyModifiers, TIERS, type HeadingMemo, type ScoredCandidate } from './modifiers.js';
 import { normalize } from './normalize.js';
@@ -122,9 +122,17 @@ export const M41_RULESET: NonNullable<AnalyzeOptions['experimental']> = {
   proceduralDocModifier: true,
 };
 
+/** The m5 rule set (engine 0.3.0, D-083), the production default. */
+export const M5_RULESET: NonNullable<AnalyzeOptions['experimental']> = {
+  ...M41_RULESET,
+  ownVoiceGateOverride: true,
+  proceduralDialogs: true,
+};
+
 function resolveOptions(options: AnalyzeOptions): AnalyzeOptions {
   if (options.ruleset === 'm1') return options;
-  return { ...options, experimental: { ...M41_RULESET, ...options.experimental } };
+  const base = options.ruleset === 'm4.1' || options.ruleset === 'm4.1-rc1' ? M41_RULESET : M5_RULESET;
+  return { ...options, experimental: { ...base, ...options.experimental } };
 }
 
 /** Strong-command observations in hidden-copy sources whose payload text is not visible anywhere on the page. */
@@ -197,7 +205,7 @@ export function analyze(snapshot: PageSnapshot, rawOptions: AnalyzeOptions = {})
   for (const f of findings) if (verdict === 'none' || TIERS.indexOf(f.classification) > TIERS.indexOf(verdict)) verdict = f.classification;
 
   return {
-    engineVersion: options.ruleset === 'm1' ? ENGINE_VERSION_M1 : ENGINE_VERSION,
+    engineVersion: options.ruleset === 'm1' ? ENGINE_VERSION_M1 : options.ruleset === 'm4.1' || options.ruleset === 'm4.1-rc1' ? ENGINE_VERSION_M41 : ENGINE_VERSION,
     schemaVersion: 1,
     verdict,
     findings,

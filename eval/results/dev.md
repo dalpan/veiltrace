@@ -1,29 +1,29 @@
 # Evaluation: dev split
 
-Engine 0.2.0, extractor 0.1.0-m2. Synthetic fixtures; **not** real-world effectiveness.
+Engine 0.3.0, extractor 0.2.0-m5. Synthetic fixtures; **not** real-world effectiveness.
 
-Composition: category:adversarial=7, category:ambiguous=1, category:benign=28, category:positive=14, hardNegative=29, lang:en=29, lang:id=21, total=50, truth:benign=29, truth:malicious=21
+Composition: category:adversarial=7, category:ambiguous=1, category:benign=31, category:positive=17, hardNegative=32, lang:en=33, lang:id=23, total=56, truth:benign=32, truth:malicious=24
 
 ## Systems
 
 | System | TP | FP | TN | FN | Precision | Recall | FPR | Hard-neg FPR | Localization |
 |---|---|---|---|---|---|---|---|---|---|
-| veiltrace | 16 | 1 | 28 | 5 | 94.1% (16/17; 95% CI 73.0%–99.0%) | 76.2% (16/21; 95% CI 54.9%–89.4%) | 3.4% (1/29; 95% CI 0.6%–17.2%) | 3.4% (1/29; 95% CI 0.6%–17.2%) | 100.0% (16/16; 95% CI 80.6%–100.0%) |
-| veiltrace-m1 | 16 | 6 | 23 | 5 | 72.7% (16/22; 95% CI 51.8%–86.8%) | 76.2% (16/21; 95% CI 54.9%–89.4%) | 20.7% (6/29; 95% CI 9.8%–38.4%) | 20.7% (6/29; 95% CI 9.8%–38.4%) | 100.0% (16/16; 95% CI 80.6%–100.0%) |
-| B0 | 20 | 14 | 15 | 1 | 58.8% (20/34; 95% CI 42.2%–73.6%) | 95.2% (20/21; 95% CI 77.3%–99.2%) | 48.3% (14/29; 95% CI 31.4%–65.6%) | 48.3% (14/29; 95% CI 31.4%–65.6%) | 100.0% (20/20; 95% CI 83.9%–100.0%) |
-| A1-page+context | 16 | 8 | 21 | 5 | 66.7% (16/24; 95% CI 46.7%–82.0%) | 76.2% (16/21; 95% CI 54.9%–89.4%) | 27.6% (8/29; 95% CI 14.7%–45.7%) | 27.6% (8/29; 95% CI 14.7%–45.7%) | 100.0% (16/16; 95% CI 80.6%–100.0%) |
-| A2-region-only | 20 | 12 | 17 | 1 | 62.5% (20/32; 95% CI 45.3%–77.1%) | 95.2% (20/21; 95% CI 77.3%–99.2%) | 41.4% (12/29; 95% CI 25.5%–59.3%) | 41.4% (12/29; 95% CI 25.5%–59.3%) | 100.0% (20/20; 95% CI 83.9%–100.0%) |
+| veiltrace | 23 | 0 | 32 | 1 | 100.0% (23/23; 95% CI 85.7%–100.0%) | 95.8% (23/24; 95% CI 79.8%–99.3%) | 0.0% (0/32; 95% CI 0.0%–10.7%) | 0.0% (0/32; 95% CI 0.0%–10.7%) | 100.0% (23/23; 95% CI 85.7%–100.0%) |
+| veiltrace-m1 | 20 | 7 | 25 | 4 | 74.1% (20/27; 95% CI 55.3%–86.8%) | 83.3% (20/24; 95% CI 64.1%–93.3%) | 21.9% (7/32; 95% CI 11.0%–38.8%) | 21.9% (7/32; 95% CI 11.0%–38.8%) | 100.0% (20/20; 95% CI 83.9%–100.0%) |
+| B0 | 24 | 17 | 15 | 0 | 58.5% (24/41; 95% CI 43.4%–72.2%) | 100.0% (24/24; 95% CI 86.2%–100.0%) | 53.1% (17/32; 95% CI 36.4%–69.1%) | 53.1% (17/32; 95% CI 36.4%–69.1%) | 100.0% (24/24; 95% CI 86.2%–100.0%) |
+| A1-page+context | 20 | 9 | 23 | 4 | 69.0% (20/29; 95% CI 50.8%–82.7%) | 83.3% (20/24; 95% CI 64.1%–93.3%) | 28.1% (9/32; 95% CI 15.6%–45.4%) | 28.1% (9/32; 95% CI 15.6%–45.4%) | 100.0% (20/20; 95% CI 83.9%–100.0%) |
+| A2-region-only | 24 | 15 | 17 | 0 | 61.5% (24/39; 95% CI 45.9%–75.1%) | 100.0% (24/24; 95% CI 86.2%–100.0%) | 46.9% (15/32; 95% CI 30.9%–63.6%) | 46.9% (15/32; 95% CI 30.9%–63.6%) | 100.0% (24/24; 95% CI 86.2%–100.0%) |
 
 ## VEILTRACE class matrix
 
 | expected \ predicted | none | observed | suspicious | manipulative |
 |---|---|---|---|---|
 | none | 7 | 0 | 0 | 0 |
-| observed | 1 | 20 | 1 | 0 |
+| observed | 1 | 24 | 0 | 0 |
 | suspicious | 0 | 0 | 6 | 0 |
-| manipulative | 0 | 5 | 1 | 9 |
+| manipulative | 0 | 1 | 5 | 12 |
 
-Observed-instruction (informational) results on benign scenarios: 20.
+Observed-instruction (informational) results on benign scenarios: 24.
 
 Requests during scanning: 0. Partial scans: none.
 
@@ -42,9 +42,9 @@ Latency is machine-specific and kept out of this file: see `dev.perf.json` (not 
 | D07-en-shadow-dom-widget-lure | malicious | manipulative | manipulative | manipulative | manipulative | manipulative |
 | D08-en-same-origin-support-iframe | malicious | manipulative | manipulative | manipulative | manipulative | manipulative |
 | D09-en-macos-spotlight | malicious | manipulative | manipulative | manipulative | manipulative | manipulative |
-| D10-en-planted-reported-speech | malicious | manipulative | observed | manipulative | observed | manipulative |
+| D10-en-planted-reported-speech | malicious | manipulative | suspicious | manipulative | observed | manipulative |
 | D11-en-planted-educational-cue | malicious | manipulative | suspicious | manipulative | suspicious | manipulative |
-| D12-id-planted-blockquote | malicious | manipulative | observed | manipulative | observed | manipulative |
+| D12-id-planted-blockquote | malicious | manipulative | suspicious | manipulative | observed | manipulative |
 | D13-en-word-error-winx | malicious | suspicious | suspicious | suspicious | suspicious | suspicious |
 | D14-id-session-copy-button | malicious | suspicious | suspicious | suspicious | suspicious | suspicious |
 | D15-en-benign-captcha-checkbox | benign | none | none | none | none | none |
@@ -71,15 +71,21 @@ Latency is machine-specific and kept out of this file: see `dev.perf.json` (not 
 | D36-id-benign-captcha | benign | none | none | none | none | none |
 | D37-en-security-tutorial-modal | benign | observed | observed | manipulative | observed | manipulative |
 | D38-en-security-quiz-modal | benign | observed | observed | manipulative | observed | manipulative |
-| D39-en-docs-quickstart-dialog | benign | observed | suspicious | suspicious | suspicious | suspicious |
+| D39-en-docs-quickstart-dialog | benign | observed | observed | suspicious | suspicious | suspicious |
 | D40-id-troubleshooting-procedure | benign | observed | observed | suspicious | suspicious | suspicious |
 | D41-en-mixed-pretext-portal | malicious | suspicious | suspicious | suspicious | suspicious | suspicious |
 | D42-id-authority-only-support-overlay | malicious | suspicious | suspicious | suspicious | suspicious | suspicious |
 | D43-en-ugc-quoted-lure-comment | malicious | manipulative | observed | manipulative | observed | manipulative |
-| D44-id-informal-paraphrase | malicious | manipulative | observed | observed | observed | observed |
+| D44-id-informal-paraphrase | malicious | manipulative | manipulative | manipulative | manipulative | manipulative |
 | D45-en-concealed-payload-edu-cue | malicious | manipulative | manipulative | manipulative | suspicious | manipulative |
 | D46-id-concealed-payload-blockquote | malicious | manipulative | manipulative | manipulative | manipulative | manipulative |
 | D47-en-unrelated-regions | benign | observed | observed | suspicious | suspicious | observed |
 | D48-en-verify-windows-version | benign | observed | observed | observed | observed | observed |
 | D49-en-news-reported-list | benign | observed | observed | manipulative | observed | manipulative |
-| D50-id-direct-lure-reported-framing | malicious | manipulative | observed | manipulative | observed | manipulative |
+| D50-id-direct-lure-reported-framing | malicious | manipulative | suspicious | manipulative | observed | manipulative |
+| D51-en-realistic-humancheck-clipboard | malicious | manipulative | manipulative | manipulative | manipulative | manipulative |
+| D52-id-realistic-blog-informal-steps | malicious | manipulative | manipulative | manipulative | manipulative | manipulative |
+| D53-en-realistic-docs-install-dialog | benign | observed | observed | suspicious | suspicious | suspicious |
+| D54-id-realistic-news-clickfix-figure | benign | observed | observed | manipulative | observed | manipulative |
+| D55-en-realistic-awareness-quiz | benign | observed | observed | manipulative | observed | manipulative |
+| D56-en-realistic-fake-browser-fix | malicious | manipulative | suspicious | suspicious | suspicious | suspicious |

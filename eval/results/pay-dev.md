@@ -1,14 +1,14 @@
 # Payment detector: development results (pay-dev)
 
-Detector pay-0.1.0-exp (EXPERIMENTAL), extractor 0.2.0-m5. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
+Detector pay-0.2.0-exp (EXPERIMENTAL), extractor 0.2.0-m5. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
 
-TP 10 · FP 0 · TN 16 · FN 1
+TP 13 · FP 0 · TN 18 · FN 0
 
-- Precision: 100.0% (10/10; 95% CI 72.2%–100.0%)
-- Recall: 90.9% (10/11; 95% CI 62.3%–98.4%)
-- Hard-negative FPR: 0.0% (0/16; 95% CI 0.0%–19.4%)
-- Localization: 100.0% (10/10; 95% CI 72.2%–100.0%)
-- Exact class agreement: 92.6% (25/27; 95% CI 76.6%–97.9%)
+- Precision: 100.0% (13/13; 95% CI 77.2%–100.0%)
+- Recall: 100.0% (13/13; 95% CI 77.2%–100.0%)
+- Hard-negative FPR: 0.0% (0/18; 95% CI 0.0%–17.6%)
+- Localization: 100.0% (13/13; 95% CI 77.2%–100.0%)
+- Exact class agreement: 90.3% (28/31; 95% CI 75.1%–96.7%)
 - Requests during scanning: 0; privacy sentinel leaks: 0 (3 fields filled)
 
 ## Class matrix
@@ -16,15 +16,15 @@ TP 10 · FP 0 · TN 16 · FN 1
 | expected \ predicted | none | observed | suspicious | manipulative |
 |---|---|---|---|---|
 | none | 2 | 0 | 0 | 0 |
-| observed | 1 | 13 | 0 | 0 |
+| observed | 3 | 13 | 0 | 0 |
 | suspicious | 0 | 0 | 1 | 0 |
-| manipulative | 1 | 0 | 0 | 9 |
+| manipulative | 0 | 0 | 0 | 12 |
 
 ## Per scenario
 
 | Scenario | Truth | Expected | Predicted | Findings | Loc. | ClickFix | Credential |
 |---|---|---|---|---|---|---|---|
-| PA01-id-slang-tf-buka-akun | malicious | manipulative | none |  |  | none | none |
+| PA01-id-slang-tf-buka-akun | malicious | manipulative | manipulative | PR2:manipulative_instruction | ✓ | none | none |
 | PD01-en-chat-refund-release-fee | malicious | manipulative | manipulative | PR1:manipulative_instruction | ✓ | none | none |
 | PD02-id-undian-pajak-hadiah | malicious | manipulative | manipulative | PR1:manipulative_instruction | ✓ | none | none |
 | PD03-id-overlay-akun-diblokir-biaya-verifikasi | malicious | manipulative | manipulative | PR1:manipulative_instruction | ✓ | none | none |
@@ -35,6 +35,8 @@ TP 10 · FP 0 · TN 16 · FN 1
 | PD08-id-kurir-paket-tertahan-bea-cukai | malicious | manipulative | manipulative | PR1:manipulative_instruction | ✓ | none | none |
 | PD09-en-account-locked-unlock-fee | malicious | manipulative | manipulative | PR1:manipulative_instruction | ✓ | none | none |
 | PD10-id-cs-palsu-komentar-refund | malicious | manipulative | manipulative | PR2:manipulative_instruction | ✓ | none | none |
+| PD11-id-realistic-chat-slang-admin-fee | malicious | manipulative | manipulative | PR1:manipulative_instruction | ✓ | none | none |
+| PD12-en-realistic-parcel-customs-fee | malicious | manipulative | manipulative | PR1:manipulative_instruction | ✓ | none | none |
 | PN01-en-checkout | benign | observed | observed | PR4:observed_instruction, PR4:observed_instruction |  | none | none |
 | PN02-id-checkout-virtual-account | benign | observed | observed | PR4:observed_instruction |  | none | none |
 | PN03-en-invoice | benign | observed | observed | PR4:observed_instruction |  | none | none |
@@ -51,3 +53,5 @@ TP 10 · FP 0 · TN 16 · FN 1
 | PN14-en-bank-transfer-help | benign | observed | observed | PR4:observed_instruction |  | none | none |
 | PN15-id-bantuan-marketplace-rekber | benign | none | none |  |  | none | none |
 | PN16-en-legit-prize-no-fee | benign | none | none |  |  | none | none |
+| PN17-id-realistic-checkout-virtual-account | benign | observed | none |  |  | none | none |
+| PN18-en-realistic-donation-campaign | benign | observed | none |  |  | none | none |

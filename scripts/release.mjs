@@ -74,7 +74,7 @@ export async function release({ out = 'release', candidate = false } = {}) {
     extensionVersion: version,
     engine: {
       default: constant('src/core/constants.ts', 'ENGINE_VERSION'),
-      defaultRuleset: 'm4.1',
+      defaultRuleset: 'm5',
       baseline: { ruleset: 'm1', version: constant('src/core/constants.ts', 'ENGINE_VERSION_M1'), usedByExtension: false },
     },
     extractorVersion: constant('src/extract/extract.ts', 'EXTRACTOR_VERSION'),

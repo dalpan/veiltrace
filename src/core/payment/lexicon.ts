@@ -26,6 +26,8 @@ const OBJECTS: PayLexiconEntry[] = [
   entry('pay.amount', 'PA.AMOUNT', 'en', 'strong',
     `${B}(?:(?:rp\\.?|idr|usd|us\\$|\\$|€|£|eur)\\s?${NUM}(?:\\s?(?:juta|jt|ribu|rb|k|million|thousand))?|${NUM}\\s?(?:juta|jt|ribu|rb)?\\s?(?:rupiah|dollars?|usd|idr|euros?))${E}`,
     ['Rp 150.000', 'Rp2 juta', '$49.99', 'USD 200', '300 dollars', '500 ribu rupiah']),
+  // Informal amounts without a currency sign ("50rb", "2jt", "100k"): only an object when a pay verb is in the same block.
+  entry('pay.amount.informal', 'PA.AMOUNT', 'id', 'strong', `${B}\\d[\\d.,]*\\s?(?:rb|ribu|jt|juta|k)${E}`, ['50rb', '2jt', '100k', '150 ribu']),
   entry('pay.en.fee', 'PF.FEE', 'en', 'weak', `${B}(?:fees?|surcharges?|charges?)${E}`, ['fee', 'charges']),
   entry('pay.id.fee', 'PF.FEE', 'id', 'weak', `${B}(?:biaya|ongkos(?:\\s+kirim)?|ongkir|pajak)${E}`, ['biaya', 'ongkir', 'pajak']),
   // A fee whose stated purpose is to release, unlock or hand over something: the core of advance-fee fraud.
@@ -45,6 +47,9 @@ const DESTINATIONS: PayLexiconEntry[] = [
   entry('pay.id.personal', 'PD.PERSONAL', 'id', 'strong',
     `${B}rekening\\s+(?:(?:pribadi|perorangan)(?!\\s+(?:anda|kamu))(?:\\s+(?:saya|kami|admin|petugas|agen))?|(?:saya|admin|petugas|agen|kurir))${E}`,
     ['rekening pribadi saya', 'rekening pribadi', 'rekening admin']),
+  entry('pay.id.personal_informal', 'PD.PERSONAL', 'id', 'strong',
+    `${B}(?:rek\\.?|norek|rekening)\\s+(?:admin|sy|aku|gw|gue|petugas|agen|kurir)${E}|${B}(?:dana|ovo|gopay|shopeepay|e-?wallet)\\s+(?:saya|sy|aku|gw|gue|admin|petugas)${E}`,
+    ['rek admin', 'norek sy', 'dana sy', 'ovo admin']),
   entry('pay.en.off_platform', 'PD.OFF_PLATFORM', 'en', 'strong',
     `${B}(?:(?:outside|off)\\s+(?:of\\s+)?(?:the\\s+|this\\s+)?(?:app|platform|marketplace|website|site|escrow)|directly\\s+to\\s+(?:me|my\\s+(?:account|number|wallet))|(?:skip|avoid|bypass|instead\\s+of)\\s+(?:using\\s+)?(?:the\\s+)?(?:checkout|escrow|platform\\s+payment|app\\s+payment))${E}`,
     ['outside the app', 'directly to me', 'instead of using the checkout']),
@@ -67,6 +72,9 @@ const RECEIVE: PayLexiconEntry[] = [
   entry('pay.id.refund', 'PR.REFUND', 'id', 'weak',
     `${B}(?:pengembalian\\s+dana|refund|ganti\\s+rugi|kompensasi|kelebihan\\s+(?:bayar|pembayaran)|(?:dana|paket)(?:\\s+(?:anda|kamu))?\\s+(?:tertahan|dibekukan|ditahan)|(?:pencairan|mencairkan)\\s+dana)${E}`,
     ['pengembalian dana', 'kompensasi', 'dana Anda tertahan', 'pencairan dana']),
+  entry('pay.id.release_informal', 'PR.REFUND', 'id', 'weak',
+    `${B}(?:saldo|bonus|hadiah|dana|uang|cashback|komisi)\\s+(?:[\\p{L}\\d]+\\s+){0,4}?(?:siap\\s+|bisa\\s+|langsung\\s+)?(?:dicair(?:kan|in)|cair|ditarik|withdraw)${E}`,
+    ['saldo bonus 2jt kakak udah siap dicairin', 'komisi bisa ditarik']),
   entry('pay.en.prize', 'PR.PRIZE', 'en', 'weak',
     `${B}(?:you(?:${APOS}ve|\\s+have)?\\s+(?:won|been\\s+selected)|(?:lucky|selected)\\s+winner|your\\s+(?:prize|winnings|reward)|claim\\s+(?:your\\s+)?(?:prize|winnings|reward)|grand\\s+prize|lottery\\s+winnings?)${E}`,
     ["you've won", 'lucky winner', 'claim your prize']),
@@ -79,6 +87,8 @@ const RECEIVE: PayLexiconEntry[] = [
   entry('pay.id.unlock', 'PR.UNLOCK', 'id', 'weak',
     `${B}(?:buka\\s+blokir|membuka\\s+blokir|aktivasi(?:\\s+ulang)?|mengaktifkan(?:\\s+kembali)?|memulihkan|pemulihan|verifikasi)\\s+(?:akun|rekening|dompet|kartu|saldo)${E}`,
     ['buka blokir akun', 'aktivasi ulang akun', 'verifikasi akun']),
+  entry('pay.id.unlock_informal', 'PR.UNLOCK', 'id', 'weak',
+    `${B}(?:buka|bka|aktifin|aktifkan|pulihin|balikin)\\s+(?:lagi\\s+)?akun(?:nya|\\s+(?:kamu|lu|lo|kakak|kak))?${E}`, ['buka akunnya', 'aktifin lagi akun kamu']),
   // The clause that makes the payment a precondition for receiving something.
   entry('pay.en.condition', 'PC.CONDITION', 'en', 'weak',
     `${B}(?:(?:in\\s+order\\s+)?to|before\\s+(?:we|you)\\s+can|so\\s+(?:that\\s+)?(?:we|you)\\s+can|for\\s+us\\s+to)\\s+(?:receive|claim|release|unlock|unblock|reactivate|activate|withdraw|collect|redeem|restore|recover|unfreeze|process\\s+(?:your\\s+|the\\s+)?(?:refund|prize|withdrawal))${E}`,
@@ -86,6 +96,12 @@ const RECEIVE: PayLexiconEntry[] = [
   entry('pay.id.condition', 'PC.CONDITION', 'id', 'weak',
     `${B}(?:agar|supaya|untuk|sebelum|baru)\\s+(?:(?:dapat|bisa)\\s+)?(?:menerima|mencairkan|dicairkan|mengklaim|diklaim|membuka|dibuka|mengaktifkan|diaktifkan|menarik|ditarik|memulihkan|dipulihkan|dilepas)${E}`,
     ['agar dapat dicairkan', 'untuk mencairkan', 'supaya bisa dibuka']),
+  entry('pay.id.condition_informal', 'PC.CONDITION', 'id', 'weak',
+    `${B}(?:(?:abis|habis|setelah|sesudah)\\s+(?:itu|bayar|transfer|tf)|baru(?:\\s+(?:bisa|dapat))?)\\s+(?:langsung\\s+)?(?:cair|dicair(?:kan|in)|masuk|dikirim|aktif|dibuka|kebuka)${E}`,
+    ['abis itu langsung cair', 'setelah transfer langsung masuk', 'baru bisa cair']),
+  entry('pay.en.condition_after', 'PC.CONDITION', 'en', 'weak',
+    `${B}(?:then|after\\s+that|once\\s+(?:paid|you\\s+pay))\\s+(?:your\\s+)?(?:funds|money|prize|refund|balance|parcel|package|account)\\s+(?:will\\s+be\\s+)?(?:released|sent|unlocked|credited|delivered)${E}`,
+    ['then your funds will be released', 'once paid your parcel will be delivered']),
 ];
 
 const PRESSURE: PayLexiconEntry[] = [
@@ -95,6 +111,9 @@ const PRESSURE: PayLexiconEntry[] = [
   entry('pay.id.threat', 'PP.THREAT', 'id', 'weak',
     `${B}(?:(?:akun|rekening|kartu|dompet|saldo|nomor)(?:\\s+(?:anda|kamu))?\\s+(?:akan\\s+|telah\\s+|sudah\\s+)?(?:di)?(?:blokir|nonaktifkan|tutup|bekukan|sita|tangguhkan)|akan\\s+(?:di)?(?:tangkap|penjarakan|pidanakan|polisikan|proses\\s+(?:secara\\s+)?hukum|laporkan\\s+ke\\s+(?:polisi|pihak\\s+berwajib))|surat\\s+(?:penangkapan|perintah\\s+penangkapan)|terancam\\s+(?:pidana|penjara|ditangkap))${E}`,
     ['akun Anda akan diblokir', 'akan ditangkap', 'terancam pidana']),
+  entry('pay.id.threat_informal', 'PP.THREAT', 'id', 'weak',
+    `${B}(?:(?:ke|ter)hapus\\s+permanen|kena\\s+(?:blokir|banned|suspend)|(?:bakal|mau)\\s+(?:di)?(?:blokir|hapus|banned|suspend))${E}`,
+    ['kehapus permanen', 'kena blokir', 'bakal diblokir']),
   // Deadlines in minutes or hours and explicit pressure. "Expires in / valid for" on real payment links is excluded.
   entry('pay.en.urgency', 'PP.URGENCY', 'en', 'weak',
     `${B}(?:(?<!(?:expires?|valid\\s+for|valid)\\s)within\\s+\\d+\\s+(?:minutes?|mins?|hours?|hrs?)|immediately|right\\s+now|act\\s+now|urgent(?:ly)?|as\\s+soon\\s+as\\s+possible|before\\s+it${APOS}?s\\s+too\\s+late|final\\s+warning|last\\s+chance)${E}`,
@@ -102,6 +121,8 @@ const PRESSURE: PayLexiconEntry[] = [
   entry('pay.id.urgency', 'PP.URGENCY', 'id', 'weak',
     `${B}(?:(?<!(?:berlaku|kedaluwarsa|kadaluarsa|hangus)\\s)dalam\\s+(?:waktu\\s+)?\\d+\\s+(?:menit|jam)|segera|sekarang\\s+juga|hari\\s+ini\\s+juga|peringatan\\s+terakhir|mendesak|secepatnya|kesempatan\\s+terakhir)${E}`,
     ['dalam 30 menit', 'segera', 'sekarang juga', 'secepatnya']),
+  entry('pay.id.urgency_informal', 'PP.URGENCY', 'id', 'weak',
+    `${B}(?:buruan|cepetan|cpt|sebelum\\s+jam\\s+\\d+|sampe\\s+jam\\s+\\d+|slot(?:nya)?\\s+(?:cuma|terbatas))${E}`, ['buruan', 'cpt', 'sampe jam 12', 'slotnya cuma']),
   // Claimed identity or authority. Never verified; never escalates on its own.
   entry('pay.en.authority', 'PP.AUTHORITY', 'en', 'weak',
     `${B}(?:customer\\s+(?:support|service|care)(?:\\s+(?:team|agent|officer|representative))?|support\\s+(?:team|agent|staff|desk)|help\\s*desk|(?:security|fraud|billing|compliance|verification)\\s+(?:team|department|officer|agent)|bank\\s+(?:officer|representative|staff|manager)|police(?:\\s+(?:officer|department))?|customs\\s+(?:office|officer|department|authority)|tax\\s+(?:office|officer|authority|department)|court\\s+(?:officer|order)|(?:government|federal)\\s+agent|official\\s+(?:support|agent|representative|account))${E}`,

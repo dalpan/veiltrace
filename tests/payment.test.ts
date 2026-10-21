@@ -137,3 +137,16 @@ describe('payment detector: privacy and invariants', () => {
     }
   });
 });
+
+describe('payment detector pay-0.2.0-exp: informal Indonesian (D-083)', () => {
+  it('"tf dlu biaya admin 50rb ke rek admin, abis itu langsung cair" → manipulative', () => {
+    const r = pay(inContainer('ugc:#chat', ['selamat kak, saldo bonus 2jt kakak udah siap dicairin ya', 'tf dlu biaya admin 50rb ke rek admin, abis itu langsung cair ke rekening kakak', 'buruan ya kak, slotnya cuma sampe jam 12']));
+    expect(r.verdict).toBe('manipulative_instruction');
+    expect(r.findings[0]!.ruleId).toBe('PR1');
+  });
+
+  it('ordinary informal shop messages stay observed: pay, then the order ships', () => {
+    expect(pay(['Bayar 150rb lewat aplikasi ya kak, setelah bayar pesanan langsung dikirim.']).verdict).toBe('observed_instruction');
+  });
+});
+

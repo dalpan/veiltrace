@@ -1,0 +1,22 @@
+{
+  "id": "PD12-en-realistic-parcel-customs-fee",
+  "split": "pay-dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://track-swiftparcel.example/t/SP90021",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": ".tr",
+  "description": "Realistic parcel-tracking page: shipment held at customs, pay a release fee within 48 hours",
+  "rationale": "Pay-to-release with urgency and a held-parcel story. (evidenceWithin widened after the first run to the whole lure container; truth and expected class unchanged.)",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; realistic dev additions (same author as the rules), labels written before the first run",
+  "created": "2026-10-22"
+}

@@ -140,3 +140,16 @@ describe('support detector: privacy and invariants', () => {
     }
   });
 });
+
+describe('support detector sup-0.2.0-exp: alarm wording (D-083)', () => {
+  it('"Windows has detected a Zeus trojan" with a number to call → SR1', () => {
+    expect(short(sup(['Windows has detected a Zeus trojan on this device.', 'Call support immediately: +1 877 555 0163']))).toEqual(['SR1:manipulative_instruction']);
+  });
+
+  it('a clean antivirus status ("0 threats detected", "no threats detected") is not an alarm', () => {
+    for (const t of ['Scan complete: 0 threats detected. Questions? Call support at +1 800 555 0177.', 'Scan complete, no threats detected. Call us at +1 800 555 0177.']) {
+      expect(sup([t]).verdict, t).toBe('observed_instruction');
+    }
+  });
+});
+

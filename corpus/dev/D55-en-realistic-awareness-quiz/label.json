@@ -1,0 +1,22 @@
+{
+  "id": "D55-en-realistic-awareness-quiz",
+  "split": "dev",
+  "lang": "en",
+  "category": "benign",
+  "threatClass": "T-neg",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://academy.safenet-training.test/module-2/quiz",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Realistic security-awareness training quiz showing a fake verification prompt as a question",
+  "rationale": "Training material quoting a lure inside a quiz card.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; realistic dev additions (same author as the rules), labels written before the first run",
+  "created": "2026-10-22"
+}

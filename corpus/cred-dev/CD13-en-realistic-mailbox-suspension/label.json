@@ -1,0 +1,22 @@
+{
+  "id": "CD13-en-realistic-mailbox-suspension",
+  "split": "cred-dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://mail-securecheck.example/session",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": ".lg",
+  "description": "Realistic webmail lookalike overlay: storage-full and suspension threat, asks to confirm password",
+  "rationale": "Credential phishing with an account threat in an overlay form.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; realistic dev additions (same author as the rules), labels written before the first run",
+  "created": "2026-10-22"
+}

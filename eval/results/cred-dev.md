@@ -1,24 +1,24 @@
 # Credential detector: development results (cred-dev)
 
-Detector cred-0.1.1-exp (EXPERIMENTAL), extractor 0.2.0-m5. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
+Detector cred-0.2.0-exp (EXPERIMENTAL), extractor 0.2.0-m5. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
 
-TP 18 · FP 0 · TN 22 · FN 1
+TP 20 · FP 0 · TN 24 · FN 1
 
-- Precision: 100.0% (18/18; 95% CI 82.4%–100.0%)
-- Recall: 94.7% (18/19; 95% CI 75.4%–99.1%)
-- Hard-negative FPR: 0.0% (0/22; 95% CI 0.0%–14.9%)
-- Localization: 100.0% (18/18; 95% CI 82.4%–100.0%)
-- Exact class agreement: 95.1% (39/41; 95% CI 83.9%–98.7%)
-- Requests during scanning: 0; privacy sentinel leaks: 0 (26 fields filled)
+- Precision: 100.0% (20/20; 95% CI 83.9%–100.0%)
+- Recall: 95.2% (20/21; 95% CI 77.3%–99.2%)
+- Hard-negative FPR: 0.0% (0/24; 95% CI 0.0%–13.8%)
+- Localization: 100.0% (20/20; 95% CI 83.9%–100.0%)
+- Exact class agreement: 97.8% (44/45; 95% CI 88.4%–99.6%)
+- Requests during scanning: 0; privacy sentinel leaks: 0 (34 fields filled)
 
 ## Class matrix
 
 | expected \ predicted | none | observed | suspicious | manipulative |
 |---|---|---|---|---|
 | none | 5 | 0 | 0 | 0 |
-| observed | 1 | 16 | 0 | 0 |
-| suspicious | 0 | 0 | 3 | 0 |
-| manipulative | 0 | 1 | 0 | 15 |
+| observed | 0 | 19 | 0 | 0 |
+| suspicious | 0 | 0 | 4 | 0 |
+| manipulative | 0 | 1 | 0 | 16 |
 
 ## Per scenario
 
@@ -43,6 +43,8 @@ TP 18 · FP 0 · TN 22 · FN 1
 | CD09-en-airdrop-claim-seed | malicious | manipulative | manipulative | CR2:manipulative_instruction | ✓ | none |
 | CD10-id-cs-chat-pembatalan | malicious | manipulative | manipulative | CR1:manipulative_instruction | ✓ | none |
 | CD11-en-fraud-dept-tell-pin | malicious | manipulative | manipulative | CR1:manipulative_instruction | ✓ | none |
+| CD12-id-realistic-marketplace-chat-otp | malicious | manipulative | manipulative | CR1:manipulative_instruction | ✓ | none |
+| CD13-en-realistic-mailbox-suspension | malicious | suspicious | suspicious | CR4:suspicious_correlation | ✓ | none |
 | CN01-en-login-form | benign | observed | observed | CR5:observed_instruction |  | none |
 | CN02-en-mfa-code | benign | observed | observed | CR5:observed_instruction |  | none |
 | CN03-id-ibanking-login | benign | observed | observed | CR5:observed_instruction |  | none |
@@ -64,4 +66,6 @@ TP 18 · FP 0 · TN 22 · FN 1
 | CN19-en-new-signin-alert | benign | none | none |  |  | none |
 | CN20-en-2fa-setup | benign | observed | observed | CR5:observed_instruction |  | none |
 | CN21-id-slang-jangan-kasih-angka | benign | none | none |  |  | none |
-| CN22-id-slang-masukin-kode-di-aplikasi | benign | observed | none |  |  | none |
+| CN22-id-slang-masukin-kode-di-aplikasi | benign | observed | observed | CR5:observed_instruction |  | none |
+| CN23-id-realistic-ibanking-otp | benign | observed | observed | CR5:observed_instruction |  | none |
+| CN24-en-realistic-2step-verification | benign | observed | observed | CR5:observed_instruction |  | none |

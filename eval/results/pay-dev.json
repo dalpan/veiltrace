@@ -1,58 +1,58 @@
 {
   "split": "pay-dev",
   "note": "DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.",
-  "detectorVersion": "pay-0.1.0-exp",
+  "detectorVersion": "pay-0.2.0-exp",
   "extractorVersion": "0.2.0-m5",
   "metrics": {
-    "scenarios": 27,
+    "scenarios": 31,
     "confusion": {
-      "tp": 10,
+      "tp": 13,
       "fp": 0,
-      "tn": 16,
-      "fn": 1
+      "tn": 18,
+      "fn": 0
     },
     "precision": {
-      "k": 10,
-      "n": 10,
+      "k": 13,
+      "n": 13,
       "value": 1,
       "ci95": [
-        0.7225,
+        0.7719,
         1
       ]
     },
     "recall": {
-      "k": 10,
-      "n": 11,
-      "value": 0.9091,
+      "k": 13,
+      "n": 13,
+      "value": 1,
       "ci95": [
-        0.6226,
-        0.9838
+        0.7719,
+        1
       ]
     },
     "fpr": {
       "k": 0,
-      "n": 16,
+      "n": 18,
       "value": 0,
       "ci95": [
         0,
-        0.1936
+        0.1759
       ]
     },
     "hardNegativeFpr": {
       "k": 0,
-      "n": 16,
+      "n": 18,
       "value": 0,
       "ci95": [
         0,
-        0.1936
+        0.1759
       ]
     },
     "localization": {
-      "k": 10,
-      "n": 10,
+      "k": 13,
+      "n": 13,
       "value": 1,
       "ci95": [
-        0.7225,
+        0.7719,
         1
       ]
     },
@@ -64,7 +64,7 @@
         0
       ],
       [
-        1,
+        3,
         13,
         0,
         0
@@ -76,60 +76,60 @@
         0
       ],
       [
-        1,
         0,
         0,
-        9
+        0,
+        12
       ]
     ],
     "exactClassAgreement": {
-      "k": 25,
-      "n": 27,
-      "value": 0.9259,
+      "k": 28,
+      "n": 31,
+      "value": 0.9032,
       "ci95": [
-        0.7663,
-        0.9794
+        0.751,
+        0.9665
       ]
     },
     "observedOnNegatives": 13,
     "byLanguage": {
       "en": {
         "recall": {
-          "k": 5,
-          "n": 5,
+          "k": 6,
+          "n": 6,
           "value": 1,
           "ci95": [
-            0.5655,
+            0.6097,
             1
           ]
         },
         "fpr": {
           "k": 0,
-          "n": 9,
+          "n": 10,
           "value": 0,
           "ci95": [
             0,
-            0.2991
+            0.2775
           ]
         }
       },
       "id": {
         "recall": {
-          "k": 5,
-          "n": 6,
-          "value": 0.8333,
+          "k": 7,
+          "n": 7,
+          "value": 1,
           "ci95": [
-            0.4365,
-            0.9699
+            0.6457,
+            1
           ]
         },
         "fpr": {
           "k": 0,
-          "n": 7,
+          "n": 8,
           "value": 0,
           "ci95": [
             0,
-            0.3543
+            0.3244
           ]
         }
       }
@@ -147,9 +147,11 @@
       "truth": "malicious",
       "expectedClass": "manipulative_instruction",
       "hardNegative": false,
-      "predicted": "none",
-      "findings": [],
-      "localized": null,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "PR2:manipulative_instruction"
+      ],
+      "localized": true,
       "clickfixVerdict": "none",
       "credentialVerdict": "none",
       "partial": [],
@@ -329,6 +331,42 @@
       "predicted": "manipulative_instruction",
       "findings": [
         "PR2:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PD11-id-realistic-chat-slang-admin-fee",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "PR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PD12-en-realistic-parcel-customs-fee",
+      "lang": "en",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "PR1:manipulative_instruction"
       ],
       "localized": true,
       "clickfixVerdict": "none",
@@ -610,6 +648,38 @@
       "category": "benign",
       "truth": "benign",
       "expectedClass": "none",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN17-id-realistic-checkout-virtual-account",
+      "lang": "id",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN18-en-realistic-donation-campaign",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
       "hardNegative": true,
       "predicted": "none",
       "findings": [],

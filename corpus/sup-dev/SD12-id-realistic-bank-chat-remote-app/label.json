@@ -1,0 +1,22 @@
+{
+  "id": "SD12-id-realistic-bank-chat-remote-app",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://bantuan-nasabah.example/live",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#wd",
+  "description": "Widget chat \"bank\" realistis: petugas meminta instal aplikasi remote karena akun akan diblokir",
+  "rationale": "Permintaan akses jarak jauh oleh pihak mengaku bank, dengan ancaman dan desakan.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; realistic dev additions (same author as the rules), labels written before the first run",
+  "created": "2026-10-22"
+}

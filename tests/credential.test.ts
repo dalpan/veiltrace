@@ -200,3 +200,16 @@ describe('credential detector: informal Indonesian (cred-0.1.1-exp, after the ow
   });
 });
 
+describe('credential detector cred-0.2.0-exp (D-083)', () => {
+  it('a secret named before the send verb in the same sentence is the object of the request', () => {
+    const r = analyzeCredentials(snapshot(inContainer('ugc:#chat', ['nanti ada kode masuk ke hp kakak, tolong kirim ke sini ya kodenya biar refund nya diproses'])));
+    expect(short(r)).toEqual(['CR1:manipulative_instruction']);
+  });
+
+  it('a first-person sender ("we will send you a code", "kami akan mengirimkan kode OTP") is a notice, not a request', () => {
+    for (const t of ['We will send a verification code to your phone. Enter it below.', 'Kami akan mengirimkan kode OTP ke nomor Anda.', 'Masukkan kode yang kami kirim ke email Anda.']) {
+      expect(analyzeCredentials(snapshot([t])).findings.every((f) => f.ruleId !== 'CR1'), t).toBe(true);
+    }
+  });
+});
+

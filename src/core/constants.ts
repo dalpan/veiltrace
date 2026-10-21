@@ -1,7 +1,9 @@
 // Tunable parameters. Change them only with evidence from the dev split (never the test split).
 
-/** Production engine (D-055): ruleset 'm4.1' = M1 decision model + P1b + P2-A + R4-beta, as approved at M4.1. */
-export const ENGINE_VERSION = '0.2.0';
+/** Production engine (D-083): ruleset 'm5' = m4.1 + own-voice verification gate + procedural dialogs, lexicon with informal key separators. */
+export const ENGINE_VERSION = '0.3.0';
+/** Engine version reported for ruleset 'm4.1' (the engine evaluated on held-out v1, D-055). */
+export const ENGINE_VERSION_M41 = '0.2.0';
 /** Engine version reported when analyze() runs with the M1 baseline ruleset ({ ruleset: 'm1' }). */
 export const ENGINE_VERSION_M1 = '0.1.0-m1';
 

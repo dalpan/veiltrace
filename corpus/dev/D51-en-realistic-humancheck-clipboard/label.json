@@ -1,0 +1,26 @@
+{
+  "id": "D51-en-realistic-humancheck-clipboard",
+  "split": "dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://www.kitchenly.example/recipes/lemon-tart",
+      "file": "index.html"
+    }
+  ],
+  "steps": [
+    {
+      "click": "#cb"
+    }
+  ],
+  "evidenceWithin": "#hc",
+  "description": "Realistic recipe blog with a fictional \"HumanCheck\" overlay: checkbox click copies a hidden command, then Win+R steps",
+  "rationale": "Classic ClickFix: human-check pretext, hidden clipboard payload, run-dialog steps.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; realistic dev additions (same author as the rules), labels written before the first run",
+  "created": "2026-10-22"
+}

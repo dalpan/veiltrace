@@ -54,7 +54,7 @@ The held-out split (`corpus/test`) is frozen and must not be evaluated during de
 
 ```ts
 import { analyze } from './src/core/index.js';
-const result = analyze(snapshot); // PageSnapshot → AnalysisResult (pure, deterministic; engine 0.2.0)
+const result = analyze(snapshot); // PageSnapshot → AnalysisResult (pure, deterministic; engine 0.3.0, ruleset m5)
 const m1 = analyze(snapshot, { ruleset: 'm1' }); // M1 baseline model (engine 0.1.0-m1), used for comparisons
 ```
 

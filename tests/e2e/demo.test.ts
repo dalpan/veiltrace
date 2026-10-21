@@ -17,7 +17,7 @@ describe('demo site in the extension popup', () => {
     expect(await verdict(popup)).toBe('manipulative_instruction');
     expect(await rules(popup)).toEqual(['R1:manipulative_instruction']);
     expect(await snippets(popup)).toEqual(['Verify you are human', 'Windows + R', 'Ctrl + V', 'Press Enter', "I'm not a robot"]);
-    expect(await popup.textContent('#meta')).toContain('Engine 0.2.0');
+    expect(await popup.textContent('#meta')).toContain('Engine 0.3.0');
     expect(await popup.getAttribute('.coverage', 'data-complete')).toBe('true');
     await popup.click('article.finding button:has-text("Show on page") >> nth=1');
     await popup.waitForSelector('.hl-status[data-result]');

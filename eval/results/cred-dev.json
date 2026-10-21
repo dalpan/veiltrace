@@ -1,59 +1,59 @@
 {
   "split": "cred-dev",
   "note": "DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.",
-  "detectorVersion": "cred-0.1.1-exp",
-  "clickfixEngineVersion": "0.2.0",
+  "detectorVersion": "cred-0.2.0-exp",
+  "clickfixEngineVersion": "0.3.0",
   "extractorVersion": "0.2.0-m5",
   "metrics": {
-    "scenarios": 41,
+    "scenarios": 45,
     "confusion": {
-      "tp": 18,
+      "tp": 20,
       "fp": 0,
-      "tn": 22,
+      "tn": 24,
       "fn": 1
     },
     "precision": {
-      "k": 18,
-      "n": 18,
+      "k": 20,
+      "n": 20,
       "value": 1,
       "ci95": [
-        0.8241,
+        0.8389,
         1
       ]
     },
     "recall": {
-      "k": 18,
-      "n": 19,
-      "value": 0.9474,
+      "k": 20,
+      "n": 21,
+      "value": 0.9524,
       "ci95": [
-        0.7536,
-        0.9906
+        0.7733,
+        0.9915
       ]
     },
     "fpr": {
       "k": 0,
-      "n": 22,
+      "n": 24,
       "value": 0,
       "ci95": [
         0,
-        0.1487
+        0.138
       ]
     },
     "hardNegativeFpr": {
       "k": 0,
-      "n": 22,
+      "n": 24,
       "value": 0,
       "ci95": [
         0,
-        0.1487
+        0.138
       ]
     },
     "localization": {
-      "k": 18,
-      "n": 18,
+      "k": 20,
+      "n": 20,
       "value": 1,
       "ci95": [
-        0.8241,
+        0.8389,
         1
       ]
     },
@@ -65,72 +65,72 @@
         0
       ],
       [
-        1,
-        16,
+        0,
+        19,
         0,
         0
       ],
       [
         0,
         0,
-        3,
+        4,
         0
       ],
       [
         0,
         1,
         0,
-        15
+        16
       ]
     ],
     "exactClassAgreement": {
-      "k": 39,
-      "n": 41,
-      "value": 0.9512,
+      "k": 44,
+      "n": 45,
+      "value": 0.9778,
       "ci95": [
-        0.8386,
-        0.9865
+        0.8843,
+        0.9961
       ]
     },
-    "observedOnNegatives": 16,
+    "observedOnNegatives": 19,
     "byLanguage": {
       "en": {
         "recall": {
-          "k": 10,
-          "n": 11,
-          "value": 0.9091,
+          "k": 11,
+          "n": 12,
+          "value": 0.9167,
           "ci95": [
-            0.6226,
-            0.9838
+            0.6461,
+            0.9851
           ]
         },
         "fpr": {
           "k": 0,
-          "n": 15,
+          "n": 16,
           "value": 0,
           "ci95": [
             0,
-            0.2039
+            0.1936
           ]
         }
       },
       "id": {
         "recall": {
-          "k": 8,
-          "n": 8,
+          "k": 9,
+          "n": 9,
           "value": 1,
           "ci95": [
-            0.6756,
+            0.7009,
             1
           ]
         },
         "fpr": {
           "k": 0,
-          "n": 7,
+          "n": 8,
           "value": 0,
           "ci95": [
             0,
-            0.3543
+            0.3244
           ]
         }
       }
@@ -138,7 +138,7 @@
   },
   "privacy": {
     "sentinelLeaks": 0,
-    "fieldsFilled": 26
+    "fieldsFilled": 34
   },
   "scenarios": [
     {
@@ -463,6 +463,40 @@
       "partial": [],
       "requestsDuringScan": 0,
       "fieldsFilled": 0
+    },
+    {
+      "id": "CD12-id-realistic-marketplace-chat-otp",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "CR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CD13-en-realistic-mailbox-suspension",
+      "lang": "en",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "suspicious_correlation",
+      "hardNegative": false,
+      "predicted": "suspicious_correlation",
+      "findings": [
+        "CR4:suspicious_correlation"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 1
     },
     {
       "id": "CN01-en-login-form",
@@ -818,13 +852,49 @@
       "truth": "benign",
       "expectedClass": "observed_instruction",
       "hardNegative": true,
-      "predicted": "none",
-      "findings": [],
+      "predicted": "observed_instruction",
+      "findings": [
+        "CR5:observed_instruction"
+      ],
       "localized": null,
       "clickfixVerdict": "none",
       "partial": [],
       "requestsDuringScan": 0,
       "fieldsFilled": 0
+    },
+    {
+      "id": "CN23-id-realistic-ibanking-otp",
+      "lang": "id",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "CR5:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 6
+    },
+    {
+      "id": "CN24-en-realistic-2step-verification",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "CR5:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 1
     }
   ]
 }

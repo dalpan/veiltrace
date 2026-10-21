@@ -1,0 +1,22 @@
+{
+  "id": "SN17-id-realistic-isp-help-whatsapp",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "benign",
+  "threatClass": "T-neg",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://bantuan.internetku.test/kontak",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Pusat bantuan ISP realistis dengan WhatsApp resmi, call center, dan panduan",
+  "rationale": "Halaman kontak resmi tanpa ancaman atau alarm.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; realistic dev additions (same author as the rules), labels written before the first run",
+  "created": "2026-10-22"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "SD11-en-realistic-blue-alert-zeus",
+  "split": "sup-dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://pc-health-alert.example/scan",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "body",
+  "description": "Realistic full-screen blue system alert: \"has detected a Zeus trojan\", call the support number",
+  "rationale": "Tech-support scam with alarm wording that differs from earlier fixtures. (evidenceWithin widened after the first run to the whole lure container; truth and expected class unchanged.)",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; realistic dev additions (same author as the rules), labels written before the first run",
+  "created": "2026-10-22"
+}
