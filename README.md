@@ -4,17 +4,22 @@
 
 An offline-first browser security engine that detects contextual social engineering and deceptive instructions in web pages, including pages on legitimate HTTPS domains.
 
-> **Status: M5.4 (unified threat dashboard in the popup; UI only).** M5.3 (experimental fake-support and authority-impersonation detector, development data only); M5.2 (experimental payment-manipulation detector); M5.1 (experimental credential-disclosure detector); manual Chrome validation of all three pending.** **M4.4 (accepted):** demo and release candidate v0.5.0. A fictional offline demo site is in `demo/nusaverta` ([docs/PRESENTER_GUIDE.md](docs/PRESENTER_GUIDE.md)). **M4.3B:** Engine 0.2.0 (contextual rule set `m4.1`) is the default. The preregistered held-out evaluation ran once on 26 synthetic scenarios: recall 75.0%, precision 81.8%, hard-negative FPR 14.3%. These are **below the research targets** and are not real-world rates ([docs/EVALUATION_RESULTS.md](docs/EVALUATION_RESULTS.md)). A working Chromium (MV3) extension with an English and Indonesian interface: click the toolbar button, then **Scan page**. The page is analyzed locally in the tab, and the popup shows the verdict, evidence and Show on page. It is built on the detection core (`src/core`) and DOM extractor (`src/extract`), with an offline evaluation harness (`src/eval`). Accuracy figures so far come from a **synthetic development split only**, not real-world use. See [docs/PROGRESS.md](docs/PROGRESS.md).
+VeilTrace reads the page **on your device** and explains, with evidence highlighted on the page, when it is trying to make you do something harmful. It runs four independent checks:
 
-## What it does
+| Check | Looks for | Status |
+|---|---|---|
+| **Command Execution Manipulation** (CMD) | ClickFix / fake CAPTCHA: "press Win+R, paste, Enter", fake error fixes | Engine 0.2.0; one frozen held-out evaluation |
+| **Credential Disclosure Manipulation** (CRED) | Requests to *send* passwords, OTP codes or recovery phrases, threats to the account | Experimental (`cred-0.1.1-exp`) |
+| **Payment Manipulation** (PAY) | Pay-to-receive refunds or prizes, transfers to personal accounts or gift cards, payment under threat | Experimental (`pay-0.1.0-exp`) |
+| **Support & Authority Impersonation** (SUP) | Fake virus alerts with a number to call, fake bank/CS asking for AnyDesk or app installs | Experimental (`sup-0.1.0-exp`) |
 
-When you click the VeilTrace toolbar button and then **Scan page**, it reads the visible content of the current page **locally** and looks for regions that:
+The popup is one dashboard: page threat summary, the four categories, advice, and one ranked list of findings. Each finding keeps classification, confidence and action risk separate and lists its evidence with **Show on page**. English and Indonesian, including common informal Indonesian.
 
-1. tell **you** to perform a high-risk action (e.g. *Win+R → Ctrl+V → Enter*, or "paste this into PowerShell"),
-2. wrap that request in a manipulative pretext (fake CAPTCHA, fake error fix, fake account verification),
-3. and are **not** merely quoted, negated, reported or explained (security tutorials, news articles, awareness pages).
-
-Results distinguish an **observed instruction** (e.g. developer docs telling you to run a command) from **suspicious correlation** and **manipulative instruction**. Confidence and action risk are reported separately. Every finding shows the exact text, and **Show on page** highlights the element when it can still be located. Partial scans (very large pages, frames from other sites) are labeled as partial, with reasons. Detection works in English and Indonesian, and the popup is available in both (it follows the browser language; EN/ID buttons switch). VEILTRACE analyzes on demand and does **not** provide real-time protection.
+**Honest status.**
+- The only held-out result is for CMD: 26 synthetic scenarios, run once, with recall 75.0%, precision 81.8% and hard-negative FPR 14.3%. All three are **below the research targets** ([docs/EVALUATION_RESULTS.md](docs/EVALUATION_RESULTS.md)).
+- CRED, PAY and SUP are measured only on development data written by the same author as the rules.
+- None of these numbers are real-world rates. Scanning is on demand, not real-time.
+- Progress log: [docs/PROGRESS.md](docs/PROGRESS.md).
 
 ## Install (unpacked, Chrome/Chromium ≥ 110)
 
@@ -57,7 +62,7 @@ const m1 = analyze(snapshot, { ruleset: 'm1' }); // M1 baseline model (engine 0.
 - It does not look up URLs or use blocklists, and it does not trust domains.
 - It does not send anything anywhere. There is no network code.
 - It does not block pages or guarantee safety. It informs.
-- It does not use AI in the MVP.
+- It does not use AI or machine learning: every finding comes from explainable rules.
 
 ## Permissions
 `activeTab` and `scripting` only, with no host permissions and no install warning. Nothing runs until you click **Scan page**. Browser-protected pages (chrome://, the Web Store, other extensions) cannot be scanned.
