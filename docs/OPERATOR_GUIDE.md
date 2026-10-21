@@ -59,3 +59,15 @@ For fleets, use enterprise force-install with a signed CRX (DEPLOYMENT.md §3, �
 - Treat results as advice to the user, not as an enforcement or disciplinary signal.
 - Keep users trained: the tool can miss lures and can flag legitimate instructions.
 - Distribute only verified releases, and re-run the supply-chain report per release (docs/RELEASE.md).
+
+## 8. Experimental: requests for passwords and codes (M5.1, development build)
+
+In development builds after M5.1, the popup has a second section, **"Passwords and codes · Experimental"**, next to the command-execution result. It is produced by a separate detector (`cred-0.1.0-exp`) and has **not** passed an independent evaluation. Treat it as an explanation aid, not a verdict on the site.
+
+- **Manipulative:** the page asks you to *send* a password, code, PIN or recovery phrase to someone (a comment, a chat agent, "tell the agent"), or asks for a wallet recovery phrase with a pretext. Advice: do not share it; legitimate services ask you to type codes into their own sign-in form, never to pass them on.
+- **Suspicious:** a password or code is requested together with a threat to the account ("will be suspended", "akan diblokir"), or inside a comment, widget or embedded frame with a pretext.
+- **Observed (collapsed):** ordinary sign-in, MFA, settings or wallet restore. Not an alert.
+- Each finding shows what is asked (send or enter, which secret), the indicators found, where it sits (user content, widget, dialog, form), where the form submits as information only, and its limits. **A claim to be "support" or "official" is never verified.**
+- **Privacy:** the check reads the page text and the structure of form fields (type and label), never what anyone typed, and nothing leaves the device.
+
+Known errors on the 36-scenario development set (same author as the rules; optimistic): requests hidden in quotation markup and very informal Indonesian slang are missed. Requests that appear only in images, in frames from other sites, or after the scan are not seen. Do not use this section to clear a page: "no requests found" only covers the analyzed content.

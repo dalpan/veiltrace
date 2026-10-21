@@ -209,3 +209,30 @@ The first build to ship engine 0.2.0 by default (D-055) and the override display
 
 ### D-061 · Accepted (pending owner review) · 2026-10-21 · Demo site: fictional, static, outside the product, not special-cased
 The hackathon demo lives in `demo/nusaverta` (fictional company, `.test`/`.example` hosts), not in `src/`. It has no JavaScript, no external resources and no executable payload; its hidden command text points to a `.invalid` host. A browser test asserts that no file under `src/` mentions the demo, so the demo cannot depend on special-case detection code. The lure uses canonical public lure wording that the frozen engine is known to detect. The first version of the page gave the intended verdicts, and its content was not changed afterwards. The demo shows behavior, not accuracy; accuracy claims come only from the recorded held-out results (EVALUATION_RESULTS.md).
+
+### D-062 · Accepted (pending owner review) · 2026-10-21 · Credential detection is a separate, versioned, experimental detector
+M5.1 adds `analyzeCredentials(snapshot)` (`src/core/credential/`, version `cred-0.1.0-exp`) next to `analyze()`. It has its own lexicon and decision table (CR1–CR5, DETECTION_MODEL.md §12) and reuses shared code read-only. No ClickFix file's behavior changed: engine 0.2.0 / ruleset `m4.1` give identical results on every unit fixture and on all 50 dev pages (only the extractor version string differs in regenerated dev artifacts, which were restored to their committed state). It stays **experimental** until a separately preregistered, frozen evaluation on an independently authored corpus (EVALUATION_PLAN.md §13).
+
+### D-063 · Accepted (pending owner review) · 2026-10-21 · Structural form fields; values never read
+Extractor 0.2.0-m5 records visible fields (kind from type/autocomplete/inputmode/maxlength/name/id/label, page-authored label, placement, locator) and forms (method, destination **category**, enclosing container). It never reads values, default values or typed text, and never exports a form's URL. Block extraction is unchanged. Sentinel tests at unit, browser, E2E and evaluation level enforce this.
+
+### D-064 · Accepted (pending owner review) · 2026-10-21 · No permission, storage or network change for M5.1
+The credential detector runs in the same on-demand isolated-world scan. Permissions stay `activeTab` + `scripting`; no storage, telemetry, reputation lookup or remote inference.
+
+### D-065 · Accepted (pending owner review) · 2026-10-21 · Credential decision principles
+(1) Sending a secret to a person or channel is the strongest signal (CR1), because legitimate services never ask for it; (2) a recovery phrase under any pretext is manipulative (CR2); (3) "verify your account" and claimed support never escalate on their own, since real MFA and help flows use them; (4) only an account threat escalates a plain entry request (CR4), because deadlines and offers are common on legitimate shops (dev CN18); (5) the form destination is reported, not scored (D1, SSO); (6) third-party status comes only from DOM structure and is labelled heuristic; (7) a claimed identity is never treated as verified.
+
+### D-066 · Accepted (pending owner review) · 2026-10-21 · Scan report v2 and popup sections
+`ScanReport` v2 adds a strictly validated `credential` section (exact keys, closed enums, evidence = page-authored text or field label only). The popup shows one section per detector, the more severe first, each with a category label, and keeps the ClickFix summary card (`.summary`) unchanged. There is no combined verdict yet; an aggregation layer needs its own design and evaluation.
+
+### D-067 · Accepted (pending owner review) · 2026-10-21 · Credential development corpus and evaluation are separate from v1
+`corpus/cred-dev` (36 scenarios, same author as the rules, labels written before the first run) and `npm run eval:cred` (`src/eval/cred.ts`) are new files; the frozen v1 harness, held-out corpus and results are untouched. Dev-driven rule changes and their before/after counts are recorded (DETECTION_MODEL.md §12.7). Development numbers are never reported as held-out or real-world results.
+
+### D-068 · Recorded · 2026-10-21 · v0.5.0 manual checklist confirmed by the owner
+The owner stated, in the M5.1 instruction, that the v0.5.0 manual validation checklist passed (DEMO.md N1–N14). The M4.4 changes were not yet committed when M5.1 started; they were separated into their own commit (`feat(demo): …`) before M5.1 was committed.
+
+### D-069 · Accepted (pending owner review) · 2026-10-21 · M5.1 finalization hardening
+Positional field/form locators and fixed hint tokens (no element id, name or raw attribute leaves the page); bounded enclosing-container chains for forms, stopping at trust boundaries; per-request scoring with quoted/code pretexts limited to their own block; the live-field override requires the same secret kind and only sets aside educational framing (DETECTION_MODEL.md §12.8). No cred-dev outcome changed.
+
+### D-070 · Proposed (pending owner approval) · 2026-10-21 · Extension version 0.6.0 for credential-enabled builds
+The M5.1 commit sets the manifest version to 0.6.0 so that no credential-enabled build can be mistaken for the owner-validated v0.5.0 (M4.4, D-060, D-068). No 0.6.0 artifact has been built, published or validated; manual Chrome validation of the credential section is pending. The owner may choose a different version before any release.

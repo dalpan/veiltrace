@@ -93,3 +93,13 @@ Residual: the extractor runs in the page's **main world** in tests (`page.evalua
 | Indonesian UI does not weaken rendering safety | Dictionaries are static strings. Page text is still inserted only as text nodes. XSS test in Indonesian mode (`tests/e2e/i18n.test.ts`) |
 | Language selection does not use the network or storage | `chrome.i18n.getUILanguage()` only; no persistence (no `storage` permission) |
 
+## 9. M5.1 verification (credential detector and form fields)
+
+| Commitment | How it is verified |
+|---|---|
+| Field values are never read | The extractor reads only `type`, `autocomplete`, `inputmode`, `maxlength`, `name`/`id` and page-authored labels; the M5.1 diff adds no `.value`/`.defaultValue` read (checked). Browser test: a typed sentinel, a password `value` attribute, a hidden input value and a prefilled email never appear in the snapshot |
+| Typed secrets never reach the popup or outputs | E2E: a sentinel typed into password and code fields is absent from the popup; `eval:cred` types a sentinel into every visible field of all 36 scenarios and fails on any leak (0 leaks, 26 fields) |
+| Form destinations do not leave the page as URLs | Only a category (`same-origin`, `other-origin`, …) is recorded (browser test asserts the action URL is absent) |
+| No credential storage, submission or interception | No storage API, no network API, no submit/click in the extractor (lint rule and bundle checks unchanged) |
+| Minimal permissions unchanged | Production manifest: `activeTab` + `scripting`, no host permissions, CSP `connect-src 'none'` (`verify:extension`) |
+| Unknown detector metadata cannot be silently dropped | `parseScanReport` validates the credential section with exact key sets and closed enums; unknown fields reject the report (unit tests) |

@@ -65,6 +65,43 @@ export interface SnapshotCoverage {
   partial?: PartialReason[];
 }
 
+/** Structural kind of a visible form field (from type, autocomplete, inputmode and name/id tokens; never from its value). */
+export type FieldKind = 'password' | 'otp' | 'pin' | 'recovery-code' | 'secret-phrase' | 'email' | 'text' | 'other';
+
+/**
+ * A visible form field, described structurally (M5.1, extractor 0.2.0-m5). The field's value, default value or
+ * any user input is never read. `label` is page-authored text: <label>, aria-label or placeholder.
+ */
+export interface FormField {
+  id: string;
+  kind: FieldKind;
+  /** Structural hints that determined `kind`, e.g. "type=password", "autocomplete=one-time-code". */
+  hints: string[];
+  label: string;
+  containerId: string;
+  afterBlockId?: string;
+  locator?: string;
+  /** Id of the enclosing FormInfo, if any. */
+  formId?: string;
+  ctx?: BlockContext;
+}
+
+/** Where a form submits, as a category only. Reported as context; never a decision input (domain independence, D1). */
+export type FormDestination = 'none' | 'same-origin' | 'other-origin' | 'mailto' | 'javascript' | 'data' | 'other';
+
+export interface FormInfo {
+  id: string;
+  containerId: string;
+  locator?: string;
+  method: 'get' | 'post' | 'dialog' | 'other';
+  destination: FormDestination;
+  /**
+   * Containers enclosing the form element, nearest first (the card, dialog or section it belongs to). Stops after the
+   * first user-content, widget or frame container; at most 8. Structural identifiers only.
+   */
+  ancestorContainerIds?: string[];
+}
+
 export interface PageSnapshot {
   schemaVersion: 1;
   /** Echoed for adapters only. The core never reads it (domain independence). */
@@ -76,6 +113,10 @@ export interface PageSnapshot {
   hiddenCopyCandidates: HiddenCopyCandidate[];
   copyTriggers: CopyTrigger[];
   coverage: SnapshotCoverage;
+  /** M5.1: visible form fields (structure only). Ignored by the ClickFix engine. Optional for older snapshots. */
+  formFields?: FormField[];
+  /** M5.1: forms that contain recorded fields. Ignored by the ClickFix engine. */
+  forms?: FormInfo[];
 }
 
 // ---------- Signals and lexicon ----------

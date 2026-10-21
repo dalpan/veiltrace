@@ -17,7 +17,8 @@ describe('UI dictionaries', () => {
 
   it('have no empty strings and translate every user-facing string', () => {
     // Technical identifiers that are deliberately identical in both languages.
-    const same = new Set(['headline.manipulative_instruction.tone', 'headline.suspicious_correlation.tone', 'headline.observed_instruction.tone', 'headline.none.tone']);
+    const tones = ['manipulative_instruction', 'suspicious_correlation', 'observed_instruction', 'none'];
+    const same = new Set([...tones.map((v) => `headline.${v}.tone`), ...tones.map((v) => `cred.headline.${v}.tone`)]);
     for (const [k, v] of en) {
       const other = id.get(k);
       if (typeof v === 'function') {

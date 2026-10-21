@@ -1,6 +1,6 @@
 // Popup controller and renderer. Page-derived strings are only ever inserted as text nodes.
 // UI language: English or Indonesian (i18n.ts); page evidence is shown in its original language.
-import type { EvidenceItem, FindingSummary, ScanReport } from '../content/report.js';
+import type { CredEvidenceItem, CredFindingSummary, EvidenceItem, FindingSummary, ScanReport } from '../content/report.js';
 import { classifyUrl, getTargetTab, runHighlight, runScan, type TargetTab, type UrlClass } from './adapter.js';
 import { detectLang, formatCount, MESSAGES, type HighlightKey, type Lang, type Messages } from './i18n.js';
 import { parseHighlightResult, parseScanReport } from './validate.js';
@@ -41,9 +41,10 @@ function h(tag: string, attrs: Record<string, string> = {}, ...children: Child[]
 
 const $ = (id: string): HTMLElement => document.getElementById(id) as HTMLElement;
 
-function evidenceItem(f: FindingSummary, i: number, e: EvidenceItem): HTMLElement {
+/** One evidence row (label, page text, Show on page). `text` is page content: a text node, never translated. */
+function evidenceRow(key: string, label: string, text: string, locator: string | null): HTMLElement {
   const m = t();
-  const key = `${f.id}:${i}`;
+  const e = { locator };
   const outcome = state.highlights.get(key) ?? (e.locator ? undefined : 'invalid-locator');
   const status = h('p', { class: 'hl-status', 'aria-live': 'polite' }, outcome ? m.highlight[outcome] : '');
   if (outcome && e.locator) status.dataset.result = outcome;
@@ -63,9 +64,67 @@ function evidenceItem(f: FindingSummary, i: number, e: EvidenceItem): HTMLElemen
     status.dataset.result = result;
     btn.disabled = false;
   });
-  const label = `${m.signal[e.signal]} · ${m.source[e.source]}${e.deobfuscated ? ` · ${m.deobfuscated}` : ''}`;
-  // e.text is page content: inserted as a text node and never translated.
-  return h('li', {}, h('div', { class: 'ev-head' }, h('span', { class: 'ev-label' }, label), btn), h('p', { class: 'snippet', lang: '' }, e.text), status);
+  return h('li', {}, h('div', { class: 'ev-head' }, h('span', { class: 'ev-label' }, label), btn), h('p', { class: 'snippet', lang: '' }, text), status);
+}
+
+function evidenceItem(f: FindingSummary, i: number, e: EvidenceItem): HTMLElement {
+  const m = t();
+  return evidenceRow(`${f.id}:${i}`, `${m.signal[e.signal]} · ${m.source[e.source]}${e.deobfuscated ? ` · ${m.deobfuscated}` : ''}`, e.text, e.locator);
+}
+
+function credEvidenceItem(f: CredFindingSummary, i: number, e: CredEvidenceItem): HTMLElement {
+  const c = t().cred;
+  const label = e.source === 'form-field'
+    ? `${c.signal[e.signal]} · ${c.fieldSource}${e.fieldKind ? ` (${c.fieldKind[e.fieldKind]})` : ''}`
+    : `${c.signal[e.signal]} · ${t().source['visible-text']}`;
+  return evidenceRow(`cred:${f.id}:${i}`, label, e.text || (e.source === 'form-field' ? c.unlabeledField : ''), e.locator);
+}
+
+function credFindingCard(f: CredFindingSummary): HTMLElement {
+  const m = t();
+  const c = m.cred;
+  const demoted = f.classification !== f.ruleClassification;
+  const indicators = [...f.pretexts.map((p) => c.pretext[p]), ...f.trustContext.map((x) => c.trust[x])];
+  return h('article', { class: 'card finding cred', 'data-rule': f.ruleId, 'data-classification': f.classification },
+    h('h4', {}, c.findingTitle[f.classification]),
+    h('div', { class: 'chips' },
+      h('span', { class: `chip ${f.classification}` }, m.classification[f.classification]),
+      h('span', { class: 'chip', title: m.confidenceHelp }, m.confidence[f.confidence]),
+      h('span', { class: 'chip' }, c.ruleChip(f.ruleId)),
+      h('span', { class: 'chip experimental' }, c.experimental),
+    ),
+    h('p', { class: 'explain' }, c.rule[f.ruleId]),
+    h('p', { class: 'requested' }, c.asks(f.requestedAction, f.secretTypes.map((x) => c.secret[x]).join(', '))),
+    indicators.length > 0 && h('p', { class: 'context indicators' }, `${c.indicators}: ${indicators.join(' · ')}`),
+    f.formDestination && h('p', { class: 'context destination' }, c.destination[f.formDestination]),
+    h('p', { class: 'risk' }, c.actionRisk[f.actionRisk]),
+    f.modifiers.length > 0 && f.overrides.length === 0 && h('p', { class: 'context' },
+      `${demoted ? m.loweredFrom(m.classification[f.ruleClassification]) : m.contextPrefix}${f.modifiers.map((x) => c.modifier[x]).join(' ')}`),
+    f.overrides.length > 0 && h('p', { class: 'context', 'data-override': f.overrides.join(' ') }, c.overrideLiveField),
+    h('ul', { class: 'evidence', 'aria-label': m.evidenceAria }, ...f.evidence.map((e, i) => credEvidenceItem(f, i, e))),
+    f.evidenceTotal > f.evidence.length && h('p', { class: 'context', 'data-more': 'evidence' }, m.moreEvidence(f.evidenceTotal - f.evidence.length)),
+    ...f.limitations.map((l) => h('p', { class: 'limitation', 'data-limitation': l }, c.limitation[l])),
+  );
+}
+
+const TIER: Record<ScanReport['verdict'], number> = { none: 0, observed_instruction: 1, suspicious_correlation: 2, manipulative_instruction: 3 };
+
+/** The experimental credential section: its own summary card, alert findings, collapsed observed requests, a note. */
+function renderCredential(r: ScanReport): Child[] {
+  const c = t().cred;
+  const sec = r.credential;
+  const head = c.headline[sec.verdict];
+  const alerting = sec.findings.filter((f) => f.classification !== 'observed_instruction');
+  const observed = sec.findings.filter((f) => f.classification === 'observed_instruction');
+  return [
+    h('div', { class: `card cred-summary tone-${head.tone}`, 'data-verdict': sec.verdict },
+      h('div', { class: 'category' }, `${c.categorySecret} · ${c.experimental}`), h('h2', {}, head.title),
+      h('p', {}, head.detail + (r.status.complete ? '' : t().partialQualifier))),
+    ...alerting.map(credFindingCard),
+    observed.length > 0 && h('details', { class: 'observed cred-observed' }, h('summary', {}, c.observedHeading(observed.length)), ...observed.map(credFindingCard)),
+    sec.findingsTotal > sec.findings.length && h('p', { class: 'context', 'data-more': 'cred-findings' }, t().moreFindings(sec.findingsTotal - sec.findings.length)),
+    h('p', { class: 'limitation experimental-note' }, c.experimentalNote),
+  ];
 }
 
 function findingCard(f: FindingSummary): HTMLElement {
@@ -99,8 +158,9 @@ function renderReport(r: ScanReport): Child[] {
   const observed = r.findings.filter((f) => f.classification === 'observed_instruction');
   const partial = !r.status.complete;
   const blocks = formatCount(r.counts.blocks, state.lang);
-  return [
-    h('div', { class: `card summary tone-${head.tone}`, 'data-verdict': r.verdict }, h('h2', {}, head.title), h('p', {}, head.detail + (partial ? m.partialQualifier : ''))),
+  const command: Child[] = [
+    h('div', { class: `card summary tone-${head.tone}`, 'data-verdict': r.verdict },
+      h('div', { class: 'category' }, m.cred.categoryCommand), h('h2', {}, head.title), h('p', {}, head.detail + (partial ? m.partialQualifier : ''))),
     partial
       ? h('div', { class: 'card coverage partial', role: 'note', 'data-complete': 'false' },
         h('h3', {}, m.partialTitle),
@@ -112,6 +172,11 @@ function renderReport(r: ScanReport): Child[] {
     observed.length > 0 && h('details', { class: 'observed' }, h('summary', {}, m.observedHeading(observed.length)), ...observed.map(findingCard)),
     r.counts.findingsTotal > r.findings.length && h('p', { class: 'context', 'data-more': 'findings' }, m.moreFindings(r.counts.findingsTotal - r.findings.length)),
   ];
+  // Coverage applies to both detectors; the more severe detector's section comes first.
+  const coverage = command.splice(1, 1);
+  const cred = renderCredential(r);
+  const [first, ...rest] = TIER[r.credential.verdict] > TIER[r.verdict] ? [...cred, ...command] : [...command, ...cred];
+  return [first, ...coverage, ...rest];
 }
 
 function renderError(kind: ErrorKind): HTMLElement {

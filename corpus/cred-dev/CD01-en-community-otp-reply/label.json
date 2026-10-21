@@ -1,0 +1,22 @@
+{
+  "id": "CD01-en-community-otp-reply",
+  "split": "cred-dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://forum.gadgetfix.test/t/4411",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#c2",
+  "description": "Forum reply impersonating support asks for the SMS code",
+  "rationale": "Codes are never sent to another person; impersonated support in UGC.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

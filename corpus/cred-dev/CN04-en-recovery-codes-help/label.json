@@ -1,0 +1,22 @@
+{
+  "id": "CN04-en-recovery-codes-help",
+  "split": "cred-dev",
+  "lang": "en",
+  "category": "benign",
+  "threatClass": "T6",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://help.taskline.test/recovery",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Help article on recovery codes",
+  "rationale": "No secret is solicited.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

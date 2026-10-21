@@ -16,6 +16,7 @@
     "test:coverage": "vitest run --coverage",
     "check": "npm run typecheck && npm run lint && npm run test",
     "eval": "node scripts/eval.mjs",
+    "eval:cred": "node scripts/eval-cred.mjs",
     "build:ext": "node scripts/build-extension.mjs",
     "build:ext:test": "node scripts/build-extension.mjs --test",
     "test:unit": "vitest run --exclude 'tests/browser/**' --exclude 'tests/e2e/**'",

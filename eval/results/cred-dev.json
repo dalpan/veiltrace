@@ -1,0 +1,747 @@
+{
+  "split": "cred-dev",
+  "note": "DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.",
+  "detectorVersion": "cred-0.1.0-exp",
+  "clickfixEngineVersion": "0.2.0",
+  "extractorVersion": "0.2.0-m5",
+  "metrics": {
+    "scenarios": 36,
+    "confusion": {
+      "tp": 14,
+      "fp": 0,
+      "tn": 20,
+      "fn": 2
+    },
+    "precision": {
+      "k": 14,
+      "n": 14,
+      "value": 1,
+      "ci95": [
+        0.7847,
+        1
+      ]
+    },
+    "recall": {
+      "k": 14,
+      "n": 16,
+      "value": 0.875,
+      "ci95": [
+        0.6398,
+        0.965
+      ]
+    },
+    "fpr": {
+      "k": 0,
+      "n": 20,
+      "value": 0,
+      "ci95": [
+        0,
+        0.1611
+      ]
+    },
+    "hardNegativeFpr": {
+      "k": 0,
+      "n": 20,
+      "value": 0,
+      "ci95": [
+        0,
+        0.1611
+      ]
+    },
+    "localization": {
+      "k": 14,
+      "n": 14,
+      "value": 1,
+      "ci95": [
+        0.7847,
+        1
+      ]
+    },
+    "classMatrix": [
+      [
+        4,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        16,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        3,
+        0
+      ],
+      [
+        1,
+        1,
+        0,
+        11
+      ]
+    ],
+    "exactClassAgreement": {
+      "k": 34,
+      "n": 36,
+      "value": 0.9444,
+      "ci95": [
+        0.8186,
+        0.9846
+      ]
+    },
+    "observedOnNegatives": 16,
+    "byLanguage": {
+      "en": {
+        "recall": {
+          "k": 10,
+          "n": 11,
+          "value": 0.9091,
+          "ci95": [
+            0.6226,
+            0.9838
+          ]
+        },
+        "fpr": {
+          "k": 0,
+          "n": 15,
+          "value": 0,
+          "ci95": [
+            0,
+            0.2039
+          ]
+        }
+      },
+      "id": {
+        "recall": {
+          "k": 4,
+          "n": 5,
+          "value": 0.8,
+          "ci95": [
+            0.3755,
+            0.9638
+          ]
+        },
+        "fpr": {
+          "k": 0,
+          "n": 5,
+          "value": 0,
+          "ci95": [
+            0,
+            0.4345
+          ]
+        }
+      }
+    }
+  },
+  "privacy": {
+    "sentinelLeaks": 0,
+    "fieldsFilled": 26
+  },
+  "scenarios": [
+    {
+      "id": "CA01-en-planted-tips-live-field",
+      "lang": "en",
+      "category": "adversarial",
+      "truth": "malicious",
+      "expectedClass": "suspicious_correlation",
+      "hardNegative": false,
+      "predicted": "suspicious_correlation",
+      "findings": [
+        "CR4:suspicious_correlation"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 1
+    },
+    {
+      "id": "CA02-en-quoted-support-request",
+      "lang": "en",
+      "category": "adversarial",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "observed_instruction",
+      "findings": [
+        "CR1:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CA03-id-parafrase-informal",
+      "lang": "id",
+      "category": "adversarial",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CA04-en-reported-framing-overlay",
+      "lang": "en",
+      "category": "adversarial",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "CR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CA05-en-split-inline-elements",
+      "lang": "en",
+      "category": "adversarial",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "CR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CD01-en-community-otp-reply",
+      "lang": "en",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "CR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CD02-en-chat-widget-backup-codes",
+      "lang": "en",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "CR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CD03-en-wallet-sync-seed",
+      "lang": "en",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "CR2:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 1
+    },
+    {
+      "id": "CD04-en-overlay-suspension-password-otp",
+      "lang": "en",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "suspicious_correlation",
+      "hardNegative": false,
+      "predicted": "suspicious_correlation",
+      "findings": [
+        "CR4:suspicious_correlation"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 2
+    },
+    {
+      "id": "CD05-id-form-akun-diblokir",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "suspicious_correlation",
+      "hardNegative": false,
+      "predicted": "suspicious_correlation",
+      "findings": [
+        "CR4:suspicious_correlation"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 2
+    },
+    {
+      "id": "CD06-id-komentar-admin-kirim-otp",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "CR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CD07-id-dompet-frasa-pemulihan",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "CR2:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 1
+    },
+    {
+      "id": "CD08-en-it-helpdesk-reply-password",
+      "lang": "en",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "CR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CD09-en-airdrop-claim-seed",
+      "lang": "en",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "CR2:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 1
+    },
+    {
+      "id": "CD10-id-cs-chat-pembatalan",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "CR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CD11-en-fraud-dept-tell-pin",
+      "lang": "en",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "CR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CN01-en-login-form",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "CR5:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 2
+    },
+    {
+      "id": "CN02-en-mfa-code",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "CR5:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 1
+    },
+    {
+      "id": "CN03-id-ibanking-login",
+      "lang": "id",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "CR5:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 2
+    },
+    {
+      "id": "CN04-en-recovery-codes-help",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CN05-en-awareness-otp-scams",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "CR1:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CN06-en-cli-api-token-docs",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "CR5:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CN07-en-password-manager-help",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "CR5:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CN08-en-html-forms-tutorial",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "CR5:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CN09-id-edukasi-penipuan-otp",
+      "lang": "id",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "CR1:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CN10-id-halaman-otp-bank",
+      "lang": "id",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "CR5:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 1
+    },
+    {
+      "id": "CN11-en-change-password",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "CR5:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 2
+    },
+    {
+      "id": "CN12-en-support-never-asks",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CN13-id-ganti-pin-ewallet",
+      "lang": "id",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "CR5:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 2
+    },
+    {
+      "id": "CN14-en-wallet-restore",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "CR5:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 1
+    },
+    {
+      "id": "CN15-en-forum-advice-never-post",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CN16-en-paywall-login-overlay",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "CR5:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 2
+    },
+    {
+      "id": "CN17-en-sso-other-origin",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "CR5:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 2
+    },
+    {
+      "id": "CN18-id-promo-login",
+      "lang": "id",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "CR5:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 2
+    },
+    {
+      "id": "CN19-en-new-signin-alert",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CN20-en-2fa-setup",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "CR5:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 1
+    }
+  ]
+}

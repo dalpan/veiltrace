@@ -1,0 +1,22 @@
+{
+  "id": "CN14-en-wallet-restore",
+  "split": "cred-dev",
+  "lang": "en",
+  "category": "benign",
+  "threatClass": "T6",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://app.coinharbor.test/restore",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "User-initiated wallet restore",
+  "rationale": "Recovery phrase entry without any pretext.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

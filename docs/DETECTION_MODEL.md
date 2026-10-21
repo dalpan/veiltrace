@@ -209,3 +209,66 @@ Per-scenario changes vs M3 (from `dev.m41.md`):
 - n = 50 synthetic scenarios: the confidence intervals overlap heavily, and no claim of significance or real-world accuracy is made.
 - Performance: identical to M1 (≈ 153 ms per 5,000 synthetic blocks after warm-up, Node). The extra work is one concealed-payload pass per analysis.
 
+
+## 12. EXPERIMENTAL credential-disclosure detector (M5.1, `cred-0.1.0-exp`)
+
+**Status: experimental, development data only.** Separate from the ClickFix engine: `analyzeCredentials(snapshot)` reads the same `PageSnapshot` and returns its own `CredentialResult`. `analyze()` (engine 0.2.0, ruleset `m4.1`) is unchanged and is not influenced by it (tested on every unit fixture and on the 50 dev pages). It has **not** passed a frozen evaluation (D-062).
+
+### 12.1 Inputs
+- Block text, as for ClickFix.
+- **Structural form fields** (extractor 0.2.0-m5, `snapshot.formFields`): visible `input`/`textarea` elements with a `kind` derived only from `type`, `autocomplete`, `inputmode`/`maxlength` and name/id/label tokens (`password`, `otp`, `pin`, `recovery-code`, `secret-phrase`, `email`, `text`, `other`), the page-authored `label` (`<label>`, `aria-label` or placeholder) and placement. **No value, default value or typed text is ever read** (D-063).
+- `snapshot.forms`: method, a **destination category** (`none`, `same-origin`, `other-origin`, `mailto`, `javascript`, `data`, `other`) and the container enclosing the form. The destination is reported as context and **never scored**: legitimate single sign-on posts to other origins, and URL/host remain non-decision inputs (D1).
+
+### 12.2 Signals (EN + ID, `src/core/credential/lexicon.ts`)
+| Family | Ids | Notes |
+|---|---|---|
+| Secret | `S.PASSWORD`, `S.OTP`, `S.PIN`, `S.RECOVERY_CODE`, `S.SEED_PHRASE`, `S.TOKEN` | What is requested |
+| Disclosure | `D.SEND` (send, share, tell, reply with, post here; kirim, berikan, sebutkan, me- forms), `D.ENTER` (enter, type, confirm; masukkan, isi, ketik) | What the reader is asked to do |
+| Pretext | `CP.ACCOUNT_THREAT`, `CP.URGENCY`, `CP.SUPPORT`, `CP.VERIFY`, `CP.REWARD` | `CP.SUPPORT` and `CP.VERIFY` are ordinary in legitimate flows. Urgency excludes code expiry ("expires in 10 minutes", "berlaku dalam 5 menit") |
+| Structural | `F.SECRET_FIELD` | A visible field of a secret kind |
+| Context | `C.NEGATION`, `C.REPORTED`, `C.EDUCATIONAL` | Reused read-only from the ClickFix lexicon |
+
+A **request** is a disclosure verb followed by a secret in the same sentence (≤ 60 normalized characters), not negated ("never share your OTP" is advice, not a request), or a visible secret field.
+
+### 12.3 Scope
+Requests and pretexts correlate inside one region and window (K = 8), as in ClickFix. **Forms continue the region of a container that encloses them** (`FormInfo.ancestorContainerIds`, nearest first, at most 8), so a dialog's warning text and a form nested in a section inside it are one scope. Only forms are merged, and the ancestor list stops at user-content, widget and frame containers: a form in a comment never inherits the article's context.
+
+**Each request is scored on its own** (its pretexts, its context), and a cluster's finding is its strongest request with the evidence of all of them. A pretext inside a quotation or code sample counts only for a request in that same block, so a quoted scam message does not escalate a practice field or a real form next to it.
+
+### 12.4 Decision table (first match)
+| Rule | Name | Condition | Classification |
+|---|---|---|---|
+| CR1 | SECRET_TO_THIRD_PARTY | A **send** request for any secret | manipulative with any pretext; suspicious without |
+| CR2 | RECOVERY_PHRASE_UNDER_PRETEXT | A recovery phrase requested with any pretext | manipulative |
+| CR3 | SECRET_IN_UNTRUSTED_CONTENT | A request in user content, a widget or a frame (container kind), with any pretext | suspicious |
+| CR4 | SECRET_UNDER_PRESSURE | A request with an **account threat** (suspend, lock, close, freeze) | suspicious |
+| CR5 | OBSERVED_SECRET_REQUEST | Any other request (ordinary sign-in, MFA, restore, settings) | observed (informational) |
+
+Rationale: legitimate services ask you to *type* codes into their own form, never to pass them to a person or channel (CR1); a recovery phrase grants full control of a wallet (CR2). "Verify your account" and claimed support are normal in real MFA and help flows, so neither escalates on its own. Deadlines and offers alone are common on legitimate shops (dev CN18), so only account threats escalate a plain entry request (CR4).
+
+### 12.5 Context modifiers and override
+- Per request: `C.QUOTED` (−2), `C.REPORTED` (−2) and `C.CODE_EXAMPLE` (−2) for text requests; `C.EDUCATIONAL` (−1) for any request. Total demotion is capped at 2.
+- `O.LIVE_SECRET_FIELD`: a working field for the **same kind of secret** in the cluster (outside quotes and code) sets aside **only `C.EDUCATIONAL`**, a cue an attacker can plant next to a form. Quotation, reported speech and code samples stay, because they are structural evidence that the text belongs to someone else (unlike ClickFix P2-A, which sets aside all contextual modifiers).
+- Confidence drops one level per applied modifier or override. Action risk is **high** for send requests and for codes, recovery codes, recovery phrases and tokens; **medium** for typing a password or PIN.
+
+### 12.6 Output semantics
+Each finding carries `requestedAction` (send/enter), `secretTypes`, `pretexts`, `trustContext` (user-content, third-party-widget, embedded-frame, dialog, overlay, form), `formDestination` (context only), evidence observation ids, modifiers/overrides, and explicit `limitations`: `claimed-identity-unverifiable` (a claim to be support is never proof), `destination-not-scored`, `trust-boundary-heuristic` (third-party status is inferred from structure).
+
+### 12.7 Development results (cred-dev, 36 synthetic scenarios; NOT held-out)
+Corpus: 11 positive, 5 adversarial, 20 benign hard negatives; 26 EN, 10 ID (`corpus/cred-dev/README.md`). Same author as the rules.
+
+| Version | Change (dev evidence) | TP | FP | TN | FN |
+|---|---|---|---|---|---|
+| v0 (first run) | Initial rules, written before the corpus was run | 12 | 1 | 19 | 4 |
+| v0.1 | Forms join the preceding region by locator prefix; per-request context reasons; Indonesian me- verbs | 13 | 1 | 19 | 3 |
+| **v1 (`cred-0.1.0-exp`)** | Forms join their enclosing container (recorded by the extractor; generalized to a bounded chain in §12.8); CR4 escalates on account threat only; "mengirim" morphology | **14** | **0** | **20** | **2** |
+
+v0 errors: FP CN05 (awareness article mixing a quoted and a reported request), FN CD03/CD07 (pretext in the dialog, field in the nested form), FN CA02, CA03. v0.1 fixed CN05 and CD07 but introduced FP CN18 (shop promo deadline + login) and still missed CD03 (id-based locators broke the prefix test). v1 errors: **FN CA02** (request inside blockquote markup, no live field) and **FN CA03** (very informal Indonesian paraphrase: "kasih liat dong angka yg barusan masuk"). Precision 100% (14/14; CI 78.5–100), recall 87.5% (14/16; CI 64.0–96.5), hard-negative FPR 0% (0/20; CI 0–16.1), localization 14/14, 0 requests, 0 privacy-sentinel leaks over 26 typed fields. **These numbers are tuned on this data and are optimistic by construction.**
+
+### 12.8 Finalization hardening (before the M5.1 commit; no dev classification changed)
+Targeted regressions exposed four weaknesses, fixed without changing any cred-dev outcome (36/36 identical; TP 14, FP 0, TN 20, FN 2):
+1. Field and form locators no longer contain the element's own id or name (positional path); hints are fixed tokens, never raw attribute values.
+2. Forms record their whole enclosing-container chain (bounded, stopping at trust boundaries) instead of one parent, so nested forms keep their dialog context.
+3. Per-request scoring; quoted or code pretexts only count for requests in the same block (interactive awareness exercise stays observed).
+4. The live-field override needs a field of the same secret kind and only sets aside educational framing (a quoted request next to an unrelated login box stays observed).
+Consequence: a credential lure wrapped in quotation markup is not recovered by a nearby live field (consistent with the measured CA02 miss).

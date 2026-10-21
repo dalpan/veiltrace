@@ -132,3 +132,32 @@ Demo safety controls:
 - No JavaScript on the demo pages. Nothing is copied to the clipboard, downloaded or executed. The hidden command text points to a `.invalid` host.
 - No external resources: one local stylesheet, inline SVG logo, system fonts.
 - No demo-specific code: a test asserts that no file under `src/` mentions the demo. The lure uses canonical public lure phrasing, which the frozen engine is known to detect; the demo shows behavior, not accuracy.
+
+## 9. Credential-disclosure threats (M5.1, experimental detector)
+
+Extends classes T6 (fake account verification) and T7 (injected instructions) to secrets: passwords, one-time codes, PINs, recovery codes, wallet recovery phrases and access tokens. Detection rules: DETECTION_MODEL.md §12.
+
+| Pattern | What VeilTrace observes | Not claimed |
+|---|---|---|
+| Secret requested to be **sent** to a person or channel (comment reply, chat, "tell the agent") | Disclosure verb + secret in one sentence; pretexts nearby; the container kind (UGC, widget, frame) | Who wrote it |
+| Wallet recovery phrase under a pretext (sync, validate, airdrop) | Recovery-phrase text or field + pretext | That the site is fake |
+| Secret entry under an account threat (suspension overlay, "akun akan diblokir") | Secret request or field + threat wording, in the same scope as the form | That the form steals data: the form destination is shown, not judged |
+| Secret in third-party content (comments, widgets, embedded frames) | Container kind from the DOM structure | That the content really is third-party (heuristic) |
+
+**Claims that cannot be verified are never treated as evidence of impersonation.** A widget saying "official support" is reported as a claimed identity (`claimed-identity-unverifiable`); it escalates only when combined with a request to send a secret or another pretext.
+
+**Benign controls by design:** a password field alone, an OTP request alone, "verify your identity" alone, deadlines or offers on a shop, protective advice ("never share your OTP") and single sign-on to another origin do not alert (dev hard negatives CN01–CN20).
+
+**Evasion and limits (measured on development data only):**
+| Evasion | Status | Evidence |
+|---|---|---|
+| Request wrapped in quotation markup, no live field | **Not detected** | cred-dev CA02 |
+| Very informal or slang paraphrase ("angka yg barusan masuk") | **Not detected** | cred-dev CA03 |
+| Educational heading planted next to a live field | **Detected** (override `O.LIVE_SECRET_FIELD`, same secret kind) | CA01 |
+| Request in quotation markup next to a live field | **Not detected** by design: the override never sets aside quotation | Unit regression; same family as CA02 |
+| Reported framing planted on a direct request | Detected on dev (the "viewers are asked to" phrasing is not a reported cue) | CA04; fragile |
+| Text split across inline elements | Detected | CA05 |
+| Request only in an image, in a cross-origin frame, or delivered by chat after the scan | **Untested / out of reach** | Same extraction limits as §5 |
+| Real-time credential capture (keylogging scripts, look-alike domains) | **Out of scope** | No script or URL analysis |
+
+**Privacy threats introduced and controls:** reading form fields could expose what the user typed. Controls: the extractor reads only structure (type, autocomplete, inputmode, maxlength, name/id) and page-authored labels; no value, default value or typed text is read; no credential is stored, submitted or intercepted. Tests type a sentinel into every field and assert it never appears in snapshots, results, the popup or evaluation outputs (unit, browser, E2E and `eval:cred`).

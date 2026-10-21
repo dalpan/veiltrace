@@ -1,9 +1,10 @@
 // DOM → PageSnapshot. Runs in a page (extension isolated world in M3; Playwright in tests).
 // Read-only by construction: no DOM writes, no event dispatch, no script execution (lint-enforced).
 // See docs/ARCHITECTURE.md §3 for behavior and limits.
-import type { Block, BlockContext, CopyTrigger, HiddenCopyCandidate, PageSnapshot, PartialReason } from '../core/types.js';
+import type { Block, BlockContext, CopyTrigger, FieldKind, FormDestination, FormField, FormInfo, HiddenCopyCandidate, PageSnapshot, PartialReason } from '../core/types.js';
 
-export const EXTRACTOR_VERSION = '0.1.0-m2';
+/** 0.2.0-m5 adds structural form fields (M5.1); block extraction is unchanged from 0.1.0-m2. */
+export const EXTRACTOR_VERSION = '0.2.0-m5';
 
 export interface ExtractOptions {
   maxNodes?: number;
@@ -48,10 +49,93 @@ const COPY_TOKEN = /(?:^|[-_\s])(?:copy|clipboard)(?:[-_\s]|$)/i;
 /** Never read values of fields whose name/id/autocomplete suggest secrets or personal data. */
 const SENSITIVE_FIELD = /pass|pwd|token|csrf|xsrf|auth|session|secret|otp|one-time|nonce|key|card|cc-|cvv|pin|ssn|nik|email|phone|tel/i;
 const LOCATOR_SEP = { shadow: '::shadow::', frame: '::frame::' } as const;
+/** Input types that never carry a typed secret or a code; they are not recorded as form fields. */
+const NON_FIELD_TYPES = new Set(['hidden', 'submit', 'button', 'reset', 'image', 'checkbox', 'radio', 'file', 'range', 'color', 'date', 'datetime-local', 'month', 'week', 'time']);
+const SECRET_PHRASE = /seed|mnemonic|recovery[\s_-]?phrase|secret[\s_-]?phrase|passphrase|frasa|kata[\s_-]?pemulihan/;
+const RECOVERY_CODE = /recovery[\s_-]?code|backup[\s_-]?code|kode[\s_-]?(?:pemulihan|cadangan)/;
+const OTP_TOKENS = /(?:^|[^a-z])(?:otp|totp|2fa|mfa|one[\s_-]?time|verification[\s_-]?code|security[\s_-]?code|kode[\s_-]?(?:otp|verifikasi|keamanan))/;
+const PIN_TOKEN = /(?:^|[^a-z])pin(?:$|[^a-z])/;
+
+/**
+ * Structural kind of a field. Reads only attributes and the page-authored label; never the field's value.
+ * Order matters: the most specific secret wins (a password-type field named "pin" is a PIN).
+ */
+function fieldKind(el: HTMLInputElement | HTMLTextAreaElement, label: string): { kind: FieldKind; hints: string[] } {
+  const type = el instanceof HTMLInputElement ? el.type : 'textarea';
+  const ac = (el.getAttribute('autocomplete') ?? '').toLowerCase();
+  const im = (el.getAttribute('inputmode') ?? '').toLowerCase();
+  const names = `${el.getAttribute('name') ?? ''} ${el.id}`.toLowerCase();
+  const text = `${names} ${label.toLowerCase()}`;
+  const max = el.maxLength;
+  if (SECRET_PHRASE.test(text)) return { kind: 'secret-phrase', hints: ['name/label: recovery phrase'] };
+  if (RECOVERY_CODE.test(text)) return { kind: 'recovery-code', hints: ['name/label: recovery code'] };
+  if (ac.split(/\s+/).includes('one-time-code')) return { kind: 'otp', hints: ['autocomplete=one-time-code'] };
+  if (OTP_TOKENS.test(text)) return { kind: 'otp', hints: ['name/label: one-time code'] };
+  if (PIN_TOKEN.test(text)) return { kind: 'pin', hints: ['name/label: PIN'] };
+  if (type === 'password') return { kind: 'password', hints: ['type=password'] };
+  // Hints are fixed tokens: raw attribute values never leave the page.
+  const pw = /(?:^|\s)(current|new)-password(?:\s|$)/.exec(ac);
+  if (pw) return { kind: 'password', hints: [`autocomplete=${pw[1] as string}-password`] };
+  if (type === 'email') return { kind: 'email', hints: ['type=email'] };
+  const user = /(?:^|\s)(email|username)(?:\s|$)/.exec(ac);
+  if (user) return { kind: 'email', hints: [`autocomplete=${user[1] as string}`] };
+  if (im === 'numeric' && max >= 4 && max <= 8) return { kind: 'otp', hints: ['inputmode=numeric', `maxlength=${max}`] };
+  if (['text', 'search', 'tel', 'number', 'url', 'textarea', ''].includes(type)) return { kind: 'text', hints: [] };
+  return { kind: 'other', hints: [] };
+}
+
+/** Max enclosing containers recorded per form. */
+const MAX_FORM_ANCESTORS = 8;
+
+/**
+ * Enclosing containers of a form, nearest first. Stops after the first user-content, widget or frame container,
+ * so a form inside a comment is never correlated with the article around it. Bounded to MAX_FORM_ANCESTORS.
+ */
+function ancestorIds(c: Container | undefined): string[] {
+  const out: string[] = [];
+  for (let cur = c; cur && out.length < MAX_FORM_ANCESTORS; cur = cur.parent) {
+    out.push(cur.id);
+    if (/^(?:ugc|widget|frame):/.test(cur.id)) break;
+  }
+  return out;
+}
+
+/**
+ * Locator of a field or form that never contains the element's own id or name (they can carry page data):
+ * the parent's path plus the element's position among same-tag siblings.
+ */
+function positionalPath(el: Element, root: Document | ShadowRoot): string {
+  const tag = el.tagName.toLowerCase();
+  let index = 1;
+  for (let sib = el.previousElementSibling; sib; sib = sib.previousElementSibling) if (sib.tagName === el.tagName) index++;
+  const parent = el.parentElement;
+  return parent ? `${cssPath(parent, root)} > ${tag}:nth-of-type(${index})` : `${tag}:nth-of-type(${index})`;
+}
+
+/** Page-authored label of a field: <label>, aria-label, then placeholder. Never the value. */
+function fieldLabel(el: HTMLInputElement | HTMLTextAreaElement): string {
+  const fromLabel = el.labels && el.labels.length > 0 ? (el.labels[0] as HTMLLabelElement).textContent ?? '' : '';
+  return collapse(fromLabel || el.getAttribute('aria-label') || el.getAttribute('placeholder') || '').slice(0, 160);
+}
+
+/** Category of a form's submission target. Only the category leaves the page, never the URL. */
+function formDestination(form: HTMLFormElement): FormDestination {
+  const raw = form.getAttribute('action');
+  if (raw === null || raw.trim() === '') return 'none';
+  let url: URL;
+  try { url = new URL(raw, form.ownerDocument.baseURI); } catch { return 'other'; }
+  if (url.protocol === 'javascript:') return 'javascript';
+  if (url.protocol === 'mailto:') return 'mailto';
+  if (url.protocol === 'data:') return 'data';
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') return 'other';
+  return url.origin === form.ownerDocument.location?.origin ? 'same-origin' : 'other-origin';
+}
 
 interface Container {
   id: string;
   heading: string | null;
+  /** Enclosing container (M5.1: lets a form know the dialog or section it belongs to). Not part of the snapshot. */
+  parent?: Container;
 }
 
 interface Inherited {
@@ -200,6 +284,11 @@ export function extractSnapshot(doc: Document, options: ExtractOptions = {}): Ex
   const hidden: HiddenCopyCandidate[] = [];
   const triggers: CopyTrigger[] = [];
   const seenHidden = new Set<Element>();
+  const fields: FormField[] = [];
+  const forms: FormInfo[] = [];
+  const formIds = new Map<Element, string>();
+  /** Containers enclosing each form element (nearest first), recorded when the walk enters the form. */
+  const formAncestors = new Map<Element, string[]>();
   let nodes = 0;
   let chars = 0;
   let framesSkipped = 0;
@@ -261,6 +350,38 @@ export function extractSnapshot(doc: Document, options: ExtractOptions = {}): Ex
     }
     seenHidden.add(el);
     hidden.push({ id: `h${hidden.length}`, text: t, containerId: inh.container.id, via, locator: inh.prefix + cssPath(el, inh.root), ...(lastBlockId ? { afterBlockId: lastBlockId } : {}) });
+  }
+
+  /** Records a visible field's structure. Values, default values and anything the user typed are never read. */
+  function addField(el: HTMLInputElement | HTMLTextAreaElement, inh: Inherited): void {
+    if (el instanceof HTMLInputElement && NON_FIELD_TYPES.has(el.type)) return;
+    if (fields.length >= o.maxAux) {
+      auxCapped = true;
+      return;
+    }
+    const label = fieldLabel(el);
+    const { kind, hints } = fieldKind(el, label);
+    let formId: string | undefined;
+    const form = el.form;
+    if (form) {
+      formId = formIds.get(form);
+      if (formId === undefined) {
+        formId = `form${forms.length}`;
+        formIds.set(form, formId);
+        const m = (form.getAttribute('method') ?? 'get').toLowerCase();
+        forms.push({
+          id: formId, containerId: inh.container.id, locator: inh.prefix + positionalPath(form, inh.root),
+          method: m === 'post' || m === 'dialog' || m === 'get' ? m : 'other', destination: formDestination(form),
+          ancestorContainerIds: formAncestors.get(form) ?? [],
+        });
+      }
+    }
+    // Anchor: the block being built (label text before the field) or the last finished block.
+    const anchor = (segment as Segment | null)?.blockId ?? lastBlockId;
+    fields.push({
+      id: `fd${fields.length}`, kind, hints, label, containerId: inh.container.id, locator: inh.prefix + positionalPath(el, inh.root),
+      ctx: { ...inh.ctx }, ...(anchor ? { afterBlockId: anchor } : {}), ...(formId ? { formId } : {}),
+    });
   }
 
   function textVisible(node: Text): boolean {
@@ -342,6 +463,7 @@ export function extractSnapshot(doc: Document, options: ExtractOptions = {}): Ex
         if (invisible || isHiddenElement(el)) addHidden(el.defaultValue, 'input', el, inh);
         else if (el.readOnly) appendText(` ${el.defaultValue} `, inh);
       }
+      if (!invisible && !isHiddenElement(el) && !el.readOnly) addField(el, inh);
       return;
     }
 
@@ -350,7 +472,7 @@ export function extractSnapshot(doc: Document, options: ExtractOptions = {}): Ex
     let next: Inherited = inh;
     if (kind || blockLevel) {
       const container: Container = kind
-        ? { id: `${kind}:${inh.prefix}${cssPath(el, inh.root)}`, heading: inh.container.heading }
+        ? { id: `${kind}:${inh.prefix}${cssPath(el, inh.root)}`, heading: inh.container.heading, parent: inh.container }
         : inh.container;
       const ctx: BlockContext = { ...inh.ctx };
       const tag = el.tagName;
@@ -358,7 +480,10 @@ export function extractSnapshot(doc: Document, options: ExtractOptions = {}): Ex
       if (tag === 'CODE' || tag === 'KBD' || tag === 'SAMP') ctx.code = true;
       if (tag === 'BLOCKQUOTE' || tag === 'Q') ctx.quote = true;
       if (tag === 'ARTICLE' || tag === 'MAIN' || el.getAttribute('role') === 'main' || el.getAttribute('role') === 'article') ctx.article = true;
-      if (tag === 'FORM') ctx.form = true;
+      if (tag === 'FORM') {
+        ctx.form = true;
+        formAncestors.set(el, ancestorIds(inh.container));
+      }
       if (kind === 'dialog') ctx.dialog = true;
       if (kind === 'overlay') ctx.overlay = true;
       if (kind === 'ugc') ctx.ugc = true;
@@ -377,6 +502,7 @@ export function extractSnapshot(doc: Document, options: ExtractOptions = {}): Ex
       if (el instanceof HTMLInputElement) {
         if (['button', 'submit', 'reset'].includes(el.type) && el.value) appendText(` ${el.value} `, next);
         else if (!isSensitiveField(el) && el.placeholder) appendText(` ${el.placeholder} `, next);
+        if (!isHiddenElement(el)) addField(el, next);
       }
       if (el instanceof HTMLTextAreaElement && el.placeholder) appendText(` ${el.placeholder} `, next);
       if ((el.tagName === 'BUTTON' || el.getAttribute('role') === 'button') && !el.textContent?.trim() && el.getAttribute('aria-label')) {
@@ -391,7 +517,7 @@ export function extractSnapshot(doc: Document, options: ExtractOptions = {}): Ex
         framesInspected++;
         flush();
         const frameLoc = inh.prefix + cssPath(el, inh.root) + LOCATOR_SEP.frame;
-        const container: Container = { id: `frame:${frameLoc}`, heading: null };
+        const container: Container = { id: `frame:${frameLoc}`, heading: null, parent: next.container };
         walkChildren(fdoc.body, { ...next, container, owner: fdoc.body, ownerLocator: () => `${frameLoc}body`, win: fdoc.defaultView, prefix: frameLoc, root: fdoc, ctx: {} });
         flush();
       }
@@ -402,7 +528,7 @@ export function extractSnapshot(doc: Document, options: ExtractOptions = {}): Ex
     if (sr) {
       flush();
       const shadowLoc = inh.prefix + cssPath(el, inh.root) + LOCATOR_SEP.shadow;
-      const container: Container = kind ? next.container : { id: `widget:${shadowLoc}`, heading: next.container.heading };
+      const container: Container = kind ? next.container : { id: `widget:${shadowLoc}`, heading: next.container.heading, parent: next.container };
       walkChildren(sr, { ...next, container, prefix: shadowLoc, root: sr });
       flush();
     } else if (el.tagName.includes('-') && !el.firstChild && !invisible) {
@@ -468,6 +594,8 @@ export function extractSnapshot(doc: Document, options: ExtractOptions = {}): Ex
     hiddenCopyCandidates: hidden,
     copyTriggers: triggers,
     coverage: { framesSkipped, truncated: budget !== null || blockTextCapped > 0, closedShadowRootsSkipped: closedSkipped, partial: partialReasons() },
+    formFields: fields,
+    forms,
   };
   return {
     snapshot,

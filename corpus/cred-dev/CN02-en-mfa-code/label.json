@@ -1,0 +1,22 @@
+{
+  "id": "CN02-en-mfa-code",
+  "split": "cred-dev",
+  "lang": "en",
+  "category": "benign",
+  "threatClass": "T6",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://app.taskline.test/verify",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Legitimate MFA code step",
+  "rationale": "Verification wording and an expiry, but no threat or third party.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

@@ -4,6 +4,30 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-21 · M5.1 Credential-disclosure detection, stage 1 · **Conditionally accepted as experimental; manual Chrome validation pending**
+
+**Commit separation:** M4.4 was committed first as its own commit (`feat(demo): prepare hackathon showcase and extension v0.5.0`), reconstructed from the shared working tree by reverting every M5.1 edit and verified separately (identical development-release hashes to the M4.4 review). M5.1 is committed on top. A full backup of the shared working tree was kept outside the repository.
+
+**Done**
+- **Detector** `cred-0.1.0-exp` (`src/core/credential/`): secrets × disclosure action × pretext × trust context × form structure; rules CR1–CR5, modifiers, `O.LIVE_SECRET_FIELD`; EN + ID lexicon (DETECTION_MODEL.md §12; D-062, D-065).
+- **Extractor 0.2.0-m5:** structural form fields and forms (kind, hints, label, destination category, enclosing container); no values read (D-063). Blocks unchanged.
+- **Extension:** ScanReport v2 with a strictly validated `credential` section; popup section "Passwords and codes · Experimental" with requested action, indicators, form destination (information only), confidence, action risk, evidence with Show on page, limitations; EN/ID (D-066). No permission, storage or network change (D-064).
+- **Development corpus** `corpus/cred-dev` (36: 11 positive, 5 adversarial, 20 hard negatives; 26 EN, 10 ID) and `npm run eval:cred` with a typed-sentinel privacy check (D-067).
+
+**Development results (tuned on this data; not held-out):** v0 TP 12 / FP 1 / TN 19 / FN 4 → v1 TP 14 / FP 0 / TN 20 / FN 2. Precision 14/14, recall 14/16, hard-negative FPR 0/20, localization 14/14, 0 requests, 0 sentinel leaks (26 fields); deterministic across two runs. Remaining FN: CA02 (blockquote), CA03 (informal Indonesian).
+
+**ClickFix regression:** regenerated dev, research and refine artifacts differ from the committed ones only in the extractor version string (2 lines); the committed files were restored. Unit fixtures: `analyze()` identical with and without form fields.
+
+**Verification (final, at commit):** see the M5.1 commit report; production manifest `activeTab` + `scripting`, CSP unchanged; no network/storage APIs in the bundles; no new `.value`/`.defaultValue` reads.
+
+**Finalization hardening (D-069):** positional field/form locators and fixed hint tokens; bounded enclosing-container chains for forms; per-request scoring with quoted/code pretexts limited to their block; live-field override limited to the same secret kind and to educational framing. Targeted regressions added (awareness exercise with fields, MFA with urgency text, attacker label, secrets in id/name/autocomplete/value, nested forms and the comment boundary, quoted request next to an unrelated field, recovery flow, popup output). cred-dev unchanged: TP 14, FP 0, TN 20, FN 2 (36/36 scenarios identical).
+
+**Version:** manifest 0.6.0 proposed for credential-enabled builds (D-070); nothing built or published.
+
+**Not done:** held-out credential evaluation (M5.2); manual Chrome check of the credential section; no release built.
+
+**Next:** manual Chrome validation of the credential section; owner decision on the version; M5.2 only after approval.
+
 ## 2026-10-21 · M4.4 Hackathon demo and release candidate · **Accepted; manual checklist N1–N14 confirmed by the owner**
 
 **Done**

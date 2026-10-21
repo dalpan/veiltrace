@@ -1,5 +1,5 @@
 // Helpers to write PageSnapshot fixtures by hand (M1 has no DOM extractor).
-import type { BlockContext, CopyTrigger, HiddenCopyCandidate, PageSnapshot } from '../../src/core/types.js';
+import type { BlockContext, CopyTrigger, FormField, FormInfo, HiddenCopyCandidate, PageSnapshot } from '../../src/core/types.js';
 
 export interface BlockSpec {
   t: string;
@@ -13,6 +13,9 @@ export interface BlockSpec {
 export interface SnapshotExtras {
   hidden?: Array<Omit<HiddenCopyCandidate, 'id' | 'via'> & { via?: HiddenCopyCandidate['via'] }>;
   triggers?: Array<Omit<CopyTrigger, 'id'>>;
+  /** M5.1 structural form fields (ids fd0, fd1, …); omitted from the snapshot when not given. */
+  fields?: Array<Omit<FormField, 'id' | 'hints'> & { hints?: string[] }>;
+  forms?: FormInfo[];
   url?: string;
   title?: string;
 }
@@ -37,6 +40,8 @@ export function snapshot(blocks: Array<BlockSpec | string>, extras: SnapshotExtr
     hiddenCopyCandidates: (extras.hidden ?? []).map((h, i) => ({ via: 'hidden-el', ...h, id: `h${i}` })),
     copyTriggers: (extras.triggers ?? []).map((t, i) => ({ ...t, id: `t${i}` })),
     coverage: { framesSkipped: 0, truncated: false, closedShadowRootsSkipped: 0 },
+    ...(extras.fields ? { formFields: extras.fields.map((f, i) => ({ hints: [], ...f, id: `fd${i}` })) } : {}),
+    ...(extras.forms ? { forms: extras.forms } : {}),
   };
 }
 

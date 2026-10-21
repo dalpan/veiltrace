@@ -1,0 +1,22 @@
+{
+  "id": "CN15-en-forum-advice-never-post",
+  "split": "cred-dev",
+  "lang": "en",
+  "category": "benign",
+  "threatClass": "T6",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://forum.gadgetfix.test/t/90",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Forum advice warning about code requests",
+  "rationale": "Negated requests in UGC.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

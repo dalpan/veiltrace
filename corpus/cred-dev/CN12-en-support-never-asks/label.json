@@ -1,0 +1,22 @@
+{
+  "id": "CN12-en-support-never-asks",
+  "split": "cred-dev",
+  "lang": "en",
+  "category": "benign",
+  "threatClass": "T6",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://help.northwind.test/security",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Support page: we never ask for codes",
+  "rationale": "Protective statements only.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

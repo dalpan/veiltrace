@@ -1,7 +1,8 @@
 // UI strings in English and Indonesian, bundled in popup.js (no runtime language files, no translation service).
 // Page evidence is never translated. Never says "safe". Severity, confidence and completeness stay distinct.
 import type { ScanGap } from '../../core/coverage.js';
-import type { ActionRisk, Classification, Level, ModifierId, OverrideId, RuleId, SignalId, Verdict } from '../../core/types.js';
+import type { CredModifierId, CredPretextSignalId, CredRuleId, CredSignalId, SecretType, TrustContext } from '../../core/credential/types.js';
+import type { ActionRisk, Classification, FieldKind, FormDestination, Level, ModifierId, OverrideId, RuleId, SignalId, Verdict } from '../../core/types.js';
 
 export type Lang = 'en' | 'id';
 export type HighlightKey = 'highlighted' | 'invalid-locator' | 'not-found' | 'frame-inaccessible' | 'not-visible' | 'failed';
@@ -53,6 +54,32 @@ export interface Messages {
   overrideEvidence: string;
   moreEvidence: (n: number) => string;
   moreFindings: (n: number) => string;
+  /** M5.1: experimental credential-disclosure detector. */
+  cred: {
+    categoryCommand: string;
+    categorySecret: string;
+    experimental: string;
+    headline: Record<Verdict, { title: string; detail: string; tone: 'danger' | 'warning' | 'neutral' }>;
+    findingTitle: Record<Classification, string>;
+    ruleChip: (id: CredRuleId) => string;
+    rule: Record<CredRuleId, string>;
+    asks: (action: 'send' | 'enter', secrets: string) => string;
+    secret: Record<SecretType, string>;
+    indicators: string;
+    pretext: Record<CredPretextSignalId, string>;
+    trust: Record<TrustContext, string>;
+    destination: Record<FormDestination, string>;
+    actionRisk: Record<ActionRisk, string>;
+    modifier: Record<CredModifierId, string>;
+    overrideLiveField: string;
+    signal: Record<CredSignalId, string>;
+    fieldSource: string;
+    fieldKind: Record<FieldKind, string>;
+    unlabeledField: string;
+    limitation: Record<'claimed-identity-unverifiable' | 'destination-not-scored' | 'trust-boundary-heuristic', string>;
+    experimentalNote: string;
+    observedHeading: (n: number) => string;
+  };
   errors: {
     noPageTitle: string; noPageDetail: string;
     restrictedTitle: string; restrictedDetail: string;
@@ -159,6 +186,73 @@ const EN: Messages = {
   overrideEvidence: 'Supporting evidence',
   moreEvidence: (n) => `${n} more evidence item(s) not shown.`,
   moreFindings: (n) => `${n} more finding(s) not shown (display limit).`,
+  cred: {
+    categoryCommand: 'Command execution',
+    categorySecret: 'Passwords and codes',
+    experimental: 'Experimental',
+    headline: {
+      manipulative_instruction: { tone: 'danger', title: 'Manipulative request for a password or code detected',
+        detail: 'This page asks you to give a password, code or recovery phrase to someone, or wraps the request in a false pretext. Do not share it.' },
+      suspicious_correlation: { tone: 'warning', title: 'Suspicious request for a password or code detected',
+        detail: 'This page asks for a password or code together with a threat to your account, or inside content the site may not control. Check before you enter anything.' },
+      observed_instruction: { tone: 'neutral', title: 'Sign-in or code requests found, without signs of manipulation.',
+        detail: 'Ordinary sign-in and verification steps look like this. Only enter secrets on sites you opened yourself.' },
+      none: { tone: 'neutral', title: 'No requests for passwords, codes or recovery phrases found in the analyzed content.',
+        detail: 'VeilTrace looked for requests to give or type passwords, one-time codes and recovery phrases.' },
+    },
+    findingTitle: { manipulative_instruction: 'Manipulative request for a secret', suspicious_correlation: 'Suspicious request for a secret', observed_instruction: 'Sign-in or code request' },
+    ruleChip: (id) => `Rule ${id}`,
+    rule: {
+      CR1: 'Asks you to send a secret to a person or channel. Real services ask you to type codes into their own form, never to pass them on.',
+      CR2: 'Asks for a wallet recovery phrase and wraps the request in a pretext. Anyone with the phrase controls the wallet.',
+      CR3: 'Asks for a secret inside content the site may not control (comments, widgets, embedded frames), together with a pretext.',
+      CR4: 'Asks for a secret together with a threat to suspend, lock or close your account.',
+      CR5: 'Asks for a password or code with no manipulation signs nearby.',
+    },
+    asks: (action, secrets) => (action === 'send' ? `Asks you to send: ${secrets}` : `Asks you to enter: ${secrets}`),
+    secret: { password: 'password', otp: 'one-time code', pin: 'PIN', 'recovery-code': 'recovery code', 'recovery-phrase': 'recovery phrase', token: 'access token' },
+    indicators: 'Indicators',
+    pretext: {
+      'CP.ACCOUNT_THREAT': 'threat to the account', 'CP.URGENCY': 'deadline or urgency', 'CP.SUPPORT': 'claims to be support or an official',
+      'CP.VERIFY': 'verification framing', 'CP.REWARD': 'prize or reward',
+    },
+    trust: {
+      'user-content': 'in user-posted content', 'third-party-widget': 'in an embedded widget', 'embedded-frame': 'in an embedded frame',
+      dialog: 'in a dialog', overlay: 'in an overlay', form: 'in a form',
+    },
+    destination: {
+      none: 'The form submits to this page.', 'same-origin': 'The form submits to this site.', 'other-origin': 'The form submits to another site.',
+      mailto: 'The form opens an email message.', javascript: 'The form is handled by a script on the page.', data: 'The form submits to an inline data address.',
+      other: 'The form submits to an unusual address.',
+    },
+    actionRisk: {
+      high: 'Action risk: high. Whoever gets this can take over the account or wallet.',
+      medium: 'Action risk: medium. Entering it on the wrong site can expose your account.',
+    },
+    modifier: {
+      'C.QUOTED': 'the request is inside a quotation.', 'C.REPORTED': 'the text reports what someone else was asked to do.',
+      'C.EDUCATIONAL': 'the surrounding text is educational or awareness material.', 'C.CODE_EXAMPLE': 'the request is inside a code sample.',
+    },
+    overrideLiveField: 'Not lowered: the same part of the page has a working input field for the secret.',
+    signal: {
+      'S.PASSWORD': 'Password', 'S.OTP': 'One-time code', 'S.PIN': 'PIN', 'S.RECOVERY_CODE': 'Recovery code', 'S.SEED_PHRASE': 'Recovery phrase', 'S.TOKEN': 'Access token',
+      'D.SEND': 'Send or share', 'D.ENTER': 'Enter', 'CP.ACCOUNT_THREAT': 'Account threat', 'CP.URGENCY': 'Urgency', 'CP.SUPPORT': 'Claimed support or authority',
+      'CP.VERIFY': 'Verification framing', 'CP.REWARD': 'Reward', 'F.SECRET_FIELD': 'Input field', 'C.NEGATION': 'Negation', 'C.REPORTED': 'Reported speech',
+      'C.EDUCATIONAL': 'Educational context',
+    },
+    fieldSource: 'Form field',
+    fieldKind: {
+      password: 'password', otp: 'one-time code', pin: 'PIN', 'recovery-code': 'recovery code', 'secret-phrase': 'recovery phrase', email: 'email', text: 'text', other: 'other',
+    },
+    unlabeledField: '(field without a label)',
+    limitation: {
+      'claimed-identity-unverifiable': 'VeilTrace cannot verify who wrote this. A claim to be support or an official is not proof.',
+      'destination-not-scored': 'Where the form submits is shown for information only; VeilTrace does not judge sites.',
+      'trust-boundary-heuristic': 'Whether this content comes from the site or from others is estimated from the page structure.',
+    },
+    experimentalNote: 'Experimental: this check has not yet passed an independent evaluation. It looks only at the page text and form structure, never at what you typed.',
+    observedHeading: (n) => `Sign-in and code requests without manipulation signs (${n})`,
+  },
   errors: {
     noPageTitle: 'No page to scan', noPageDetail: 'Open a web page, then click the VeilTrace button again.',
     restrictedTitle: 'This page cannot be scanned',
@@ -268,6 +362,73 @@ const ID: Messages = {
   overrideEvidence: 'Bukti pendukung',
   moreEvidence: (n) => `${n} bukti lainnya tidak ditampilkan.`,
   moreFindings: (n) => `${n} temuan lainnya tidak ditampilkan (batas tampilan).`,
+  cred: {
+    categoryCommand: 'Menjalankan perintah',
+    categorySecret: 'Kata sandi dan kode',
+    experimental: 'Eksperimental',
+    headline: {
+      manipulative_instruction: { tone: 'danger', title: 'Permintaan manipulatif atas kata sandi atau kode terdeteksi',
+        detail: 'Halaman ini meminta Anda memberikan kata sandi, kode, atau frasa pemulihan kepada seseorang, atau membungkus permintaan itu dengan dalih palsu. Jangan bagikan.' },
+      suspicious_correlation: { tone: 'warning', title: 'Permintaan mencurigakan atas kata sandi atau kode terdeteksi',
+        detail: 'Halaman ini meminta kata sandi atau kode disertai ancaman terhadap akun Anda, atau di dalam konten yang mungkin tidak dikendalikan situs. Periksa sebelum mengisi apa pun.' },
+      observed_instruction: { tone: 'neutral', title: 'Permintaan masuk atau kode ditemukan, tanpa tanda manipulasi.',
+        detail: 'Langkah masuk dan verifikasi biasa memang seperti ini. Isi rahasia hanya di situs yang Anda buka sendiri.' },
+      none: { tone: 'neutral', title: 'Tidak ada permintaan kata sandi, kode, atau frasa pemulihan di konten yang dianalisis.',
+        detail: 'VeilTrace mencari permintaan untuk memberikan atau mengetik kata sandi, kode sekali pakai, dan frasa pemulihan.' },
+    },
+    findingTitle: { manipulative_instruction: 'Permintaan rahasia yang manipulatif', suspicious_correlation: 'Permintaan rahasia yang mencurigakan', observed_instruction: 'Permintaan masuk atau kode' },
+    ruleChip: (id) => `Aturan ${id}`,
+    rule: {
+      CR1: 'Meminta Anda mengirim rahasia kepada orang atau kanal. Layanan asli meminta Anda mengetik kode di formulirnya sendiri, tidak pernah meneruskannya.',
+      CR2: 'Meminta frasa pemulihan dompet dengan suatu dalih. Siapa pun yang memegang frasa itu menguasai dompetnya.',
+      CR3: 'Meminta rahasia di dalam konten yang mungkin tidak dikendalikan situs (komentar, widget, frame tersemat), disertai dalih.',
+      CR4: 'Meminta rahasia disertai ancaman untuk menangguhkan, mengunci, atau menutup akun Anda.',
+      CR5: 'Meminta kata sandi atau kode tanpa tanda manipulasi di sekitarnya.',
+    },
+    asks: (action, secrets) => (action === 'send' ? `Meminta Anda mengirim: ${secrets}` : `Meminta Anda mengisi: ${secrets}`),
+    secret: { password: 'kata sandi', otp: 'kode sekali pakai (OTP)', pin: 'nomor PIN', 'recovery-code': 'kode pemulihan', 'recovery-phrase': 'frasa pemulihan', token: 'token akses' },
+    indicators: 'Indikator',
+    pretext: {
+      'CP.ACCOUNT_THREAT': 'ancaman terhadap akun', 'CP.URGENCY': 'tenggat atau desakan', 'CP.SUPPORT': 'mengaku sebagai petugas atau pihak resmi',
+      'CP.VERIFY': 'dalih verifikasi', 'CP.REWARD': 'hadiah atau imbalan',
+    },
+    trust: {
+      'user-content': 'di konten kiriman pengguna', 'third-party-widget': 'di widget tersemat', 'embedded-frame': 'di frame tersemat',
+      dialog: 'di dalam dialog', overlay: 'di dalam overlay', form: 'di dalam formulir',
+    },
+    destination: {
+      none: 'Formulir dikirim ke halaman ini.', 'same-origin': 'Formulir dikirim ke situs ini.', 'other-origin': 'Formulir dikirim ke situs lain.',
+      mailto: 'Formulir membuka pesan email.', javascript: 'Formulir ditangani skrip di halaman.', data: 'Formulir dikirim ke alamat data sebaris.',
+      other: 'Formulir dikirim ke alamat yang tidak biasa.',
+    },
+    actionRisk: {
+      high: 'Risiko tindakan: tinggi. Siapa pun yang mendapatkannya bisa mengambil alih akun atau dompet.',
+      medium: 'Risiko tindakan: sedang. Mengisinya di situs yang salah dapat membuka akses ke akun Anda.',
+    },
+    modifier: {
+      'C.QUOTED': 'permintaan berada di dalam kutipan.', 'C.REPORTED': 'teks melaporkan apa yang diminta dari orang lain.',
+      'C.EDUCATIONAL': 'teks di sekitarnya adalah materi edukasi atau kesadaran keamanan.', 'C.CODE_EXAMPLE': 'permintaan berada di dalam contoh kode.',
+    },
+    overrideLiveField: 'Tidak diturunkan: bagian halaman yang sama memiliki kolom isian yang berfungsi untuk rahasia tersebut.',
+    signal: {
+      'S.PASSWORD': 'Kata sandi', 'S.OTP': 'Kode sekali pakai', 'S.PIN': 'Nomor PIN', 'S.RECOVERY_CODE': 'Kode pemulihan', 'S.SEED_PHRASE': 'Frasa pemulihan', 'S.TOKEN': 'Token akses',
+      'D.SEND': 'Kirim atau bagikan', 'D.ENTER': 'Isi', 'CP.ACCOUNT_THREAT': 'Ancaman akun', 'CP.URGENCY': 'Desakan', 'CP.SUPPORT': 'Mengaku petugas atau otoritas',
+      'CP.VERIFY': 'Dalih verifikasi', 'CP.REWARD': 'Hadiah', 'F.SECRET_FIELD': 'Kolom isian', 'C.NEGATION': 'Negasi', 'C.REPORTED': 'Kalimat dilaporkan',
+      'C.EDUCATIONAL': 'Konteks edukasi',
+    },
+    fieldSource: 'Kolom formulir',
+    fieldKind: {
+      password: 'kata sandi', otp: 'kode sekali pakai', pin: 'nomor PIN', 'recovery-code': 'kode pemulihan', 'secret-phrase': 'frasa pemulihan', email: 'alamat email', text: 'teks', other: 'lainnya',
+    },
+    unlabeledField: '(kolom tanpa label)',
+    limitation: {
+      'claimed-identity-unverifiable': 'VeilTrace tidak dapat memastikan siapa penulisnya. Pengakuan sebagai petugas atau pihak resmi bukan bukti.',
+      'destination-not-scored': 'Tujuan formulir hanya ditampilkan sebagai informasi; VeilTrace tidak menilai situs.',
+      'trust-boundary-heuristic': 'Apakah konten ini berasal dari situs atau dari pihak lain diperkirakan dari struktur halaman.',
+    },
+    experimentalNote: 'Eksperimental: pemeriksaan ini belum lulus evaluasi independen. Hanya teks halaman dan struktur formulir yang diperiksa, tidak pernah isian yang Anda ketik.',
+    observedHeading: (n) => `Permintaan masuk dan kode tanpa tanda manipulasi (${n})`,
+  },
   errors: {
     noPageTitle: 'Tidak ada halaman untuk dipindai', noPageDetail: 'Buka sebuah halaman web, lalu klik tombol VeilTrace lagi.',
     restrictedTitle: 'Halaman ini tidak dapat dipindai',

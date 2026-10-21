@@ -1,0 +1,22 @@
+{
+  "id": "CN13-id-ganti-pin-ewallet",
+  "split": "cred-dev",
+  "lang": "id",
+  "category": "benign",
+  "threatClass": "T6",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://app.ewallet-kita.test/pin",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Pengaturan ubah PIN e-wallet",
+  "rationale": "Pengelolaan akun biasa.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

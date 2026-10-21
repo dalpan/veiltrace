@@ -1,0 +1,22 @@
+{
+  "id": "CN11-en-change-password",
+  "split": "cred-dev",
+  "lang": "en",
+  "category": "benign",
+  "threatClass": "T6",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://app.taskline.test/settings/password",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Account settings: change password",
+  "rationale": "Ordinary account management.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

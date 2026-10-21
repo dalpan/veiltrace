@@ -1,0 +1,22 @@
+{
+  "id": "CN18-id-promo-login",
+  "split": "cred-dev",
+  "lang": "id",
+  "category": "benign",
+  "threatClass": "T6",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://tokobaru.test/promo",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Halaman promo dengan login",
+  "rationale": "Tenggat dan hadiah yang sah di toko online; tidak meminta rahasia ke pihak lain.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

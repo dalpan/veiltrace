@@ -1,0 +1,22 @@
+{
+  "id": "CD10-id-cs-chat-pembatalan",
+  "split": "cred-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://bantuan.ewallet-kita.test/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#cs",
+  "description": "Widget chat \"CS\" meminta OTP untuk membatalkan transaksi",
+  "rationale": "OTP disebutkan ke orang lain dengan dalih CS.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

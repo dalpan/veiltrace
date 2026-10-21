@@ -1,0 +1,22 @@
+{
+  "id": "CD06-id-komentar-admin-kirim-otp",
+  "split": "cred-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://blog.resepnusantara.test/rendang",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#k2",
+  "description": "Komentar \"admin\" meminta kode OTP untuk klaim hadiah",
+  "rationale": "Kode dikirim ke orang lain dengan dalih hadiah.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

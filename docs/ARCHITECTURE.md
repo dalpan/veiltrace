@@ -1,6 +1,6 @@
 # Architecture
 
-Status: updated at M3; engine default updated at M4.3A (`analyze(snapshot)` = engine 0.2.0, ruleset `m4.1`; M1 via `{ ruleset: 'm1' }`, D-055). **Implemented:** the pure core (`src/core`, §1, M1), the `PageSnapshot` types (§4), the DOM extractor and change watcher (`src/extract`, §3, M2), the offline evaluation harness (`src/eval`, §10, M2), the Chromium MV3 extension with popup, isolated-world scanning and evidence highlighting (`src/extension`, §2, §6, §9, §11, M3), and the toolchain (§5). **Planned, not implemented:** Firefox desktop/Android (§7, M5), auto-scan, settings and storage (M6), and the "Copy report" action (PRODUCT_SPEC.md §5).
+Status: updated at M3; engine default updated at M4.3A; detector modules and form fields added at M5.1 (§3.11, §12) (`analyze(snapshot)` = engine 0.2.0, ruleset `m4.1`; M1 via `{ ruleset: 'm1' }`, D-055). **Implemented:** the pure core (`src/core`, §1, M1), the `PageSnapshot` types (§4), the DOM extractor and change watcher (`src/extract`, §3, M2), the offline evaluation harness (`src/eval`, §10, M2), the Chromium MV3 extension with popup, isolated-world scanning and evidence highlighting (`src/extension`, §2, §6, §9, §11, M3), and the toolchain (§5). **Planned, not implemented:** Firefox desktop/Android (§7, M5), auto-scan, settings and storage (M6), and the "Copy report" action (PRODUCT_SPEC.md §5).
 
 ## 1. Principles that shape the architecture
 
@@ -98,6 +98,9 @@ A scan is **complete** when `scanStatus(result.coverage).reasons` is empty. That
 | `core-truncated` | The core's own input bounds dropped blocks or characters | Same |
 
 Findings are computed only on what was extracted, and partial status never changes a finding (tested). **Absence of a finding on a partial scan says nothing about the unscanned part.** The M3 UI must show partial status and reasons next to the verdict (PRODUCT_SPEC.md §5).
+
+### 3.11 Form fields (M5.1, extractor 0.2.0-m5)
+Visible `input` (except hidden, buttons, checkboxes, radios, file, range, color, date/time) and editable `textarea` elements are recorded in `snapshot.formFields` with a structural `kind`, the `hints` that decided it, the page-authored `label` (`<label>`, `aria-label`, placeholder; ≤ 160 chars), container, placement (`afterBlockId`) and locator. Forms are recorded in `snapshot.forms` with method, a destination **category** and their enclosing containers (`ancestorContainerIds`, nearest first, at most 8, stopping at user-content, widget and frame containers). **No value, default value or typed text is read**; the URL of the destination does not leave the page, only its category. Field and form locators are positional (the element's own id or name never appears), and `hints` are fixed tokens, never raw attribute values. Block extraction is unchanged (the dev corpus produces byte-identical ClickFix results). Fields count toward the `maxAux` budget (`aux-capped`).
 
 ## 4. PageSnapshot (schemaVersion 1, implemented as types in `src/core/types.ts`)
 
@@ -233,3 +236,24 @@ Runtime dependencies target: **0**. Everything shipped in the extension is our o
 **UI language (M4.2, D-049).** The popup renders all text from bundled EN/ID dictionaries. It selects Indonesian when `chrome.i18n.getUILanguage()` is Indonesian; EN/ID buttons switch for the session and re-render from popup state without rescanning. Evidence snippets are page text and stay untranslated (inserted as text nodes with `lang=""`).
 
 **Closed shadow roots.** In the isolated world, `chrome.dom.openOrClosedShadowRoot` is available. Closed-root content is extracted, and a lure inside one is detected (E2E-verified). This resolves the M2 open item.
+
+## 12. Detector modules (M5.1)
+
+```
+                       PageSnapshot (blocks, hidden copy candidates, copy triggers, form fields, forms)
+                                   │                                   │
+          analyze()  ClickFix / command execution            analyzeCredentials()  credential disclosure
+          engine 0.2.0, ruleset m4.1 (frozen, evaluated)     cred-0.1.0-exp (EXPERIMENTAL, dev data only)
+                                   │                                   │
+                  shared: normalization, regions, K = 8 windows, negation/reported/educational cues,
+                  Classification (observed / suspicious / manipulative), Level, ActionRisk, locators
+                                   │                                   │
+                              ScanReport v2: findings + credential section (validated by parseScanReport)
+                                   │
+                         popup: one section per detector, most severe first, shared coverage card
+```
+
+- **Independent detectors over one snapshot.** Each detector is a pure function with its own version, lexicon and decision table. Shared code (normalize, regions, pattern helpers, context cues) is imported read-only; the credential module does not modify any ClickFix file, so ClickFix results cannot change through it (tested).
+- **Shared semantics.** Both use the same three classifications, confidence levels and action-risk scale, and the same evidence model (observation → source → locator → "Show on page").
+- **Aggregation (future).** The popup currently shows each detector's verdict separately and orders sections by severity; it does not compute a combined score. A future aggregation layer (M5.x) must be specified and evaluated before any combined verdict is shown.
+- **Constraints.** No network lookups, remote inference, telemetry or browsing history; no new permission (D-064).

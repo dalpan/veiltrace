@@ -1,0 +1,22 @@
+{
+  "id": "CD05-id-form-akun-diblokir",
+  "split": "cred-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T6",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://promo.tokobaru.test/verifikasi",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#v",
+  "description": "Halaman meminta PIN dan OTP dengan ancaman pemblokiran",
+  "rationale": "Permintaan rahasia di bawah ancaman dan tenggat.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

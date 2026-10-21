@@ -81,8 +81,19 @@ Positioning: a defensive, privacy-preserving, human-centric browser security too
 | Category | Content |
 |---|---|
 | **Implemented (M1–M4.4)** | On-device detection with no network code; Chromium MV3 extension with `activeTab` + `scripting` only; on-demand scanning; explainable evidence; complete/partial scan reporting; deterministic engine; offline evaluation harness; Indonesian + English detection lexicons; contextual rule set `m4.1` as the default engine 0.2.0, with overrides explained in the popup (M4.3A); **Indonesian and English popup UI (M4.2)**; **CycloneDX SBOM, license review, dependency audit (M4.2)**; **reproducible release ZIP with release manifest, SHA-256 checksums and a verification script (M4.2)**; organizational threat model and Operator Guide (M4.2); offline demo site and release candidate v0.5.0 (M4.4) |
+| **Experimental (M5.1; not independently evaluated)** | Credential-disclosure detector `cred-0.1.0-exp`: flags requests to send passwords, one-time codes, PINs, recovery codes, recovery phrases or tokens to someone, recovery phrases under a pretext, and secret requests under account threats or in third-party content; ordinary sign-in and MFA are listed as observed, not alerts. Shown in its own popup section labelled Experimental. Development results only (DETECTION_MODEL.md §12) |
 | **Planned (M4.3+; not implemented)** | Signed CRX packaging and a self-hosted update channel; end-to-end managed-browser force-install test; reproducibility across OSes; strictly opt-in, user-reviewed, privacy-preserving incident reports (local export first); independent security review |
 | **Research hypotheses (unproven)** | Contextual instruction analysis detects social-engineering lures independent of domain reputation; region-local correlation + context modifiers reduce false positives versus page-level matching; results on synthetic dev data transfer to real pages (unmeasured) |
 | **Potential organizational applications (speculative)** | User-side awareness aid in organizations with strict browser policies; a training aid that explains why a page is manipulative; one layer alongside existing endpoint and network controls. Not a replacement for EDR, email filtering or URL reputation |
 
 Explicit non-goals without a separate requirements process and review: centralized monitoring, employee surveillance, collection of browsing data, privileged endpoint access, and military-specific operational features.
+
+## 10. Multi-threat roadmap (M5.x)
+
+| Stage | Scope | Status |
+|---|---|---|
+| M5.1 | Credential-disclosure indicators (passwords, codes, PINs, recovery codes and phrases, tokens): separate experimental detector, structural form fields, dev corpus, popup section | Implemented, experimental, development data only |
+| M5.2 | Independent held-out credential corpus, preregistration, frozen evaluation (EVALUATION_PLAN.md §13) | Not started |
+| Later | Aggregation layer across detectors; other threat classes (payment manipulation, remote-access tools) | Not started; payment manipulation and general malware scanning are explicitly out of scope for M5.1 |
+
+UX principle for every detector: show the **threat category**, the **requested action**, the observed **evidence** with "Show on page", the **context indicators**, separate **confidence** and **action risk**, and the **limits** (what was not examined, which claims cannot be verified). Benign authentication content (sign-in, MFA) is listed as observed, never as an alert.

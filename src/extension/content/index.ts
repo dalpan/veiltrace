@@ -2,6 +2,7 @@
 // Bundled as an IIFE exposing `VeiltraceContent` in the isolated world only; page scripts cannot see or
 // replace it. No listeners, no messaging, no network: the popup calls these functions via executeScript.
 import { analyze } from '../../core/analyze.js';
+import { analyzeCredentials } from '../../core/credential/analyze.js';
 import { EXTRACTOR_VERSION, extractSnapshot } from '../../extract/extract.js';
 import { clearHighlight, highlight, type HighlightResult } from './highlight.js';
 import { buildReport, type ScanReport } from './report.js';
@@ -25,7 +26,10 @@ export function scan(options: { timeBudgetMs?: number } = {}): ScanReport {
   const t1 = performance.now();
   const result = analyze(snapshot);
   const t2 = performance.now();
-  return buildReport(snapshot, result, { engine: result.engineVersion, extractor: EXTRACTOR_VERSION }, { extractMs: t1 - t0, analyzeMs: t2 - t1 });
+  // Experimental credential detector (M5.1): independent of, and never changing, the ClickFix result above.
+  const cred = analyzeCredentials(snapshot);
+  const t3 = performance.now();
+  return buildReport(snapshot, result, { engine: result.engineVersion, extractor: EXTRACTOR_VERSION }, { extractMs: t1 - t0, analyzeMs: t2 - t1, credentialMs: t3 - t2 }, cred);
 }
 
 export function show(locator: unknown, durationMs: number): HighlightResult {

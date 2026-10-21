@@ -1,0 +1,22 @@
+{
+  "id": "CD08-en-it-helpdesk-reply-password",
+  "split": "cred-dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T6",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://portal.contoso-corp.test/notice",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#n",
+  "description": "Fake IT notice asks for the password by reply",
+  "rationale": "Password sent on, under authority and threat.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

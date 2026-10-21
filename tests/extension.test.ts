@@ -1,6 +1,6 @@
 // Unit tests for the extension's browser-independent pieces (no browser needed).
 import { describe, expect, it } from 'vitest';
-import { analyze } from '../src/core/index.js';
+import { analyze, analyzeCredentials } from '../src/core/index.js';
 import { buildReport, MAX_SNIPPET_CHARS } from '../src/extension/content/report.js';
 import { parseHighlightResult, parseScanReport } from '../src/extension/popup/validate.js';
 import { isSafeLocator } from '../src/extract/extract.js';
@@ -29,7 +29,8 @@ describe('buildReport (data minimization)', () => {
     expect(r.findings[0]!.evidence[0]!.locator).toBe('#b0');
     expect(r.counts).toEqual({ blocks: 5, hiddenCopyCandidates: 0, copyTriggers: 0, observations: 4, findingsTotal: 1 });
     expect(r.status).toEqual({ complete: true, reasons: [] });
-    expect(r.timing).toEqual({ extractMs: 1.2, analyzeMs: 0.6 });
+    expect(r.timing).toEqual({ extractMs: 1.2, analyzeMs: 0.6, credentialMs: 0 });
+    expect(r.credential).toEqual({ detectorVersion: '', experimental: true, verdict: 'none', findings: [], findingsTotal: 0 });
   });
 
   it('caps snippet length', () => {
@@ -59,7 +60,8 @@ describe('parseScanReport (boundary validation)', () => {
     const bad = (mut: (r: typeof good) => void) => { const c = structuredClone(good); mut(c); return parseScanReport(c); };
     expect(parseScanReport(null)).toBeNull();
     expect(parseScanReport('{}')).toBeNull();
-    expect(bad((r) => { r.v = 2; })).toBeNull();
+    expect(bad((r) => { r.v = 1; })).toBeNull();
+    expect(bad((r) => { r.v = 3; })).toBeNull();
     expect(bad((r) => { r.verdict = 'safe'; })).toBeNull();
     expect(bad((r) => { r.findings[0].classification = 'benign'; })).toBeNull();
     expect(bad((r) => { r.findings[0].evidence[0].text = 'x'.repeat(5000); })).toBeNull();
@@ -155,5 +157,43 @@ describe('engine 0.2.0 metadata reaches the popup intact (M4.3A)', () => {
     expect(bad((r) => { delete r.findings[0].overrides; })).toBeNull();
     expect(bad((r) => { r.findings[0].evidenceTotal = 0; })).toBeNull();
     expect(bad((r) => { r.coverage.newCoverageField = 1; })).toBeNull();
+  });
+});
+
+describe('experimental credential section in the scan report (M5.1)', () => {
+  const credSnap = () => snapshot([{ t: 'Official support here. Send me the 6-digit code we just texted you.', c: 'ugc:#c2' }, { t: 'Unrelated article text.', c: 'main' }],
+    { fields: [{ kind: 'otp', label: 'Code', containerId: 'ugc:#c2', afterBlockId: 'b0', locator: '#otp' }] });
+  const build = () => {
+    const s = credSnap();
+    return buildReport(s, analyze(s), { engine: '0.2.0', extractor: 'x' }, { extractMs: 0, analyzeMs: 0, credentialMs: 0.04 }, analyzeCredentials(s));
+  };
+
+  it('carries the credential finding with page-authored evidence only, and survives validation', () => {
+    const r = build();
+    expect(r.verdict).toBe('none');
+    expect(r.credential).toMatchObject({ experimental: true, verdict: 'manipulative_instruction', findingsTotal: 1 });
+    const f = r.credential.findings[0]!;
+    expect(f).toMatchObject({ ruleId: 'CR1', requestedAction: 'send', secretTypes: ['otp'], trustContext: ['user-content'], formDestination: null });
+    expect(f.evidence.map((e) => [e.signal, e.source, e.text, e.fieldKind])).toEqual([
+      ['CP.SUPPORT', 'visible-text', 'Official support', null], ['D.SEND', 'visible-text', 'Send me', null], ['S.OTP', 'visible-text', '6-digit code', null],
+      ['F.SECRET_FIELD', 'form-field', 'Code', 'otp'],
+    ]);
+    expect(JSON.stringify(r)).not.toContain('Unrelated article text');
+    expect(parseScanReport(JSON.parse(JSON.stringify(r)))).toEqual(r);
+  });
+
+  it('rejects unknown or inconsistent credential metadata instead of dropping it', () => {
+    const good = JSON.parse(JSON.stringify(build()));
+    const bad = (mut: (r: typeof good) => void) => { const c = structuredClone(good); mut(c); return parseScanReport(c); };
+    expect(bad((r) => { delete r.credential; })).toBeNull();
+    expect(bad((r) => { r.credential.experimental = false; })).toBeNull();
+    expect(bad((r) => { r.credential.extra = 1; })).toBeNull();
+    expect(bad((r) => { r.credential.findings[0].ruleId = 'CR9'; })).toBeNull();
+    expect(bad((r) => { r.credential.findings[0].pretexts.push('CP.FUTURE'); })).toBeNull();
+    expect(bad((r) => { r.credential.findings[0].secretTypes = []; })).toBeNull();
+    expect(bad((r) => { r.credential.findings[0].evidence[0].source = 'form-field'; })).toBeNull();
+    expect(bad((r) => { r.credential.findings[0].evidence[0].value = 'x'; })).toBeNull();
+    expect(bad((r) => { r.credential.findings[0].limitations.push('trusted-site'); })).toBeNull();
+    expect(bad((r) => { r.timing.extra = 1; })).toBeNull();
   });
 });

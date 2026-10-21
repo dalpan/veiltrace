@@ -93,3 +93,13 @@ footer p { margin: 6px 0 0; font-size: 12px; color: var(--muted); }
 .ev-head .secondary { flex: none; white-space: nowrap; }
 .override { margin: 6px 0; padding: 6px 8px; border-left: 3px solid var(--warn-bd); background: var(--bg); }
 .override .context { margin: 2px 0; }
+/* M5.1: experimental credential section */
+.cred-summary.tone-danger { background: var(--danger-bg); border-color: var(--danger-bd); color: var(--danger-fg); }
+.cred-summary.tone-warning { background: var(--warn-bg); border-color: var(--warn-bd); color: var(--warn-fg); }
+.cred-summary.tone-neutral { background: var(--neutral-bg); border-color: var(--neutral-bd); color: var(--neutral-fg); }
+.cred-summary h2 { margin: 0 0 4px; font-size: 15px; }
+.cred-summary p { margin: 4px 0 0; font-size: 13.5px; line-height: 1.45; }
+.category { margin: 0 0 2px !important; font-size: 11px !important; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; opacity: .8; }
+.chip.experimental { border-style: dashed; }
+.requested { margin: 4px 0; font-weight: 600; font-size: 13px; }
+.limitation { margin: 4px 0; font-size: 12px; color: var(--muted, inherit); }

@@ -1,6 +1,6 @@
 # Implementation Plan
 
-Status: M1 accepted (`d856fbd`). Held-out split frozen (`407beb0`). M2 accepted (`70c5697`). M3 accepted (`64e632a`, manual production validation recorded in PROGRESS.md). M4.1 accepted (`7088de0`, experimental rule set `m4.1-rc1`, not default). M4.2 accepted (release engineering, bilingual UI). M4.3A accepted (engine 0.2.0, preregistration, tag `eval-freeze-v1`). M4.3B done: held-out evaluation v1 executed once, with targets missed for recall, precision and FPR (docs/EVALUATION_RESULTS.md, D-059). M4.4 accepted (demo site, presenter guide, hard-negative and evasion tables, release candidate v0.5.0; manual checklist N1–N14 confirmed by the owner). Every milestone is independently testable and ends with a PROGRESS.md entry. No milestone is started before the previous one's acceptance criteria are met or explicitly waived in DECISIONS.md.
+Status: M1 accepted (`d856fbd`). Held-out split frozen (`407beb0`). M2 accepted (`70c5697`). M3 accepted (`64e632a`, manual production validation recorded in PROGRESS.md). M4.1 accepted (`7088de0`, experimental rule set `m4.1-rc1`, not default). M4.2 accepted (release engineering, bilingual UI). M4.3A accepted (engine 0.2.0, preregistration, tag `eval-freeze-v1`). M4.3B done: held-out evaluation v1 executed once, with targets missed for recall, precision and FPR (docs/EVALUATION_RESULTS.md, D-059). M4.4 accepted (demo site, presenter guide, hard-negative and evasion tables, release candidate v0.5.0; manual checklist N1–N14 confirmed by the owner). M5.1 conditionally accepted as experimental (credential-disclosure detector; development data only; manual Chrome validation pending). Note: the owner sequenced the multi-threat roadmap (M5.x) before the Firefox work previously planned as M5. Every milestone is independently testable and ends with a PROGRESS.md entry. No milestone is started before the previous one's acceptance criteria are met or explicitly waived in DECISIONS.md.
 
 ## Milestone overview
 
@@ -202,6 +202,22 @@ Out of scope unless separately required and reviewed: centralized monitoring, em
 3. Freeze and hash it, then develop any engine revision (e.g. the EVALUATION_RESULTS.md §6 hypotheses) on dev data only, as a new engine version.
 4. Preregister v2 (system, metrics, rerun policy), tag, run once, and publish next to v1.
 5. Separately, a governed real-world sample (EVALUATION_PLAN.md §7) before any real-world claim.
+
+## M5.1: Credential-disclosure detection, stage 1 (2026-10-21, conditionally accepted as experimental)
+
+| Owner requirement | Result |
+|---|---|
+| Preserve the evaluated baseline | `analyze()` (engine 0.2.0, `m4.1`) unchanged; ClickFix dev results identical; v1 records untouched (D-062) |
+| Threat model and design | THREAT_MODEL.md §9; DETECTION_MODEL.md §12: secrets × disclosure action × pretext × trust context × form structure; no "password field = phishing" rules (D-065) |
+| Architecture | Independent detectors over one snapshot, shared evidence/confidence/risk semantics, future aggregation layer (ARCHITECTURE.md §12) |
+| Rules | CR1–CR5 with modifiers and `O.LIVE_SECRET_FIELD`; EN + ID lexicon |
+| Evaluation discipline | `corpus/cred-dev` (36), `npm run eval:cred`, held-out prerequisites (EVALUATION_PLAN.md §13); development data only |
+| Privacy | Structural fields only, sentinel tests at every layer (D-063, PRIVACY_SECURITY.md §9); no permission change (D-064) |
+| UX | Separate "Passwords and codes · Experimental" section with category, requested action, indicators, confidence, action risk, evidence + Show on page, limitations (D-066) |
+| Tests | Unit, browser and E2E tests for the detector, privacy and regressions |
+
+## M5.2 (proposed, not started): independent held-out credential evaluation
+Independent authoring, double labelling with owner adjudication, preregistration, harness provenance fix (D-059), freeze and a single authorized run (EVALUATION_PLAN.md §13).
 
 ## M4: Hardening, held-out evaluation, demo
 

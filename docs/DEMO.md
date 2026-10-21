@@ -102,3 +102,18 @@ Build and serve as in docs/PRESENTER_GUIDE.md §1 (candidate ZIP `veiltrace-chro
 | N12 | `chrome://settings` → toolbar button | "This page cannot be scanned"; button disabled | Screenshot |
 | N13 | Wi-Fi off; DevTools Network open for the page and the popup; repeat N4, N5, N8 | Same results; no requests caused by VeilTrace; the demo page loads only `style.css` from localhost | Network panel screenshots |
 | N14 | Rehearse the 3-minute script (PRESENTER_GUIDE.md §3) end to end | Finishes within 3 minutes with no failed step | Timing note |
+
+## v0.6.0 credential section (M5.1, experimental): not yet executed
+
+Build a development release from the M5.1 commit (`npm run release`, version 0.6.0 is a proposal, D-070) and load it unpacked. Serve `corpus/cred-dev` with `python3 -m http.server 8082 -d corpus/cred-dev` and open `http://localhost:8082/<scenario>/`. **No row is passed until the owner confirms it.**
+
+| # | Step | Expected | Evidence to record |
+|---|---|---|---|
+| K1 | Extension Details | Version 0.6.0; Permissions empty; no sites listed | Screenshot |
+| K2 | `CD01-en-community-otp-reply/` → scan | "Passwords and codes · Experimental" card first: "Manipulative request for a password or code detected"; Rule CR1; "Asks you to send: one-time code"; limitation "cannot verify who wrote this"; command section "No suspicious instructions…" | Popup screenshot |
+| K3 | K2 → **Show on page** on "6-digit code" | Box inside the second forum reply | Page screenshot |
+| K4 | `CD04-en-overlay-suspension-password-otp/` → type anything into both fields → scan | Suspicious (CR4); "The form submits to another site."; what you typed appears nowhere in the popup | Popup screenshot |
+| K5 | `CN02-en-mfa-code/` → scan | "Sign-in or code requests found, without signs of manipulation." collapsed; no alert | Screenshot |
+| K6 | `CD06-id-komentar-admin-kirim-otp/` in an Indonesian browser, then **EN** | Indonesian credential card, evidence untranslated; switching languages does not rescan | Two screenshots |
+| K7 | `http://localhost:8080/demo/` (M4.4 demo) → scan | ClickFix result as in N4; credential card "No requests for passwords, codes or recovery phrases found…" | Screenshot |
+| K8 | Wi-Fi off, DevTools Network for page and popup, repeat K2 and K4 | Same results; no requests caused by VeilTrace | Network screenshots |

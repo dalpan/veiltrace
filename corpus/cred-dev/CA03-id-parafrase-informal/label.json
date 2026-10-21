@@ -1,0 +1,22 @@
+{
+  "id": "CA03-id-parafrase-informal",
+  "split": "cred-dev",
+  "lang": "id",
+  "category": "adversarial",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://forum.jualbeli.test/t/77",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#p",
+  "description": "Permintaan OTP dengan bahasa sangat informal (\"angka yg barusan masuk\")",
+  "rationale": "Parafrase di luar leksikon.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "CD04-en-overlay-suspension-password-otp",
+  "split": "cred-dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T6",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://news.daily-ledger.test/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m",
+  "description": "Overlay demands password and code under a suspension threat",
+  "rationale": "Credential request under account threat and deadline.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

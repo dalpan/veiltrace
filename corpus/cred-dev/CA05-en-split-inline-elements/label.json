@@ -1,0 +1,22 @@
+{
+  "id": "CA05-en-split-inline-elements",
+  "split": "cred-dev",
+  "lang": "en",
+  "category": "adversarial",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://forum.cameraclub.test/t/5",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#s",
+  "description": "Request split across inline elements",
+  "rationale": "Text joined by the extractor before matching.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "CA01-en-planted-tips-live-field",
+  "split": "cred-dev",
+  "lang": "en",
+  "category": "adversarial",
+  "threatClass": "T6",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://account.mailfolio.test/recover",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#r",
+  "description": "Lure with a planted \"Security tips\" heading and a live recovery-code field",
+  "rationale": "Educational cue planted to lower the result.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

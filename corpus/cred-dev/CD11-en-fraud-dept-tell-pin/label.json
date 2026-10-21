@@ -1,0 +1,22 @@
+{
+  "id": "CD11-en-fraud-dept-tell-pin",
+  "split": "cred-dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T6",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://alerts.securecard.test/case/88",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#f",
+  "description": "Fake fraud department asks to tell the PIN to an agent",
+  "rationale": "PIN disclosed to a person, authority + urgency.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

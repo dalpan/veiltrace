@@ -1,0 +1,22 @@
+{
+  "id": "CD02-en-chat-widget-backup-codes",
+  "split": "cred-dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://shop.northwind.test/help",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#chat",
+  "description": "Chat widget asks the customer to share backup codes",
+  "rationale": "Secret requested to a person in a widget, threat + urgency.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules)",
+  "created": "2026-10-21"
+}
