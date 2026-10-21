@@ -167,3 +167,24 @@ Owner safeguard. A concealed clipboard payload (hidden-copy strong command whose
 
 ### D-048 · Accepted · 2026-10-21 · Potential high-assurance organizational deployment is a planning context only
 VEILTRACE is being developed for a cybersecurity innovation hackathon, and winning projects *may* later be evaluated by organizations such as Satsiber TNI AD. This is a possibility, **not** a confirmed adoption, endorsement, requirement or procurement. The context informs planning (PRODUCT_SPEC.md §9, IMPLEMENTATION_PLAN.md "Potential High-Assurance Deployment"): offline/restricted-network operation, supply-chain security (SBOM, dependency audit), reproducible builds, distribution and update integrity, managed-browser deployment, Indonesian UI, strictly opt-in privacy-preserving reporting, and organizational threat modeling. No centralized monitoring, employee surveillance, privileged endpoint access or military-specific features will be built without explicit requirements and a separate review. No document may describe VEILTRACE as military-grade, certified, approved or endorsed.
+
+### D-049 · Accepted · 2026-10-21 · Indonesian popup UI; language follows the browser UI language
+All popup strings live in bundled EN/ID dictionaries (`src/extension/popup/i18n.ts`). There are no runtime language files and no translation service. Selection is deterministic: `chrome.i18n.getUILanguage()` starting with `id` (or legacy `in`) selects Indonesian, anything else English. EN/ID buttons switch for the current popup only; the choice is not persisted, because persistence would need the `storage` permission. Page evidence is never translated. Modifier explanations are now localized by modifier id rather than taken from the core's English reasons. The detection lexicon and classification are unchanged. E2E tests pin the browser UI language (`--lang`) so they do not depend on the host OS locale.
+
+### D-050 · Accepted · 2026-10-21 · Deterministic release process with integrity verification
+`npm run release` builds the production extension and packages it with a first-party deterministic ZIP writer (sorted entries, `SOURCE_DATE_EPOCH`, fixed permissions), a release manifest and SHA256SUMS. `npm run release:verify` checks integrity and production policy. Two independent clean builds were byte-identical. Checksums provide integrity, **not authenticity**; signed distribution is future work. Release artifacts are git-ignored.
+
+### D-051 · Accepted · 2026-10-21 · Supply-chain reporting; MPL-2.0 dev-only dependency accepted
+CycloneDX SBOMs (toolchain and runtime; the runtime SBOM is empty), license review, lockfile integrity check and `npm audit` via `npm run supply-chain`. Findings on 2026-10-21: 0 vulnerabilities; 2 MPL-2.0 packages (`lightningcss`, via `vitest → vite`), used for testing only and not distributed, so they are accepted and recorded, not suppressed. Policy: any new runtime dependency, or any non-permissive license in distributed code, requires a decision.
+
+### D-052 · Accepted · 2026-10-21 · Extension version 0.4.0
+The UI changed (Indonesian, language switch). Engine versions are unchanged: default `0.1.0-m1`, experimental `0.2.0-rc.1` (not used by the extension).
+
+### D-053 · Accepted · 2026-10-21 · Browser compatibility status
+- Automated: Chromium (Playwright build), and Microsoft Edge 155 (smoke test: loaded and detected a lure).
+- Manual: Google Chrome stable (M3).
+- Branded Chrome 155 ignores `--load-extension`, so it cannot be automated with unpacked builds.
+- Untested: Brave, Opera, Vivaldi, Chrome on Windows/Linux, ChromeOS.
+
+### D-054 · Accepted · 2026-10-21 · Release types, artifact SBOM, no "official" label before signing
+Releases are `development` (default; a dirty tree is allowed and recorded) or `candidate` (`npm run release:candidate`, which refuses a dirty or uncommitted tree). Every release carries a CycloneDX artifact SBOM hash-bound to the ZIP, with no third-party components. `verify-release` enforces the SBOM, the release type and the absence of third-party code markers (e.g. MPL-2.0 tooling). No artifact is called "official" until signed distribution exists (DEPLOYMENT.md §5). The M4.2 working-tree artifact is a development build, not a release.

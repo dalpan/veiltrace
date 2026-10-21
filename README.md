@@ -4,7 +4,7 @@
 
 An offline-first browser security engine that detects contextual social engineering and deceptive instructions in web pages, including pages on legitimate HTTPS domains.
 
-> **Status: M3.** A working Chromium (MV3) extension: click the toolbar button, then **Scan page**. The page is analyzed locally in the tab, and the popup shows the verdict, evidence and Show on page. It is built on the detection core (`src/core`) and DOM extractor (`src/extract`), with an offline evaluation harness (`src/eval`). Accuracy figures so far come from a **synthetic development split only**, not real-world use. See [docs/PROGRESS.md](docs/PROGRESS.md).
+> **Status: M4.2.** A working Chromium (MV3) extension with an English and Indonesian interface: click the toolbar button, then **Scan page**. The page is analyzed locally in the tab, and the popup shows the verdict, evidence and Show on page. It is built on the detection core (`src/core`) and DOM extractor (`src/extract`), with an offline evaluation harness (`src/eval`). Accuracy figures so far come from a **synthetic development split only**, not real-world use. See [docs/PROGRESS.md](docs/PROGRESS.md).
 
 ## What it does
 
@@ -14,7 +14,7 @@ When you click the VeilTrace toolbar button and then **Scan page**, it reads the
 2. wrap that request in a manipulative pretext (fake CAPTCHA, fake error fix, fake account verification),
 3. and are **not** merely quoted, negated, reported or explained (security tutorials, news articles, awareness pages).
 
-Results distinguish an **observed instruction** (e.g. developer docs telling you to run a command) from **suspicious correlation** and **manipulative instruction**. Confidence and action risk are reported separately. Every finding shows the exact text, and **Show on page** highlights the element when it can still be located. Partial scans (very large pages, frames from other sites) are labeled as partial, with reasons. Detection works in English and Indonesian; the UI is in English. VEILTRACE analyzes on demand and does **not** provide real-time protection.
+Results distinguish an **observed instruction** (e.g. developer docs telling you to run a command) from **suspicious correlation** and **manipulative instruction**. Confidence and action risk are reported separately. Every finding shows the exact text, and **Show on page** highlights the element when it can still be located. Partial scans (very large pages, frames from other sites) are labeled as partial, with reasons. Detection works in English and Indonesian, and the popup is available in both (it follows the browser language; EN/ID buttons switch). VEILTRACE analyzes on demand and does **not** provide real-time protection.
 
 ## Install (unpacked, Chrome/Chromium ≥ 110)
 
@@ -37,6 +37,9 @@ npm run check                       # typecheck + lint + all tests
 npm run verify:extension            # production build + manifest/permission/offline/CSP/XSS checks
 npm run build                       # dist/core.mjs, dist/extractor.js and dist/extension
 npm run build:ext:test              # dist/extension-test (E2E only; never distribute)
+npm run release && npm run release:verify   # deterministic ZIP + manifest + SHA256SUMS (docs/RELEASE.md)
+npm run release:repro               # two independent clean builds must match
+npm run supply-chain                # SBOMs, license review, lockfile check, npm audit
 npm run eval -- run --split dev     # offline evaluation on the development split → eval/results/
 npm run eval -- research --split dev
 npm run eval -- perf
@@ -72,6 +75,9 @@ const result = analyze(snapshot); // PageSnapshot → AnalysisResult (pure, dete
 | [EVALUATION_PLAN](docs/EVALUATION_PLAN.md) | Corpus, leakage controls, metrics, baseline |
 | [IMPLEMENTATION_PLAN](docs/IMPLEMENTATION_PLAN.md) | Milestones M1–M7 with acceptance criteria |
 | [DECISIONS](docs/DECISIONS.md) | Decision log |
+| [OPERATOR_GUIDE](docs/OPERATOR_GUIDE.md) | For IT/security staff: results, limits, installation, troubleshooting |
+| [DEPLOYMENT](docs/DEPLOYMENT.md) | Organizational deployment feasibility |
+| [RELEASE](docs/RELEASE.md) | Release process, reproducibility, supply chain |
 | [PROGRESS](docs/PROGRESS.md) | Status log |
 
 ## Planned repository layout

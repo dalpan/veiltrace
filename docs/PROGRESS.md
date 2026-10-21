@@ -4,6 +4,27 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-21 · M4.2 finalization (owner review: conditionally accepted)
+
+- Artifact SBOM (CycloneDX, 0 components, hash-bound to the ZIP) added to every release. Release types `development` / `candidate`; `candidate` refuses dirty trees (tested). No "official" label before signing (D-054).
+- Third-party-code markers (MPL-2.0 `lightningcss`, `node_modules`) are rejected by `verify-release`.
+- RELEASE.md: distributed vs development-only licenses separated; the toolchain SBOM is scoped to the installed macOS/arm64 tree; the reproducibility claim is scoped to macOS/arm64 with Node 26.8.1 and esbuild 0.28.2; signing is a documented future requirement.
+- The M4.2 working-tree artifact (`dirty: true`) is a development build, **not a release**.
+- **Manual Chrome stable v0.4.0 checklist (docs/DEMO.md C1–C12): not yet executed.**
+
+## 2026-10-21 · M4.2 Release engineering, security hardening, high-assurance readiness · **Implemented (accepted)**
+
+**Done**
+- **Supply chain:** `npm run supply-chain` → CycloneDX SBOMs, license review, lockfile check, audit (0 vulnerabilities; MPL-2.0 dev-only flagged and accepted, D-051).
+- **Release:** `npm run release` / `release:verify` / `release:repro` (deterministic ZIP, manifest, SHA256SUMS; D-050). Two clean builds identical.
+- **Indonesian popup UI** with deterministic selection and a session switch (D-049). Extension 0.4.0 (D-052).
+- **Docs:** DEPLOYMENT.md (feasibility), RELEASE.md, OPERATOR_GUIDE.md, THREAT_MODEL §7, PRIVACY_SECURITY §8, DECISIONS D-049 … D-053.
+- **Compatibility:** Edge 155 automated smoke OK; branded Chrome cannot be automated (D-053).
+
+**Not changed:** detection rules, lexicons, modifiers, both engine variants, `corpus/dev`, `corpus/test`. No held-out evaluation.
+
+**Next:** manual v0.4.0 checklist (owner); M4.3 (evaluation freeze) only after approval.
+
 ## 2026-10-21 · M4.1 finalization (owner review: rc1 approved as experimental)
 
 - **Decisions:** P1b, P2-A and R4-β approved as the experimental ruleset `m4.1-rc1` (engine `0.2.0-rc.1`). P2-C is rejected for rc1, not permanently. The default stays `0.1.0-m1` and the extension is unchanged (D-041 … D-044).

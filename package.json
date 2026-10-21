@@ -22,7 +22,12 @@
     "test:browser": "vitest run tests/browser",
     "test:e2e": "vitest run tests/e2e",
     "verify:extension": "npm run build:ext && vitest run tests/e2e/security.test.ts tests/architecture.test.ts tests/extension.test.ts",
-    "manual:fixtures": "node scripts/manual-fixtures.mjs"
+    "manual:fixtures": "node scripts/manual-fixtures.mjs",
+    "release": "node scripts/release.mjs --out release",
+    "release:verify": "node scripts/verify-release.mjs release",
+    "release:repro": "node scripts/repro-check.mjs",
+    "supply-chain": "node scripts/supply-chain.mjs",
+    "release:candidate": "node scripts/release.mjs --out release --candidate"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

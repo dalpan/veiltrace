@@ -15,27 +15,32 @@
       <path d="M7 25 25 7" stroke="var(--brand)" stroke-width="5" stroke-linecap="round"/>
       <path d="M7.5 24.5 24.5 7.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="2.4 2.6"/>
     </svg>
-    <div>
+    <div class="brand-text">
       <h1>VeilTrace</h1>
-      <p class="tagline">Uncover the manipulation behind the page</p>
+      <p id="tagline" class="tagline">Uncover the manipulation behind the page</p>
+    </div>
+    <div class="lang" role="group" aria-labelledby="lang-label">
+      <span id="lang-label" class="visually-hidden">Language</span>
+      <button id="lang-en" type="button" class="lang-btn" lang="en" aria-pressed="true">EN</button>
+      <button id="lang-id" type="button" class="lang-btn" lang="id" aria-pressed="false">ID</button>
     </div>
   </header>
 
   <main>
-    <section class="target" aria-label="Page to scan">
-      <span class="target-label">Page</span>
+    <section class="target" aria-labelledby="target-label">
+      <span id="target-label" class="target-label">Page</span>
       <span id="target-host" class="target-host">…</span>
     </section>
 
     <button id="scan" class="primary" type="button">Scan page</button>
     <p id="status" class="status" role="status" aria-live="polite"></p>
 
-    <section id="result" aria-label="Scan result" hidden></section>
+    <section id="result" aria-live="polite" hidden></section>
   </main>
 
   <footer>
     <details class="limits">
-      <summary>What VeilTrace can and cannot see</summary>
+      <summary id="limits-summary">What VeilTrace can and cannot see</summary>
       <p id="limits"></p>
     </details>
     <p id="meta" class="meta">Runs on this device only. Nothing is sent anywhere.</p>

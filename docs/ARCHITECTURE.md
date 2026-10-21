@@ -146,7 +146,7 @@ Runtime dependencies target: **0**. Everything shipped in the extension is our o
 {
   "manifest_version": 3,
   "name": "VeilTrace",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "minimum_chrome_version": "110",
   "action": { "default_title": "VeilTrace: scan this page", "default_popup": "popup.html", "default_icon": { "16": "…", "32": "…", "48": "…", "128": "…" } },
   "icons": { … },
@@ -178,6 +178,8 @@ Runtime dependencies target: **0**. Everything shipped in the extension is our o
   - First scan, including injection of `content.js` (75 KB): **31–57 ms** on dev fixture pages and **64–211 ms** on the large synthetic pages. Injection takes 14–30 ms, transfer to the popup < 1 ms (13 ms once), and render < 10 ms.
   - Extraction under real extension conditions peaks at **141 ms** (3,000-row table), far below the 1,500 ms budget (D-027 remains provisional until measured on slower hardware).
   - The shop and table pages report `block-budget` partial scans in the popup.
+- **Re-measured at M4.2** (v0.4.0, Indonesian-capable popup): first scan 33–69 ms on fixtures and 63–221 ms on large synthetic pages; peak extraction 143 ms. The UI change added no measurable cost.
+- **Extraction budget (1,500 ms, D-027 provisional):** it is checked every 256 visited nodes, so the walk can overrun the budget by at most that many nodes. It only bounds extraction, not analysis (≈ 100 ms on the largest pages) or injection. The budget has never been reached on the test pages; slower hardware is untested.
 - **Analysis dominates on large pages:** 115 lexicon regexes run on every block. The optimization candidate is a cheap prefilter (keyword set) before the regex pass (M4).
 - `getComputedStyle` is called once per element. `Range.getClientRects()` runs once per non-empty text node.
 - Budgets are in §3.7. The M4 acceptance criterion still requires a p95 on fixtures and on ≥ 3 large real pages saved locally (not done in M2: no third-party page content is stored in the repo).
@@ -227,6 +229,8 @@ Runtime dependencies target: **0**. Everything shipped in the extension is our o
 - Elements inside fixed-position containers (typical lure overlays) get a `position: fixed` box; other elements get an absolutely positioned box in document coordinates.
 - Same-origin frame elements are offset by the frame's position.
 - Limitations: the box does not follow later layout changes or animations; elements inside a frame that is itself inside a fixed container may be misplaced; transformed or clipped ancestors are not accounted for.
+
+**UI language (M4.2, D-049).** The popup renders all text from bundled EN/ID dictionaries. It selects Indonesian when `chrome.i18n.getUILanguage()` is Indonesian; EN/ID buttons switch for the session and re-render from popup state without rescanning. Evidence snippets are page text and stay untranslated (inserted as text nodes with `lang=""`).
 
 **Closed shadow roots.** In the isolated world, `chrome.dom.openOrClosedShadowRoot` is available. Closed-root content is extracted, and a lure inside one is detected (E2E-verified). This resolves the M2 open item.
 

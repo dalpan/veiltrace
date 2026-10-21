@@ -34,14 +34,16 @@ export function extensionIdFor(dir: string): string {
   return [...createHash('sha256').update(dir).digest('hex').slice(0, 32)].map((c) => String.fromCharCode(97 + parseInt(c, 16))).join('');
 }
 
-export async function launchExtension(kind: 'test' | 'prod'): Promise<Loaded> {
+/** `uiLang` pins the browser UI language (the popup follows chrome.i18n.getUILanguage()); tests must not depend on the host OS locale. */
+export async function launchExtension(kind: 'test' | 'prod', uiLang: 'en-US' | 'id' = 'en-US'): Promise<Loaded> {
   const dir = await extensionDir(kind);
   mkdirSync(join(tmpdir(), 'veiltrace-e2e'), { recursive: true });
   const context = await chromium.launchPersistentContext(mkdtempSync(join(tmpdir(), 'veiltrace-e2e', 'profile-')), {
     channel: 'chromium',
     headless: true,
     viewport: { width: 1280, height: 800 },
-    args: [`--disable-extensions-except=${dir}`, `--load-extension=${dir}`],
+    locale: uiLang,
+    args: [`--disable-extensions-except=${dir}`, `--load-extension=${dir}`, `--lang=${uiLang}`],
   });
   const loaded: Loaded = { context, extId: extensionIdFor(dir), dir, served: [], blocked: [], pages: new Map() };
   await context.route(/^https?:\/\//, async (route) => {

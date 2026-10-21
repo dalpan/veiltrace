@@ -1,6 +1,6 @@
 # Threat Model
 
-Status: M0, updated at M1 (modifier-evasion rows) and M2 (measured outcomes, extractor limits) · Owner: research lead
+Status: M0, updated at M1 (modifier-evasion rows), M2 (measured outcomes, extractor limits) and M4.2 (§7 organizational deployment) · Owner: research lead
 
 This document covers two threat surfaces:
 1. **The user-facing threat:** social engineering instructions on web pages, which is what VEILTRACE detects.
@@ -84,3 +84,20 @@ The Microsoft Threat Intelligence write-up (2025-08-21) documents ClickFix at th
 | Supply chain (npm deps) | Minimal runtime dependencies (target: zero). Dev-deps pinned with a lockfile. No CDN loads |
 | Over-permission abuse if the extension is compromised | `activeTab` + `scripting` only. No `<all_urls>`, `tabs`, `webRequest` or `clipboardRead` |
 | Signing key / secrets in the repo | `.gitignore` covers `*.pem`, `*.crx` and `.env`. CI secret scan later (M3) |
+
+## 7. Organizational deployment threats (M4.2)
+
+Scope: VeilTrace deployed in organizations, possibly high-assurance (D-048). Evidence refers to tests or documents in this repository.
+
+| # | Attack scenario | Mitigations (implemented) | Residual risk | Verification evidence |
+|---|---|---|---|---|
+| O1 | **Malicious website manipulates the extension**: forges messages, spoofs `VeiltraceContent`, injects HTML via evidence text, plants selectors, uses strict CSP to break highlighting | No messaging surface (D-035); isolated world; text-only rendering; strict report validation; locator grammar (D-040); CSSOM-styled overlay | The page can still *evade* detection (§5) or detect and remove the highlight overlay | `tests/e2e/security.test.ts` (spoofing, XSS, CSP), `tests/e2e/i18n.test.ts` (XSS in ID mode), `tests/extension.test.ts` (validation, locator grammar) |
+| O2 | **Malicious or compromised extension update** | No auto-update channel exists yet; releases are reproducible and verifiable; the manifest records commit and dirty flag | No signing yet: an attacker who controls the distribution point can replace the ZIP **and** its checksums | `npm run release:verify`, `tests/release.test.ts`; signing is future work (DEPLOYMENT.md §5) |
+| O3 | **Dependency compromise** (build-time npm package) | Zero runtime dependencies; lockfile integrity hashes; pinned dev deps; install scripts not required (`--ignore-scripts`); SBOM; `npm audit`; production bundle scanned for network/eval/messaging identifiers | A compromised build tool (esbuild, TypeScript) could alter the bundle at build time. Bundle checks are heuristic | `release/supply-chain/*`, `scripts/verify-release.mjs` bundle checks, reproducibility across clean builds (a single tampered build environment would diverge) |
+| O4 | **Local modification of release artifacts** (in transit or on disk) | SHA256SUMS + per-file hashes in the release manifest + ZIP CRCs | Integrity only; checksums replaced together with the artifact go undetected without an out-of-band trusted copy | `tests/release.test.ts` (tamper detection: byte flip, repacked file, edited manifest, test-build swap) |
+| O5 | **Insider misuse**: modifying the extension to collect browsing data or report users | Architecture has no network path (CSP `connect-src 'none'`); release verification rejects network identifiers and extra permissions; Apache-2.0 source is reviewable | An insider with signing authority could ship a modified build. That needs organizational controls: two-person review, reproducible build comparison, protected signing key | `verify-release` policy checks; reproducibility check; D-048 (no monitoring features) |
+| O6 | **Browser API changes** (MV3 `scripting`, `activeTab`, `chrome.dom`, `--load-extension` removal) | Minimal API surface; E2E suite on Chromium; manual validation on stable Chrome (M3) and an automated Edge 155 smoke test (M4.2) | Future Chrome/Edge versions could break injection or closed-shadow access; branded Chrome can no longer be automated with unpacked extensions | `tests/e2e/*`; DEPLOYMENT.md §3 automation note |
+| O7 | **Partial scans and unsupported content** exploited to hide lures (huge pages, cross-origin frames, images, closed components, late content) | Explicit partial-scan reasons in the UI (D-033); limitations text in both languages | A lure placed beyond 5,000 blocks, in an image or in a cross-origin frame is missed; the user still sees "Partial scan" for budgets and frames, but **not** for images | `tests/e2e/extension.test.ts` (partial, frames), ARCHITECTURE.md §3.9–3.10 |
+| O8 | **Extension failure or user misunderstanding** ("no findings" read as "safe"; Observed read as "malicious"; confidence vs risk) | Never says "safe"; explicit "not a guarantee"; distinct labels and help text in EN/ID; Operator Guide §3 | Users may still over-trust a clean result; synthetic accuracy does not transfer automatically | `tests/i18n.test.ts` (no "safe"/"aman"), `tests/e2e/i18n.test.ts`, docs/OPERATOR_GUIDE.md |
+| O9 | **Release built from a dirty or unreviewed tree** | The manifest records `dirty: true`; the release process requires clean commits | Operators must check `source.dirty` before distribution | `release-manifest.json` |
+

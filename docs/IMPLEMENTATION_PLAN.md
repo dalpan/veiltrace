@@ -1,6 +1,6 @@
 # Implementation Plan
 
-Status: M1 accepted (`d856fbd`). Held-out split frozen (`407beb0`). M2 accepted (`70c5697`). M3 accepted (`64e632a`, manual production validation recorded in PROGRESS.md). M4.1 accepted: experimental rule set `m4.1-rc1` approved, not default (see PROGRESS.md). M4.2–M4.4 not started (require approval). Every milestone is independently testable and ends with a PROGRESS.md entry. No milestone is started before the previous one's acceptance criteria are met or explicitly waived in DECISIONS.md.
+Status: M1 accepted (`d856fbd`). Held-out split frozen (`407beb0`). M2 accepted (`70c5697`). M3 accepted (`64e632a`, manual production validation recorded in PROGRESS.md). M4.1 accepted (`7088de0`, experimental rule set `m4.1-rc1`, not default). M4.2 accepted (release engineering, bilingual UI). M4.3+ not started (requires approval). Every milestone is independently testable and ends with a PROGRESS.md entry. No milestone is started before the previous one's acceptance criteria are met or explicitly waived in DECISIONS.md.
 
 ## Milestone overview
 
@@ -139,18 +139,31 @@ None of the items below is implemented. They are candidates for M4.2+ and requir
 
 | # | Consideration | Proposed milestone | Notes |
 |---|---|---|---|
-| 1 | Offline and restricted-network deployment | **M4.2** | Already true at runtime (no network). Document installation from an internal artifact store; verify the build works with an offline npm cache |
-| 2 | Supply-chain security: SBOM, dependency audit | **M4.2** | Generate a CycloneDX/SPDX SBOM for the build toolchain; `npm audit` plus license review. Runtime dependencies are 0, so the shipped attack surface is our code only |
-| 3 | Reproducible builds and artifact integrity | **M4.2** | Deterministic esbuild output, pinned toolchain, published SHA-256 of `dist/extension` and the packaged zip |
-| 4 | Secure distribution and updates | M4.3 | Signed CRX via an internal update URL, or Chrome Web Store unlisted; version pinning; rollback |
-| 5 | Managed-browser deployment feasibility | M4.3 | Chrome enterprise policies (`ExtensionInstallForcelist`, `ExtensionSettings`), as a documentation and feasibility test only |
-| 6 | Indonesian detection and UI | **M4.2** (UI strings) | Detection is bilingual already. Add Indonesian popup strings and extend the informal-Indonesian lexicon (D44) with dev evidence |
+| 1 | Offline and restricted-network deployment | **M4.2: done** | Runtime offline; offline build via `npm ci --offline` verified; DEPLOYMENT.md §2 |
+| 2 | Supply-chain security: SBOM, dependency audit | **M4.2: done** | CycloneDX SBOMs, license review (2 MPL-2.0 dev-only, accepted), lockfile check, `npm audit` 0 findings; RELEASE.md §4 |
+| 3 | Reproducible builds and artifact integrity | **M4.2: done** | Deterministic ZIP + manifest + SHA256SUMS + verifier; two clean builds identical; RELEASE.md §3 |
+| 4 | Secure distribution and updates | M4.3 (assessed in DEPLOYMENT.md §5) | Signed CRX via an internal update URL, or Chrome Web Store unlisted; version pinning; rollback |
+| 5 | Managed-browser deployment feasibility | M4.2 assessment done (DEPLOYMENT.md §3); end-to-end test M4.3 | Chrome enterprise policies (`ExtensionInstallForcelist`, `ExtensionSettings`), as a documentation and feasibility test only |
+| 6 | Indonesian detection and UI | **M4.2: UI done** | Indonesian popup (D-049). The informal-Indonesian lexicon gap (D44) remains for a future controlled rule revision |
 | 7 | Privacy-preserving incident reporting (strictly opt-in) | M4.4+ | User-initiated local export of a redacted finding (no URL query, no page text beyond evidence snippets). Any transmission needs a separate design and review |
-| 8 | Organizational threat model and security review | **M4.2** (threat model update) | Extend THREAT_MODEL.md with the managed-deployment adversary, insider misuse and update-channel compromise |
-| 9 | Coverage limitations and failure modes | **M4.2** | One operator-facing page: what VEILTRACE cannot see, partial scans, false-positive and false-negative classes, known evasions |
-| 10 | Compatibility with organizational security policies | M4.3 | Behavior under strict CSP, disabled developer mode, restricted extension permissions, proxy-only networks |
+| 8 | Organizational threat model and security review | **M4.2: threat model done** | THREAT_MODEL.md §7 (O1–O9). An independent security review remains future work |
+| 9 | Coverage limitations and failure modes | **M4.2: done** | docs/OPERATOR_GUIDE.md |
+| 10 | Compatibility with organizational security policies | M4.2 assessment (DEPLOYMENT.md §7); testing M4.3 | Behavior under strict CSP, disabled developer mode, restricted extension permissions, proxy-only networks |
 
 Out of scope unless separately required and reviewed: centralized monitoring, employee surveillance, privileged endpoint access, military-specific operational features.
+
+## M4.2: Release engineering, security hardening, high-assurance readiness (2026-10-21, accepted)
+
+| Owner requirement | Result |
+|---|---|
+| Supply chain | CycloneDX SBOMs (toolchain 150 components, runtime 0); `npm audit` 0 findings; license review (MPL-2.0 ×2 dev-only, flagged and accepted); lockfile 199/199 with integrity, registry-only, dev-only; runtime deps 0 (D-051) |
+| Reproducible release | Deterministic ZIP, release manifest, SHA256SUMS, verifier. Two independent clean builds byte-identical; `unzip -t` clean (D-050) |
+| Indonesian UI | Full EN/ID popup, deterministic selection, session switch, evidence untranslated; tests in both languages (D-049) |
+| Deployment feasibility | docs/DEPLOYMENT.md: implemented vs feasibility vs future |
+| Threat model | THREAT_MODEL.md §7 (O1–O9) with evidence |
+| Operator guide | docs/OPERATOR_GUIDE.md |
+| Performance / compatibility | Re-measured (no regression); Edge 155 automated smoke OK; branded Chrome automation impossible (D-053) |
+| Detection / held-out | Unchanged; not evaluated |
 
 ## M4: Hardening, held-out evaluation, demo
 

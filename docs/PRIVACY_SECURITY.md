@@ -1,6 +1,6 @@
 # Privacy & Security
 
-Status: M0 commitments; verified for the core (M1), the extractor/harness (M2) and the Chromium extension (M3, §7). Each one has a verification method that must hold before any release. **M1 (core only):** zero runtime dependencies, and a test asserts the esbuild core bundle contains no network or dynamic-code identifiers. The extension-level checks (P1 b/c, P4) apply from M3, when an extension exists.
+Status: M0 commitments; verified for the core (M1), the extractor/harness (M2), the Chromium extension (M3, §7) and release engineering (M4.2, §8). Each one has a verification method that must hold before any release. **M1 (core only):** zero runtime dependencies, and a test asserts the esbuild core bundle contains no network or dynamic-code identifiers. The extension-level checks (P1 b/c, P4) apply from M3, when an extension exists.
 
 ## 1. Data handling commitments
 
@@ -82,4 +82,14 @@ Residual: the extractor runs in the page's **main world** in tests (`page.evalua
 - The real toolbar click that grants `activeTab` cannot be automated in Playwright; it is covered by the manual checklist in `docs/DEMO.md`.
 - Chrome on other OSes and the non-headless UI were not tested.
 - The overlay element is visible to page scripts (they could detect or remove it). It contains no text and no extension data.
+
+## 8. M4.2 verification (release engineering and Indonesian UI)
+
+| Claim | Verification |
+|---|---|
+| Released artifacts are exactly what was built | `npm run release:verify`: SHA256SUMS, per-file hashes, ZIP CRCs. Tamper tests in `tests/release.test.ts` |
+| Released artifacts keep production permissions and no test code | `verify-release` policy checks (permissions, no host permissions, no test build, `connect-src 'none'`, no network/eval/messaging identifiers) |
+| No runtime third-party code | Runtime SBOM has 0 components; no `node_modules` imports in shipped sources |
+| Indonesian UI does not weaken rendering safety | Dictionaries are static strings. Page text is still inserted only as text nodes. XSS test in Indonesian mode (`tests/e2e/i18n.test.ts`) |
+| Language selection does not use the network or storage | `chrome.i18n.getUILanguage()` only; no persistence (no `storage` permission) |
 
