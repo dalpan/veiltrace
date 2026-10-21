@@ -19,7 +19,7 @@ import { runScenario, scored, type ScenarioRun } from './runner.js';
 import { routeScenario, VIEWPORT, type RequestLog } from './serve.js';
 import { m41Variants, researchVariants, SYSTEMS, type SystemDef } from './systems.js';
 import { analyze } from '../core/analyze.js';
-import { ENGINE_VERSION } from '../core/constants.js';
+import { ENGINE_VERSION, ENGINE_VERSION_M1 } from '../core/constants.js';
 import { EXTRACTOR_VERSION } from '../extract/extract.js';
 
 const ROOT = 'corpus';
@@ -93,7 +93,7 @@ async function run(split: Split): Promise<void> {
   const runs = await runAll(browser, split, SYSTEMS).finally(() => browser.close());
   const metrics = metricsFor(runs, SYSTEMS);
   const scenarios = runs.map((r) => r.scenario);
-  const meta = { split, engineVersion: ENGINE_VERSION, extractorVersion: EXTRACTOR_VERSION, systems: SYSTEMS.map(({ id, description }) => ({ id, description })) };
+  const meta = { split, engineVersion: ENGINE_VERSION, baselineEngineVersion: ENGINE_VERSION_M1, extractorVersion: EXTRACTOR_VERSION, systems: SYSTEMS.map(({ id, description }) => ({ id, description })) };
 
   // Deterministic part (no timings): byte-identical across runs on the same commit.
   write(`${split}.json`, {
@@ -152,14 +152,14 @@ async function research(): Promise<void> {
   const browser = await chromium.launch();
   try {
     const semantic = await runAll(browser, 'dev', [...SYSTEMS, ...variants]);
-    const coarse = await runAll(browser, 'dev', [{ id: 'coarse-containers', description: 'extractor containerStrategy=coarse', run: (s) => analyze(s) }], { containerStrategy: 'coarse' });
+    const coarse = await runAll(browser, 'dev', [{ id: 'coarse-containers', description: 'extractor containerStrategy=coarse (M1 table)', run: (s) => analyze(s, { ruleset: 'm1' }) }], { containerStrategy: 'coarse' });
     const metrics = { ...metricsFor(semantic, [...SYSTEMS, ...variants]), 'coarse-containers': computeMetrics(scored(coarse, 'coarse-containers')) };
     const changed = (id: string, runs: readonly ScenarioRun[]): string[] => runs
-      .filter((r) => r.outcomes[id]?.verdict !== semantic.find((s) => s.scenario.label.id === r.scenario.label.id)?.outcomes.veiltrace?.verdict)
-      .map((r) => `${r.scenario.label.id}: ${semantic.find((s) => s.scenario.label.id === r.scenario.label.id)?.outcomes.veiltrace?.verdict} → ${r.outcomes[id]?.verdict}`);
+      .filter((r) => r.outcomes[id]?.verdict !== semantic.find((s) => s.scenario.label.id === r.scenario.label.id)?.outcomes['veiltrace-m1']?.verdict)
+      .map((r) => `${r.scenario.label.id}: ${semantic.find((s) => s.scenario.label.id === r.scenario.label.id)?.outcomes['veiltrace-m1']?.verdict} → ${r.outcomes[id]?.verdict}`);
     const diffs: Record<string, string[]> = Object.fromEntries([...variants.map((v) => [v.id, changed(v.id, semantic)]), ['coarse-containers', changed('coarse-containers', coarse)]]);
-    write('dev.research.json', { engineVersion: ENGINE_VERSION, metrics, verdictChangesVsVeiltrace: diffs });
-    write('dev.research.md', ['# Dev research variants (not the accepted model)', '', systemsTable(metrics), '', '## Verdict changes vs VEILTRACE (M1)', '',
+    write('dev.research.json', { engineVersion: ENGINE_VERSION_M1, note: 'Research variants are defined on the M1 table and compared against veiltrace-m1.', metrics, verdictChangesVsVeiltraceM1: diffs });
+    write('dev.research.md', ['# Dev research variants (not the accepted model)', '', systemsTable(metrics), '', '## Verdict changes vs veiltrace-m1 (M1 baseline)', '',
       ...Object.entries(diffs).map(([k, d]) => `- **${k}**: ${d.length === 0 ? 'no change' : d.join('; ')}`), ''].join('\n'));
     console.log(`research: ${Object.keys(metrics).length} systems → ${OUT}/dev.research.{json,md}`);
   } finally {
@@ -203,7 +203,7 @@ async function refine(): Promise<void> {
   }
   const scenarios = runs.map((r) => ({ id: r.scenario.label.id, truth: r.scenario.label.truth, expectedClass: r.scenario.label.expectedClass,
     verdicts: Object.fromEntries(variants.map((v) => [v.id, r.outcomes[v.id]?.verdict])) }));
-  write('dev.m41.json', { engineVersion: ENGINE_VERSION, composition: composition(runs.map((r) => r.scenario)), metrics, changesVsM3: changes, contextSignals: ctxTable, scenarios });
+  write('dev.m41.json', { engineVersion: ENGINE_VERSION_M1, composition: composition(runs.map((r) => r.scenario)), metrics, changesVsM3: changes, contextSignals: ctxTable, scenarios });
   write('dev.m41.md', ['# M4.1 dev comparison (development split only; synthetic)', '', `Composition: ${Object.entries(composition(runs.map((r) => r.scenario))).map(([k, n]) => `${k}=${n}`).join(', ')}`, '',
     systemsTable(metrics), '', '## Verdict changes vs M3 baseline', '',
     ...Object.entries(changes).map(([k, d]) => `- **${k}**: ${d.length === 0 ? 'no change' : ''}\n${d.map((x) => `  - ${x}`).join('\n')}`), '',

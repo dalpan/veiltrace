@@ -54,7 +54,7 @@ Automation note: branded Google Chrome 155 ignores `--load-extension`, so the au
 
 ## 6. Organizational configuration management
 - Current: none needed; behavior is fixed by the build.
-- Possible future managed settings (each needs a decision): UI language override; enabling the experimental ruleset for evaluation groups only; disabling "Show on page" for kiosk use. Reporting endpoints are explicitly excluded.
+- Possible future managed settings (each needs a decision): UI language override; selecting a non-default ruleset for evaluation groups only; disabling "Show on page" for kiosk use. Reporting endpoints are explicitly excluded.
 
 ## 7. Compatibility with organizational security policies
 

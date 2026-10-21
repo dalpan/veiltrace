@@ -1,6 +1,7 @@
 import { spawnSync } from 'node:child_process';
 import { describe, expect, it } from 'vitest';
 import { computeMetrics, percentile, wilson, type ScoredScenario } from '../src/eval/metrics.js';
+import { fmtRate } from '../src/eval/report.js';
 import { pageLevel, SYSTEMS } from '../src/eval/systems.js';
 import { inContainer, snapshot } from './fixtures/build.js';
 
@@ -9,6 +10,12 @@ describe('wilson interval', () => {
     expect(wilson(12, 14)).toEqual({ k: 12, n: 14, value: 0.8571, ci95: [0.6006, 0.9599] });
     expect(wilson(0, 22).ci95).toEqual([0, 0.1487]);
     expect(wilson(0, 0)).toEqual({ k: 0, n: 0, value: null, ci95: null });
+  });
+
+  it('formats percentages from k/n without double rounding', () => {
+    expect(wilson(1, 29).value).toBe(0.0345);
+    expect(fmtRate(wilson(1, 29))).toBe('3.4% (1/29; 95% CI 0.6%–17.2%)');
+    expect(fmtRate(wilson(0, 0))).toBe('– (0/0)');
   });
 });
 

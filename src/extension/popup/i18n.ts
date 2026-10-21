@@ -1,7 +1,7 @@
 // UI strings in English and Indonesian, bundled in popup.js (no runtime language files, no translation service).
 // Page evidence is never translated. Never says "safe". Severity, confidence and completeness stay distinct.
 import type { ScanGap } from '../../core/coverage.js';
-import type { ActionRisk, Classification, Level, ModifierId, RuleId, SignalId, Verdict } from '../../core/types.js';
+import type { ActionRisk, Classification, Level, ModifierId, OverrideId, RuleId, SignalId, Verdict } from '../../core/types.js';
 
 export type Lang = 'en' | 'id';
 export type HighlightKey = 'highlighted' | 'invalid-locator' | 'not-found' | 'frame-inaccessible' | 'not-visible' | 'failed';
@@ -47,6 +47,12 @@ export interface Messages {
   loweredFrom: (cls: string) => string;
   contextPrefix: string;
   modifier: Record<ModifierId, string>;
+  override: Record<OverrideId, string>;
+  overrideCapped: string;
+  contextSetAside: string;
+  overrideEvidence: string;
+  moreEvidence: (n: number) => string;
+  moreFindings: (n: number) => string;
   errors: {
     noPageTitle: string; noPageDetail: string;
     restrictedTitle: string; restrictedDetail: string;
@@ -144,6 +150,15 @@ const EN: Messages = {
     'C.CODE_EXAMPLE': 'the instruction is a code example inside an article.',
     'C.PROCEDURAL': 'the instruction is a step in a procedural document.',
   },
+  override: {
+    'O.CONCEALED_PAYLOAD': 'Not lowered: this part of the page also places hidden text on your clipboard, which a quotation or tutorial would not do.',
+    'O.VERIFICATION_GATE': 'Not lowered: the instruction sits in a short verification dialog addressed to you.',
+  },
+  overrideCapped: 'Lowered by at most one level: the instruction sits in a short verification dialog addressed to you.',
+  contextSetAside: 'Context set aside',
+  overrideEvidence: 'Supporting evidence',
+  moreEvidence: (n) => `${n} more evidence item(s) not shown.`,
+  moreFindings: (n) => `${n} more finding(s) not shown (display limit).`,
   errors: {
     noPageTitle: 'No page to scan', noPageDetail: 'Open a web page, then click the VeilTrace button again.',
     restrictedTitle: 'This page cannot be scanned',
@@ -244,6 +259,15 @@ const ID: Messages = {
     'C.CODE_EXAMPLE': 'instruksi adalah contoh kode di dalam artikel.',
     'C.PROCEDURAL': 'instruksi adalah langkah dalam dokumen prosedural.',
   },
+  override: {
+    'O.CONCEALED_PAYLOAD': 'Tidak diturunkan: bagian halaman ini juga menaruh teks tersembunyi di clipboard Anda, sesuatu yang tidak dilakukan kutipan atau tutorial.',
+    'O.VERIFICATION_GATE': 'Tidak diturunkan: instruksi berada di dialog verifikasi singkat yang ditujukan kepada Anda.',
+  },
+  overrideCapped: 'Diturunkan paling banyak satu tingkat: instruksi berada di dialog verifikasi singkat yang ditujukan kepada Anda.',
+  contextSetAside: 'Konteks yang dikesampingkan',
+  overrideEvidence: 'Bukti pendukung',
+  moreEvidence: (n) => `${n} bukti lainnya tidak ditampilkan.`,
+  moreFindings: (n) => `${n} temuan lainnya tidak ditampilkan (batas tampilan).`,
   errors: {
     noPageTitle: 'Tidak ada halaman untuk dipindai', noPageDetail: 'Buka sebuah halaman web, lalu klik tombol VeilTrace lagi.',
     restrictedTitle: 'Halaman ini tidak dapat dipindai',

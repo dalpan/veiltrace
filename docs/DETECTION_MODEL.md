@@ -1,6 +1,6 @@
 # Detection Model
 
-Status: M1 model is still the **default** (engine `0.1.0-m1`; equivalence with commit `d856fbd` re-verified at M4.1 on all unit fixtures and all 50 extracted dev snapshots). M4.1 adds the owner-approved **experimental** rule set `ruleset: 'm4.1-rc1'` (engine `0.2.0-rc.1`, §11). It is not the default, not used by the extension and not frozen (D-041). M2 added research-only `AnalyzeOptions` (§9) and measured the model on the dev split. Rule decisions after the M2 review are in §10: P1 is accepted for a future revision (not implemented) and P2 is rejected in its current form.
+Status: since M4.3A the **default** engine is `0.2.0` = the M1 model (§1–§8) plus the M4.1 rule set `m4.1` (P1b + P2-A + R4-β, §11), owner-adopted unchanged from the M4.1 candidate `0.2.0-rc.1` (D-055). This is the engine frozen for held-out evaluation v1 (EVAL_PREREGISTRATION.md). The M1 model stays selectable with `analyze(snapshot, { ruleset: 'm1' })` (engine `0.1.0-m1`); baselines and ablations use it. M2 added research-only `AnalyzeOptions` (§9) and measured the model on the dev split. Rule decisions after the M2 review are in §10; the M4.1 refinement is in §11.
 
 ## 1. Design goals
 
@@ -119,13 +119,13 @@ Matching runs on a normalized copy. Evidence always uses the original text.
 
 ## 9. Research options (M2, `AnalyzeOptions`)
 
-`analyze(snapshot, options?)`. Omitting `options`, or passing `{}`, reproduces the M1 model exactly; a test asserts deep equality on all unit fixtures. The options exist so that baselines and ablations run on identical input:
+`analyze(snapshot, options?)`. *Since M4.3A (D-055), omitting `options` runs engine 0.2.0; the M1 model is `{ ruleset: 'm1' }`, and the sentences below about "omitting options" now apply to that path.* `ruleset` selects `'m4.1'` (default; `'m4.1-rc1'` is an alias) or `'m1'`; the other options apply on top of the selected rule set. Omitting `options`, or passing `{}`, reproduced the M1 model exactly; a test asserts deep equality on all unit fixtures. The options exist so that baselines and ablations run on identical input:
 - `windowBlocks` (default 8; `Infinity` = whole region)
 - `contextModifiers` (default true)
 - `negation` (default true)
 - `experimental.r4MinWeakFamilies`, `experimental.r4ExcludeAuthorityOnly`, `experimental.noDemotionInDialogs`, which are candidate rule changes under evaluation (§10)
 
-Production callers (the M3 extension) must use the defaults (D-028).
+Production callers (the extension) must use the defaults (D-028, D-055).
 
 ## 10. M2 findings and proposed changes (dev split only; NOT applied)
 
@@ -143,7 +143,9 @@ Evidence: `eval/results/dev.research.md`. The dev split deliberately contains th
 
 For the record only: P1 + P2 combined on dev gave TP 14, FP 2, TN 20, FN 0. This is tuned on dev, P2 is rejected, and it must not be cited as a performance claim.
 
-## 11. M4.1 controlled refinement (dev split only; experimental rule set `m4.1-rc1`, approved as experimental, not default)
+## 11. M4.1 controlled refinement (dev split only; rule set `m4.1`, default since M4.3A)
+
+Developed and approved at M4.1 as the experimental candidate `m4.1-rc1` (engine `0.2.0-rc.1`); adopted unchanged as the default engine `0.2.0` at M4.3A (D-055). "rc1" below refers to this rule set.
 
 Evidence: `eval/results/dev.m41.{json,md}` (`npm run eval -- refine --split dev`). The dev split grew from 36 to 50 scenarios (D37–D50). The new scenarios were written **before** the candidates were implemented, and include benign counterexamples aimed at the candidates. The held-out split was not used.
 
@@ -165,7 +167,7 @@ Overrides are explicit in the output (`Finding.overrides[]` with id, effect, sup
 | System | TP | FP | TN | FN | Precision | Recall | Hard-neg FPR |
 |---|---|---|---|---|---|---|---|
 | M3 baseline (M1 model) | 16 | 6 | 23 | 5 | 72.7% (16/22) | 76.2% (16/21) | 20.7% (6/29) |
-| P1 | 15 | 4 | 25 | 6 | 79.0% | 71.4% | 13.8% (4/29) |
+| P1 | 15 | 4 | 25 | 6 | 78.9% | 71.4% | 13.8% (4/29) |
 | P1b | 16 | 4 | 25 | 5 | 80.0% | 76.2% | 13.8% (4/29) |
 | P2-A | 16 | 6 | 23 | 5 | 72.7% | 76.2% | 20.7% |
 | P2-B | 19 | 7 | 22 | 2 | 73.1% | 90.5% | 24.1% (7/29) |

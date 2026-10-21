@@ -17,7 +17,7 @@ npm run supply-chain -- --offline   # same without npm audit (registry access)
 | File | Purpose |
 |---|---|
 | `veiltrace-chromium-<version>.zip` | Production build (`dist/extension` layout): manifest, popup, content script, icons |
-| `release-manifest.json` | Product, extension version, default and experimental engine versions, extractor version, source commit and dirty flag, `SOURCE_DATE_EPOCH`, toolchain (Node, esbuild), permissions, per-file SHA-256 and size, artifact SHA-256 |
+| `release-manifest.json` | Product, extension version, default engine version and ruleset, the M1 baseline engine version (not used by the extension), extractor version, source commit and dirty flag, `SOURCE_DATE_EPOCH`, toolchain (Node, esbuild), permissions, per-file SHA-256 and size, artifact SHA-256 |
 | `veiltrace-chromium-<version>.cdx.json` | **Artifact SBOM** (CycloneDX 1.5): the distributed extension, Apache-2.0, SHA-256 of the ZIP, source commit, `components: []` (no third-party code) |
 | `SHA256SUMS` | SHA-256 of the ZIP, the artifact SBOM and the release manifest (`shasum -a 256 -c` compatible) |
 

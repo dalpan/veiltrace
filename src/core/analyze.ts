@@ -1,5 +1,5 @@
 // Entry point: PageSnapshot → AnalysisResult. Pure and deterministic; never reads url or title.
-import { ENGINE_VERSION, ENGINE_VERSION_M41_RC, MAX_AUX_CHARS, MAX_AUX_SOURCES, MAX_BLOCK_CHARS, MAX_BLOCKS } from './constants.js';
+import { ENGINE_VERSION, ENGINE_VERSION_M1, MAX_AUX_CHARS, MAX_AUX_SOURCES, MAX_BLOCK_CHARS, MAX_BLOCKS } from './constants.js';
 import { findCandidates, RULE_RANK, readingOrder, type Candidate } from './correlate.js';
 import { applyModifiers, TIERS, type HeadingMemo, type ScoredCandidate } from './modifiers.js';
 import { normalize } from './normalize.js';
@@ -115,16 +115,16 @@ function refKey(r: SourceRef): string {
   return r.type === 'block' ? `b:${r.blockId}` : r.type === 'hiddenCopy' ? `h:${r.candidateId}` : `t:${r.triggerId}`;
 }
 
-/** The M4.1 candidate rule set (D-041). Placeholder flags are set from the M4.1 dev evaluation. */
-export const M41_RC1: NonNullable<AnalyzeOptions['experimental']> = {
+/** The M4.1 rule set approved at M4.1 (D-041) and adopted as the production default in M4.3A (D-055). */
+export const M41_RULESET: NonNullable<AnalyzeOptions['experimental']> = {
   r4AuthorityOnlyUnlessConcealed: true,
   concealedPayloadOverride: true,
   proceduralDocModifier: true,
 };
 
 function resolveOptions(options: AnalyzeOptions): AnalyzeOptions {
-  if (options.ruleset !== 'm4.1-rc1') return options;
-  return { ...options, experimental: { ...M41_RC1, ...options.experimental } };
+  if (options.ruleset === 'm1') return options;
+  return { ...options, experimental: { ...M41_RULESET, ...options.experimental } };
 }
 
 /** Strong-command observations in hidden-copy sources whose payload text is not visible anywhere on the page. */
@@ -197,7 +197,7 @@ export function analyze(snapshot: PageSnapshot, rawOptions: AnalyzeOptions = {})
   for (const f of findings) if (verdict === 'none' || TIERS.indexOf(f.classification) > TIERS.indexOf(verdict)) verdict = f.classification;
 
   return {
-    engineVersion: options.ruleset === 'm4.1-rc1' ? ENGINE_VERSION_M41_RC : ENGINE_VERSION,
+    engineVersion: options.ruleset === 'm1' ? ENGINE_VERSION_M1 : ENGINE_VERSION,
     schemaVersion: 1,
     verdict,
     findings,

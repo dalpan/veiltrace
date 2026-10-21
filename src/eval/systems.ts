@@ -21,27 +21,34 @@ export function pageLevel(s: PageSnapshot): PageSnapshot {
 
 const PAGE_WIDE: AnalyzeOptions = { windowBlocks: Number.POSITIVE_INFINITY };
 
+const M1 = { ruleset: 'm1' } as const;
+
+/**
+ * 'veiltrace' is the production engine (0.2.0). B0 and the ablations keep their M2 definitions on the M1
+ * decision table (ruleset 'm1') so the baseline is unchanged by the M4.3A adoption (EVAL_PREREGISTRATION.md).
+ */
 export const SYSTEMS: readonly SystemDef[] = [
-  { id: 'veiltrace', description: 'M1 model: region-local windows (K=8) + negation + context modifiers', run: (s) => analyze(s) },
+  { id: 'veiltrace', description: 'Production engine 0.2.0 (ruleset m4.1): region-local windows (K=8) + negation + context modifiers + P1b/P2-A/R4-beta', run: (s) => analyze(s) },
+  { id: 'veiltrace-m1', description: 'M1 baseline engine 0.1.0-m1 (ruleset m1)', run: (s) => analyze(s, M1) },
   {
-    id: 'B0', description: 'Baseline: page-level co-occurrence, same signals and R1–R5 table, no negation, no context modifiers',
-    run: (s) => analyze(pageLevel(s), { ...PAGE_WIDE, negation: false, contextModifiers: false }),
+    id: 'B0', description: 'Baseline: page-level co-occurrence, same signals and M1 R1–R5 table, no negation, no context modifiers',
+    run: (s) => analyze(pageLevel(s), { ...M1, ...PAGE_WIDE, negation: false, contextModifiers: false }),
   },
-  { id: 'A1-page+context', description: 'Ablation: page-level, with negation and context modifiers', run: (s) => analyze(pageLevel(s), PAGE_WIDE) },
-  { id: 'A2-region-only', description: 'Ablation: region-local, no negation, no context modifiers', run: (s) => analyze(s, { negation: false, contextModifiers: false }) },
+  { id: 'A1-page+context', description: 'Ablation (M1 table): page-level, with negation and context modifiers', run: (s) => analyze(pageLevel(s), { ...M1, ...PAGE_WIDE }) },
+  { id: 'A2-region-only', description: 'Ablation (M1 table): region-local, no negation, no context modifiers', run: (s) => analyze(s, { ...M1, negation: false, contextModifiers: false }) },
 ];
 
 /** Dev-only research variants (IMPLEMENTATION_PLAN.md M2 R-1…R-3). Never evaluated on the test split. */
 export function researchVariants(): SystemDef[] {
   const ks = [2, 4, 6, 8, 12, 16, Number.POSITIVE_INFINITY];
   return [
-    ...ks.map((k) => ({ id: `K=${k === Number.POSITIVE_INFINITY ? '∞' : k}`, description: `window ${k} blocks`, run: (s: PageSnapshot) => analyze(s, { windowBlocks: k }) })),
-    { id: 'R4:minFamilies=2', description: 'R4 needs ≥ 2 weak pretext families', run: (s) => analyze(s, { experimental: { r4MinWeakFamilies: 2 } }) },
-    { id: 'R4:noAuthorityOnly', description: 'R4 ignores authority-only pretext', run: (s) => analyze(s, { experimental: { r4ExcludeAuthorityOnly: true } }) },
-    { id: 'MOD:noDemotionInDialogs', description: 'No context demotion when all evidence is in dialogs/overlays', run: (s) => analyze(s, { experimental: { noDemotionInDialogs: true } }) },
+    ...ks.map((k) => ({ id: `K=${k === Number.POSITIVE_INFINITY ? '∞' : k}`, description: `window ${k} blocks (M1 table)`, run: (s: PageSnapshot) => analyze(s, { ...M1, windowBlocks: k }) })),
+    { id: 'R4:minFamilies=2', description: 'R4 needs ≥ 2 weak pretext families', run: (s) => analyze(s, { ...M1, experimental: { r4MinWeakFamilies: 2 } }) },
+    { id: 'R4:noAuthorityOnly', description: 'R4 ignores authority-only pretext', run: (s) => analyze(s, { ...M1, experimental: { r4ExcludeAuthorityOnly: true } }) },
+    { id: 'MOD:noDemotionInDialogs', description: 'No context demotion when all evidence is in dialogs/overlays', run: (s) => analyze(s, { ...M1, experimental: { noDemotionInDialogs: true } }) },
     {
       id: 'COMBINED', description: 'R4:noAuthorityOnly + MOD:noDemotionInDialogs',
-      run: (s) => analyze(s, { experimental: { r4ExcludeAuthorityOnly: true, noDemotionInDialogs: true } }),
+      run: (s) => analyze(s, { ...M1, experimental: { r4ExcludeAuthorityOnly: true, noDemotionInDialogs: true } }),
     },
   ];
 }
@@ -49,9 +56,9 @@ export function researchVariants(): SystemDef[] {
 /** M4.1 candidates (dev only). Each variant changes exactly what its id says relative to the M3 baseline. */
 export function m41Variants(): SystemDef[] {
   const v = (id: string, description: string, experimental: NonNullable<AnalyzeOptions['experimental']>): SystemDef =>
-    ({ id, description, run: (s: PageSnapshot) => analyze(s, { experimental }) });
+    ({ id, description, run: (s: PageSnapshot) => analyze(s, { ...M1, experimental }) });
   return [
-    { id: 'M3-baseline', description: 'Accepted M1 model as shipped in M3', run: (s) => analyze(s) },
+    { id: 'M3-baseline', description: 'Accepted M1 model as shipped in M3', run: (s) => analyze(s, M1) },
     v('P1', 'R4 ignores authority-only pretext', { r4ExcludeAuthorityOnly: true }),
     v('P1b', 'P1, unless the region stages a concealed clipboard payload', { r4AuthorityOnlyUnlessConcealed: true }),
     v('P2-A', 'Concealed clipboard payload suppresses contextual demotion', { concealedPayloadOverride: true }),
@@ -64,6 +71,6 @@ export function m41Variants(): SystemDef[] {
     v('P1b+P2-A+P2-C+R4-beta', 'Conservative combination plus gate cap', {
       r4AuthorityOnlyUnlessConcealed: true, concealedPayloadOverride: true, verificationGateOverride: 'cap1', proceduralDocModifier: true,
     }),
-    { id: 'm4.1-rc1', description: 'Recommended rule set preset (ruleset: m4.1-rc1)', run: (s) => analyze(s, { ruleset: 'm4.1-rc1' }) },
+    { id: 'm4.1-rc1', description: 'M4.1 rule set (now the production default, engine 0.2.0)', run: (s) => analyze(s, { ruleset: 'm4.1' }) },
   ];
 }

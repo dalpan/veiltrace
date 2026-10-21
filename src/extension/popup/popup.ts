@@ -82,7 +82,13 @@ function findingCard(f: FindingSummary): HTMLElement {
     h('p', { class: 'explain' }, m.rule[f.ruleId]),
     h('p', { class: 'risk' }, m.actionRisk[f.actionRisk]),
     f.modifiers.length > 0 && h('p', { class: 'context' }, `${demoted ? m.loweredFrom(m.classification[f.ruleClassification]) : m.contextPrefix}${context}`),
+    ...f.overrides.map((o, j) => h('div', { class: 'override', 'data-override': o.id },
+      h('p', { class: 'context' }, o.effect === 'capped-at-1' ? m.overrideCapped : m.override[o.id]),
+      h('p', { class: 'context' }, `${m.contextSetAside}: ${o.suppressed.map((x) => m.modifier[x]).join(' ')}`),
+      o.evidence.length > 0 && h('ul', { class: 'evidence', 'aria-label': m.overrideEvidence }, ...o.evidence.map((e, k) => evidenceItem(f, 1000 * (j + 1) + k, e))),
+    )),
     h('ul', { class: 'evidence', 'aria-label': m.evidenceAria }, ...f.evidence.map((e, i) => evidenceItem(f, i, e))),
+    f.evidenceTotal > f.evidence.length && h('p', { class: 'context', 'data-more': 'evidence' }, m.moreEvidence(f.evidenceTotal - f.evidence.length)),
   );
 }
 
@@ -104,6 +110,7 @@ function renderReport(r: ScanReport): Child[] {
     alerting.length > 0 && h('h3', { class: 'section' }, m.findingsHeading(alerting.length)),
     ...alerting.map(findingCard),
     observed.length > 0 && h('details', { class: 'observed' }, h('summary', {}, m.observedHeading(observed.length)), ...observed.map(findingCard)),
+    r.counts.findingsTotal > r.findings.length && h('p', { class: 'context', 'data-more': 'findings' }, m.moreFindings(r.counts.findingsTotal - r.findings.length)),
   ];
 }
 

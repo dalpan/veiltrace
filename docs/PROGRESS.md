@@ -4,6 +4,24 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-21 · M4.3A Engine adoption and pre-evaluation freeze · **Implemented (awaiting owner review)**
+
+**Done**
+- **Engine 0.2.0 is the default** (ruleset `m4.1` = P1b + P2-A + R4-β, unchanged from the M4.1 candidate; `m4.1-rc1` is an alias). M1 stays available as `{ ruleset: 'm1' }` (engine `0.1.0-m1`). No rule, lexicon, modifier, window or threshold changed (D-055).
+- **Popup:** overrides with explanation, context set aside and supporting evidence; `C.PROCEDURAL`; hidden-evidence/finding counts; strict validator that rejects unknown keys, modifiers and overrides instead of dropping them (D-056). No new permission, network access or storage.
+- **`release:repro`** now builds `candidate` artifacts on a clean tree, so they match `release:candidate` (D-057).
+- **Preregistration:** docs/EVAL_PREREGISTRATION.md, written before any held-out run (D-058). Corrections made before results: `veiltrace` = 0.2.0; B0/A1/A2 pinned to M1; Markdown percentages computed from k/n (double-rounding fix).
+- **Tests:** E2E `engine.test.ts` (D17 procedural observed, D45 override with hidden evidence, Indonesian strings); unit tests for adoption, report/validator, `fmtRate`. Fixed a pre-existing E2E race (parallel test files rebuilt the same `dist/e2e` folder; now one folder per worker).
+- **Manual fixtures** add D06, D17, D27, D45. DEMO.md v0.4.0 checklist in four categories (confirmed in M3 / bilingual UI / engine change / not yet done).
+
+**Dev results (synthetic, development split, regenerated twice, byte-identical):** `veiltrace` 0.2.0: TP 16, FP 1 (D39), TN 28, FN 5 (D10, D12, D43, D44, D50). `veiltrace-m1`: TP 16, FP 6, TN 23, FN 5, identical per scenario to the M4.2 `veiltrace` results; B0/A1/A2 identical. `dev.m41.json` byte-identical.
+
+**Verification:** typecheck, ESLint clean; unit 277/277; browser 71/71; E2E 35/35 (×4 after the race fix); `verify:extension` 25/25; supply-chain 0 vulnerabilities; `eval -- validate --split test` valid (structural only, no detection); `corpus/test` 0 changes vs `407beb0`, MANIFEST.json SHA-256 `c89904bf…d447`; `corpus/dev` and lexicons unchanged; development release verified and `release:repro` identical. No `eval/runs.md`.
+
+**Not done:** held-out evaluation, `--final`, `eval-freeze-v1` tag; manual Chrome v0.4.0 checklist (owner). Extension version stays 0.4.0; bump before any distribution.
+
+**Next:** owner review of M4.3A; then (if approved) the `eval-freeze-v1` tag and the single preregistered held-out run (M4.3B).
+
 ## 2026-10-21 · M4.2 finalization (owner review: conditionally accepted)
 
 - Artifact SBOM (CycloneDX, 0 components, hash-bound to the ZIP) added to every release. Release types `development` / `candidate`; `candidate` refuses dirty trees (tested). No "official" label before signing (D-054).

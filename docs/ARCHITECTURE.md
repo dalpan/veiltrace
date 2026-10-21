@@ -1,6 +1,6 @@
 # Architecture
 
-Status: updated at M3. **Implemented:** the pure core (`src/core`, §1, M1), the `PageSnapshot` types (§4), the DOM extractor and change watcher (`src/extract`, §3, M2), the offline evaluation harness (`src/eval`, §10, M2), the Chromium MV3 extension with popup, isolated-world scanning and evidence highlighting (`src/extension`, §2, §6, §9, §11, M3), and the toolchain (§5). **Planned, not implemented:** Firefox desktop/Android (§7, M5), auto-scan, settings and storage (M6), and the "Copy report" action (PRODUCT_SPEC.md §5).
+Status: updated at M3; engine default updated at M4.3A (`analyze(snapshot)` = engine 0.2.0, ruleset `m4.1`; M1 via `{ ruleset: 'm1' }`, D-055). **Implemented:** the pure core (`src/core`, §1, M1), the `PageSnapshot` types (§4), the DOM extractor and change watcher (`src/extract`, §3, M2), the offline evaluation harness (`src/eval`, §10, M2), the Chromium MV3 extension with popup, isolated-world scanning and evidence highlighting (`src/extension`, §2, §6, §9, §11, M3), and the toolchain (§5). **Planned, not implemented:** Firefox desktop/Android (§7, M5), auto-scan, settings and storage (M6), and the "Copy report" action (PRODUCT_SPEC.md §5).
 
 ## 1. Principles that shape the architecture
 

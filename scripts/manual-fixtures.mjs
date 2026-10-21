@@ -7,7 +7,8 @@ const out = 'dist/manual';
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
 
-for (const id of ['D01-en-blog-security-check-overlay', 'D16-en-vendor-install-script']) {
+for (const id of ['D01-en-blog-security-check-overlay', 'D06-id-recipe-comment-lure', 'D16-en-vendor-install-script', 'D17-en-vendor-troubleshooting-fix',
+  'D27-id-troubleshooting-fix', 'D45-en-concealed-payload-edu-cue']) {
   cpSync(join('corpus/dev', id), join(out, id), { recursive: true });
 }
 

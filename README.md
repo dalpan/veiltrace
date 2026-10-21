@@ -4,7 +4,7 @@
 
 An offline-first browser security engine that detects contextual social engineering and deceptive instructions in web pages, including pages on legitimate HTTPS domains.
 
-> **Status: M4.2.** A working Chromium (MV3) extension with an English and Indonesian interface: click the toolbar button, then **Scan page**. The page is analyzed locally in the tab, and the popup shows the verdict, evidence and Show on page. It is built on the detection core (`src/core`) and DOM extractor (`src/extract`), with an offline evaluation harness (`src/eval`). Accuracy figures so far come from a **synthetic development split only**, not real-world use. See [docs/PROGRESS.md](docs/PROGRESS.md).
+> **Status: M4.3A.** Engine 0.2.0 (contextual rule set `m4.1`) is the default and the held-out evaluation is preregistered ([docs/EVAL_PREREGISTRATION.md](docs/EVAL_PREREGISTRATION.md)) but **not yet run**. A working Chromium (MV3) extension with an English and Indonesian interface: click the toolbar button, then **Scan page**. The page is analyzed locally in the tab, and the popup shows the verdict, evidence and Show on page. It is built on the detection core (`src/core`) and DOM extractor (`src/extract`), with an offline evaluation harness (`src/eval`). Accuracy figures so far come from a **synthetic development split only**, not real-world use. See [docs/PROGRESS.md](docs/PROGRESS.md).
 
 ## What it does
 
@@ -49,7 +49,8 @@ The held-out split (`corpus/test`) is frozen and must not be evaluated during de
 
 ```ts
 import { analyze } from './src/core/index.js';
-const result = analyze(snapshot); // PageSnapshot → AnalysisResult (pure, deterministic)
+const result = analyze(snapshot); // PageSnapshot → AnalysisResult (pure, deterministic; engine 0.2.0)
+const m1 = analyze(snapshot, { ruleset: 'm1' }); // M1 baseline model (engine 0.1.0-m1), used for comparisons
 ```
 
 ## What it does not do

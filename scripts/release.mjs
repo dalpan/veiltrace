@@ -74,7 +74,8 @@ export async function release({ out = 'release', candidate = false } = {}) {
     extensionVersion: version,
     engine: {
       default: constant('src/core/constants.ts', 'ENGINE_VERSION'),
-      experimental: { ruleset: 'm4.1-rc1', version: constant('src/core/constants.ts', 'ENGINE_VERSION_M41_RC'), usedByExtension: false },
+      defaultRuleset: 'm4.1',
+      baseline: { ruleset: 'm1', version: constant('src/core/constants.ts', 'ENGINE_VERSION_M1'), usedByExtension: false },
     },
     extractorVersion: constant('src/extract/extract.ts', 'EXTRACTOR_VERSION'),
     source: { commit, dirty, sourceDateEpoch: epoch },

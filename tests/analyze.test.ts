@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { analyze, ENGINE_VERSION } from '../src/core/index.js';
-import type { AnalysisResult, Observation, PageSnapshot } from '../src/core/types.js';
+import { analyze as coreAnalyze, ENGINE_VERSION_M1 } from '../src/core/index.js';
+import type { AnalysisResult, AnalyzeOptions, Observation, PageSnapshot } from '../src/core/types.js';
+
+// These tests specify the M1 decision model. Since M4.3A the production default is engine 0.2.0 (ruleset
+// 'm4.1'), so the M1 model is selected explicitly; the expectations themselves are unchanged from M1.
+const analyze = (s: PageSnapshot, o: AnalyzeOptions = {}): AnalysisResult => coreAnalyze(s, { ruleset: 'm1', ...o });
 import { inContainer, snapshot } from './fixtures/build.js';
 import { KNOWN_LIMITATIONS, SCENARIOS } from './fixtures/scenarios.js';
 
@@ -276,7 +280,7 @@ describe('domain independence and determinism', () => {
   });
 
   it('reports the engine version', () => {
-    expect(analyze(SCENARIOS[0]!.snapshot).engineVersion).toBe(ENGINE_VERSION);
+    expect(analyze(SCENARIOS[0]!.snapshot).engineVersion).toBe(ENGINE_VERSION_M1);
   });
 });
 

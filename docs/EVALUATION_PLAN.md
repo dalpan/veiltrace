@@ -1,6 +1,6 @@
 # Evaluation Plan
 
-Status: harness implemented (M2). M4 targets approved (D-011). **Executed on the dev split only** (§9). The frozen held-out split has **not** been evaluated; that is reserved for M4 (`--final`). The M1 snapshot scenarios in `tests/fixtures/scenarios.ts` remain unit fixtures, not part of the evaluation corpus.
+Status: harness implemented (M2). M4 targets approved (D-011). **Executed on the dev split only** (§9, §10, §11). The frozen held-out split has **not** been evaluated. The single final run is preregistered in **[EVAL_PREREGISTRATION.md](EVAL_PREREGISTRATION.md)** (M4.3A, D-058), which takes precedence over this plan where they differ, and needs owner approval and the `eval-freeze-v1` tag. The M1 snapshot scenarios in `tests/fixtures/scenarios.ts` remain unit fixtures, not part of the evaluation corpus.
 
 ## 1. Questions the evaluation must answer
 
@@ -74,16 +74,17 @@ Extraction + analysis wall time per fixture (p50/p95) in Playwright Chromium on 
 
 ## 5. Baseline B0 and ablations (implemented in M2, `src/eval/systems.ts`)
 
-All systems consume the **same extracted `PageSnapshot`**, the same lexicons and the same normalization, and they use the same R1–R5 table. They differ only in correlation scope and context handling:
+All systems consume the **same extracted `PageSnapshot`**, the same lexicons and the same normalization. B0, A1 and A2 use the **M1** R1–R5 table (`ruleset: 'm1'`), so their definitions are unchanged since M2 (D-058). They differ only in correlation scope and context handling:
 
 | System | Correlation scope | Negation | Context modifiers |
 |---|---|---|---|
-| `veiltrace` (M1 model) | region-local, window K = 8 | yes | yes |
+| `veiltrace` (engine 0.2.0, default since M4.3A) | region-local, window K = 8 | yes | yes, plus P1b, P2-A, `C.PROCEDURAL` |
+| `veiltrace-m1` (M1 model; called `veiltrace` in §9) | region-local, window K = 8 | yes | yes |
 | `B0` baseline | whole page (one region, K = ∞) | no | no |
 | `A1-page+context` | whole page | yes | yes |
 | `A2-region-only` | region-local, K = 8 | no | no |
 
-B0 is our own reimplementation of page-level co-occurrence, not third-party code. Comparing veiltrace with A1 isolates the effect of region locality, and comparing it with A2 isolates the effect of negation and context modifiers.
+B0 is our own reimplementation of page-level co-occurrence, not third-party code. Comparing veiltrace-m1 with A1 isolates the effect of region locality, and comparing it with A2 isolates the effect of negation and context modifiers.
 
 **Limitations of B0:**
 - It shares VEILTRACE's lexicon, normalization, extractor and R1–R5 table, so it measures *our own* design choices, not any competitor. It must never be presented as "competitor X".
@@ -171,7 +172,7 @@ Source: `eval/results/dev.json` (byte-identical across repeated runs), `dev.md`,
 ## 10. M4.1 dev results (development split only; synthetic)
 
 - **Corpus:** 50 dev scenarios: 21 malicious (14 positive, 7 adversarial) and 29 benign hard negatives (1 ambiguous); 29 EN, 21 ID. D37–D50 were added before the M4.1 candidates were implemented (D-046).
-- **Baseline:** M3 (M1 model) on dev50: TP 16, FP 6, TN 23, FN 5. Precision 72.7% (16/22, CI 51.8–86.9), recall 76.2% (16/21, CI 54.9–89.4), hard-negative FPR 20.7% (6/29, CI 9.8–38.4).
+- **Baseline:** M3 (M1 model) on dev50: TP 16, FP 6, TN 23, FN 5. Precision 72.7% (16/22, CI 51.8–86.8), recall 76.2% (16/21, CI 54.9–89.4), hard-negative FPR 20.7% (6/29, CI 9.8–38.4).
 - **Candidate `m4.1-rc1`:** TP 16, FP 1, TN 28, FN 5. Precision 94.1% (16/17, CI 73.0–99.0), recall 76.2% (16/21, CI 54.9–89.4), hard-negative FPR 3.4% (1/29, CI 0.6–17.2). Localization 16/16.
 - **All candidates, raw counts and per-scenario changes:** DETECTION_MODEL.md §11 and `eval/results/dev.m41.md`.
 - **Limitations:**
@@ -180,4 +181,8 @@ Source: `eval/results/dev.json` (byte-identical across repeated runs), `dev.md`,
   - Intervals overlap; no significance is claimed.
   - Nothing here estimates real-world or held-out performance.
 - **The held-out split was not evaluated.** The single final run waits until the engine is adopted and frozen (D-041).
+
+## 11. M4.3A: engine 0.2.0 adopted (dev split only; synthetic)
+
+The `m4.1` rule set became the default engine `0.2.0` without changes (D-055). Regenerated dev artifacts (`eval/results/dev.*`) list `veiltrace` = 0.2.0 and `veiltrace-m1` = M1; both reproduce the §10 numbers exactly (0.2.0: TP 16, FP 1, TN 28, FN 5; M1: TP 16, FP 6, TN 23, FN 5). Research tables (`dev.research.*`, `dev.m41.*`) still compare variants against the M1 model. Markdown percentages are now computed from k/n (no double rounding), so a few dev Markdown figures moved by 0.1 point (e.g. 1/29 is 3.4%, not 3.5%); JSON is unchanged. The held-out split was not evaluated; its procedure is fixed in EVAL_PREREGISTRATION.md.
 

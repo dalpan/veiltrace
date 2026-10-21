@@ -1,4 +1,4 @@
-# VeilTrace Operator Guide (v0.4.0, engine 0.1.0-m1)
+# VeilTrace Operator Guide (v0.4.0, engine 0.2.0)
 
 For IT/security staff evaluating or deploying the VeilTrace browser extension. VeilTrace is **one awareness layer**. It does **not** replace endpoint protection, secure browsing policies, email/URL filtering or security awareness training.
 
@@ -27,11 +27,13 @@ On request (toolbar button → **Scan page**), VeilTrace reads the visible text 
 - **Show on page** draws a temporary amber box around the evidence. If the page changed, it says so instead of pretending.
 
 ## 4. Known false positives and negatives (development data, synthetic)
-Production engine `0.1.0-m1`, 50 synthetic development scenarios: TP 16, FP 6, TN 23, FN 5. **These are not real-world rates.**
-- **Typical false positives (shown as "Suspicious"):** legitimate troubleshooting docs ("To fix this error, open Terminal and run…") and internal IT notices ("IT Department: open PowerShell, paste the script…").
-- **Typical false negatives:** lures that disguise themselves as quotations or reports ("Visitors were asked to:"), quoted lures in comments, very informal Indonesian.
+Production engine `0.2.0`, 50 synthetic development scenarios (the same data the rules were refined on, so optimistic): TP 16, FP 1, TN 28, FN 5. **These are not real-world rates**, and the held-out evaluation has not been run yet.
+- **Remaining false positive (shown as "Suspicious"):** a documentation dialog that shows a terse run-this-command step.
+- **Typical false negatives:** lures that plant educational or quoted context inside a short verification dialog, quoted lures in user comments, very informal Indonesian paraphrases.
+- **Shown as "Observed", not "Suspicious":** procedural troubleshooting articles with a code block ("To fix this error, open Terminal and run…") and internal IT notices that only cite an authority. Action risk stays high, so the instruction is still listed.
+- **Shown as "Manipulative" despite an educational cue:** pages that also place hidden text on the clipboard. The popup explains which context was set aside and why.
 
-An experimental rule set (`m4.1-rc1`) reduces these false positives on the same data (FP 6 → 1). It is not enabled in the extension.
+The previous engine (`0.1.0-m1`) had FP 6 on the same data, mainly troubleshooting docs and IT notices.
 
 ## 5. Offline installation and integrity verification
 1. On a trusted build machine: `npm ci --ignore-scripts && npm run release && npm run release:verify`. Or obtain `release/` from a trusted source.

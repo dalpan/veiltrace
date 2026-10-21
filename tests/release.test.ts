@@ -62,8 +62,7 @@ describe('artifact verification', () => {
     const manifest = JSON.parse(readFileSync(join(dir, 'release-manifest.json'), 'utf8'));
     expect(manifest.permissions).toEqual(['activeTab', 'scripting']);
     expect(manifest.hostPermissions).toEqual([]);
-    expect(manifest.engine.default).toBe('0.1.0-m1');
-    expect(manifest.engine.experimental).toEqual({ ruleset: 'm4.1-rc1', version: '0.2.0-rc.1', usedByExtension: false });
+    expect(manifest.engine).toEqual({ default: '0.2.0', defaultRuleset: 'm4.1', baseline: { ruleset: 'm1', version: '0.1.0-m1', usedByExtension: false } });
     expect(manifest.source.commit).toMatch(/^[0-9a-f]{40}$|^unknown$/);
     expect(manifest.notice).toMatch(/do not establish authenticity/);
     expect(manifest.releaseType).toBe('development');

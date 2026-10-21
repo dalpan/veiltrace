@@ -2,7 +2,7 @@
 // leaves the tab: only verdict, findings, the evidence snippets of those findings, coverage and counts.
 import { scanStatus, type ScanStatus } from '../../core/coverage.js';
 import type {
-  ActionRisk, AnalysisResult, Classification, Level, ModifierId, PageSnapshot, RuleId, SignalId, Verdict,
+  ActionRisk, AnalysisResult, Classification, ContextOverride, Level, ModifierId, Observation, OverrideId, PageSnapshot, RuleId, SignalId, Verdict,
 } from '../../core/types.js';
 
 export const REPORT_VERSION = 1;
@@ -31,7 +31,11 @@ export interface FindingSummary {
   actionRisk: ActionRisk;
   summary: string;
   modifiers: Array<{ id: ModifierId; reason: string }>;
+  /** Engine 0.2.0: context that was set aside because of direct-instruction evidence (always present; may be empty). */
+  overrides: Array<{ id: OverrideId; effect: ContextOverride['effect']; suppressed: ModifierId[]; evidence: EvidenceItem[] }>;
   evidence: EvidenceItem[];
+  /** Number of evidence observations before the MAX_EVIDENCE_PER_FINDING cap (the popup shows any remainder). */
+  evidenceTotal: number;
 }
 
 export interface ScanReport {
@@ -58,6 +62,19 @@ export function buildReport(
   timing: { extractMs: number; analyzeMs: number },
 ): ScanReport {
   const obsById = new Map(result.observations.map((o) => [o.id, o]));
+  const item = (o: Observation): EvidenceItem => {
+    const src = o.source;
+    const locator = src.type === 'block' ? snapshot.blocks.find((b) => b.id === src.blockId)?.locator
+      : src.type === 'hiddenCopy' ? snapshot.hiddenCopyCandidates.find((h) => h.id === src.candidateId)?.locator
+        : snapshot.copyTriggers.find((t) => t.id === src.triggerId)?.locator;
+    const source: EvidenceSource = src.type === 'block' ? 'visible-text' : src.type === 'hiddenCopy' ? 'hidden-clipboard' : 'copy-control';
+    return { signal: o.signal, text: clip(o.text), source, locator: locator ?? null, deobfuscated: o.deobfuscated };
+  };
+  const items = (ids: readonly string[]): EvidenceItem[] =>
+    ids.slice(0, MAX_EVIDENCE_PER_FINDING).flatMap((id) => {
+      const o = obsById.get(id);
+      return o ? [item(o)] : [];
+    });
   const findings = [...result.findings]
     .sort((a, b) => RANK[b.classification] - RANK[a.classification])
     .slice(0, MAX_FINDINGS)
@@ -71,16 +88,9 @@ export function buildReport(
       actionRisk: f.actionRisk,
       summary: f.summary,
       modifiers: f.modifiers.map((m) => ({ id: m.id, reason: m.reason })),
-      evidence: f.observationIds.slice(0, MAX_EVIDENCE_PER_FINDING).flatMap((id) => {
-        const o = obsById.get(id);
-        if (!o) return [];
-        const src = o.source;
-        const locator = src.type === 'block' ? snapshot.blocks.find((b) => b.id === src.blockId)?.locator
-          : src.type === 'hiddenCopy' ? snapshot.hiddenCopyCandidates.find((h) => h.id === src.candidateId)?.locator
-            : snapshot.copyTriggers.find((t) => t.id === src.triggerId)?.locator;
-        const source: EvidenceSource = src.type === 'block' ? 'visible-text' : src.type === 'hiddenCopy' ? 'hidden-clipboard' : 'copy-control';
-        return [{ signal: o.signal, text: clip(o.text), source, locator: locator ?? null, deobfuscated: o.deobfuscated }];
-      }),
+      overrides: (f.overrides ?? []).map((o) => ({ id: o.id, effect: o.effect, suppressed: [...o.suppressed], evidence: items(o.evidence) })),
+      evidence: items(f.observationIds),
+      evidenceTotal: f.observationIds.length,
     }));
   return {
     v: REPORT_VERSION,

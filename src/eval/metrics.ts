@@ -12,14 +12,21 @@ export interface Rate {
 
 const Z = 1.959963984540054;
 
-export function wilson(k: number, n: number): Rate {
-  if (n === 0) return { k, n, value: null, ci95: null };
+/** Unrounded proportion and Wilson 95% interval (n > 0). */
+export function wilsonExact(k: number, n: number): { value: number; ci95: [number, number] } {
   const p = k / n;
   const denom = 1 + (Z * Z) / n;
   const centre = (p + (Z * Z) / (2 * n)) / denom;
   const half = (Z * Math.sqrt((p * (1 - p)) / n + (Z * Z) / (4 * n * n))) / denom;
+  return { value: p, ci95: [Math.max(0, centre - half), Math.min(1, centre + half)] };
+}
+
+/** Rate rounded to 4 decimals for the JSON results. */
+export function wilson(k: number, n: number): Rate {
+  if (n === 0) return { k, n, value: null, ci95: null };
+  const { value, ci95 } = wilsonExact(k, n);
   const r = (x: number): number => Math.round(x * 10000) / 10000;
-  return { k, n, value: r(p), ci95: [r(Math.max(0, centre - half)), r(Math.min(1, centre + half))] };
+  return { k, n, value: r(value), ci95: [r(ci95[0]), r(ci95[1])] };
 }
 
 export const CLASS_ORDER: readonly ExpectedClass[] = ['none', 'observed_instruction', 'suspicious_correlation', 'manipulative_instruction'];

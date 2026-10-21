@@ -1,7 +1,140 @@
 {
   "engineVersion": "0.1.0-m1",
+  "note": "Research variants are defined on the M1 table and compared against veiltrace-m1.",
   "metrics": {
     "veiltrace": {
+      "scenarios": 50,
+      "confusion": {
+        "tp": 16,
+        "fp": 1,
+        "tn": 28,
+        "fn": 5
+      },
+      "precision": {
+        "k": 16,
+        "n": 17,
+        "value": 0.9412,
+        "ci95": [
+          0.7302,
+          0.9895
+        ]
+      },
+      "recall": {
+        "k": 16,
+        "n": 21,
+        "value": 0.7619,
+        "ci95": [
+          0.5491,
+          0.8937
+        ]
+      },
+      "fpr": {
+        "k": 1,
+        "n": 29,
+        "value": 0.0345,
+        "ci95": [
+          0.0061,
+          0.1718
+        ]
+      },
+      "hardNegativeFpr": {
+        "k": 1,
+        "n": 29,
+        "value": 0.0345,
+        "ci95": [
+          0.0061,
+          0.1718
+        ]
+      },
+      "localization": {
+        "k": 16,
+        "n": 16,
+        "value": 1,
+        "ci95": [
+          0.8064,
+          1
+        ]
+      },
+      "classMatrix": [
+        [
+          7,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          20,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          6,
+          0
+        ],
+        [
+          0,
+          5,
+          1,
+          9
+        ]
+      ],
+      "exactClassAgreement": {
+        "k": 42,
+        "n": 50,
+        "value": 0.84,
+        "ci95": [
+          0.7149,
+          0.9166
+        ]
+      },
+      "observedOnNegatives": 20,
+      "byLanguage": {
+        "en": {
+          "recall": {
+            "k": 10,
+            "n": 12,
+            "value": 0.8333,
+            "ci95": [
+              0.552,
+              0.953
+            ]
+          },
+          "fpr": {
+            "k": 1,
+            "n": 17,
+            "value": 0.0588,
+            "ci95": [
+              0.0105,
+              0.2698
+            ]
+          }
+        },
+        "id": {
+          "recall": {
+            "k": 6,
+            "n": 9,
+            "value": 0.6667,
+            "ci95": [
+              0.3542,
+              0.8794
+            ]
+          },
+          "fpr": {
+            "k": 0,
+            "n": 12,
+            "value": 0,
+            "ci95": [
+              0,
+              0.2425
+            ]
+          }
+        }
+      }
+    },
+    "veiltrace-m1": {
       "scenarios": 50,
       "confusion": {
         "tp": 16,
@@ -2114,7 +2247,7 @@
       }
     }
   },
-  "verdictChangesVsVeiltrace": {
+  "verdictChangesVsVeiltraceM1": {
     "K=2": [
       "D02-id-download-modal-after-click: manipulative_instruction → observed_instruction",
       "D03-en-locked-pc-support-scam: suspicious_correlation → observed_instruction",

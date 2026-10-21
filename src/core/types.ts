@@ -231,8 +231,12 @@ export interface AnalyzeOptions {
     /** R4-β: C.PROCEDURAL demotes single-family R4 findings in procedural documents (article + code block). */
     proceduralDocModifier?: boolean;
   };
-  /** Named rule set. 'm1' (default) is the accepted M1 model; 'm4.1-rc1' is the M4.1 recommendation (not adopted, D-041). */
-  ruleset?: 'm1' | 'm4.1-rc1';
+  /**
+   * Named rule set. Default 'm4.1' (engine 0.2.0, D-055) = M1 + P1b + P2-A + R4-beta. 'm1' is the M1 baseline
+   * (engine 0.1.0-m1), kept for comparison and research. 'm4.1-rc1' is a legacy alias of 'm4.1'.
+   * `experimental` flags are applied on top of the selected rule set.
+   */
+  ruleset?: 'm1' | 'm4.1' | 'm4.1-rc1';
 }
 
 export interface AnalysisResult {

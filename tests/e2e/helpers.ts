@@ -23,7 +23,8 @@ const built = new Map<string, Promise<string>>();
 
 export function extensionDir(kind: 'test' | 'prod'): Promise<string> {
   if (!built.has(kind)) {
-    const outdir = kind === 'test' ? 'dist/e2e/extension-test' : 'dist/e2e/extension';
+    // One directory per Vitest worker: test files run in parallel and each rebuilds (rm + write) its extension.
+    const outdir = join('dist/e2e', `w${process.env.VITEST_POOL_ID ?? process.pid}`, kind === 'test' ? 'extension-test' : 'extension');
     built.set(kind, (buildExtension({ test: kind === 'test', outdir }) as Promise<string>).then((d) => realpathSync(d)));
   }
   return built.get(kind) as Promise<string>;

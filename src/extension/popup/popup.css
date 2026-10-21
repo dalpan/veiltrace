@@ -91,3 +91,5 @@ footer p { margin: 6px 0 0; font-size: 12px; color: var(--muted); }
 .lang-btn[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: #fff; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .ev-head .secondary { flex: none; white-space: nowrap; }
+.override { margin: 6px 0; padding: 6px 8px; border-left: 3px solid var(--warn-bd); background: var(--bg); }
+.override .context { margin: 2px 0; }

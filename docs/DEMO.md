@@ -31,22 +31,49 @@ Since v0.4.0 the popup follows the browser UI language. In an Indonesian browser
 - `file://` pages need "Allow access to file URLs" on the extension card; otherwise the popup explains this.
 - The popup is 400 px wide and narrows on small viewports (Firefox Android adaptation is M5 and untested).
 
-## v0.4.0 compatibility checklist (Chrome stable): not yet executed
+## v0.4.0 checklist (engine 0.2.0, bilingual UI): not yet executed
 
-Build: `npm run release:candidate && npm run release:verify` from a clean commit (or `npm run release` for a development build), then unzip the ZIP into a folder and **Load unpacked** that folder. Serve the pages with `npm run manual:fixtures` and the two `python3 -m http.server` commands above. A row counts as passed only when the owner confirms it.
+Build: `npm run release:candidate && npm run release:verify` from a clean commit (or `npm run release` for a development build), unzip the ZIP into an empty folder and **Load unpacked** that folder. Serve the pages with `npm run manual:fixtures` and the two `python3 -m http.server` commands above (D06, D17, D27 and D45 are included in `dist/manual`). A row counts as passed **only when the owner confirms it**; no row below has been confirmed for v0.4.0.
 
-| # | Area | Step | Expected |
-|---|---|---|---|
-| C1 | Permissions | Extension Details | Version 0.4.0; Permissions empty; no sites listed under Site access |
-| C2 | Language (Indonesian browser) | Open D01 → toolbar button | Popup in Indonesian: "Pindai halaman", page label "HALAMAN". Nothing scanned yet |
-| C3 | On-demand scanning | Click **Pindai halaman** | "Instruksi manipulatif terdeteksi", "Aturan R1", "Pemindaian lengkap"; evidence snippets stay in English as on the page |
-| C4 | Language switching | Click **EN**, then **ID** | Whole popup switches; verdict and evidence unchanged; no rescan |
-| C5 | Benign example | D16 → scan | "Tidak ada instruksi mencurigakan di konten yang dianalisis." (EN: "No suspicious instructions detected in the analyzed content."); one observed instruction |
-| C6 | Indonesian page | Serve `corpus/dev` (`python3 -m http.server 8082 -d corpus/dev`) → `D06-id-recipe-comment-lure/` → scan | Manipulative; Indonesian evidence ("verifikasi manusia", "Win + R") |
-| C7 | Partial scan | `large.html` → scan | "Pemindaian sebagian…" with the 5,000-block reason (EN: "Partial scan…") |
-| C8 | Partial scan (frames) | `cross-origin.html` → scan | Frames-from-other-sites reason; no finding claimed for the iframe |
-| C9 | Evidence highlighting | D01 → **Tunjukkan di halaman** | Amber box on the page; "Ditandai di halaman."; the box disappears after ~5 s |
-| C10 | Stale evidence | D01 → console `document.getElementById('gate').remove()` → Tunjukkan di halaman | "Elemen ini sudah tidak ada di halaman…"; no box |
-| C11 | Restricted page | `chrome://settings` → toolbar button | "Halaman ini tidak dapat dipindai"; button disabled |
-| C12 | Offline | Turn off Wi-Fi/network, then repeat C3 and C9 | Same results; DevTools Network (page and popup) shows no VeilTrace requests |
+Engine 0.2.0 (D-055) changes three things a person can see: procedural troubleshooting pages are now *observed* instead of *suspicious*, a hidden clipboard payload next to an educational cue is now *manipulative* with an explanation of why the context was set aside, and the footer reads "Engine 0.2.0".
 
+### Category A: confirmed in M3 (v0.3.0), owner-confirmed 2026-10-21
+M1–M12 above passed on v0.3.0 (engine 0.1.0, English UI). They are not automatically valid for v0.4.0; rows A1–A3 are the subset whose behavior did not change and that should still be spot-checked once.
+
+| # | Step | Expected |
+|---|---|---|
+| A1 | Extension Details (as M1/M4) | Version 0.4.0; Permissions empty; no sites listed under Site access, before and after a scan |
+| A2 | M7 (highlight cleanup) | `1` then `0` after ~6 s; overlay has no text |
+| A3 | M12 (network) | No requests caused by VeilTrace in the page or popup Network panel |
+
+### Category B: repeat because of the bilingual UI
+| # | Step | Expected |
+|---|---|---|
+| B1 | Indonesian Chrome UI: D01 → toolbar button | Popup in Indonesian: "Pindai halaman", label "HALAMAN"; nothing scanned yet |
+| B2 | Click **Pindai halaman** | "Instruksi manipulatif terdeteksi", "Aturan R1", "Pemindaian lengkap"; evidence stays in English, as on the page |
+| B3 | Click **EN**, then **ID** | Whole popup switches; verdict, evidence and highlight statuses unchanged; no rescan |
+| B4 | D06 (Indonesian page) → scan | Manipulative; Indonesian evidence ("verifikasi manusia", "Win + R") shown untranslated |
+| B5 | `large.html` → scan | "Pemindaian sebagian…" with the 5,000-block reason |
+| B6 | `cross-origin.html` → scan | Frames-from-other-sites reason; no finding claimed for the iframe |
+| B7 | D01 → **Tunjukkan di halaman** | Amber box; "Ditandai di halaman."; box disappears after ~5 s |
+| B8 | D01 → console `document.getElementById('gate').remove()` → **Tunjukkan di halaman** | "Elemen ini sudah tidak ada di halaman…"; no box |
+| B9 | `chrome://settings` → toolbar button | "Halaman ini tidak dapat dipindai"; button disabled |
+
+### Category C: repeat because the engine changed (0.1.0 → 0.2.0)
+| # | Step | Expected |
+|---|---|---|
+| C1 | Any scan → popup footer | "Engine 0.2.0 · extractor 0.1.0-m2 · … · on this device only" |
+| C2 | D16 → scan (as M5) | "No suspicious instructions detected in the analyzed content."; one observed instruction; the words "safe"/"aman" do not appear |
+| C3 | D17 → scan (EN) | Headline "No suspicious instructions detected…"; under the collapsed observed section: "Observed", "Confidence: low", "Action risk: high…", "Lowered from suspicious because of context: the instruction is a step in a procedural document." (with v0.3.0 this page was *suspicious*) |
+| C4 | D27 → scan (ID) | Same as C3 in Indonesian: "Teramati", "Keyakinan: rendah", "Diturunkan dari mencurigakan karena konteks: instruksi adalah langkah dalam dokumen prosedural." |
+| C5 | D45 → scan (EN) | "Manipulative instruction detected"; an override block "Not lowered: this part of the page also places hidden text on your clipboard…", "Context set aside: …", and supporting evidence labelled as hidden clipboard text (with v0.3.0 this page was *suspicious*) |
+| C6 | D45 → **ID** | Override text "Tidak diturunkan: bagian halaman ini juga menaruh teks tersembunyi di clipboard Anda…", "Konteks yang dikesampingkan: …"; the hidden payload text itself is not translated |
+| C7 | D45 → **Show on page** on the hidden-clipboard evidence | Either a box or "This evidence is not visible on the page (for example, hidden clipboard text)."; never "Highlighted on the page." without a visible box |
+| C8 | D01 → scan (as M3) | Unchanged from v0.3.0: manipulative, R1, confidence high |
+
+### Category D: not yet performed on any version
+| # | Step | Expected |
+|---|---|---|
+| D1 | Install from the **candidate ZIP** (not `dist/extension`) | Loads without errors; name "VeilTrace", version 0.4.0, no "TEST BUILD" |
+| D2 | Network off (Wi-Fi off), repeat B2, B7 and C5 | Same results; DevTools Network (page and popup) shows no VeilTrace requests |
+| D3 | English Chrome UI (or `--lang=en-US`) → open popup before switching | Popup starts in English |
