@@ -1,0 +1,50 @@
+# Progress Log
+
+Newest entry first. Each entry: date, milestone, what was done, verification, what is next, blockers.
+
+---
+
+## 2026-10-21 · M1 Detection core · **Provisionally accepted by owner; initial M1 commit**
+
+**Done**
+- Docs reconciled with the owner's M1 corrections before coding: the three-class result model with separate confidence and action risk (D-017), strong vs weak pretexts (D-018), regions and the window (D-019), negation and demotion (D-020), approved M4 targets (D-011), highlighting marked as planned M3, no real-time claims (D-004).
+- `git init` (branch `main`), Apache-2.0 `LICENSE` (SHA-256 `cfc7749b…d30`, the official text), `NOTICE`, `.gitignore`.
+- Scaffold: TypeScript 6 strict (core config has no DOM/Node types), esbuild 0.28 build (`dist/core.mjs`, 48 KB), Vitest 5, ESLint 10 with the core-purity rule. Zero runtime dependencies. Dev dependencies pinned exactly. esbuild's postinstall script was **not** approved and is not needed.
+- `src/core`: types, normalize (offset map, zero-width, NFKC, confusables), lexicons (115 entries: 45 EN, 47 ID, 23 language-neutral), observe (matching, negation/reported binding), regions, correlate (windows, R1–R5, two-pass), modifiers, analyze, public index.
+- Dev scenarios in snapshot form: 27 scenarios (9 positive, 12 hard negative, 6 ambiguous/adversarial; 17 EN, 10 ID) + 3 documented known limitations.
+
+**Verification** (`npm run check`, 2026-10-21)
+- typecheck ✔, lint ✔, **202/202 tests passed**.
+- Coverage of `src/core`: 98.14% statements, 90.94% branches, 98.93% functions, 98.52% lines.
+- 5,000-block synthetic snapshot: ~211 ms in Node (CI bound 1 s).
+- Lint purity probe: 9 forbidden patterns are rejected in `src/core`. The esbuild bundle contains no network/dynamic-code identifiers.
+
+**Deviations from the plan**
+- Selection ranks candidates by final classification before rule precedence, and each window is evaluated in two passes. Added after a dev-scenario walkthrough showed that a reported decoy could absorb a real lure.
+- The negation scope also ends at conjunctions (adversarial "do not refresh and press Win+R").
+- `C.OVERLAY`/`C.UGC` deferred to M4 as planned. Lexicon counts meet AC4 (≥ 5 per language-dependent signal per language).
+
+**Known limitations (documented, test-pinned):** FP S-N8 (internal IT notice → R4), FP S-L2 (troubleshooting doc → R4), FN S-L3 (paraphrase), modifier evasion via planted reported speech / educational cues / quotation markup (THREAT_MODEL.md §5, DETECTION_MODEL.md §8).
+
+**Next:** M2 requires explicit owner authorization. The M2 research tasks R-1…R-8 are recorded in IMPLEMENTATION_PLAN.md (M2 section) and are not started.
+
+## 2026-10-21 · M0 Research & specification · **Complete, pending owner review**
+
+**Done**
+- The working directory was empty. The project starts from scratch, and no prior architecture was reused.
+- Inspected the source of Nehboro (`f67efb7205`), ClipShield (`1b55b4ecbd`) and ClickFixMitigator (`ae0e514493`), plus the Malwarebytes Browser Guard product page and the Opera Paste Protect announcement. Findings are in COMPETITIVE_ANALYSIS.md.
+- Reviewed Chrome docs (activeTab, content scripts/isolated worlds, `chrome.dom`), MDN `host_permissions`, Extension Workshop (Firefox for Android) and the Microsoft ClickFix write-up, plus persuasion-detection literature.
+- Wrote README.md, CLAUDE.md and docs/{PRODUCT_SPEC, RESEARCH, COMPETITIVE_ANALYSIS, ARCHITECTURE, THREAT_MODEL, DETECTION_MODEL, PRIVACY_SECURITY, EVALUATION_PLAN, IMPLEMENTATION_PLAN, DECISIONS, PROGRESS}.md.
+
+**Not done (by design)**
+- No code, dependencies, git repository or commit.
+
+**Verification**
+- Documents cross-checked for consistent IDs (T*, A.*/P.*/C.*, R1–R5, S-P*/S-N*, D-0xx, M1–M7).
+
+**Blockers / owner decisions needed before M1**
+- D-010 license, D-004 on-demand scanning trade-off, D-006 build tool, D-009 documentation language.
+- D-011 acceptance targets (needed before M2 freezes the test split).
+- Permission to `git init` (and later to commit).
+
+**Next:** M1, the core engine on hand-written snapshots (see IMPLEMENTATION_PLAN.md).
