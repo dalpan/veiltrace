@@ -7,8 +7,8 @@ let id: Loaded;
 beforeAll(async () => { [en, id] = await Promise.all([launchExtension('test', 'en-US'), launchExtension('test', 'id')]); });
 afterAll(async () => { await Promise.all([en.context.close(), id.context.close()]); });
 
-const sections = (popup: import('playwright').Page): Promise<string[]> =>
-  popup.$$eval('#result > .card[data-verdict]', (els) => els.map((e) => e.className.split(' ')[1] ?? ''));
+const categoriesInOrder = (popup: import('playwright').Page): Promise<string[]> =>
+  popup.$$eval('article.finding', (els) => [...new Set(els.map((e) => e.getAttribute('data-category') ?? ''))]);
 
 describe('support section in the popup', () => {
   it('fake virus overlay → manipulative support finding first, with category, severity, claims kept apart from observed indicators, and highlighting', async () => {
@@ -16,8 +16,9 @@ describe('support section in the popup', () => {
     expect(await verdict(popup)).toBe('none');
     expect(await popup.getAttribute('.sup-summary', 'data-verdict')).toBe('manipulative_instruction');
     expect(await popup.textContent('.sup-summary .category')).toBe('Support & Authority Impersonation · Experimental');
-    // All four detectors are shown, most severe first; the others keep their own verdicts.
-    expect(await sections(popup)).toEqual(['sup-summary', 'summary', 'cred-summary', 'pay-summary']);
+    // The most severe finding leads the unified list; the other detectors keep their own verdicts.
+    expect((await categoriesInOrder(popup))[0]).toBe('support');
+    expect(await popup.getAttribute('.summary', 'data-verdict')).toBe('none');
     const card = popup.locator('article.finding.sup').first();
     expect(await card.getAttribute('data-rule')).toBe('SR1');
     expect(await card.locator('.category').textContent()).toBe('Support & Authority Impersonation');
@@ -39,7 +40,7 @@ describe('support section in the popup', () => {
     const { popup } = await scanUrl(en, addCorpusScenario(en, 'sup-dev', 'SN01-en-help-center-contact'));
     expect(await popup.getAttribute('.sup-summary', 'data-verdict')).toBe('observed_instruction');
     expect(await popup.locator('article.finding.sup:visible').count()).toBe(0);
-    await popup.click('details.sup-observed summary');
+    await popup.click('details.observed summary');
     expect(await popup.locator('article.finding.sup[data-rule="SR5"]').count()).toBe(1);
     expect(await popup.content()).not.toContain('555-0100');
     expect((await popup.textContent('body'))!.toLowerCase()).not.toMatch(/\bsafe\b/);
@@ -54,7 +55,7 @@ describe('support section in the popup', () => {
     expect(await popup.locator('article.finding.sup .snippet').allTextContents()).toContain('japri');
     expect(await popup.content()).not.toContain('0000 2222');
     await popup.click('#lang-en');
-    expect(await popup.textContent('.sup-summary h2')).toBe('Manipulative support or authority direction detected');
+    expect(await popup.textContent('.threat-summary h2')).toBe('Manipulative content detected');
   });
 
   it('page markup in support evidence stays text', async () => {
@@ -78,6 +79,6 @@ describe('support section in the popup', () => {
     const { popup } = await scanUrl(en, site.lure);
     expect(await verdict(popup)).toBe('manipulative_instruction');
     expect(await popup.getAttribute('.sup-summary', 'data-verdict')).toBe('none');
-    expect((await sections(popup))[0]).toBe('summary');
+    expect((await categoriesInOrder(popup))[0]).toBe('command');
   });
 });

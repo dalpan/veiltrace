@@ -31,7 +31,7 @@ describe('detection through the extension (dev corpus pages)', () => {
     expect(state).toBe('done');
     expect(await verdict(popup)).toBe('manipulative_instruction');
     expect(await rules(popup)).toContain('R1:manipulative_instruction');
-    expect(await popup.textContent('.summary h2')).toBe('Manipulative instruction detected');
+    expect(await popup.textContent('.threat-summary h2')).toBe('Manipulative content detected');
     expect(await popup.$$eval('.snippet', (e) => e.length)).toBeGreaterThanOrEqual(3);
     expect(await popup.textContent('.explain')).toContain('human-verification');
     expect(await popup.textContent('.coverage h3')).toBe('Complete scan');
@@ -41,8 +41,8 @@ describe('detection through the extension (dev corpus pages)', () => {
   it('legitimate technical documentation → no suspicious instructions; observed instruction listed separately', async () => {
     const { popup } = await scanUrl(l, addCorpusScenario(l, 'dev', 'D16-en-vendor-install-script'));
     expect(await verdict(popup)).toBe('observed_instruction');
-    expect(await popup.textContent('.summary h2')).toBe('No suspicious instructions detected in the analyzed content.');
-    expect(await popup.textContent('details.observed summary')).toContain('Observed instructions without manipulation signs (1)');
+    expect(await popup.textContent('.threat-summary h2')).toBe('No manipulation signs in the analyzed content');
+    expect(await popup.textContent('details.observed summary')).toContain('Observed without manipulation signs (1)');
     expect((await popup.textContent('body'))?.toLowerCase()).not.toMatch(/\bsafe\b/);
     await shot(popup, '03-docs-observed');
   });
@@ -142,7 +142,9 @@ describe('dynamic content, partial scans and failures', () => {
     expect(await r.popup.getAttribute('.coverage', 'data-complete')).toBe('false');
     expect(await r.popup.textContent('.coverage h3')).toBe('Partial scan: some content was not examined');
     expect(await r.popup.$$eval('.coverage li', (lis) => lis.map((li) => li.getAttribute('data-reason')))).toEqual(['block-budget']);
-    expect(await r.popup.textContent('.summary p')).toContain('Part of the page could not be examined');
+    expect(await r.popup.textContent('.threat-summary p')).toContain('Part of the page could not be examined');
+    expect(await r.popup.textContent('#scan-state')).toBe('PARTIAL SCAN');
+    expect(await r.popup.getAttribute('.stat[data-stat="coverage"]', 'data-complete')).toBe('false');
     await shot(r.popup, '05-partial');
   });
 
@@ -207,6 +209,6 @@ describe('shadow DOM and frames in the isolated world', () => {
     const cross = await scanUrl(l, 'https://portal.test/');
     expect(await verdict(cross.popup)).toBe('none');
     expect(await cross.popup.$$eval('.coverage li', (lis) => lis.map((li) => li.getAttribute('data-reason')))).toEqual(['frames-skipped']);
-    expect(await cross.popup.textContent('.summary h2')).toBe('No suspicious instructions detected in the analyzed content.');
+    expect(await cross.popup.textContent('.threat-summary h2')).toBe('Nothing to report in the analyzed content');
   });
 });

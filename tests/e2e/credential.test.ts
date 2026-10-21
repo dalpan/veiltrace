@@ -14,17 +14,17 @@ describe('credential section in the popup', () => {
     const { target, popup } = await scanUrl(en, addCorpusScenario(en, 'cred-dev', 'CD01-en-community-otp-reply'));
     expect(await verdict(popup)).toBe('none');
     expect(await popup.getAttribute('.cred-summary', 'data-verdict')).toBe('manipulative_instruction');
-    expect(await popup.textContent('.cred-summary h2')).toBe('Manipulative request for a password or code detected');
+    expect(await popup.textContent('.cred-summary h2')).toBe('Manipulative');
     expect(await popup.textContent('.cred-summary .category')).toBe('Credential Disclosure Manipulation · Experimental');
-    // The more severe section comes first.
-    expect(await popup.evaluate(() => document.querySelector('#result > .card')?.classList.contains('cred-summary'))).toBe(true);
+    // The most severe finding comes first in the unified list.
+    expect(await popup.$eval('article.finding', (e) => e.getAttribute('data-category'))).toBe('credential');
     const card = popup.locator('article.finding.cred').first();
     expect(await card.getAttribute('data-rule')).toBe('CR1');
     expect(await card.locator('.requested').textContent()).toBe('Asks you to send: one-time code');
     expect(await card.locator('.indicators').textContent()).toBe('Indicators: claims to be support or an official · verification framing · in user-posted content');
     expect(await card.locator('[data-limitation="claimed-identity-unverifiable"]').count()).toBe(1);
-    // One note per experimental section (credential, payment and support).
-    expect(await popup.locator('.experimental-note').count()).toBe(3);
+    // One shared note covers the three experimental detectors.
+    expect(await popup.locator('.experimental-note').count()).toBe(1);
     await card.locator('button:has-text("Show on page")').nth(2).click();
     await popup.waitForSelector('article.finding.cred .hl-status[data-result]');
     expect(await popup.getAttribute('article.finding.cred .hl-status[data-result]', 'data-result')).toBe('highlighted');
@@ -41,7 +41,7 @@ describe('credential section in the popup', () => {
     const { popup } = await scanUrl(en, addCorpusScenario(en, 'cred-dev', 'CN02-en-mfa-code'));
     expect(await popup.getAttribute('.cred-summary', 'data-verdict')).toBe('observed_instruction');
     expect(await popup.locator('article.finding.cred:visible').count()).toBe(0);
-    await popup.click('details.cred-observed summary');
+    await popup.click('details.observed summary');
     expect(await popup.locator('article.finding.cred[data-rule="CR5"]').count()).toBe(1);
     expect((await popup.textContent('body'))!.toLowerCase()).not.toMatch(/\bsafe\b/);
   });
@@ -76,11 +76,12 @@ describe('credential section in the popup', () => {
 
   it('Indonesian popup translates the credential section; page evidence stays untranslated', async () => {
     const { popup } = await scanUrl(id, addCorpusScenario(id, 'cred-dev', 'CD06-id-komentar-admin-kirim-otp'));
-    expect(await popup.textContent('.cred-summary h2')).toBe('Permintaan manipulatif atas kata sandi atau kode terdeteksi');
+    expect(await popup.textContent('.threat-summary h2')).toBe('Konten manipulatif terdeteksi');
+    expect(await popup.textContent('.cred-summary h2')).toBe('Manipulatif');
     expect(await popup.textContent('article.finding.cred .requested')).toBe('Meminta Anda mengirim: kode sekali pakai (OTP)');
     expect(await popup.locator('article.finding.cred .snippet').allTextContents()).toContain('Kirimkan');
     await popup.click('#lang-en');
-    expect(await popup.textContent('.cred-summary h2')).toBe('Manipulative request for a password or code detected');
+    expect(await popup.textContent('.cred-summary h2')).toBe('Manipulative');
   });
 
   it('ClickFix demo page: command section unchanged, credential section reports no requests', async () => {
@@ -88,6 +89,6 @@ describe('credential section in the popup', () => {
     const { popup } = await scanUrl(en, site.lure);
     expect(await verdict(popup)).toBe('manipulative_instruction');
     expect(await popup.getAttribute('.cred-summary', 'data-verdict')).toBe('none');
-    expect(await popup.evaluate(() => document.querySelector('#result > .card')?.classList.contains('summary'))).toBe(true);
+    expect(await popup.$eval('article.finding', (e) => e.getAttribute('data-category'))).toBe('command');
   });
 });

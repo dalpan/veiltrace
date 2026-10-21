@@ -8,8 +8,8 @@ beforeAll(async () => { [en, id] = await Promise.all([launchExtension('test', 'e
 afterAll(async () => { await Promise.all([en.context.close(), id.context.close()]); });
 
 const SENTINEL = '4111-VT-E2E-SENTINEL-1111';
-const section = (popup: import('playwright').Page): Promise<string[]> =>
-  popup.$$eval('#result > .card[data-verdict]', (els) => els.map((e) => e.className.split(' ')[1] ?? ''));
+const categoriesInOrder = (popup: import('playwright').Page): Promise<string[]> =>
+  popup.$$eval('article.finding', (els) => [...new Set(els.map((e) => e.getAttribute('data-category') ?? ''))]);
 
 describe('payment section in the popup', () => {
   it('fake refund in a chat widget → manipulative payment finding first, with category, severity, explanation and evidence highlighting', async () => {
@@ -18,9 +18,11 @@ describe('payment section in the popup', () => {
     expect(await popup.getAttribute('.cred-summary', 'data-verdict')).toBe('none');
     expect(await popup.getAttribute('.pay-summary', 'data-verdict')).toBe('manipulative_instruction');
     expect(await popup.textContent('.pay-summary .category')).toBe('Payment Manipulation · Experimental');
-    expect(await popup.textContent('.pay-summary h2')).toBe('Manipulative payment request detected');
-    // All detectors are shown; the most severe section comes first.
-    expect(await section(popup)).toEqual(['pay-summary', 'summary', 'cred-summary', 'sup-summary']);
+    expect(await popup.textContent('.pay-summary h2')).toBe('Manipulative');
+    expect(await popup.textContent('.threat-summary h2')).toBe('Manipulative content detected');
+    expect(await popup.$$eval('.cat', (els) => els.map((e) => e.getAttribute('data-category')))).toEqual(['command', 'credential', 'payment', 'support']);
+    expect((await categoriesInOrder(popup))[0]).toBe('payment');
+    expect(await popup.getAttribute('.advice', 'data-advice')).toBe('payment');
     expect(await popup.textContent('.summary .category')).toBe('Command Execution Manipulation');
     const card = popup.locator('article.finding.pay').first();
     expect(await card.getAttribute('data-rule')).toBe('PR1');
@@ -48,7 +50,7 @@ describe('payment section in the popup', () => {
     await scan(popup);
     expect(await popup.getAttribute('.pay-summary', 'data-verdict')).toBe('observed_instruction');
     expect(await popup.locator('article.finding.pay:visible').count()).toBe(0);
-    await popup.click('details.pay-observed summary');
+    await popup.click('details.observed summary');
     expect(await popup.locator('article.finding.pay[data-rule="PR4"]').count()).toBeGreaterThan(0);
     expect(await popup.content()).not.toContain(SENTINEL);
     expect(await popup.content()).not.toContain('$90.00');
@@ -68,11 +70,11 @@ describe('payment section in the popup', () => {
   it('Indonesian popup translates the payment section; page evidence stays untranslated', async () => {
     const { popup } = await scanUrl(id, addCorpusScenario(id, 'pay-dev', 'PD03-id-overlay-akun-diblokir-biaya-verifikasi'));
     expect(await popup.textContent('.pay-summary .category')).toBe('Manipulasi Pembayaran · Eksperimental');
-    expect(await popup.textContent('.pay-summary h2')).toBe('Permintaan pembayaran manipulatif terdeteksi');
+    expect(await popup.textContent('.pay-summary h2')).toBe('Manipulatif');
     expect(await popup.textContent('article.finding.pay .chip.severity')).toBe('Tingkat keparahan: tinggi');
     expect(await popup.locator('article.finding.pay .snippet').allTextContents()).toContain('biaya verifikasi');
     await popup.click('#lang-en');
-    expect(await popup.textContent('.pay-summary h2')).toBe('Manipulative payment request detected');
+    expect(await popup.textContent('.pay-summary h2')).toBe('Manipulative');
   });
 
   it('awareness page and news report → no payment alert', async () => {
@@ -87,6 +89,6 @@ describe('payment section in the popup', () => {
     const { popup } = await scanUrl(en, site.lure);
     expect(await verdict(popup)).toBe('manipulative_instruction');
     expect(await popup.getAttribute('.pay-summary', 'data-verdict')).toBe('none');
-    expect((await section(popup))[0]).toBe('summary');
+    expect((await categoriesInOrder(popup))[0]).toBe('command');
   });
 });

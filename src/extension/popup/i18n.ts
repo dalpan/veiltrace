@@ -7,6 +7,7 @@ import type {
   ImpersonationIndicator, SupportAction, SupportChannel, SupportClaim, SupportLimitation, SupportPressure, SupportRuleId, SupportSignalId,
 } from '../../core/support/types.js';
 import type { ActionRisk, Classification, FieldKind, FormDestination, Level, ModifierId, OverrideId, RuleId, SignalId, Verdict } from '../../core/types.js';
+import type { Category } from './aggregate.js';
 
 export type Lang = 'en' | 'id';
 export type HighlightKey = 'highlighted' | 'invalid-locator' | 'not-found' | 'frame-inaccessible' | 'not-visible' | 'failed';
@@ -27,7 +28,6 @@ export interface Messages {
   limitsText: string;
   metaIdle: string;
   meta: (engine: string, extractor: string, ms: number) => string;
-  headline: Record<Verdict, { title: string; detail: string; tone: 'danger' | 'warning' | 'neutral' }>;
   partialQualifier: string;
   classification: Record<Classification, string>;
   findingTitle: Record<Classification, string>;
@@ -47,8 +47,6 @@ export interface Messages {
   partialTitle: string;
   partialFooter: (blocks: string) => string;
   partial: Record<ScanGap, string>;
-  findingsHeading: (n: number) => string;
-  observedHeading: (n: number) => string;
   loweredFrom: (cls: string) => string;
   contextPrefix: string;
   modifier: Record<ModifierId, string>;
@@ -62,10 +60,7 @@ export interface Messages {
   severity: Record<Classification, string>;
   /** M5.1: experimental credential-disclosure detector. */
   cred: {
-    categoryCommand: string;
-    categorySecret: string;
     experimental: string;
-    headline: Record<Verdict, { title: string; detail: string; tone: 'danger' | 'warning' | 'neutral' }>;
     findingTitle: Record<Classification, string>;
     ruleChip: (id: CredRuleId) => string;
     rule: Record<CredRuleId, string>;
@@ -83,13 +78,9 @@ export interface Messages {
     fieldKind: Record<FieldKind, string>;
     unlabeledField: string;
     limitation: Record<'claimed-identity-unverifiable' | 'destination-not-scored' | 'trust-boundary-heuristic', string>;
-    experimentalNote: string;
-    observedHeading: (n: number) => string;
   };
   /** M5.2: experimental payment-manipulation detector. Trust, modifier and highlight labels are shared with `cred`. */
   pay: {
-    category: string;
-    headline: Record<Verdict, { title: string; detail: string; tone: 'danger' | 'warning' | 'neutral' }>;
     findingTitle: Record<Classification, string>;
     ruleChip: (id: PayRuleId) => string;
     rule: Record<PayRuleId, string>;
@@ -103,13 +94,9 @@ export interface Messages {
     signal: Record<PaySignalId, string>;
     amountHidden: string;
     limitation: Record<PayLimitation, string>;
-    experimentalNote: string;
-    observedHeading: (n: number) => string;
   };
   /** M5.3: experimental fake-support and authority-impersonation detector. Trust, modifier and highlight labels are shared. */
   sup: {
-    category: string;
-    headline: Record<Verdict, { title: string; detail: string; tone: 'danger' | 'warning' | 'neutral' }>;
     findingTitle: Record<Classification, string>;
     ruleChip: (id: SupportRuleId) => string;
     rule: Record<SupportRuleId, string>;
@@ -126,8 +113,38 @@ export interface Messages {
     signal: Record<SupportSignalId, string>;
     contactHidden: string;
     limitation: Record<SupportLimitation, string>;
+  };
+  /** M5.4: unified threat dashboard (all four detectors). */
+  dash: {
+    stateLabel: Record<'standby' | 'scanning' | 'complete' | 'partial' | 'error', string>;
+    assessment: string;
+    headline: Record<Verdict, { title: string; detail: string; tone: 'danger' | 'warning' | 'neutral' }>;
+    statHighest: string;
+    statActionable: string;
+    statCategories: string;
+    statCoverage: string;
+    coverageValue: Record<'complete' | 'partial', string>;
+    noCategories: string;
+    verdictLabel: Record<Verdict, string>;
+    overviewTitle: string;
+    categoryName: Record<Category, string>;
+    /** Short technical codes; identical in both languages. */
+    categoryCode: Record<Category, string>;
+    tileCount: (total: number, actionable: number) => string;
+    experimental: string;
     experimentalNote: string;
-    observedHeading: (n: number) => string;
+    findingsTitle: (n: number) => string;
+    observedTitle: (n: number) => string;
+    groupTitle: (n: number) => string;
+    groupNote: string;
+    alsoCitedBy: (categories: string) => string;
+    evidenceTitle: string;
+    evidenceId: (id: string) => string;
+    findingId: (id: string) => string;
+    actionRiskChip: Record<ActionRisk, string>;
+    adviceTitle: string;
+    advice: Record<Category | 'remoteAccess', string>;
+    adviceNone: string;
   };
   errors: {
     noPageTitle: string; noPageDetail: string;
@@ -154,16 +171,6 @@ const EN: Messages = {
     'content from other sites inside frames, and it can miss instructions worded in unusual ways. A result without findings is not a guarantee.',
   metaIdle: 'Runs on this device only. Nothing is sent anywhere.',
   meta: (engine, extractor, ms) => `Engine ${engine} · extractor ${extractor} · ${ms} ms · on this device only`,
-  headline: {
-    manipulative_instruction: { tone: 'danger', title: 'Manipulative instruction detected',
-      detail: 'This page asks you to run something on your computer and presents it as a verification step. Do not follow these instructions.' },
-    suspicious_correlation: { tone: 'warning', title: 'Suspicious instruction detected',
-      detail: 'This page asks you to run something on your computer and uses pressure, authority or a "fix" story. Be careful before following it.' },
-    observed_instruction: { tone: 'neutral', title: 'No suspicious instructions detected in the analyzed content.',
-      detail: 'Instructions to run commands were found, but without signs of manipulation nearby. Only follow them if you trust the source.' },
-    none: { tone: 'neutral', title: 'No suspicious instructions detected in the analyzed content.',
-      detail: 'VeilTrace looked for instructions that try to make you run commands. It did not find any in the content it could examine.' },
-  },
   partialQualifier: ' Part of the page could not be examined (see below).',
   classification: { manipulative_instruction: 'Manipulative', suspicious_correlation: 'Suspicious', observed_instruction: 'Observed' },
   findingTitle: { manipulative_instruction: 'Manipulative instruction', suspicious_correlation: 'Suspicious instruction', observed_instruction: 'Observed instruction' },
@@ -215,8 +222,6 @@ const EN: Messages = {
     'extractor-truncated': 'Some content was skipped.',
     'core-truncated': 'Some content exceeded the analysis limits and was skipped.',
   },
-  findingsHeading: (n) => `Findings (${n})`,
-  observedHeading: (n) => `Observed instructions without manipulation signs (${n})`,
   loweredFrom: (cls) => `Lowered from ${cls.toLowerCase()} because of context: `,
   contextPrefix: 'Context: ',
   modifier: {
@@ -237,19 +242,7 @@ const EN: Messages = {
   moreFindings: (n) => `${n} more finding(s) not shown (display limit).`,
   severity: { manipulative_instruction: 'Severity: high', suspicious_correlation: 'Severity: medium', observed_instruction: 'Severity: informational' },
   cred: {
-    categoryCommand: 'Command Execution Manipulation',
-    categorySecret: 'Credential Disclosure Manipulation',
     experimental: 'Experimental',
-    headline: {
-      manipulative_instruction: { tone: 'danger', title: 'Manipulative request for a password or code detected',
-        detail: 'This page asks you to give a password, code or recovery phrase to someone, or wraps the request in a false pretext. Do not share it.' },
-      suspicious_correlation: { tone: 'warning', title: 'Suspicious request for a password or code detected',
-        detail: 'This page asks for a password or code together with a threat to your account, or inside content the site may not control. Check before you enter anything.' },
-      observed_instruction: { tone: 'neutral', title: 'Sign-in or code requests found, without signs of manipulation.',
-        detail: 'Ordinary sign-in and verification steps look like this. Only enter secrets on sites you opened yourself.' },
-      none: { tone: 'neutral', title: 'No requests for passwords, codes or recovery phrases found in the analyzed content.',
-        detail: 'VeilTrace looked for requests to give or type passwords, one-time codes and recovery phrases.' },
-    },
     findingTitle: { manipulative_instruction: 'Manipulative request for a secret', suspicious_correlation: 'Suspicious request for a secret', observed_instruction: 'Sign-in or code request' },
     ruleChip: (id) => `Rule ${id}`,
     rule: {
@@ -300,21 +293,8 @@ const EN: Messages = {
       'destination-not-scored': 'Where the form submits is shown for information only; VeilTrace does not judge sites.',
       'trust-boundary-heuristic': 'Whether this content comes from the site or from others is estimated from the page structure.',
     },
-    experimentalNote: 'Experimental: this check has not yet passed an independent evaluation. It looks only at the page text and form structure, never at what you typed.',
-    observedHeading: (n) => `Sign-in and code requests without manipulation signs (${n})`,
   },
   pay: {
-    category: 'Payment Manipulation',
-    headline: {
-      manipulative_instruction: { tone: 'danger', title: 'Manipulative payment request detected',
-        detail: 'This page asks you to pay in a way scams use: paying first to receive a refund or prize, paying a personal account or gift cards, or paying under a threat. Do not pay.' },
-      suspicious_correlation: { tone: 'warning', title: 'Suspicious payment request detected',
-        detail: 'This page asks for money together with signs often seen in scams. Check with the organization through a channel you already know before paying.' },
-      observed_instruction: { tone: 'neutral', title: 'Payment requests found, without signs of manipulation.',
-        detail: 'Checkouts, invoices and donation pages look like this. Pay only through channels you trust.' },
-      none: { tone: 'neutral', title: 'No payment requests found in the analyzed content.',
-        detail: 'VeilTrace looked for requests to pay or transfer money.' },
-    },
     findingTitle: { manipulative_instruction: 'Manipulative payment request', suspicious_correlation: 'Suspicious payment request', observed_instruction: 'Payment request' },
     ruleChip: (id) => `Rule ${id}`,
     rule: {
@@ -345,21 +325,8 @@ const EN: Messages = {
       'trust-boundary-heuristic': 'Whether this content comes from the site or from others is estimated from the page structure.',
       'amount-not-reported': 'Amounts are matched to understand the request, but their values are never copied into the report.',
     },
-    experimentalNote: 'Experimental: this check has not yet passed an independent evaluation. It reads only the page text, never form fields, card numbers, balances or what you typed.',
-    observedHeading: (n) => `Payment requests without manipulation signs (${n})`,
   },
   sup: {
-    category: 'Support & Authority Impersonation',
-    headline: {
-      manipulative_instruction: { tone: 'danger', title: 'Manipulative support or authority direction detected',
-        detail: 'This page shows signs of fake support: an alarm drawn by the web page, or someone presenting as support, a bank or an administrator who sends you to an outside contact, or asks for remote access or an install, under pressure. Do not call, install or give access.' },
-      suspicious_correlation: { tone: 'warning', title: 'Suspicious support or authority direction detected',
-        detail: 'This page directs you to contact someone, install software or allow remote access, together with signs often seen in support scams. Find the organization’s contact details yourself before you act.' },
-      observed_instruction: { tone: 'neutral', title: 'Support directions found, without signs of impersonation.',
-        detail: 'Help centers and contact pages look like this. Use contact details you found yourself.' },
-      none: { tone: 'neutral', title: 'No support or authority directions found in the analyzed content.',
-        detail: 'VeilTrace looked for directions to call or message support, install software or allow remote access.' },
-    },
     findingTitle: { manipulative_instruction: 'Manipulative support direction', suspicious_correlation: 'Suspicious support direction', observed_instruction: 'Support direction' },
     ruleChip: (id) => `Rule ${id}`,
     rule: {
@@ -398,8 +365,54 @@ const EN: Messages = {
       'trust-boundary-heuristic': 'Whether this content comes from the site or from others is estimated from the page structure.',
       'contact-details-not-reported': 'Phone numbers are matched to understand the direction, but are never copied into the report.',
     },
-    experimentalNote: 'Experimental: this check has not yet passed an independent evaluation. It reads only the page text, never form fields or what you typed, and never copies phone numbers.',
-    observedHeading: (n) => `Support directions without impersonation signs (${n})`,
+  },
+  dash: {
+    stateLabel: { standby: 'STANDBY', scanning: 'SCANNING', complete: 'SCAN COMPLETE', partial: 'PARTIAL SCAN', error: 'SCAN FAILED' },
+    assessment: 'PAGE THREAT ASSESSMENT',
+    headline: {
+      manipulative_instruction: { tone: 'danger', title: 'Manipulative content detected',
+        detail: 'This page tries to make you do something harmful. Do not follow the instructions listed below.' },
+      suspicious_correlation: { tone: 'warning', title: 'Suspicious content detected',
+        detail: 'This page combines requests with signs often seen in scams. Check the findings below before you act.' },
+      observed_instruction: { tone: 'neutral', title: 'No manipulation signs in the analyzed content',
+        detail: 'Ordinary instructions or requests were found and are listed as observed. This is not a guarantee about the page.' },
+      none: { tone: 'neutral', title: 'Nothing to report in the analyzed content',
+        detail: 'VeilTrace found no findings in what it could examine. This is not a guarantee about the page.' },
+    },
+    statHighest: 'Highest classification',
+    statActionable: 'Actionable findings',
+    statCategories: 'Affected categories',
+    statCoverage: 'Scan coverage',
+    coverageValue: { complete: 'Complete', partial: 'Partial' },
+    noCategories: 'None',
+    verdictLabel: { manipulative_instruction: 'Manipulative', suspicious_correlation: 'Suspicious', observed_instruction: 'Observed only', none: 'No findings' },
+    overviewTitle: 'Detection categories',
+    categoryName: {
+      command: 'Command Execution Manipulation', credential: 'Credential Disclosure Manipulation', payment: 'Payment Manipulation',
+      support: 'Support & Authority Impersonation',
+    },
+    categoryCode: { command: 'CMD', credential: 'CRED', payment: 'PAY', support: 'SUP' },
+    tileCount: (total, actionable) => (total === 0 ? '0 findings' : `${actionable} actionable · ${total} total`),
+    experimental: 'Experimental',
+    experimentalNote: 'Credential, payment and support checks are experimental and have not yet passed an independent evaluation. They read only the page text and form structure, never what you typed, and never copy amounts or phone numbers.',
+    findingsTitle: (n) => `Findings (${n})`,
+    observedTitle: (n) => `Observed without manipulation signs (${n})`,
+    groupTitle: (n) => `${n} related findings on the same page element`,
+    groupNote: 'Each detector’s finding is shown with its own evidence.',
+    alsoCitedBy: (c) => `Also cited by: ${c}`,
+    evidenceTitle: 'Observed evidence',
+    evidenceId: (id) => `Evidence ID ${id}`,
+    findingId: (id) => `Finding ID ${id}`,
+    actionRiskChip: { high: 'Action risk: high', medium: 'Action risk: medium' },
+    adviceTitle: 'What to do',
+    advice: {
+      command: 'Do not press Win+R, open a terminal, paste or run anything this page asks for. A real CAPTCHA never asks you to run commands.',
+      credential: 'Do not send passwords, one-time codes or recovery phrases to anyone. Sign in only on a site you opened yourself.',
+      payment: 'Do not pay to receive a refund, prize or unlocked account, and do not pay personal accounts, gift cards or crypto on request. Contact the organization through a channel you already know.',
+      support: 'Do not call numbers or message accounts shown in alerts or comments. Look up the organization’s contact details yourself.',
+      remoteAccess: 'Never install remote-access apps (AnyDesk, TeamViewer) or other software because someone claiming to be support asks you to.',
+    },
+    adviceNone: 'No findings does not make a page trustworthy. VeilTrace checks only what it can see on this page, at the moment of the scan.',
   },
   errors: {
     noPageTitle: 'No page to scan', noPageDetail: 'Open a web page, then click the VeilTrace button again.',
@@ -429,16 +442,6 @@ const ID: Messages = {
     'atau konten dari situs lain di dalam frame, dan bisa melewatkan instruksi yang ditulis dengan cara tidak biasa. Hasil tanpa temuan bukan jaminan.',
   metaIdle: 'Berjalan hanya di perangkat ini. Tidak ada data yang dikirim.',
   meta: (engine, extractor, ms) => `Engine ${engine} · extractor ${extractor} · ${ms} md · hanya di perangkat ini`,
-  headline: {
-    manipulative_instruction: { tone: 'danger', title: 'Instruksi manipulatif terdeteksi',
-      detail: 'Halaman ini meminta Anda menjalankan sesuatu di komputer dan menyamarkannya sebagai langkah verifikasi. Jangan ikuti instruksi ini.' },
-    suspicious_correlation: { tone: 'warning', title: 'Instruksi mencurigakan terdeteksi',
-      detail: 'Halaman ini meminta Anda menjalankan sesuatu di komputer dan memakai tekanan, klaim otoritas, atau cerita "perbaikan". Berhati-hatilah sebelum mengikutinya.' },
-    observed_instruction: { tone: 'neutral', title: 'Tidak ada instruksi mencurigakan di konten yang dianalisis.',
-      detail: 'Ada instruksi untuk menjalankan perintah, tetapi tanpa tanda manipulasi di sekitarnya. Ikuti hanya jika Anda memercayai sumbernya.' },
-    none: { tone: 'neutral', title: 'Tidak ada instruksi mencurigakan di konten yang dianalisis.',
-      detail: 'VeilTrace mencari instruksi yang mencoba membuat Anda menjalankan perintah, dan tidak menemukannya di konten yang dapat diperiksa.' },
-  },
   partialQualifier: ' Sebagian halaman tidak dapat diperiksa (lihat di bawah).',
   classification: { manipulative_instruction: 'Manipulatif', suspicious_correlation: 'Mencurigakan', observed_instruction: 'Teramati' },
   findingTitle: { manipulative_instruction: 'Instruksi manipulatif', suspicious_correlation: 'Instruksi mencurigakan', observed_instruction: 'Instruksi teramati' },
@@ -490,8 +493,6 @@ const ID: Messages = {
     'extractor-truncated': 'Sebagian konten dilewati.',
     'core-truncated': 'Sebagian konten melebihi batas analisis dan dilewati.',
   },
-  findingsHeading: (n) => `Temuan (${n})`,
-  observedHeading: (n) => `Instruksi teramati tanpa tanda manipulasi (${n})`,
   loweredFrom: (cls) => `Diturunkan dari ${cls.toLowerCase()} karena konteks: `,
   contextPrefix: 'Konteks: ',
   modifier: {
@@ -512,19 +513,7 @@ const ID: Messages = {
   moreFindings: (n) => `${n} temuan lainnya tidak ditampilkan (batas tampilan).`,
   severity: { manipulative_instruction: 'Tingkat keparahan: tinggi', suspicious_correlation: 'Tingkat keparahan: sedang', observed_instruction: 'Tingkat keparahan: informasi' },
   cred: {
-    categoryCommand: 'Manipulasi Eksekusi Perintah',
-    categorySecret: 'Manipulasi Pengungkapan Kredensial',
     experimental: 'Eksperimental',
-    headline: {
-      manipulative_instruction: { tone: 'danger', title: 'Permintaan manipulatif atas kata sandi atau kode terdeteksi',
-        detail: 'Halaman ini meminta Anda memberikan kata sandi, kode, atau frasa pemulihan kepada seseorang, atau membungkus permintaan itu dengan dalih palsu. Jangan bagikan.' },
-      suspicious_correlation: { tone: 'warning', title: 'Permintaan mencurigakan atas kata sandi atau kode terdeteksi',
-        detail: 'Halaman ini meminta kata sandi atau kode disertai ancaman terhadap akun Anda, atau di dalam konten yang mungkin tidak dikendalikan situs. Periksa sebelum mengisi apa pun.' },
-      observed_instruction: { tone: 'neutral', title: 'Permintaan masuk atau kode ditemukan, tanpa tanda manipulasi.',
-        detail: 'Langkah masuk dan verifikasi biasa memang seperti ini. Isi rahasia hanya di situs yang Anda buka sendiri.' },
-      none: { tone: 'neutral', title: 'Tidak ada permintaan kata sandi, kode, atau frasa pemulihan di konten yang dianalisis.',
-        detail: 'VeilTrace mencari permintaan untuk memberikan atau mengetik kata sandi, kode sekali pakai, dan frasa pemulihan.' },
-    },
     findingTitle: { manipulative_instruction: 'Permintaan rahasia yang manipulatif', suspicious_correlation: 'Permintaan rahasia yang mencurigakan', observed_instruction: 'Permintaan masuk atau kode' },
     ruleChip: (id) => `Aturan ${id}`,
     rule: {
@@ -575,21 +564,8 @@ const ID: Messages = {
       'destination-not-scored': 'Tujuan formulir hanya ditampilkan sebagai informasi; VeilTrace tidak menilai situs.',
       'trust-boundary-heuristic': 'Apakah konten ini berasal dari situs atau dari pihak lain diperkirakan dari struktur halaman.',
     },
-    experimentalNote: 'Eksperimental: pemeriksaan ini belum lulus evaluasi independen. Hanya teks halaman dan struktur formulir yang diperiksa, tidak pernah isian yang Anda ketik.',
-    observedHeading: (n) => `Permintaan masuk dan kode tanpa tanda manipulasi (${n})`,
   },
   pay: {
-    category: 'Manipulasi Pembayaran',
-    headline: {
-      manipulative_instruction: { tone: 'danger', title: 'Permintaan pembayaran manipulatif terdeteksi',
-        detail: 'Halaman ini meminta Anda membayar dengan cara yang lazim dipakai penipuan: membayar dulu untuk menerima refund atau hadiah, membayar ke rekening pribadi atau kartu hadiah, atau membayar di bawah ancaman. Jangan bayar.' },
-      suspicious_correlation: { tone: 'warning', title: 'Permintaan pembayaran mencurigakan terdeteksi',
-        detail: 'Halaman ini meminta uang disertai tanda yang sering muncul dalam penipuan. Pastikan ke organisasinya lewat saluran yang sudah Anda kenal sebelum membayar.' },
-      observed_instruction: { tone: 'neutral', title: 'Permintaan pembayaran ditemukan, tanpa tanda manipulasi.',
-        detail: 'Halaman checkout, tagihan, dan donasi memang seperti ini. Bayar hanya lewat saluran yang Anda percayai.' },
-      none: { tone: 'neutral', title: 'Tidak ada permintaan pembayaran di konten yang dianalisis.',
-        detail: 'VeilTrace mencari permintaan untuk membayar atau mentransfer uang.' },
-    },
     findingTitle: { manipulative_instruction: 'Permintaan pembayaran manipulatif', suspicious_correlation: 'Permintaan pembayaran mencurigakan', observed_instruction: 'Permintaan pembayaran' },
     ruleChip: (id) => `Aturan ${id}`,
     rule: {
@@ -620,21 +596,8 @@ const ID: Messages = {
       'trust-boundary-heuristic': 'Apakah konten ini berasal dari situs atau dari pihak lain diperkirakan dari struktur halaman.',
       'amount-not-reported': 'Nominal dicocokkan untuk memahami permintaan, tetapi nilainya tidak pernah disalin ke laporan.',
     },
-    experimentalNote: 'Eksperimental: pemeriksaan ini belum lulus evaluasi independen. Hanya teks halaman yang dibaca, tidak pernah kolom formulir, nomor kartu, saldo, atau isian yang Anda ketik.',
-    observedHeading: (n) => `Permintaan pembayaran tanpa tanda manipulasi (${n})`,
   },
   sup: {
-    category: 'Peniruan Dukungan & Otoritas',
-    headline: {
-      manipulative_instruction: { tone: 'danger', title: 'Arahan dukungan atau otoritas yang manipulatif terdeteksi',
-        detail: 'Halaman ini menunjukkan tanda dukungan palsu: alarm yang dibuat halaman web, atau pihak yang mengaku petugas, bank, atau admin yang mengarahkan Anda ke kontak luar, atau meminta akses jarak jauh atau instalasi, disertai tekanan. Jangan menelepon, menginstal, atau memberi akses.' },
-      suspicious_correlation: { tone: 'warning', title: 'Arahan dukungan atau otoritas yang mencurigakan terdeteksi',
-        detail: 'Halaman ini mengarahkan Anda menghubungi seseorang, menginstal perangkat lunak, atau memberi akses jarak jauh, disertai tanda yang sering muncul dalam penipuan berkedok dukungan. Cari sendiri kontak organisasinya sebelum bertindak.' },
-      observed_instruction: { tone: 'neutral', title: 'Arahan dukungan ditemukan, tanpa tanda peniruan.',
-        detail: 'Pusat bantuan dan halaman kontak memang seperti ini. Gunakan kontak yang Anda temukan sendiri.' },
-      none: { tone: 'neutral', title: 'Tidak ada arahan dukungan atau otoritas di konten yang dianalisis.',
-        detail: 'VeilTrace mencari arahan untuk menelepon atau mengirim pesan ke petugas, menginstal perangkat lunak, atau memberi akses jarak jauh.' },
-    },
     findingTitle: { manipulative_instruction: 'Arahan dukungan yang manipulatif', suspicious_correlation: 'Arahan dukungan yang mencurigakan', observed_instruction: 'Arahan dukungan' },
     ruleChip: (id) => `Aturan ${id}`,
     rule: {
@@ -673,8 +636,54 @@ const ID: Messages = {
       'trust-boundary-heuristic': 'Apakah konten ini berasal dari situs atau dari pihak lain diperkirakan dari struktur halaman.',
       'contact-details-not-reported': 'Nomor telepon dicocokkan untuk memahami arahan, tetapi tidak pernah disalin ke laporan.',
     },
-    experimentalNote: 'Eksperimental: pemeriksaan ini belum lulus evaluasi independen. Hanya teks halaman yang dibaca, tidak pernah kolom formulir atau isian Anda, dan nomor telepon tidak pernah disalin.',
-    observedHeading: (n) => `Arahan dukungan tanpa tanda peniruan (${n})`,
+  },
+  dash: {
+    stateLabel: { standby: 'SIAGA', scanning: 'MEMINDAI', complete: 'PEMINDAIAN LENGKAP', partial: 'PEMINDAIAN SEBAGIAN', error: 'PEMINDAIAN GAGAL' },
+    assessment: 'PENILAIAN ANCAMAN HALAMAN',
+    headline: {
+      manipulative_instruction: { tone: 'danger', title: 'Konten manipulatif terdeteksi',
+        detail: 'Halaman ini mencoba membuat Anda melakukan sesuatu yang merugikan. Jangan ikuti instruksi yang tercantum di bawah.' },
+      suspicious_correlation: { tone: 'warning', title: 'Konten mencurigakan terdeteksi',
+        detail: 'Halaman ini menggabungkan permintaan dengan tanda yang sering muncul dalam penipuan. Periksa temuan di bawah sebelum bertindak.' },
+      observed_instruction: { tone: 'neutral', title: 'Tidak ada tanda manipulasi di konten yang dianalisis',
+        detail: 'Instruksi atau permintaan biasa ditemukan dan dicantumkan sebagai teramati. Ini bukan jaminan tentang halaman.' },
+      none: { tone: 'neutral', title: 'Tidak ada yang perlu dilaporkan di konten yang dianalisis',
+        detail: 'VeilTrace tidak menemukan temuan di bagian yang dapat diperiksa. Ini bukan jaminan tentang halaman.' },
+    },
+    statHighest: 'Klasifikasi tertinggi',
+    statActionable: 'Perlu tindakan',
+    statCategories: 'Kategori terdampak',
+    statCoverage: 'Cakupan pemindaian',
+    coverageValue: { complete: 'Lengkap', partial: 'Sebagian' },
+    noCategories: 'Tidak ada',
+    verdictLabel: { manipulative_instruction: 'Manipulatif', suspicious_correlation: 'Mencurigakan', observed_instruction: 'Hanya teramati', none: 'Tidak ada temuan' },
+    overviewTitle: 'Kategori deteksi',
+    categoryName: {
+      command: 'Manipulasi Eksekusi Perintah', credential: 'Manipulasi Pengungkapan Kredensial', payment: 'Manipulasi Pembayaran',
+      support: 'Peniruan Dukungan & Otoritas',
+    },
+    categoryCode: { command: 'CMD', credential: 'CRED', payment: 'PAY', support: 'SUP' },
+    tileCount: (total, actionable) => (total === 0 ? '0 temuan' : `${actionable} perlu tindakan · ${total} total`),
+    experimental: 'Eksperimental',
+    experimentalNote: 'Pemeriksaan kredensial, pembayaran, dan dukungan bersifat eksperimental dan belum lulus evaluasi independen. Hanya teks halaman dan struktur formulir yang dibaca, tidak pernah isian Anda, dan nominal maupun nomor telepon tidak pernah disalin.',
+    findingsTitle: (n) => `Temuan (${n})`,
+    observedTitle: (n) => `Teramati tanpa tanda manipulasi (${n})`,
+    groupTitle: (n) => `${n} temuan terkait pada elemen halaman yang sama`,
+    groupNote: 'Temuan setiap detektor ditampilkan dengan buktinya sendiri.',
+    alsoCitedBy: (c) => `Juga dirujuk oleh: ${c}`,
+    evidenceTitle: 'Bukti teramati',
+    evidenceId: (id) => `ID bukti ${id}`,
+    findingId: (id) => `ID temuan ${id}`,
+    actionRiskChip: { high: 'Risiko tindakan: tinggi', medium: 'Risiko tindakan: sedang' },
+    adviceTitle: 'Yang perlu dilakukan',
+    advice: {
+      command: 'Jangan tekan Win+R, membuka terminal, menempel, atau menjalankan apa pun yang diminta halaman ini. CAPTCHA asli tidak pernah meminta Anda menjalankan perintah.',
+      credential: 'Jangan kirim kata sandi, kode sekali pakai, atau frasa pemulihan kepada siapa pun. Masuk hanya di situs yang Anda buka sendiri.',
+      payment: 'Jangan membayar untuk menerima refund, hadiah, atau pembukaan akun, dan jangan membayar ke rekening pribadi, kartu hadiah, atau kripto atas permintaan. Hubungi organisasinya lewat saluran yang sudah Anda kenal.',
+      support: 'Jangan menelepon nomor atau menghubungi akun yang muncul di peringatan atau komentar. Cari sendiri kontak resmi organisasinya.',
+      remoteAccess: 'Jangan pernah menginstal aplikasi akses jarak jauh (AnyDesk, TeamViewer) atau perangkat lunak lain karena diminta orang yang mengaku petugas.',
+    },
+    adviceNone: 'Tidak adanya temuan tidak membuat halaman dapat dipercaya. VeilTrace hanya memeriksa yang terlihat di halaman ini, pada saat pemindaian.',
   },
   errors: {
     noPageTitle: 'Tidak ada halaman untuk dipindai', noPageDetail: 'Buka sebuah halaman web, lalu klik tombol VeilTrace lagi.',

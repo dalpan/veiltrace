@@ -4,6 +4,20 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-21 · M5.4 Unified threat dashboard · **Implemented (UI only); manual Chrome validation pending**
+
+**Done**
+- `src/extension/popup/aggregate.ts`: pure aggregation of the four detector sections (highest classification, actionable count, affected categories, completeness), ranking (classification → action risk → confidence → detector), grouping of findings that cite the same element with provenance kept (D-077).
+- Popup rewritten as one dashboard: header with scan status and version, page threat summary with four stats, category overview tiles, coverage panel, contextual advice, unified findings list with F-/E- ids, groups, collapsed observed list. Dark console styling at 560 px with narrow fallback (D-078). EN/ID strings in parity; per-section headlines replaced by dashboard strings.
+- Detection engines, `ScanReport` v4, permissions and privacy rules unchanged.
+- **Tests:** `tests/aggregate.test.ts` (8), `tests/browser/dashboard.test.ts` (2), `tests/e2e/dashboard.test.ts` (7: aggregation, sorting, grouping, highlighting from a group, keyboard, language switching, empty and partial scans, layout at 560/420/360 px). Existing E2E assertions updated to the dashboard.
+
+**Verification:** typecheck and lint clean; unit 357/357, browser 178/178, E2E 64/64, verify:extension 31/31. One first full run had load-related timeouts (an extractor budget test and three E2E tests near 515 s); each passed on an isolated rerun. No change under `src/core`, `src/extract`, `src/extension/content`, the manifest, corpora or evaluation data; `eval-freeze-v1` unchanged.
+
+**Next:** owner review; manual Chrome check (DEMO.md D1–D8). **Blockers:** none.
+
+---
+
 ## 2026-10-21 · M5.3 Fake support and authority impersonation · **Implemented as experimental (development data only); manual Chrome validation pending**
 
 **Done**

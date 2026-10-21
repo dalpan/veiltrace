@@ -29,6 +29,15 @@ export function classifyUrl(url: string | undefined): UrlClass {
   return 'scannable';
 }
 
+/** The installed extension's version (shown in the header), or "" when unavailable. */
+export function extensionVersion(): string {
+  try {
+    return chrome.runtime.getManifest().version;
+  } catch {
+    return '';
+  }
+}
+
 export async function getTargetTab(): Promise<TargetTab | null> {
   if (__VT_TEST__) {
     // Test build only: Playwright cannot click the toolbar button, so the target tab is passed explicitly.

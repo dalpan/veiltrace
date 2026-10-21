@@ -95,3 +95,11 @@ A fourth section, **"Support & Authority Impersonation · Experimental"** (detec
 - **Privacy:** only page text is read; phone numbers are never shown or stored in the report.
 
 Known errors on the 27-scenario development set (same author as the rules; optimistic): alarms worded outside the lexicon ("Windows has detected a Zeus trojan") are missed. Numbers shown only in images are not seen.
+
+## 11. The unified dashboard (M5.4, development build)
+
+From M5.4 the popup shows all four checks in one view:
+- **Page threat assessment:** the highest classification across the checks, the number of findings that need attention (suspicious or manipulative), the affected categories (CMD, CRED, PAY, SUP) and whether the scan was complete.
+- **Detection categories:** one tile per check with its own result. Credential, payment and support checks are marked experimental.
+- **What to do:** short advice for each affected category. With no findings, a reminder that this is not a guarantee.
+- **Findings:** one list, most serious first (classification, then action risk, then confidence). Each card keeps classification, severity, confidence and action risk separate, and every evidence item has an id (E-nn) and **Show on page**. Findings from different checks that point at the same element are shown together as related findings; each keeps its own evidence and rule.

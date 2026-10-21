@@ -45,11 +45,11 @@ describe('demo site in the extension popup', () => {
   it('Indonesian popup; switching to English re-renders without rescanning', async () => {
     const site = addDemoSite(id, 'https://help.nusaverta.test/');
     const { popup } = await scanUrl(id, site.lure);
-    expect(await popup.textContent('.summary h2')).toBe('Instruksi manipulatif terdeteksi');
+    expect(await popup.textContent('.threat-summary h2')).toBe('Konten manipulatif terdeteksi');
     const injections = await popup.getAttribute('body', 'data-injections');
     const meta = await popup.textContent('#meta');
     await popup.click('#lang-en');
-    expect(await popup.textContent('.summary h2')).toBe('Manipulative instruction detected');
+    expect(await popup.textContent('.threat-summary h2')).toBe('Manipulative content detected');
     expect(await verdict(popup)).toBe('manipulative_instruction');
     expect(await snippets(popup)).toEqual(['Verify you are human', 'Windows + R', 'Ctrl + V', 'Press Enter', "I'm not a robot"]);
     expect(await popup.getAttribute('body', 'data-injections')).toBe(injections);

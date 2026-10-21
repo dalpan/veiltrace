@@ -103,7 +103,8 @@ export async function tabIdOf(l: Loaded, page: Page): Promise<number> {
 /** Opens the popup UI (as a tab) targeting `tabId` (test build only). */
 export async function openPopup(l: Loaded, tabId: number): Promise<Page> {
   const popup = await l.context.newPage();
-  await popup.setViewportSize({ width: 400, height: 760 });
+  // Chrome popups are at most 800×600; the dashboard is designed for 560 px.
+  await popup.setViewportSize({ width: 560, height: 600 });
   await popup.goto(`chrome-extension://${l.extId}/popup.html?tab=${tabId}`);
   return popup;
 }

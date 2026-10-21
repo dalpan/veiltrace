@@ -117,3 +117,18 @@ Build a development release from the M5.1 commit (`npm run release`, version 0.6
 | K6 | `CD06-id-komentar-admin-kirim-otp/` in an Indonesian browser, then **EN** | Indonesian credential card, evidence untranslated; switching languages does not rescan | Two screenshots |
 | K7 | `http://localhost:8080/demo/` (M4.4 demo) → scan | ClickFix result as in N4; credential card "No requests for passwords, codes or recovery phrases found…" | Screenshot |
 | K8 | Wi-Fi off, DevTools Network for page and popup, repeat K2 and K4 | Same results; no requests caused by VeilTrace | Network screenshots |
+
+## Unified dashboard checklist (M5.4, development build; not yet run by the owner)
+
+The K/N/M/B/C checklists above record what the owner confirmed on v0.4.0–v0.5.0 and quote that popup's strings. From M5.4 the popup is one dashboard: the page headline is "Manipulative content detected" / "Suspicious content detected" / "No manipulation signs in the analyzed content" / "Nothing to report in the analyzed content", and the observed list is "Observed without manipulation signs (n)".
+
+| # | Step | Expected |
+|---|---|---|
+| D1 | Load the development build; open any page; click the toolbar button | Dark popup about 560 px wide; header "VEILTRACE", status "STANDBY", version "v…"; no horizontal scrollbar |
+| D2 | `demo/` lure → scan | "Manipulative content detected"; stats: Manipulative · 1 · CMD · Complete; tile CMD Manipulative, others "No findings"; advice item for commands; finding F-01 with R1 chips and evidence E-01…; status "SCAN COMPLETE" |
+| D3 | **Show on page** on E-02 | Amber box on the widget post; "Highlighted on the page." |
+| D4 | `CD01-en-community-otp-reply/` → scan | First card CRED, Rule CR1; tile CRED Manipulative; advice for credentials |
+| D5 | `PD01-en-chat-refund-release-fee/` → scan | First card PAY, Rule PR1; amounts shown as "(amount on the page; the value is not shown)" |
+| D6 | `SD01-en-fake-virus-overlay-call/` → scan | First card SUP, Rule SR1; no phone number anywhere in the popup |
+| D7 | `cross-origin.html` → scan | Status "PARTIAL SCAN"; coverage stat "Partial"; partial-scan panel lists frames |
+| D8 | **ID**, then **EN** | All labels switch, evidence text and E-ids unchanged, no rescan; the words "safe"/"aman" never appear |

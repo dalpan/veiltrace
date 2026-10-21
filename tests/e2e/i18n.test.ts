@@ -21,7 +21,7 @@ describe('Indonesian UI (browser UI language = id)', () => {
     expect(await popup.getAttribute('html', 'lang')).toBe('id');
     expect(await popup.textContent('#tagline')).toBe('Ungkap manipulasi di balik halaman');
     expect(await popup.textContent('#scan')).toBe('Pindai ulang');
-    expect(await popup.textContent('.summary h2')).toBe('Instruksi manipulatif terdeteksi');
+    expect(await popup.textContent('.threat-summary h2')).toBe('Konten manipulatif terdeteksi');
     expect(await popup.textContent('.coverage h3')).toBe('Pemindaian lengkap');
     expect(await popup.$$eval('.chip', (c) => c.map((x) => x.textContent))).toEqual(expect.arrayContaining(['Manipulatif', 'Keyakinan: tinggi', 'Aturan R1']));
     // Evidence is the English page text, untranslated.
@@ -69,19 +69,19 @@ describe('language switching (English browser)', () => {
     const popup = await openPopup(en, await tabIdOf(en, target));
     expect(await popup.getAttribute('body', 'data-lang')).toBe('en');
     await scan(popup);
-    expect(await popup.textContent('.summary h2')).toBe('Manipulative instruction detected');
+    expect(await popup.textContent('.threat-summary h2')).toBe('Manipulative content detected');
     await popup.click('article.finding button >> nth=0');
     await popup.waitForSelector('.hl-status[data-result]');
     const snippetsEn = await popup.$$eval('.snippet', (e) => e.map((x) => x.textContent));
     await popup.click('#lang-id');
     expect(await popup.getAttribute('body', 'data-lang')).toBe('id');
     expect(await popup.getAttribute('#lang-id', 'aria-pressed')).toBe('true');
-    expect(await popup.textContent('.summary h2')).toBe('Instruksi manipulatif terdeteksi');
+    expect(await popup.textContent('.threat-summary h2')).toBe('Konten manipulatif terdeteksi');
     expect(await popup.textContent('.hl-status[data-result]')).toBe('Ditandai di halaman.');
     expect(await popup.$$eval('.snippet', (e) => e.map((x) => x.textContent))).toEqual(snippetsEn);
     expect(await popup.getAttribute('body', 'data-injections')).toBe('1');
     await popup.click('#lang-en');
-    expect(await popup.textContent('.summary h2')).toBe('Manipulative instruction detected');
+    expect(await popup.textContent('.threat-summary h2')).toBe('Manipulative content detected');
     expect(await popup.textContent('#scan')).toBe('Scan again');
   });
 

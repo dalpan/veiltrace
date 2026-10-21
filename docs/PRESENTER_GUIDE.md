@@ -34,6 +34,8 @@ For the person presenting VeilTrace v0.5.0 (engine 0.2.0, ruleset `m4.1`). Every
 | 5 | `http://localhost:8080/D45-en-concealed-payload-edu-cue/` | Contextual override (dev fixture) |
 | 6 | `http://localhost:8080/cross-origin.html` | Partial scan (cross-origin frame) |
 
+**Build note:** the strings quoted in this guide are from the v0.5.0 popup. A development build from M5.4 or later shows the unified dashboard instead (headline "Manipulative content detected", category tiles, F-/E- ids; DEMO.md D1–D8); the flow and the numbers in §7 are unchanged.
+
 **Pre-flight (2 minutes before):** scan tab 1 once to confirm "Manipulative instruction detected" and "Engine 0.2.0" in the footer, then close the popup. Set the zoom so the community widget is visible without scrolling.
 
 ## 2. What the demo page is

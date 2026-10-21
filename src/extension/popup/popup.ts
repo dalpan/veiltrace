@@ -1,9 +1,10 @@
-// Popup controller and renderer. Page-derived strings are only ever inserted as text nodes.
-// UI language: English or Indonesian (i18n.ts); page evidence is shown in its original language.
+// Popup controller and renderer: the unified threat dashboard (M5.4) over the four detectors. Page-derived strings are only
+// ever inserted as text nodes. UI language: English or Indonesian (i18n.ts); page evidence is shown in its original language.
 import type {
   CredEvidenceItem, CredFindingSummary, EvidenceItem, FindingSummary, PayEvidenceItem, PayFindingSummary, ScanReport, SupportEvidenceItem, SupportFindingSummary,
 } from '../content/report.js';
-import { classifyUrl, getTargetTab, runHighlight, runScan, type TargetTab, type UrlClass } from './adapter.js';
+import { classifyUrl, extensionVersion, getTargetTab, runHighlight, runScan, type TargetTab, type UrlClass } from './adapter.js';
+import { aggregate, CATEGORIES, type Category, type Dashboard, type FindingGroup, type FindingRef } from './aggregate.js';
 import { detectLang, formatCount, MESSAGES, type HighlightKey, type Lang, type Messages } from './i18n.js';
 import { parseHighlightResult, parseScanReport } from './validate.js';
 
@@ -43,21 +44,41 @@ function h(tag: string, attrs: Record<string, string> = {}, ...children: Child[]
 
 const $ = (id: string): HTMLElement => document.getElementById(id) as HTMLElement;
 
-/** One evidence row (label, page text, Show on page). `text` is page content: a text node, never translated. */
-function evidenceRow(key: string, label: string, text: string, locator: string | null): HTMLElement {
+/** Per-render numbering of findings (F-01…) and evidence (E-01…), so a presenter can refer to them. */
+interface Numbering {
+  finding: number;
+  evidence: number;
+}
+
+const pad = (n: number): string => String(n).padStart(2, '0');
+
+/** Context of one card inside the dashboard: its numbering and the evidence it shares with related findings. */
+interface CardCtx {
+  ref: FindingRef;
+  num: Numbering;
+  shared: FindingGroup['shared'];
+  /** Shared elements already annotated on this card (the note is shown once per element). */
+  noted: Set<string>;
+}
+
+/**
+ * One evidence row (label, evidence id, page text, Show on page). `text` is page content: a text node, never translated.
+ * `key` identifies the highlight outcome across re-renders (language switches).
+ */
+function evidenceRow(c: CardCtx, key: string, label: string, text: string, locator: string | null): HTMLElement {
   const m = t();
-  const e = { locator };
-  const outcome = state.highlights.get(key) ?? (e.locator ? undefined : 'invalid-locator');
+  const evId = `E-${pad(++c.num.evidence)}`;
+  const outcome = state.highlights.get(key) ?? (locator ? undefined : 'invalid-locator');
   const status = h('p', { class: 'hl-status', 'aria-live': 'polite' }, outcome ? m.highlight[outcome] : '');
-  if (outcome && e.locator) status.dataset.result = outcome;
-  const btn = h('button', { class: 'secondary', type: 'button' }, m.showOnPage) as HTMLButtonElement;
-  btn.disabled = !e.locator;
+  if (outcome && locator) status.dataset.result = outcome;
+  const btn = h('button', { class: 'show', type: 'button', 'aria-describedby': `ev-${evId}` }, m.showOnPage) as HTMLButtonElement;
+  btn.disabled = !locator;
   btn.addEventListener('click', async () => {
-    if (!e.locator || !state.tab) return;
+    if (!locator || !state.tab) return;
     btn.disabled = true;
     let result: HighlightKey;
     try {
-      result = parseHighlightResult(await runHighlight(state.tab.id, e.locator, HIGHLIGHT_MS))?.status ?? 'failed';
+      result = parseHighlightResult(await runHighlight(state.tab.id, locator, HIGHLIGHT_MS))?.status ?? 'failed';
     } catch {
       result = 'failed';
     }
@@ -66,229 +87,225 @@ function evidenceRow(key: string, label: string, text: string, locator: string |
     status.dataset.result = result;
     btn.disabled = false;
   });
-  return h('li', {}, h('div', { class: 'ev-head' }, h('span', { class: 'ev-label' }, label), btn), h('p', { class: 'snippet', lang: '' }, text), status);
+  const others = locator && !c.noted.has(locator) ? (c.shared.get(locator) ?? []).filter((x) => x !== c.ref.category) : [];
+  if (locator && others.length > 0) c.noted.add(locator);
+  return h('li', { 'data-evidence-id': evId },
+    h('div', { class: 'ev-head' },
+      h('span', { class: 'ev-id', title: m.dash.evidenceId(evId), id: `ev-${evId}` }, evId),
+      h('span', { class: 'ev-label' }, label),
+      btn),
+    h('p', { class: 'snippet', lang: '' }, text),
+    others.length > 0 && h('p', { class: 'shared', 'data-shared': others.join(' ') }, m.dash.alsoCitedBy(others.map((x) => m.dash.categoryName[x]).join(', '))),
+    status);
 }
 
-function evidenceItem(f: FindingSummary, i: number, e: EvidenceItem): HTMLElement {
+/** The frame every finding shares: category, title, the separate classification / severity / confidence / action-risk chips, body. */
+function findingShell(c: CardCtx, cls: string, title: string, ruleChip: string, experimental: boolean, body: Child[]): HTMLElement {
   const m = t();
-  return evidenceRow(`${f.id}:${i}`, `${m.signal[e.signal]} · ${m.source[e.source]}${e.deobfuscated ? ` · ${m.deobfuscated}` : ''}`, e.text, e.locator);
+  const f = c.ref;
+  const fid = `F-${pad(++c.num.finding)}`;
+  return h('article', {
+    class: `card finding${cls ? ` ${cls}` : ''}`, 'data-category': f.category, 'data-rule': f.ruleId, 'data-classification': f.classification,
+    'data-risk': f.actionRisk, 'data-finding-id': fid,
+  },
+  h('div', { class: 'card-head' },
+    h('span', { class: 'cat-code', 'data-category': f.category }, m.dash.categoryCode[f.category]),
+    h('div', { class: 'category' }, m.dash.categoryName[f.category]),
+    h('span', { class: 'fid', title: m.dash.findingId(fid) }, fid)),
+  h('h4', {}, title),
+  h('div', { class: 'chips' },
+    h('span', { class: `chip ${f.classification}` }, m.classification[f.classification]),
+    h('span', { class: 'chip severity', 'data-severity': f.classification }, m.severity[f.classification]),
+    h('span', { class: 'chip', title: m.confidenceHelp }, m.confidence[f.confidence]),
+    h('span', { class: `chip risk-chip ${f.actionRisk}` }, m.dash.actionRiskChip[f.actionRisk]),
+    h('span', { class: 'chip rule' }, ruleChip),
+    experimental && h('span', { class: 'chip experimental' }, m.dash.experimental)),
+  ...body);
 }
 
-function credEvidenceItem(f: CredFindingSummary, i: number, e: CredEvidenceItem): HTMLElement {
-  const c = t().cred;
-  const label = e.source === 'form-field'
-    ? `${c.signal[e.signal]} · ${c.fieldSource}${e.fieldKind ? ` (${c.fieldKind[e.fieldKind]})` : ''}`
-    : `${c.signal[e.signal]} · ${t().source['visible-text']}`;
-  return evidenceRow(`cred:${f.id}:${i}`, label, e.text || (e.source === 'form-field' ? c.unlabeledField : ''), e.locator);
-}
-
-function credFindingCard(f: CredFindingSummary): HTMLElement {
+function evidenceList(items: HTMLElement[], total: number): Child[] {
   const m = t();
-  const c = m.cred;
-  const demoted = f.classification !== f.ruleClassification;
-  const indicators = [...f.pretexts.map((p) => c.pretext[p]), ...f.trustContext.map((x) => c.trust[x])];
-  return h('article', { class: 'card finding cred', 'data-rule': f.ruleId, 'data-classification': f.classification },
-    h('div', { class: 'category' }, c.categorySecret),
-    h('h4', {}, c.findingTitle[f.classification]),
-    h('div', { class: 'chips' },
-      h('span', { class: `chip ${f.classification}` }, m.classification[f.classification]),
-      h('span', { class: 'chip severity', 'data-severity': f.classification }, m.severity[f.classification]),
-      h('span', { class: 'chip', title: m.confidenceHelp }, m.confidence[f.confidence]),
-      h('span', { class: 'chip' }, c.ruleChip(f.ruleId)),
-      h('span', { class: 'chip experimental' }, c.experimental),
-    ),
-    h('p', { class: 'explain' }, c.rule[f.ruleId]),
-    h('p', { class: 'requested' }, c.asks(f.requestedAction, f.secretTypes.map((x) => c.secret[x]).join(', '))),
-    indicators.length > 0 && h('p', { class: 'context indicators' }, `${c.indicators}: ${indicators.join(' · ')}`),
-    f.formDestination && h('p', { class: 'context destination' }, c.destination[f.formDestination]),
-    h('p', { class: 'risk' }, c.actionRisk[f.actionRisk]),
-    f.modifiers.length > 0 && f.overrides.length === 0 && h('p', { class: 'context' },
-      `${demoted ? m.loweredFrom(m.classification[f.ruleClassification]) : m.contextPrefix}${f.modifiers.map((x) => c.modifier[x]).join(' ')}`),
-    f.overrides.length > 0 && h('p', { class: 'context', 'data-override': f.overrides.join(' ') }, c.overrideLiveField),
-    h('ul', { class: 'evidence', 'aria-label': m.evidenceAria }, ...f.evidence.map((e, i) => credEvidenceItem(f, i, e))),
-    f.evidenceTotal > f.evidence.length && h('p', { class: 'context', 'data-more': 'evidence' }, m.moreEvidence(f.evidenceTotal - f.evidence.length)),
-    ...f.limitations.map((l) => h('p', { class: 'limitation', 'data-limitation': l }, c.limitation[l])),
-  );
+  return [
+    h('h5', { class: 'ev-title' }, m.dash.evidenceTitle),
+    h('ul', { class: 'evidence', 'aria-label': m.evidenceAria }, ...items),
+    total > items.length && h('p', { class: 'context', 'data-more': 'evidence' }, m.moreEvidence(total - items.length)),
+  ];
 }
 
-function payEvidenceItem(f: PayFindingSummary, i: number, e: PayEvidenceItem): HTMLElement {
-  const p = t().pay;
-  return evidenceRow(`pay:${f.id}:${i}`, `${p.signal[e.signal]} · ${t().source['visible-text']}`, e.signal === 'PA.AMOUNT' ? p.amountHidden : e.text, e.locator);
+const lowered = (cls: FindingSummary['classification'], rule: FindingSummary['classification'], reasons: string): string => {
+  const m = t();
+  return `${cls !== rule ? m.loweredFrom(m.classification[rule]) : m.contextPrefix}${reasons}`;
+};
+
+function commandCard(c: CardCtx, f: FindingSummary): HTMLElement {
+  const m = t();
+  const ev = (e: EvidenceItem, i: number): HTMLElement =>
+    evidenceRow(c, `${f.id}:${i}`, `${m.signal[e.signal]} · ${m.source[e.source]}${e.deobfuscated ? ` · ${m.deobfuscated}` : ''}`, e.text, e.locator);
+  return findingShell(c, '', m.findingTitle[f.classification], m.ruleChip(f.ruleId), false, [
+    h('p', { class: 'explain' }, m.rule[f.ruleId]),
+    h('p', { class: 'risk' }, m.actionRisk[f.actionRisk]),
+    f.modifiers.length > 0 && h('p', { class: 'context' }, lowered(f.classification, f.ruleClassification, f.modifiers.map((x) => m.modifier[x.id]).join(' '))),
+    ...f.overrides.map((o, j) => h('div', { class: 'override', 'data-override': o.id },
+      h('p', { class: 'context' }, o.effect === 'capped-at-1' ? m.overrideCapped : m.override[o.id]),
+      h('p', { class: 'context' }, `${m.contextSetAside}: ${o.suppressed.map((x) => m.modifier[x]).join(' ')}`),
+      o.evidence.length > 0 && h('ul', { class: 'evidence', 'aria-label': m.overrideEvidence }, ...o.evidence.map((e, k) => ev(e, 1000 * (j + 1) + k))),
+    )),
+    ...evidenceList(f.evidence.map(ev), f.evidenceTotal),
+  ]);
 }
 
-function payFindingCard(f: PayFindingSummary): HTMLElement {
+function credCard(c: CardCtx, f: CredFindingSummary): HTMLElement {
+  const m = t();
+  const cr = m.cred;
+  const indicators = [...f.pretexts.map((p) => cr.pretext[p]), ...f.trustContext.map((x) => cr.trust[x])];
+  const ev = (e: CredEvidenceItem, i: number): HTMLElement => evidenceRow(c, `cred:${f.id}:${i}`,
+    e.source === 'form-field' ? `${cr.signal[e.signal]} · ${cr.fieldSource}${e.fieldKind ? ` (${cr.fieldKind[e.fieldKind]})` : ''}` : `${cr.signal[e.signal]} · ${m.source['visible-text']}`,
+    e.text || (e.source === 'form-field' ? cr.unlabeledField : ''), e.locator);
+  return findingShell(c, 'cred', cr.findingTitle[f.classification], cr.ruleChip(f.ruleId), true, [
+    h('p', { class: 'explain' }, cr.rule[f.ruleId]),
+    h('p', { class: 'requested' }, cr.asks(f.requestedAction, f.secretTypes.map((x) => cr.secret[x]).join(', '))),
+    indicators.length > 0 && h('p', { class: 'context indicators' }, `${cr.indicators}: ${indicators.join(' · ')}`),
+    f.formDestination && h('p', { class: 'context destination' }, cr.destination[f.formDestination]),
+    h('p', { class: 'risk' }, cr.actionRisk[f.actionRisk]),
+    f.modifiers.length > 0 && f.overrides.length === 0 && h('p', { class: 'context' }, lowered(f.classification, f.ruleClassification, f.modifiers.map((x) => cr.modifier[x]).join(' '))),
+    f.overrides.length > 0 && h('p', { class: 'context', 'data-override': f.overrides.join(' ') }, cr.overrideLiveField),
+    ...evidenceList(f.evidence.map(ev), f.evidenceTotal),
+    ...f.limitations.map((l) => h('p', { class: 'limitation', 'data-limitation': l }, cr.limitation[l])),
+  ]);
+}
+
+function payCard(c: CardCtx, f: PayFindingSummary): HTMLElement {
   const m = t();
   const p = m.pay;
-  const demoted = f.classification !== f.ruleClassification;
   const indicators = [...f.pressures.map((x) => p.pressure[x]), ...f.trustContext.map((x) => m.cred.trust[x])];
-  return h('article', { class: 'card finding pay', 'data-rule': f.ruleId, 'data-classification': f.classification },
-    h('div', { class: 'category' }, p.category),
-    h('h4', {}, p.findingTitle[f.classification]),
-    h('div', { class: 'chips' },
-      h('span', { class: `chip ${f.classification}` }, m.classification[f.classification]),
-      h('span', { class: 'chip severity', 'data-severity': f.classification }, m.severity[f.classification]),
-      h('span', { class: 'chip', title: m.confidenceHelp }, m.confidence[f.confidence]),
-      h('span', { class: 'chip' }, p.ruleChip(f.ruleId)),
-      h('span', { class: 'chip experimental' }, m.cred.experimental),
-    ),
+  const ev = (e: PayEvidenceItem, i: number): HTMLElement =>
+    evidenceRow(c, `pay:${f.id}:${i}`, `${p.signal[e.signal]} · ${m.source['visible-text']}`, e.signal === 'PA.AMOUNT' ? p.amountHidden : e.text, e.locator);
+  return findingShell(c, 'pay', p.findingTitle[f.classification], p.ruleChip(f.ruleId), true, [
     h('p', { class: 'explain' }, p.rule[f.ruleId]),
     f.promises.length > 0 && h('p', { class: 'context promises' }, `${p.promisesLabel}: ${f.promises.map((x) => p.promise[x]).join(', ')}`),
     f.destinations.length > 0 && h('p', { class: 'context destinations' }, `${p.destinationsLabel}: ${f.destinations.map((x) => p.destination[x]).join(', ')}`),
     indicators.length > 0 && h('p', { class: 'context indicators' }, `${p.indicators}: ${indicators.join(' · ')}`),
     h('p', { class: 'risk' }, p.actionRisk[f.actionRisk]),
-    f.modifiers.length > 0 && h('p', { class: 'context' },
-      `${demoted ? m.loweredFrom(m.classification[f.ruleClassification]) : m.contextPrefix}${f.modifiers.map((x) => m.cred.modifier[x]).join(' ')}`),
-    h('ul', { class: 'evidence', 'aria-label': m.evidenceAria }, ...f.evidence.map((e, i) => payEvidenceItem(f, i, e))),
-    f.evidenceTotal > f.evidence.length && h('p', { class: 'context', 'data-more': 'evidence' }, m.moreEvidence(f.evidenceTotal - f.evidence.length)),
+    f.modifiers.length > 0 && h('p', { class: 'context' }, lowered(f.classification, f.ruleClassification, f.modifiers.map((x) => m.cred.modifier[x]).join(' '))),
+    ...evidenceList(f.evidence.map(ev), f.evidenceTotal),
     ...f.limitations.map((l) => h('p', { class: 'limitation', 'data-limitation': l }, p.limitation[l])),
-  );
+  ]);
 }
 
-/** The experimental payment section, laid out like the credential section. */
-function renderPayment(r: ScanReport): Child[] {
-  const p = t().pay;
-  const sec = r.payment;
-  const head = p.headline[sec.verdict];
-  const alerting = sec.findings.filter((f) => f.classification !== 'observed_instruction');
-  const observed = sec.findings.filter((f) => f.classification === 'observed_instruction');
-  return [
-    h('div', { class: `card pay-summary tone-${head.tone}`, 'data-verdict': sec.verdict },
-      h('div', { class: 'category' }, `${p.category} · ${t().cred.experimental}`), h('h2', {}, head.title),
-      h('p', {}, head.detail + (r.status.complete ? '' : t().partialQualifier))),
-    ...alerting.map(payFindingCard),
-    observed.length > 0 && h('details', { class: 'observed pay-observed' }, h('summary', {}, p.observedHeading(observed.length)), ...observed.map(payFindingCard)),
-    sec.findingsTotal > sec.findings.length && h('p', { class: 'context', 'data-more': 'pay-findings' }, t().moreFindings(sec.findingsTotal - sec.findings.length)),
-    h('p', { class: 'limitation experimental-note' }, p.experimentalNote),
-  ];
-}
-
-function supportEvidenceItem(f: SupportFindingSummary, i: number, e: SupportEvidenceItem): HTMLElement {
-  const s = t().sup;
-  const hidden = e.signal === 'SX.PHONE' || e.signal === 'SX.MOBILE';
-  return evidenceRow(`sup:${f.id}:${i}`, `${s.signal[e.signal]} · ${t().source['visible-text']}`, hidden ? s.contactHidden : e.text, e.locator);
-}
-
-function supportFindingCard(f: SupportFindingSummary): HTMLElement {
+function supCard(c: CardCtx, f: SupportFindingSummary): HTMLElement {
   const m = t();
   const s = m.sup;
-  const demoted = f.classification !== f.ruleClassification;
   const asks = [...f.requestedActions.map((x) => s.action[x]), ...f.channels.map((x) => s.channel[x])];
   const pressure = [...f.pressures.map((x) => s.pressure[x]), ...f.trustContext.map((x) => m.cred.trust[x])];
-  return h('article', { class: 'card finding sup', 'data-rule': f.ruleId, 'data-classification': f.classification },
-    h('div', { class: 'category' }, s.category),
-    h('h4', {}, s.findingTitle[f.classification]),
-    h('div', { class: 'chips' },
-      h('span', { class: `chip ${f.classification}` }, m.classification[f.classification]),
-      h('span', { class: 'chip severity', 'data-severity': f.classification }, m.severity[f.classification]),
-      h('span', { class: 'chip', title: m.confidenceHelp }, m.confidence[f.confidence]),
-      h('span', { class: 'chip' }, s.ruleChip(f.ruleId)),
-      h('span', { class: 'chip experimental' }, m.cred.experimental),
-    ),
+  const ev = (e: SupportEvidenceItem, i: number): HTMLElement => evidenceRow(c, `sup:${f.id}:${i}`, `${s.signal[e.signal]} · ${m.source['visible-text']}`,
+    e.signal === 'SX.PHONE' || e.signal === 'SX.MOBILE' ? s.contactHidden : e.text, e.locator);
+  return findingShell(c, 'sup', s.findingTitle[f.classification], s.ruleChip(f.ruleId), true, [
     h('p', { class: 'explain' }, s.rule[f.ruleId]),
     asks.length > 0 && h('p', { class: 'context asks' }, `${s.asksLabel}: ${asks.join(', ')}`),
     f.claims.length > 0 && h('p', { class: 'context claims' }, `${s.claimsLabel}: ${f.claims.map((x) => s.claim[x]).join(', ')}`),
     f.indicators.length > 0 && h('p', { class: 'context indicators' }, `${s.indicatorsLabel}: ${f.indicators.map((x) => s.indicator[x]).join(' · ')}`),
     pressure.length > 0 && h('p', { class: 'context pressure' }, `${s.pressureLabel}: ${pressure.join(' · ')}`),
     h('p', { class: 'risk' }, s.actionRisk[f.actionRisk]),
-    f.modifiers.length > 0 && h('p', { class: 'context' },
-      `${demoted ? m.loweredFrom(m.classification[f.ruleClassification]) : m.contextPrefix}${f.modifiers.map((x) => m.cred.modifier[x]).join(' ')}`),
-    h('ul', { class: 'evidence', 'aria-label': m.evidenceAria }, ...f.evidence.map((e, i) => supportEvidenceItem(f, i, e))),
-    f.evidenceTotal > f.evidence.length && h('p', { class: 'context', 'data-more': 'evidence' }, m.moreEvidence(f.evidenceTotal - f.evidence.length)),
+    f.modifiers.length > 0 && h('p', { class: 'context' }, lowered(f.classification, f.ruleClassification, f.modifiers.map((x) => m.cred.modifier[x]).join(' '))),
+    ...evidenceList(f.evidence.map(ev), f.evidenceTotal),
     ...f.limitations.map((l) => h('p', { class: 'limitation', 'data-limitation': l }, s.limitation[l])),
-  );
+  ]);
 }
 
-/** The experimental support section, laid out like the credential and payment sections. */
-function renderSupport(r: ScanReport): Child[] {
-  const s = t().sup;
-  const sec = r.support;
-  const head = s.headline[sec.verdict];
-  const alerting = sec.findings.filter((f) => f.classification !== 'observed_instruction');
-  const observed = sec.findings.filter((f) => f.classification === 'observed_instruction');
-  return [
-    h('div', { class: `card sup-summary tone-${head.tone}`, 'data-verdict': sec.verdict },
-      h('div', { class: 'category' }, `${s.category} · ${t().cred.experimental}`), h('h2', {}, head.title),
-      h('p', {}, head.detail + (r.status.complete ? '' : t().partialQualifier))),
-    ...alerting.map(supportFindingCard),
-    observed.length > 0 && h('details', { class: 'observed sup-observed' }, h('summary', {}, s.observedHeading(observed.length)), ...observed.map(supportFindingCard)),
-    sec.findingsTotal > sec.findings.length && h('p', { class: 'context', 'data-more': 'sup-findings' }, t().moreFindings(sec.findingsTotal - sec.findings.length)),
-    h('p', { class: 'limitation experimental-note' }, s.experimentalNote),
-  ];
+function card(r: ScanReport, c: CardCtx): HTMLElement {
+  const { category, index } = c.ref;
+  if (category === 'command') return commandCard(c, r.findings[index] as FindingSummary);
+  if (category === 'credential') return credCard(c, r.credential.findings[index] as CredFindingSummary);
+  if (category === 'payment') return payCard(c, r.payment.findings[index] as PayFindingSummary);
+  return supCard(c, r.support.findings[index] as SupportFindingSummary);
 }
 
-const TIER: Record<ScanReport['verdict'], number> = { none: 0, observed_instruction: 1, suspicious_correlation: 2, manipulative_instruction: 3 };
-
-/** The experimental credential section: its own summary card, alert findings, collapsed observed requests, a note. */
-function renderCredential(r: ScanReport): Child[] {
-  const c = t().cred;
-  const sec = r.credential;
-  const head = c.headline[sec.verdict];
-  const alerting = sec.findings.filter((f) => f.classification !== 'observed_instruction');
-  const observed = sec.findings.filter((f) => f.classification === 'observed_instruction');
-  return [
-    h('div', { class: `card cred-summary tone-${head.tone}`, 'data-verdict': sec.verdict },
-      h('div', { class: 'category' }, `${c.categorySecret} · ${c.experimental}`), h('h2', {}, head.title),
-      h('p', {}, head.detail + (r.status.complete ? '' : t().partialQualifier))),
-    ...alerting.map(credFindingCard),
-    observed.length > 0 && h('details', { class: 'observed cred-observed' }, h('summary', {}, c.observedHeading(observed.length)), ...observed.map(credFindingCard)),
-    sec.findingsTotal > sec.findings.length && h('p', { class: 'context', 'data-more': 'cred-findings' }, t().moreFindings(sec.findingsTotal - sec.findings.length)),
-    h('p', { class: 'limitation experimental-note' }, c.experimentalNote),
-  ];
-}
-
-function findingCard(f: FindingSummary): HTMLElement {
+/** A group of related findings keeps every member card (provenance); single findings render as plain cards. */
+function renderGroup(r: ScanReport, g: FindingGroup, num: Numbering): HTMLElement {
+  const cards = g.members.map((ref) => card(r, { ref, num, shared: g.shared, noted: new Set() }));
+  if (cards.length === 1) return cards[0] as HTMLElement;
   const m = t();
-  const demoted = f.classification !== f.ruleClassification;
-  const context = f.modifiers.map((x) => m.modifier[x.id]).join(' ');
-  return h('article', { class: 'card finding', 'data-rule': f.ruleId, 'data-classification': f.classification },
-    h('div', { class: 'category' }, m.cred.categoryCommand),
-    h('h4', {}, m.findingTitle[f.classification]),
-    h('div', { class: 'chips' },
-      h('span', { class: `chip ${f.classification}` }, m.classification[f.classification]),
-      h('span', { class: 'chip severity', 'data-severity': f.classification }, m.severity[f.classification]),
-      h('span', { class: 'chip', title: m.confidenceHelp }, m.confidence[f.confidence]),
-      h('span', { class: 'chip', title: f.ruleName }, m.ruleChip(f.ruleId)),
-    ),
-    h('p', { class: 'explain' }, m.rule[f.ruleId]),
-    h('p', { class: 'risk' }, m.actionRisk[f.actionRisk]),
-    f.modifiers.length > 0 && h('p', { class: 'context' }, `${demoted ? m.loweredFrom(m.classification[f.ruleClassification]) : m.contextPrefix}${context}`),
-    ...f.overrides.map((o, j) => h('div', { class: 'override', 'data-override': o.id },
-      h('p', { class: 'context' }, o.effect === 'capped-at-1' ? m.overrideCapped : m.override[o.id]),
-      h('p', { class: 'context' }, `${m.contextSetAside}: ${o.suppressed.map((x) => m.modifier[x]).join(' ')}`),
-      o.evidence.length > 0 && h('ul', { class: 'evidence', 'aria-label': m.overrideEvidence }, ...o.evidence.map((e, k) => evidenceItem(f, 1000 * (j + 1) + k, e))),
-    )),
-    h('ul', { class: 'evidence', 'aria-label': m.evidenceAria }, ...f.evidence.map((e, i) => evidenceItem(f, i, e))),
-    f.evidenceTotal > f.evidence.length && h('p', { class: 'context', 'data-more': 'evidence' }, m.moreEvidence(f.evidenceTotal - f.evidence.length)),
-  );
+  return h('section', { class: 'finding-group', 'data-group-size': String(cards.length), 'aria-label': m.dash.groupTitle(cards.length) },
+    h('p', { class: 'group-head' }, m.dash.groupTitle(cards.length)), h('p', { class: 'group-note' }, m.dash.groupNote), ...cards);
+}
+
+const LEGACY_CLASS: Record<Category, string> = { command: 'summary', credential: 'cred-summary', payment: 'pay-summary', support: 'sup-summary' };
+const TONE: Record<ScanReport['verdict'], string> = { manipulative_instruction: 'danger', suspicious_correlation: 'warning', observed_instruction: 'neutral', none: 'neutral' };
+
+function renderSummary(r: ScanReport, d: Dashboard): HTMLElement {
+  const m = t();
+  const head = m.dash.headline[d.highest];
+  const stat = (key: string, label: string, value: string, extra: Record<string, string> = {}): HTMLElement =>
+    h('div', { class: 'stat', 'data-stat': key, ...extra }, h('dt', {}, label), h('dd', {}, value));
+  return h('div', { class: `card threat-summary tone-${head.tone}`, 'data-verdict': d.highest, 'data-actionable': String(d.actionable) },
+    h('div', { class: 'panel-label' }, m.dash.assessment),
+    h('h2', {}, head.title),
+    h('p', {}, head.detail + (r.status.complete ? '' : m.partialQualifier)),
+    h('dl', { class: 'stats' },
+      stat('highest', m.dash.statHighest, m.dash.verdictLabel[d.highest], { 'data-verdict': d.highest }),
+      stat('actionable', m.dash.statActionable, formatCount(d.actionable, state.lang)),
+      stat('categories', m.dash.statCategories, d.affected.length > 0 ? d.affected.map((c) => m.dash.categoryCode[c]).join(' · ') : m.dash.noCategories),
+      stat('coverage', m.dash.statCoverage, m.dash.coverageValue[d.complete ? 'complete' : 'partial'], { 'data-complete': String(d.complete) })));
+}
+
+function renderOverview(d: Dashboard): HTMLElement {
+  const m = t();
+  return h('section', { class: 'overview', 'aria-labelledby': 'overview-title' },
+    h('h3', { class: 'section', id: 'overview-title' }, m.dash.overviewTitle),
+    h('div', { class: 'cat-grid' }, ...CATEGORIES.map((c) => {
+      const s = d.categories[c];
+      return h('div', { class: `cat ${LEGACY_CLASS[c]} tone-${TONE[s.verdict]}`, 'data-category': c, 'data-verdict': s.verdict },
+        h('span', { class: 'cat-code', 'data-category': c }, m.dash.categoryCode[c]),
+        h('div', { class: 'category' }, c === 'command' ? m.dash.categoryName[c] : `${m.dash.categoryName[c]} · ${m.dash.experimental}`),
+        h('h2', {}, m.dash.verdictLabel[s.verdict]),
+        h('p', { class: 'cat-count' }, m.dash.tileCount(s.total, s.actionable)));
+    })),
+    h('p', { class: 'limitation experimental-note' }, m.dash.experimentalNote));
+}
+
+function renderCoverage(r: ScanReport): HTMLElement {
+  const m = t();
+  const blocks = formatCount(r.counts.blocks, state.lang);
+  return r.status.complete
+    ? h('div', { class: 'card coverage', 'data-complete': 'true' }, h('h3', {}, m.completeTitle), h('p', {}, m.completeText(blocks)))
+    : h('div', { class: 'card coverage partial', role: 'note', 'data-complete': 'false' },
+      h('h3', {}, m.partialTitle),
+      h('ul', {}, ...r.status.reasons.map((g) => h('li', { 'data-reason': g }, m.partial[g]))),
+      h('p', {}, m.partialFooter(blocks)));
+}
+
+/** Advice for each affected category; remote-access advice when a support finding asks for remote access or an install. */
+function renderAdvice(r: ScanReport, d: Dashboard): HTMLElement {
+  const m = t();
+  const remote = r.support.findings.some((f) => f.classification !== 'observed_instruction'
+    && (f.requestedActions.includes('remote-access') || f.requestedActions.includes('install')));
+  const items: Array<[string, string]> = d.affected.map((c) => [c, m.dash.advice[c]]);
+  if (remote) items.push(['remoteAccess', m.dash.advice.remoteAccess]);
+  return h('section', { class: 'card advice', 'aria-labelledby': 'advice-title', 'data-advice': items.map(([k]) => k).join(' ') || 'none' },
+    h('h3', { id: 'advice-title' }, m.dash.adviceTitle),
+    items.length > 0
+      ? h('ul', {}, ...items.map(([k, text]) => h('li', { 'data-advice': k }, text)))
+      : h('p', {}, m.dash.adviceNone));
 }
 
 function renderReport(r: ScanReport): Child[] {
   const m = t();
-  const head = m.headline[r.verdict];
-  const alerting = r.findings.filter((f) => f.classification !== 'observed_instruction');
-  const observed = r.findings.filter((f) => f.classification === 'observed_instruction');
-  const partial = !r.status.complete;
-  const blocks = formatCount(r.counts.blocks, state.lang);
-  const command: Child[] = [
-    h('div', { class: `card summary tone-${head.tone}`, 'data-verdict': r.verdict },
-      h('div', { class: 'category' }, m.cred.categoryCommand), h('h2', {}, head.title), h('p', {}, head.detail + (partial ? m.partialQualifier : ''))),
-    partial
-      ? h('div', { class: 'card coverage partial', role: 'note', 'data-complete': 'false' },
-        h('h3', {}, m.partialTitle),
-        h('ul', {}, ...r.status.reasons.map((g) => h('li', { 'data-reason': g }, m.partial[g]))),
-        h('p', {}, m.partialFooter(blocks)))
-      : h('div', { class: 'card coverage', 'data-complete': 'true' }, h('h3', {}, m.completeTitle), h('p', {}, m.completeText(blocks))),
-    alerting.length > 0 && h('h3', { class: 'section' }, m.findingsHeading(alerting.length)),
-    ...alerting.map(findingCard),
-    observed.length > 0 && h('details', { class: 'observed' }, h('summary', {}, m.observedHeading(observed.length)), ...observed.map(findingCard)),
-    r.counts.findingsTotal > r.findings.length && h('p', { class: 'context', 'data-more': 'findings' }, m.moreFindings(r.counts.findingsTotal - r.findings.length)),
+  const d = aggregate(r);
+  const num: Numbering = { finding: 0, evidence: 0 };
+  const hidden = (r.counts.findingsTotal - r.findings.length) + (r.credential.findingsTotal - r.credential.findings.length)
+    + (r.payment.findingsTotal - r.payment.findings.length) + (r.support.findingsTotal - r.support.findings.length);
+  const observedCount = d.observed.reduce((n, g) => n + g.members.length, 0);
+  const alertCount = d.groups.reduce((n, g) => n + g.members.length, 0);
+  return [
+    renderSummary(r, d),
+    renderOverview(d),
+    renderCoverage(r),
+    renderAdvice(r, d),
+    alertCount > 0 && h('h3', { class: 'section findings-title' }, m.dash.findingsTitle(alertCount)),
+    ...d.groups.map((g) => renderGroup(r, g, num)),
+    observedCount > 0 && h('details', { class: 'observed' }, h('summary', {}, m.dash.observedTitle(observedCount)), ...d.observed.map((g) => renderGroup(r, g, num))),
+    hidden > 0 && h('p', { class: 'context', 'data-more': 'findings' }, m.moreFindings(hidden)),
   ];
-  // Coverage applies to all detectors. Sections are ordered by verdict, most severe first (stable: command, credential, payment, support).
-  const coverage = command.splice(1, 1);
-  const sections: Array<[number, Child[]]> = [[TIER[r.verdict], command], [TIER[r.credential.verdict], renderCredential(r)], [TIER[r.payment.verdict], renderPayment(r)],
-    [TIER[r.support.verdict], renderSupport(r)]];
-  const [first, ...rest] = sections.sort((a, b) => b[0] - a[0]).flatMap(([, parts]) => parts);
-  return [first, ...coverage, ...rest];
 }
 
 function renderError(kind: ErrorKind): HTMLElement {
@@ -321,6 +338,12 @@ function render(): void {
   scanBtn.textContent = state.scannedOnce ? m.scanAgain : m.scan;
   scanBtn.disabled = state.phase === 'scanning' || state.urlClass === 'restricted' || state.urlClass === 'unknown' || !tab;
   $('status').textContent = state.phase === 'scanning' ? m.scanning : state.phase === 'done' ? m.scanFinished : '';
+  const scanState = state.phase === 'scanning' ? 'scanning' : state.phase === 'error' ? 'error'
+    : state.phase === 'done' && state.report ? (state.report.status.complete ? 'complete' : 'partial') : 'standby';
+  $('scan-state').textContent = m.dash.stateLabel[scanState];
+  $('scan-state').dataset.state = scanState;
+  const version = extensionVersion();
+  $('version').textContent = version ? `v${version}` : '';
   $('limits-summary').textContent = m.limitsSummary;
   $('limits').textContent = m.limitsText;
   $('meta').textContent = state.report && state.phase === 'done'
