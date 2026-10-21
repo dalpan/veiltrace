@@ -71,3 +71,18 @@ D1 no domain bypass · D2 element-local correlation (FP vs B0) · D3 context mod
 3. Open the security tutorial that quotes the same command in a code block: no manipulative finding, and Details shows "demoted: code example in an article".
 4. Show the evaluation table: test split, B0 vs VEILTRACE, raw counts.
 5. Show the manifest: two permissions, and the network panel is empty.
+
+## 9. Potential High-Assurance Deployment
+
+Context: VEILTRACE is a hackathon project. Winning projects *may* later be evaluated by organizations such as Satsiber TNI AD (Indonesian Army Cyber Unit). **This is a potential opportunity, not an adoption, endorsement, certification or requirement.** VEILTRACE is not military-grade, certified, approved or endorsed by anyone (D-048).
+
+Positioning: a defensive, privacy-preserving, human-centric browser security tool that explains manipulative instructions to the person reading them. It is **not** a monitoring product.
+
+| Category | Content |
+|---|---|
+| **Implemented (M1–M4.1)** | On-device detection with no network code; Chromium MV3 extension with `activeTab` + `scripting` only; on-demand scanning; explainable evidence; complete/partial scan reporting; deterministic engine; offline evaluation harness; Indonesian + English detection lexicons; experimental `m4.1-rc1` rule set (not default) |
+| **Planned (M4.2+; not implemented)** | Indonesian UI; documented offline / restricted-network install; SBOM and dependency audit; reproducible builds with published hashes; signed packaging and update strategy; managed-browser deployment guide (enterprise policy force-install of an internally hosted build); strictly opt-in, user-reviewed, privacy-preserving incident reports (local export first); organizational threat model and security review; operational failure-mode documentation |
+| **Research hypotheses (unproven)** | Contextual instruction analysis detects social-engineering lures independent of domain reputation; region-local correlation + context modifiers reduce false positives versus page-level matching; results on synthetic dev data transfer to real pages (unmeasured) |
+| **Potential organizational applications (speculative)** | User-side awareness aid in organizations with strict browser policies; a training aid that explains why a page is manipulative; one layer alongside existing endpoint and network controls. Not a replacement for EDR, email filtering or URL reputation |
+
+Explicit non-goals without a separate requirements process and review: centralized monitoring, employee surveillance, collection of browsing data, privileged endpoint access, and military-specific operational features.

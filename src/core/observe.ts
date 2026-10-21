@@ -105,7 +105,7 @@ function structuralTrigger(src: Source): Obs {
 }
 
 /** Matches every source. Returns action/pretext observations and all context cue candidates. */
-export function observeAll(sources: readonly Source[], negation = true): { signals: Obs[]; cues: Obs[] } {
+export function observeAll(sources: readonly Source[], negation = true, listIntroOutsideDialogsOnly = false): { signals: Obs[]; cues: Obs[] } {
   const signals: Obs[] = [];
   const cues: Obs[] = [];
   for (const src of sources) {
@@ -113,7 +113,7 @@ export function observeAll(sources: readonly Source[], negation = true): { signa
     for (const ob of matchSource(src)) (ob.o.kind === 'context' ? cues : signals).push(ob);
   }
   if (negation) bindNegation(signals, cues);
-  bindReported(signals, cues);
+  bindReported(signals, cues, listIntroOutsideDialogsOnly);
   return { signals, cues };
 }
 
@@ -137,7 +137,7 @@ function bindNegation(signals: Obs[], cues: readonly Obs[]): void {
   }
 }
 
-function bindReported(signals: Obs[], cues: readonly Obs[]): void {
+function bindReported(signals: Obs[], cues: readonly Obs[], listIntroOutsideDialogsOnly: boolean): void {
   for (const a of signals) {
     if (a.o.kind !== 'action' || a.src.ref.type !== 'block' || a.o.negated) continue;
     // Same block, same sentence, cue before the action.
@@ -145,7 +145,7 @@ function bindReported(signals: Obs[], cues: readonly Obs[]): void {
       (c) => c.nEnd <= a.nStart && !SENTENCE_BREAK.test(a.src.norm.text.slice(c.nEnd, a.nStart)),
     );
     // Or the nearest preceding block in the region that ends with ":" introduces a list.
-    if (!cue) cue = listIntroCue(a, cues);
+    if (!cue) cue = listIntroCue(a, cues, listIntroOutsideDialogsOnly);
     if (cue) {
       a.o.reported = true;
       a.boundBy = cue;
@@ -154,11 +154,12 @@ function bindReported(signals: Obs[], cues: readonly Obs[]): void {
 }
 
 /** The nearest earlier block (within the window) that ends with ":" introduces the list; use its reported cue. */
-function listIntroCue(a: Obs, cues: readonly Obs[]): Obs | undefined {
+function listIntroCue(a: Obs, cues: readonly Obs[], outsideDialogsOnly: boolean): Obs | undefined {
   const region = a.src.region;
   for (let p = a.src.pos - 1; p >= 0 && a.src.pos - p < WINDOW_BLOCKS; p--) {
     const block = region.blocks[p];
     if (!block || !/:\s*$/u.test(block.text)) continue;
+    if (outsideDialogsOnly && (block.ctx?.dialog || block.ctx?.overlay)) return undefined;
     return cues.find((c) => c.src.block === block && c.o.signal === 'C.REPORTED');
   }
   return undefined;

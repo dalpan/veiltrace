@@ -1,0 +1,22 @@
+{
+  "id": "D43-en-ugc-quoted-lure-comment",
+  "split": "dev",
+  "lang": "en",
+  "category": "adversarial",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://gamers-forum.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#c7",
+  "description": "Forum comment that wraps a ClickFix instruction in blockquote markup",
+  "rationale": "Quotation evasion outside any dialog and without a staged payload.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M4.1 dev additions, written before the M4.1 candidates",
+  "created": "2026-10-21"
+}

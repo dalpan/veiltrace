@@ -4,6 +4,32 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-21 · M4.1 finalization (owner review: rc1 approved as experimental)
+
+- **Decisions:** P1b, P2-A and R4-β approved as the experimental ruleset `m4.1-rc1` (engine `0.2.0-rc.1`). P2-C is rejected for rc1, not permanently. The default stays `0.1.0-m1` and the extension is unchanged (D-041 … D-044).
+- **Safeguards** (D-047):
+  - Concealed payloads now count only inside the instruction's correlation window (previously anywhere in the region).
+  - Overrides list the supporting observation ids.
+  - 7 new safeguard tests: window association, docs with hidden copy targets, R4-β evidence and explanation, attacker articles with code blocks, P1b vs R1/R2/R3, explainability/traceability, determinism.
+- **Dev results unchanged** by the tightening (artifacts byte-identical): rc1 TP 16, FP 1, TN 28, FN 5.
+- Strategic context recorded as planning only (D-048; PRODUCT_SPEC §9; IMPLEMENTATION_PLAN "Potential High-Assurance Deployment"). No deployment features were implemented.
+
+## 2026-10-21 · M4.1 Controlled detection refinement · **Implemented (accepted as experimental)**
+
+**Done**
+- Baseline: M3 reproduced on dev36 (byte-identical). Dev split extended to 50 scenarios (D37–D50), written before the candidates (D-046). M3 on dev50: TP 16, FP 6, TN 23, FN 5.
+- Candidates implemented as research options: P1, P1b, P2-A/B/C/D, R4-β (`C.PROCEDURAL`). Explicit `Finding.overrides`. New command `npm run eval -- refine --split dev` → `eval/results/dev.m41.{json,md}`.
+- Recommended rule set `m4.1-rc1` = P1b + P2-A + R4-β (engine `0.2.0-rc.1`). Dev: TP 16, FP 1, TN 28, FN 5. **Not adopted, not frozen** (D-041 … D-046).
+- 22 regression tests (`tests/m41.test.ts`).
+
+**Verification**
+- The default engine still equals M1 (`d856fbd`) on 30 unit fixtures and 50 extracted dev snapshots.
+- Eval artifacts are byte-identical across runs. The held-out split was not evaluated, `corpus/test` is unchanged and its manifest is verified.
+
+**Remaining errors (rc1, dev):** FP D39 (docs dialog); FN D10, D12, D50 (planted context in a verification dialog), D43 (quoted UGC lure), D44 (informal Indonesian paraphrase).
+
+**Next:** M4.2 only after explicit owner approval.
+
 ## 2026-10-21 · M3 finalization: manual production validation (stable Google Chrome, owner-run)
 
 Checklist: docs/DEMO.md. Production build `dist/extension` loaded unpacked; pages served offline from `dist/manual` on two local origins.

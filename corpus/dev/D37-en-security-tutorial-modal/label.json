@@ -1,0 +1,22 @@
+{
+  "id": "D37-en-security-tutorial-modal",
+  "split": "dev",
+  "lang": "en",
+  "category": "benign",
+  "threatClass": "-",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://academy.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Security-awareness course: a tutorial modal explains a fake CAPTCHA and lists what the fake page tells visitors",
+  "rationale": "Benign modal/tutorial counterexample for any 'dialog overrides context' rule.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M4.1 dev additions, written before the M4.1 candidates",
+  "created": "2026-10-21"
+}

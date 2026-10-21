@@ -38,6 +38,8 @@ export interface Candidate {
   weakFamilies: SignalId[];
   spanMin: number;
   spanMax: number;
+  /** Concealed clipboard payloads (strong commands not visible on the page) inside this candidate's window. */
+  concealedPayloads: Obs[];
 }
 
 export function readingOrder(a: Obs, b: Obs): number {
@@ -47,10 +49,12 @@ export function readingOrder(a: Obs, b: Obs): number {
 const after = (x: Obs, y: Obs): boolean => readingOrder(x, y) > 0;
 const of = (list: readonly Obs[], signal: SignalId): Obs[] => list.filter((o) => o.o.signal === signal);
 
-type Match = Omit<Candidate, 'region' | 'windowStart' | 'windowEnd' | 'spanMin' | 'spanMax'>;
+type Match = Omit<Candidate, 'region' | 'windowStart' | 'windowEnd' | 'spanMin' | 'spanMax' | 'concealedPayloads'>;
 
 /** Evaluates R1–R5 on one window. `actions` must exclude negated actions. */
-export function evaluateWindow(actions: readonly Obs[], pretexts: readonly Obs[], experimental: AnalyzeOptions['experimental'] = {}): Match | null {
+export function evaluateWindow(
+  actions: readonly Obs[], pretexts: readonly Obs[], experimental: AnalyzeOptions['experimental'] = {}, concealedInWindow = false,
+): Match | null {
   const opens = of(actions, 'A.OPEN_RUN');
   const pastes = of(actions, 'A.PASTE');
   const execs = of(actions, 'A.EXECUTE');
@@ -86,7 +90,9 @@ export function evaluateWindow(actions: readonly Obs[], pretexts: readonly Obs[]
     return { rule: rule('R3'), actions: partial, pretexts: verify, baseConfidence: 'medium', actionRisk: 'medium', weakFamilies };
   }
   const execution = chain ?? delivered;
-  const r4Families = experimental.r4ExcludeAuthorityOnly && weakFamilies.length === 1 && weakFamilies[0] === 'P.AUTHORITY' ? 0 : weakFamilies.length;
+  const authorityOnly = weakFamilies.length === 1 && weakFamilies[0] === 'P.AUTHORITY';
+  const dropAuthorityOnly = authorityOnly && (experimental.r4ExcludeAuthorityOnly || (experimental.r4AuthorityOnlyUnlessConcealed && !concealedInWindow));
+  const r4Families = dropAuthorityOnly ? 0 : weakFamilies.length;
   if (execution && r4Families > 0 && r4Families >= (experimental.r4MinWeakFamilies ?? 1)) {
     return {
       rule: rule('R4'), actions: execution, pretexts: weak,
@@ -108,7 +114,11 @@ export function evaluateWindow(actions: readonly Obs[], pretexts: readonly Obs[]
  * direct actions only (not reported, not quoted) and once with all non-negated actions, so a reported
  * or quoted decoy cannot absorb a direct lure (the selection step keeps the strongest interpretation).
  */
-export function findCandidates(region: RegionInfo, regionObs: readonly Obs[], options: AnalyzeOptions = {}): Candidate[] {
+/**
+ * `concealed` marks hidden-copy A.COMMAND observations whose payload is not visible anywhere on the page.
+ * A concealed payload only counts for a candidate when it lies in the same correlation window (D-047).
+ */
+export function findCandidates(region: RegionInfo, regionObs: readonly Obs[], options: AnalyzeOptions = {}, concealed: ReadonlySet<Obs> = new Set()): Candidate[] {
   const k = options.windowBlocks ?? WINDOW_BLOCKS;
   if (region.unplaced) return [];
   const sorted = [...regionObs].sort(readingOrder);
@@ -124,16 +134,17 @@ export function findCandidates(region: RegionInfo, regionObs: readonly Obs[], op
     const win = sorted.slice(lo, hi);
     const actions = win.filter((o) => o.o.kind === 'action' && !o.o.negated);
     const pretexts = win.filter((o) => o.o.kind === 'pretext');
+    const concealedPayloads = win.filter((o) => concealed.has(o));
     const seen = new Set<string>();
     for (const pass of [actions.filter(isDirect), actions]) {
-      const m = evaluateWindow(pass, pretexts, options.experimental);
+      const m = evaluateWindow(pass, pretexts, options.experimental, concealedPayloads.length > 0);
       if (!m) continue;
       const evidence = [...m.actions, ...m.pretexts];
       const key = `${m.rule.id}|${evidence.map((o) => `${o.src.pos}:${o.src.order}:${o.nStart}:${o.o.signal}`).join(',')}`;
       if (seen.has(key)) continue;
       seen.add(key);
       const positions = evidence.map((o) => o.src.pos);
-      out.push({ ...m, region, windowStart: s, windowEnd: end, spanMin: Math.min(...positions), spanMax: Math.max(...positions) });
+      out.push({ ...m, region, windowStart: s, windowEnd: end, spanMin: Math.min(...positions), spanMax: Math.max(...positions), concealedPayloads });
     }
   }
   return out;

@@ -153,7 +153,20 @@ export type Level = 'high' | 'medium' | 'low';
 export type ActionRisk = 'high' | 'medium';
 
 export type RuleId = 'R1' | 'R2' | 'R3' | 'R4' | 'R5';
-export type ModifierId = 'C.QUOTED' | 'C.REPORTED' | 'C.EDUCATIONAL' | 'C.CODE_EXAMPLE';
+export type ModifierId = 'C.QUOTED' | 'C.REPORTED' | 'C.EDUCATIONAL' | 'C.CODE_EXAMPLE' | 'C.PROCEDURAL';
+
+/** M4.1 research: evidence that the instruction targets the current reader, which overrides contextual demotion. */
+export type OverrideId = 'O.CONCEALED_PAYLOAD' | 'O.VERIFICATION_GATE';
+
+export interface ContextOverride {
+  id: OverrideId;
+  reason: string;
+  /** Modifiers whose demotion was suppressed (or capped). */
+  suppressed: ModifierId[];
+  effect: 'suppressed' | 'capped-at-1';
+  /** Observation ids supporting the override (e.g. the concealed clipboard payload). */
+  evidence: string[];
+}
 
 export interface AppliedModifier {
   id: ModifierId;
@@ -182,6 +195,8 @@ export interface Finding {
   span: { firstBlockId: string; lastBlockId: string };
   observationIds: string[];
   modifiers: AppliedModifier[];
+  /** Present only when an M4.1 research override applied (absent under the M1 model). */
+  overrides?: ContextOverride[];
   /** Plain-English inference statement (not localized in M1). */
   summary: string;
 }
@@ -203,9 +218,21 @@ export interface AnalyzeOptions {
     r4MinWeakFamilies?: number;
     /** R4 does not fire when P.AUTHORITY is the only weak pretext family. */
     r4ExcludeAuthorityOnly?: boolean;
-    /** Context modifiers do not demote findings whose evidence lies entirely in dialogs/overlays. */
+    /** Context modifiers do not demote findings whose evidence lies entirely in dialogs/overlays. REJECTED (D-032); kept to reproduce M2. */
     noDemotionInDialogs?: boolean;
+    /** P1b: like r4ExcludeAuthorityOnly, but an authority-only R4 still fires when the region stages a concealed clipboard payload. */
+    r4AuthorityOnlyUnlessConcealed?: boolean;
+    /** P2-A: a concealed clipboard payload in the finding's region suppresses contextual demotion. */
+    concealedPayloadOverride?: boolean;
+    /** P2-B ('skip') / P2-C ('cap1'): terse verification dialog/overlay addressed to the reader overrides demotion. */
+    verificationGateOverride?: 'skip' | 'cap1';
+    /** P2-D: a reported-speech list introduction does not bind inside dialogs/overlays. */
+    reportedListIntroOutsideDialogsOnly?: boolean;
+    /** R4-β: C.PROCEDURAL demotes single-family R4 findings in procedural documents (article + code block). */
+    proceduralDocModifier?: boolean;
   };
+  /** Named rule set. 'm1' (default) is the accepted M1 model; 'm4.1-rc1' is the M4.1 recommendation (not adopted, D-041). */
+  ruleset?: 'm1' | 'm4.1-rc1';
 }
 
 export interface AnalysisResult {

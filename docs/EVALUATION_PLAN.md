@@ -168,3 +168,16 @@ Source: `eval/results/dev.json` (byte-identical across repeated runs), `dev.md`,
 - All precision, recall and FPR figures in this section are **development-split, synthetic results**. The frozen held-out split is untouched, and real-world effectiveness is unmeasured (§7).
 - Committed artifacts: `eval/results/dev.json`, `dev.md`, `dev.research.json` and `dev.research.md` (deterministic, D-034). Timings are not committed.
 
+## 10. M4.1 dev results (development split only; synthetic)
+
+- **Corpus:** 50 dev scenarios: 21 malicious (14 positive, 7 adversarial) and 29 benign hard negatives (1 ambiguous); 29 EN, 21 ID. D37–D50 were added before the M4.1 candidates were implemented (D-046).
+- **Baseline:** M3 (M1 model) on dev50: TP 16, FP 6, TN 23, FN 5. Precision 72.7% (16/22, CI 51.8–86.9), recall 76.2% (16/21, CI 54.9–89.4), hard-negative FPR 20.7% (6/29, CI 9.8–38.4).
+- **Candidate `m4.1-rc1`:** TP 16, FP 1, TN 28, FN 5. Precision 94.1% (16/17, CI 73.0–99.0), recall 76.2% (16/21, CI 54.9–89.4), hard-negative FPR 3.4% (1/29, CI 0.6–17.2). Localization 16/16.
+- **All candidates, raw counts and per-scenario changes:** DETECTION_MODEL.md §11 and `eval/results/dev.m41.md`.
+- **Limitations:**
+  - The candidates were designed by the same author who wrote the dev fixtures.
+  - R4-β targets failure modes known since M2, so the improvement is optimistic.
+  - Intervals overlap; no significance is claimed.
+  - Nothing here estimates real-world or held-out performance.
+- **The held-out split was not evaluated.** The single final run waits until the engine is adopted and frozen (D-041).
+

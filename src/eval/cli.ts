@@ -17,7 +17,7 @@ import { perfPages } from './perfpages.js';
 import { classMatrix, composition, systemsTable } from './report.js';
 import { runScenario, scored, type ScenarioRun } from './runner.js';
 import { routeScenario, VIEWPORT, type RequestLog } from './serve.js';
-import { researchVariants, SYSTEMS, type SystemDef } from './systems.js';
+import { m41Variants, researchVariants, SYSTEMS, type SystemDef } from './systems.js';
 import { analyze } from '../core/analyze.js';
 import { ENGINE_VERSION } from '../core/constants.js';
 import { EXTRACTOR_VERSION } from '../extract/extract.js';
@@ -167,6 +167,52 @@ async function research(): Promise<void> {
   }
 }
 
+/** M4.1: candidate rule sets vs the M3 baseline on the dev split (never the test split). */
+async function refine(): Promise<void> {
+  if (arg('split') !== 'dev') throw new Error('refine is dev-only (never on the frozen test split)');
+  const variants = m41Variants();
+  const browser = await chromium.launch();
+  const runs = await runAll(browser, 'dev', variants).finally(() => browser.close());
+  const metrics = metricsFor(runs, variants);
+  const pos = (v: string): boolean => v === 'suspicious_correlation' || v === 'manipulative_instruction';
+  const changes: Record<string, string[]> = {};
+  for (const v of variants.slice(1)) {
+    changes[v.id] = runs.flatMap((r) => {
+      const a = r.outcomes['M3-baseline']?.verdict as string;
+      const b = r.outcomes[v.id]?.verdict as string;
+      if (a === b) return [];
+      const l = r.scenario.label;
+      const effect = pos(a) === pos(b) ? 'class change' : l.truth === 'malicious' ? (pos(b) ? 'FIXED FN' : 'NEW FN') : (pos(b) ? 'NEW FP' : 'FIXED FP');
+      return [`${l.id} [${l.truth}] ${a} → ${b} (${effect})`];
+    });
+  }
+  // C.OVERLAY / C.UGC: do these contexts separate malicious from benign on their own? (M3 strongest finding evidence)
+  const ctxTable = { overlayOrDialog: { malicious: 0, benign: 0 }, ugc: { malicious: 0, benign: 0 }, anyFinding: { malicious: 0, benign: 0 } };
+  for (const r of runs) {
+    const res = (variants[0] as SystemDef).run(r.snapshot);
+    const top = [...res.findings].sort((x, y) => ['observed_instruction', 'suspicious_correlation', 'manipulative_instruction'].indexOf(y.classification)
+      - ['observed_instruction', 'suspicious_correlation', 'manipulative_instruction'].indexOf(x.classification))[0];
+    if (!top) continue;
+    const t = r.scenario.label.truth;
+    ctxTable.anyFinding[t]++;
+    const ids = new Set(top.observationIds);
+    const blocks = res.observations.filter((o) => ids.has(o.id) && o.source.type === 'block')
+      .map((o) => r.snapshot.blocks.find((b) => b.id === (o.source as { blockId: string }).blockId));
+    if (blocks.some((b) => b?.ctx?.overlay || b?.ctx?.dialog)) ctxTable.overlayOrDialog[t]++;
+    if (blocks.some((b) => b?.ctx?.ugc)) ctxTable.ugc[t]++;
+  }
+  const scenarios = runs.map((r) => ({ id: r.scenario.label.id, truth: r.scenario.label.truth, expectedClass: r.scenario.label.expectedClass,
+    verdicts: Object.fromEntries(variants.map((v) => [v.id, r.outcomes[v.id]?.verdict])) }));
+  write('dev.m41.json', { engineVersion: ENGINE_VERSION, composition: composition(runs.map((r) => r.scenario)), metrics, changesVsM3: changes, contextSignals: ctxTable, scenarios });
+  write('dev.m41.md', ['# M4.1 dev comparison (development split only; synthetic)', '', `Composition: ${Object.entries(composition(runs.map((r) => r.scenario))).map(([k, n]) => `${k}=${n}`).join(', ')}`, '',
+    systemsTable(metrics), '', '## Verdict changes vs M3 baseline', '',
+    ...Object.entries(changes).map(([k, d]) => `- **${k}**: ${d.length === 0 ? 'no change' : ''}\n${d.map((x) => `  - ${x}`).join('\n')}`), '',
+    '## Context signals in the strongest M3 finding (scenarios with any finding)', '',
+    '| Context | malicious | benign |', '|---|---|---|',
+    ...Object.entries(ctxTable).map(([k, v]) => `| ${k} | ${v.malicious} | ${v.benign} |`), ''].join('\n'));
+  console.log(`refine: ${variants.length} systems → ${OUT}/dev.m41.{json,md}`);
+}
+
 async function perf(): Promise<void> {
   const repeats = Number(arg('repeats') ?? 5);
   const browser = await chromium.launch();
@@ -241,6 +287,7 @@ async function main(): Promise<void> {
     } else console.log(`${split}: valid (${loadSplit(ROOT, split).length} scenarios)`);
   } else if (cmd === 'run') await run(splitArg());
   else if (cmd === 'research') await research();
+  else if (cmd === 'refine') await refine();
   else if (cmd === 'perf') await perf();
   else throw new Error(`Unknown command: ${String(cmd)}`);
 }

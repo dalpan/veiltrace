@@ -45,3 +45,25 @@ export function researchVariants(): SystemDef[] {
     },
   ];
 }
+
+/** M4.1 candidates (dev only). Each variant changes exactly what its id says relative to the M3 baseline. */
+export function m41Variants(): SystemDef[] {
+  const v = (id: string, description: string, experimental: NonNullable<AnalyzeOptions['experimental']>): SystemDef =>
+    ({ id, description, run: (s: PageSnapshot) => analyze(s, { experimental }) });
+  return [
+    { id: 'M3-baseline', description: 'Accepted M1 model as shipped in M3', run: (s) => analyze(s) },
+    v('P1', 'R4 ignores authority-only pretext', { r4ExcludeAuthorityOnly: true }),
+    v('P1b', 'P1, unless the region stages a concealed clipboard payload', { r4AuthorityOnlyUnlessConcealed: true }),
+    v('P2-A', 'Concealed clipboard payload suppresses contextual demotion', { concealedPayloadOverride: true }),
+    v('P2-B', 'Terse verification dialog suppresses contextual demotion', { verificationGateOverride: 'skip' }),
+    v('P2-C', 'Terse verification dialog caps contextual demotion at 1 tier', { verificationGateOverride: 'cap1' }),
+    v('P2-D', 'Reported list intros do not bind inside dialogs/overlays', { reportedListIntroOutsideDialogsOnly: true }),
+    v('R4-beta', 'C.PROCEDURAL: single-family R4 in procedural documents is demoted 1 tier', { proceduralDocModifier: true }),
+    v('P2-A+C', 'P2-A and P2-C', { concealedPayloadOverride: true, verificationGateOverride: 'cap1' }),
+    v('P1b+P2-A+R4-beta', 'Conservative combination', { r4AuthorityOnlyUnlessConcealed: true, concealedPayloadOverride: true, proceduralDocModifier: true }),
+    v('P1b+P2-A+P2-C+R4-beta', 'Conservative combination plus gate cap', {
+      r4AuthorityOnlyUnlessConcealed: true, concealedPayloadOverride: true, verificationGateOverride: 'cap1', proceduralDocModifier: true,
+    }),
+    { id: 'm4.1-rc1', description: 'Recommended rule set preset (ruleset: m4.1-rc1)', run: (s) => analyze(s, { ruleset: 'm4.1-rc1' }) },
+  ];
+}

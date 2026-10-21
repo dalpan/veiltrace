@@ -126,3 +126,44 @@ Chrome gives no URL (and never an activeTab grant) for `chrome://` pages, other 
 
 ### D-040 · Accepted · 2026-10-21 · Extractor locators are validated against a grammar before any use
 `isSafeLocator` accepts only what `cssPath` produces (tag names, simple `#id`, `:nth-of-type(n)`, ` > `, `::shadow::`, `::frame::`). `resolveLocator`, the popup validator and the highlighter all enforce it, so a value round-tripped through the popup can never become an arbitrary selector. Extraction output is unchanged (dev results byte-identical to M2).
+
+### D-041 · Accepted (experimental; not default) · 2026-10-21 · Experimental engine `0.2.0-rc.1` (ruleset `m4.1-rc1` = P1b + P2-A + R4-β)
+Owner-approved at the M4.1 review as an **experimental release candidate**, selectable only with `analyze(snapshot, { ruleset: 'm4.1-rc1' })`. The default engine stays `0.1.0-m1`, and the production extension stays on M1 (owner decision). Default equality with `d856fbd` was re-verified. Dev evidence (DETECTION_MODEL.md §11): FP 6 → 1, FN 5 → 5, TP 16 → 16 on 50 dev scenarios. **Not the default and not frozen.**
+
+Known errors of rc1 on dev:
+- **5 FN:** D10, D12 and D50 (planted reported speech or blockquote in a verification dialog without a payload), D43 (quoted lure in a forum comment), D44 (very informal Indonesian paraphrase outside the lexicon).
+- **1 FP:** D39 (docs quick-start inside a dialog; R4-β deliberately excludes dialogs).
+
+Limitations of the evidence:
+- 50 synthetic dev scenarios written by the same author as the rules; R4-β targets failure modes known since M2, so the improvement is optimistic.
+- The confidence intervals overlap, and no significance or real-world accuracy is claimed.
+- The held-out split was not evaluated.
+
+Making it the default would require a new owner decision, and then:
+1. Make it the default with engine `0.2.0`.
+2. Let the popup validator and labels accept `C.PROCEDURAL` and `overrides`.
+3. Freeze the engine before the single held-out run (M4.x).
+
+### D-042 · Accepted (experimental, part of D-041) · 2026-10-21 · P1b: authority-only R4 does not escalate unless clipboard staging is present
+Implements the intent of D-031. Plain P1 created a new FN on a fake-support overlay with only an authority pretext (D42). P1b keeps R4 there because the region stages a concealed payload. The authority observation is always preserved in `observations`, and the finding falls to R5 (`observed_instruction`).
+
+### D-043 · Accepted (experimental, part of D-041) · 2026-10-21 · P2 redesign: only a concealed clipboard payload overrides contextual demotion; dialog "gates" not included
+- **P2-A (included):** it requires a hidden-copy payload with a strong command that is not visible anywhere on the page.
+- **Gate variants (not included):** P2-B (suppress), P2-C (cap at 1) and P2-D (no reported list intro in dialogs) each recover 2–3 planted-context lures, but each misfires on a benign dialog counterexample (D38 quiz, D37 tutorial).
+
+Overlay or dialog presence is never sufficient on its own (D-032 honored). **P2-C is rejected for rc1, not ruled out permanently:** it remains available as a research option (+3 TP, +1 FP on dev) and may be reconsidered with stronger evidence that separates terse benign dialogs from lures.
+
+### D-044 · Accepted (experimental, part of D-041) · 2026-10-21 · `C.PROCEDURAL` modifier (R4-β)
+Demotes one tier for R4 findings with exactly one weak pretext family, when every evidence block is in article context outside dialogs/overlays, the region contains a code/pre block and no concealed payload is staged. R1–R3 are never affected, and action risk stays as computed. It is DOM-evidenced and explained in the finding ("procedural document"). Remaining limitation: legitimate documentation shown in a *dialog* is not covered (D39).
+
+### D-045 · Accepted · 2026-10-21 · `C.OVERLAY` and `C.UGC` are not added as decision modifiers
+Measured on dev: overlay/dialog evidence appears in 15 malicious vs 3 benign strongest findings, and UGC in 3 vs 1. They are correlated, but not sufficient and biased by how the lures were written. Overlay/dialog context is used only as a *condition* inside other rules (it excludes R4-β; it gated the rejected P2 variants) and never raises risk. UGC may become a UI label later.
+
+### D-046 · Accepted · 2026-10-21 · Dev split extended to 50 scenarios (D37–D50) before implementing M4.1 candidates
+Seven benign counterexamples (tutorial and quiz modals, docs dialog, Indonesian troubleshooting, unrelated regions, "verify your Windows version", news list) and seven malicious cases (mixed pretext, authority-only with payload, quoted UGC lure, informal Indonesian paraphrase, concealed payload with educational cue or blockquote, reported framing in a dialog). The leakage check against the frozen test split passes. The M3 baseline on dev50 (TP 16, FP 6, TN 23, FN 5) is the comparison point; the dev36 baseline remains in `eval/results/dev.json` at commit `64e632a`.
+
+### D-047 · Accepted · 2026-10-21 · Concealed payloads count only inside the instruction's correlation window; overrides carry evidence
+Owner safeguard. A concealed clipboard payload (hidden-copy strong command whose text is not visible anywhere on the page) affects a candidate only when it lies in the same K = 8 block window. This applies to P1b, P2-A and the R4-β exclusion alike. A payload elsewhere in the same region has no effect (tested). `ContextOverride.evidence` lists the observation ids of the payload, or the verification pretext for the research-only gate, so every override is traceable. Dev results are unchanged by this tightening (byte-identical artifacts).
+
+### D-048 · Accepted · 2026-10-21 · Potential high-assurance organizational deployment is a planning context only
+VEILTRACE is being developed for a cybersecurity innovation hackathon, and winning projects *may* later be evaluated by organizations such as Satsiber TNI AD. This is a possibility, **not** a confirmed adoption, endorsement, requirement or procurement. The context informs planning (PRODUCT_SPEC.md §9, IMPLEMENTATION_PLAN.md "Potential High-Assurance Deployment"): offline/restricted-network operation, supply-chain security (SBOM, dependency audit), reproducible builds, distribution and update integrity, managed-browser deployment, Indonesian UI, strictly opt-in privacy-preserving reporting, and organizational threat modeling. No centralized monitoring, employee surveillance, privileged endpoint access or military-specific features will be built without explicit requirements and a separate review. No document may describe VEILTRACE as military-grade, certified, approved or endorsed.

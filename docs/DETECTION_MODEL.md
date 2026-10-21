@@ -1,6 +1,6 @@
 # Detection Model
 
-Status: M1 model, **unchanged in M2** (engine `0.1.0-m1`; equivalence with commit `d856fbd` verified on all unit fixtures and all 36 extracted dev snapshots). M2 added research-only `AnalyzeOptions` (§9) and measured the model on the dev split. Rule decisions after the M2 review are in §10: P1 is accepted for a future revision (not implemented) and P2 is rejected in its current form.
+Status: M1 model is still the **default** (engine `0.1.0-m1`; equivalence with commit `d856fbd` re-verified at M4.1 on all unit fixtures and all 50 extracted dev snapshots). M4.1 adds the owner-approved **experimental** rule set `ruleset: 'm4.1-rc1'` (engine `0.2.0-rc.1`, §11). It is not the default, not used by the extension and not frozen (D-041). M2 added research-only `AnalyzeOptions` (§9) and measured the model on the dev split. Rule decisions after the M2 review are in §10: P1 is accepted for a future revision (not implemented) and P2 is rejected in its current form.
 
 ## 1. Design goals
 
@@ -142,4 +142,68 @@ Evidence: `eval/results/dev.research.md`. The dev split deliberately contains th
 | Region boundaries | Coarse containers (dialog/overlay/body only) add 1 FP (D24: header banner pretext + article how-to) | Keep semantic containers | Keep |
 
 For the record only: P1 + P2 combined on dev gave TP 14, FP 2, TN 20, FN 0. This is tuned on dev, P2 is rejected, and it must not be cited as a performance claim.
+
+## 11. M4.1 controlled refinement (dev split only; experimental rule set `m4.1-rc1`, approved as experimental, not default)
+
+Evidence: `eval/results/dev.m41.{json,md}` (`npm run eval -- refine --split dev`). The dev split grew from 36 to 50 scenarios (D37–D50). The new scenarios were written **before** the candidates were implemented, and include benign counterexamples aimed at the candidates. The held-out split was not used.
+
+### 11.1 Mechanisms implemented (research options; the default stays M1)
+
+| ID | Mechanism | Implementation |
+|---|---|---|
+| P1 | R4 does not fire when `P.AUTHORITY` is the only weak family | `experimental.r4ExcludeAuthorityOnly` |
+| **P1b** | P1, **unless** the region stages a concealed clipboard payload | `experimental.r4AuthorityOnlyUnlessConcealed` |
+| **P2-A** | A **concealed clipboard payload** in the finding's correlation window suppresses contextual demotion (`O.CONCEALED_PAYLOAD`, with the payload observation as evidence). Concealed = a hidden-copy source with a strong `A.COMMAND` whose normalized text appears in no visible block on the page. **Association:** only payloads inside the same K = 8 window count, for P1b, P2-A and the R4-β exclusion (D-047) | `experimental.concealedPayloadOverride` |
+| P2-B / P2-C | "Verification gate": all evidence in a dialog/overlay **and** a `P.HUMAN_VERIFY` pretext **and** < 25 other words in the region. B suppresses demotion; C caps it at one tier (`O.VERIFICATION_GATE`) | `experimental.verificationGateOverride: 'skip' / 'cap1'` |
+| P2-D | Reported-speech list introductions do not bind inside dialogs/overlays | `experimental.reportedListIntroOutsideDialogsOnly` |
+| **R4-β** | New modifier `C.PROCEDURAL` (demote 1). Applies only to R4 findings with exactly one weak family, whose evidence is in `article` context outside any dialog/overlay, in a region that contains a code/pre block and stages no concealed payload | `experimental.proceduralDocModifier` |
+
+Overrides are explicit in the output (`Finding.overrides[]` with id, effect, suppressed modifiers and reason, plus "Not lowered: …" in the summary). Each override, like each modifier, lowers confidence one level, because it signals conflicting evidence. Action risk is never changed by any of these mechanisms.
+
+### 11.2 Dev results (50 scenarios: 21 malicious, 29 benign hard negatives)
+
+| System | TP | FP | TN | FN | Precision | Recall | Hard-neg FPR |
+|---|---|---|---|---|---|---|---|
+| M3 baseline (M1 model) | 16 | 6 | 23 | 5 | 72.7% (16/22) | 76.2% (16/21) | 20.7% (6/29) |
+| P1 | 15 | 4 | 25 | 6 | 79.0% | 71.4% | 13.8% (4/29) |
+| P1b | 16 | 4 | 25 | 5 | 80.0% | 76.2% | 13.8% (4/29) |
+| P2-A | 16 | 6 | 23 | 5 | 72.7% | 76.2% | 20.7% |
+| P2-B | 19 | 7 | 22 | 2 | 73.1% | 90.5% | 24.1% (7/29) |
+| P2-C | 19 | 7 | 22 | 2 | 73.1% | 90.5% | 24.1% |
+| P2-D | 18 | 7 | 22 | 3 | 72.0% | 85.7% | 24.1% |
+| R4-β | 16 | 1 | 28 | 5 | 94.1% | 76.2% | 3.4% (1/29) |
+| P1b + P2-A + P2-C + R4-β | 19 | 2 | 27 | 2 | 90.5% (19/21) | 90.5% (19/21) | 6.9% (2/29) |
+| **m4.1-rc1 = P1b + P2-A + R4-β** | **16** | **1** | **28** | **5** | **94.1% (16/17; CI 73.0–99.0)** | **76.2% (16/21; CI 54.9–89.4)** | **3.4% (1/29; CI 0.6–17.2)** |
+
+Per-scenario changes vs M3 (from `dev.m41.md`):
+- **P1:** fixes FP D18 and D28, but creates **new FN D42** (a fake-support overlay whose only pretext is authority).
+- **P1b:** fixes D18 and D28 with no new FN (D42 keeps R4 because its region stages a concealed payload).
+- **R4-β:** fixes FP D17, D18, D27, D28 and D40, with no new FN.
+- **P2-A:** D45 suspicious → manipulative (class change on a TP); no FP or FN change on dev.
+- **P2-B/C:** fix FN D10, D12 and D50, but create **new FP D38** (terse benign quiz dialog quoting a lure).
+- **P2-D:** fixes FN D10 and D50, but creates **new FP D37** (benign tutorial modal with a reported list).
+
+### 11.3 Decisions and rationale
+
+| Candidate | Recommendation | Why |
+|---|---|---|
+| P1 | Superseded by P1b | It loses a real authority-only lure that stages a payload (D42) |
+| **P1b** | **Include in rc1** (D-042) | Owner-approved intent (D-031), refined to preserve rule matches backed by clipboard staging. 2 FP fixed, 0 FN |
+| **R4-β `C.PROCEDURAL`** | **Include in rc1** (D-044) | 5 FP fixed, 0 FN on dev. It is DOM-evidenced (article, code block, no dialog, no concealed payload), applies only to single-family R4, never touches R1–R3, and keeps action risk high |
+| **P2-A** | **Include in rc1** (D-043) | Conservative: it overrides demotion only on hard evidence of interaction machinery a quote or tutorial never has. Small dev effect, no counterexample triggered it |
+| P2-B / P2-C / P2-D | **Not included in rc1** (D-043); P2-C not permanently ruled out | Every gate variant that recovers the planted-context lures also misfires on a benign dialog counterexample. With quote-identical text, the dev fixtures offer no evidence that separates D12 (lure) from D38 (quiz) without overfitting. P2-C is offered as an owner option with this explicit trade-off: +3 TP, +1 FP on dev |
+| `C.OVERLAY` | Not added as a modifier (D-045) | In the strongest M3 finding, overlay/dialog evidence occurs in 15 malicious vs 3 benign scenarios. It is correlated but not sufficient, and the dev composition (lures were mostly written as overlays) inflates the correlation. It is used only as a *condition* inside other rules (R4-β exclusion, P2 gate), never to raise risk |
+| `C.UGC` | Not added (D-045) | 3 malicious vs 1 benign. Too few to justify any effect; candidate for a UI label only |
+
+### 11.4 Remaining errors under rc1 (dev)
+- **FP D39:** docs quick-start *dialog* with "To fix this, run the same command with sudo" + install chain. R4-β deliberately excludes dialogs.
+- **FN D10, D12, D50:** planted reported speech / blockquote inside a verification dialog, without a payload (P2 gate not adopted).
+- **FN D43:** quoted lure in a forum comment without a payload.
+- **FN D44:** very informal Indonesian paraphrase ("pencet … sama … barengan", "terus", "abis itu"), which is outside the lexicon. A lexicon revision is a separate future step.
+
+### 11.5 Caveats
+- R4-β was motivated by D17/D27 (known since M2), and D40 was written by the same author after that motivation existed. The dev improvement is therefore an **optimistic** estimate.
+- The rc1 composition (P1b + P2-A + R4-β) was the pre-stated conservative hypothesis. The evaluation compared it against the alternatives rather than searching all combinations.
+- n = 50 synthetic scenarios: the confidence intervals overlap heavily, and no claim of significance or real-world accuracy is made.
+- Performance: identical to M1 (≈ 153 ms per 5,000 synthetic blocks after warm-up, Node). The extra work is one concealed-payload pass per analysis.
 

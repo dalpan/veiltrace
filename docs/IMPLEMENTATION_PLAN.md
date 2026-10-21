@@ -1,6 +1,6 @@
 # Implementation Plan
 
-Status: M1 accepted (`d856fbd`). Held-out split frozen (`407beb0`). M2 accepted (`70c5697`). M3 accepted (manual production validation on stable Chrome recorded in PROGRESS.md). Every milestone is independently testable and ends with a PROGRESS.md entry. No milestone is started before the previous one's acceptance criteria are met or explicitly waived in DECISIONS.md.
+Status: M1 accepted (`d856fbd`). Held-out split frozen (`407beb0`). M2 accepted (`70c5697`). M3 accepted (`64e632a`, manual production validation recorded in PROGRESS.md). M4.1 accepted: experimental rule set `m4.1-rc1` approved, not default (see PROGRESS.md). M4.2–M4.4 not started (require approval). Every milestone is independently testable and ends with a PROGRESS.md entry. No milestone is started before the previous one's acceptance criteria are met or explicitly waived in DECISIONS.md.
 
 ## Milestone overview
 
@@ -117,6 +117,40 @@ Each task produces a written result in `docs/RESEARCH.md` §6 (or a new `docs/EV
 | Held-out corpus untouched | Met: no diff in `corpus/test`; manifest verified |
 
 The M3 plan items above that the owner brief superseded: the UI was built as a full evidence UI (§4 of the brief) instead of the minimal M0 list. "Copy report" is not implemented (planned).
+
+## M4.1: Controlled detection refinement (2026-10-21, accepted as experimental)
+
+| Owner requirement | Result |
+|---|---|
+| Baseline reproduced | M3 on dev36 reproduced byte-identically (TP 12, FP 4, TN 18, FN 2). The M3 baseline on the extended dev50 set: TP 16, FP 6, TN 23, FN 5 |
+| P1 evaluated | P1: −2 FP, +1 FN (D42). Refined to P1b: −2 FP, 0 FN; the authority observation is preserved |
+| P2 redesigned | P2-A (concealed payload) included. Gate variants P2-B/C/D rejected with counterexamples (D37, D38) |
+| Remaining R4 FPs | R4-β `C.PROCEDURAL`: −5 FP, 0 FN. Remaining: a docs dialog (D39) |
+| `C.OVERLAY` / `C.UGC` | Measured; not added as modifiers (D-045) |
+| Regression tests | `tests/m41.test.ts` (22 tests) + 14 new dev scenarios in the browser corpus test |
+| Performance and compatibility | No measurable change (≈ 153 ms per 5k blocks); permissions, architecture and network unchanged |
+| Held-out | Not evaluated; `corpus/test` unchanged |
+| Recommended engine | `0.2.0-rc.1` (`ruleset: 'm4.1-rc1'`), approved as **experimental**; the default stays `0.1.0-m1` (D-041) |
+| Owner safeguards | Window-level payload association, override evidence, documentation with hidden copy targets, R4-β evidence preservation, attacker articles, P1b vs stronger rules, determinism: 7 safeguard tests (D-047) |
+
+## Potential High-Assurance Deployment (roadmap; planning only, D-048)
+
+None of the items below is implemented. They are candidates for M4.2+ and require owner approval. Separation of implemented vs planned vs hypotheses vs potential applications: PRODUCT_SPEC.md §9.
+
+| # | Consideration | Proposed milestone | Notes |
+|---|---|---|---|
+| 1 | Offline and restricted-network deployment | **M4.2** | Already true at runtime (no network). Document installation from an internal artifact store; verify the build works with an offline npm cache |
+| 2 | Supply-chain security: SBOM, dependency audit | **M4.2** | Generate a CycloneDX/SPDX SBOM for the build toolchain; `npm audit` plus license review. Runtime dependencies are 0, so the shipped attack surface is our code only |
+| 3 | Reproducible builds and artifact integrity | **M4.2** | Deterministic esbuild output, pinned toolchain, published SHA-256 of `dist/extension` and the packaged zip |
+| 4 | Secure distribution and updates | M4.3 | Signed CRX via an internal update URL, or Chrome Web Store unlisted; version pinning; rollback |
+| 5 | Managed-browser deployment feasibility | M4.3 | Chrome enterprise policies (`ExtensionInstallForcelist`, `ExtensionSettings`), as a documentation and feasibility test only |
+| 6 | Indonesian detection and UI | **M4.2** (UI strings) | Detection is bilingual already. Add Indonesian popup strings and extend the informal-Indonesian lexicon (D44) with dev evidence |
+| 7 | Privacy-preserving incident reporting (strictly opt-in) | M4.4+ | User-initiated local export of a redacted finding (no URL query, no page text beyond evidence snippets). Any transmission needs a separate design and review |
+| 8 | Organizational threat model and security review | **M4.2** (threat model update) | Extend THREAT_MODEL.md with the managed-deployment adversary, insider misuse and update-channel compromise |
+| 9 | Coverage limitations and failure modes | **M4.2** | One operator-facing page: what VEILTRACE cannot see, partial scans, false-positive and false-negative classes, known evasions |
+| 10 | Compatibility with organizational security policies | M4.3 | Behavior under strict CSP, disabled developer mode, restricted extension permissions, proxy-only networks |
+
+Out of scope unless separately required and reviewed: centralized monitoring, employee surveillance, privileged endpoint access, military-specific operational features.
 
 ## M4: Hardening, held-out evaluation, demo
 

@@ -1,5 +1,5 @@
 // Entry point: PageSnapshot → AnalysisResult. Pure and deterministic; never reads url or title.
-import { ENGINE_VERSION, MAX_AUX_CHARS, MAX_AUX_SOURCES, MAX_BLOCK_CHARS, MAX_BLOCKS } from './constants.js';
+import { ENGINE_VERSION, ENGINE_VERSION_M41_RC, MAX_AUX_CHARS, MAX_AUX_SOURCES, MAX_BLOCK_CHARS, MAX_BLOCKS } from './constants.js';
 import { findCandidates, RULE_RANK, readingOrder, type Candidate } from './correlate.js';
 import { applyModifiers, TIERS, type HeadingMemo, type ScoredCandidate } from './modifiers.js';
 import { normalize } from './normalize.js';
@@ -107,6 +107,7 @@ function summarize(c: ScoredCandidate): string {
   let text = SUMMARY[c.rule.id] as string;
   if (c.rule.id === 'R4') text += ` (${c.weakFamilies.map((f) => f.slice(2).toLowerCase()).join(', ')}).`;
   if (c.modifiers.length > 0) text += ` Context: ${c.modifiers.map((m) => m.reason).join(' ')}`;
+  if (c.overrides.length > 0) text += ` Not lowered: ${c.overrides.map((o) => o.reason).join(' ')}`;
   return text;
 }
 
@@ -114,11 +115,38 @@ function refKey(r: SourceRef): string {
   return r.type === 'block' ? `b:${r.blockId}` : r.type === 'hiddenCopy' ? `h:${r.candidateId}` : `t:${r.triggerId}`;
 }
 
-export function analyze(snapshot: PageSnapshot, options: AnalyzeOptions = {}): AnalysisResult {
+/** The M4.1 candidate rule set (D-041). Placeholder flags are set from the M4.1 dev evaluation. */
+export const M41_RC1: NonNullable<AnalyzeOptions['experimental']> = {
+  r4AuthorityOnlyUnlessConcealed: true,
+  concealedPayloadOverride: true,
+  proceduralDocModifier: true,
+};
+
+function resolveOptions(options: AnalyzeOptions): AnalyzeOptions {
+  if (options.ruleset !== 'm4.1-rc1') return options;
+  return { ...options, experimental: { ...M41_RC1, ...options.experimental } };
+}
+
+/** Strong-command observations in hidden-copy sources whose payload text is not visible anywhere on the page. */
+function concealedPayloads(sources: readonly Source[], signals: readonly Obs[]): Set<Obs> {
+  const visible = sources.filter((s) => s.ref.type === 'block').map((s) => s.norm.text).join('\n');
+  const out = new Set<Obs>();
+  for (const o of signals) {
+    if (o.src.ref.type !== 'hiddenCopy' || o.o.signal !== 'A.COMMAND' || o.o.strength !== 'strong') continue;
+    const payload = o.src.norm.text.trim();
+    if (payload && !visible.includes(payload)) out.add(o);
+  }
+  return out;
+}
+
+export function analyze(snapshot: PageSnapshot, rawOptions: AnalyzeOptions = {}): AnalysisResult {
   validate(snapshot);
+  const options = resolveOptions(rawOptions);
+  const x = options.experimental ?? {};
   const regions = buildRegions(snapshot.blocks.slice(0, MAX_BLOCKS));
   const { sources, truncated } = buildSources(snapshot, regions);
-  const { signals, cues } = observeAll(sources, options.negation !== false);
+  const { signals, cues } = observeAll(sources, options.negation !== false, x.reportedListIntroOutsideDialogsOnly === true);
+  const concealed = concealedPayloads(sources, signals);
 
   const byRegion = new Map<RegionInfo, Obs[]>();
   for (const o of signals) {
@@ -130,7 +158,7 @@ export function analyze(snapshot: PageSnapshot, options: AnalyzeOptions = {}): A
   const memo: HeadingMemo = new Map();
   const scored: ScoredCandidate[] = [];
   for (const r of regions) {
-    for (const c of findCandidates(r, byRegion.get(r) ?? [], options)) scored.push(applyModifiers(c, cues, memo, options));
+    for (const c of findCandidates(r, byRegion.get(r) ?? [], options, concealed)) scored.push(applyModifiers(c, cues, memo, options));
   }
   const selected = select(scored);
 
@@ -161,6 +189,7 @@ export function analyze(snapshot: PageSnapshot, options: AnalyzeOptions = {}): A
       reason: m.reason,
       evidence: m.evidence.map((e) => (typeof e === 'string' ? e : (idOf.get(e) as string))),
     })),
+    ...(c.overrides.length > 0 ? { overrides: c.overrides.map((o) => ({ ...o, evidence: o.evidence.map((e) => idOf.get(e) as string) })) } : {}),
     summary: summarize(c),
   }));
 
@@ -168,7 +197,7 @@ export function analyze(snapshot: PageSnapshot, options: AnalyzeOptions = {}): A
   for (const f of findings) if (verdict === 'none' || TIERS.indexOf(f.classification) > TIERS.indexOf(verdict)) verdict = f.classification;
 
   return {
-    engineVersion: ENGINE_VERSION,
+    engineVersion: options.ruleset === 'm4.1-rc1' ? ENGINE_VERSION_M41_RC : ENGINE_VERSION,
     schemaVersion: 1,
     verdict,
     findings,

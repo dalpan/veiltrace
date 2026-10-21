@@ -1,0 +1,22 @@
+{
+  "id": "D41-en-mixed-pretext-portal",
+  "split": "dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T5",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://staff-portal.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#notice",
+  "description": "Page-level notice combining authority and urgency with an execution chain",
+  "rationale": "Mixed weak pretexts (authority + urgency) must still escalate under P1.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M4.1 dev additions, written before the M4.1 candidates",
+  "created": "2026-10-21"
+}
