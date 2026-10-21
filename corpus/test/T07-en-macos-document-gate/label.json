@@ -1,0 +1,22 @@
+{
+  "id": "T07-en-macos-document-gate",
+  "split": "test",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T1",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://docs-viewer.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#gate",
+  "description": "macOS variant: Spotlight → Terminal → paste → Return to open a document",
+  "rationale": "macOS ClickFix with a bash download-and-execute payload in a hidden textarea.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; written before the M2 extractor existed",
+  "created": "2026-10-21"
+}

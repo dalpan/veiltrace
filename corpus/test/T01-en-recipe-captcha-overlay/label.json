@@ -1,0 +1,26 @@
+{
+  "id": "T01-en-recipe-captcha-overlay",
+  "split": "test",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T1",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://recipes.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [
+    {
+      "click": "#cf-check"
+    }
+  ],
+  "evidenceWithin": "#cf-overlay",
+  "description": "Recipe site covered by a fake security-check overlay; steps appear after clicking the checkbox",
+  "rationale": "Classic ClickFix: fake human check + Run/paste/Enter, payload staged in an off-screen textarea.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; written before the M2 extractor existed",
+  "created": "2026-10-21"
+}

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Install the Contoso CLI</title><style>body{font-family:system-ui,sans-serif;margin:0;color:#222;background:#fafafa}
+header,footer{background:#203040;color:#fff;padding:12px 24px}nav a{color:#fff;margin-right:16px}
+main{max-width:860px;margin:24px auto;padding:0 24px;background:#fff}
+.overlay{position:fixed;inset:0;background:#fff;z-index:9999;display:flex;align-items:center;justify-content:center}
+.box{max-width:520px;padding:32px;border:1px solid #ccc;border-radius:8px;box-shadow:0 4px 24px #0002}
+.offscreen{position:absolute;left:-9999px;top:0;width:1px;height:1px}
+pre{background:#f0f0f0;padding:12px;overflow:auto}</style></head>
+<body>
+<header><strong>Contoso Docs</strong> <nav><a href="#">Guides</a><a href="#">API</a><a href="#">CLI</a></nav></header>
+<main><nav aria-label="sidebar"><ul><li>Overview</li><li>Install</li><li>Configure</li></ul></nav>
+<article><h1>Install the Contoso CLI</h1>
+<p>On macOS and Linux, open a terminal and paste the following command, then press Enter:</p>
+<pre><code id="inst">curl --proto '=https' --tlsv1.2 -sSf https://sh.contoso.test/install.sh | sh</code></pre>
+<button class="copy" type="button" data-clipboard-text="curl --proto '=https' --tlsv1.2 -sSf https://sh.contoso.test/install.sh | sh">Copy</button>
+<p>On Windows, download the installer from the releases page.</p>
+<h2>Troubleshooting</h2><p>If the installer fails with a permissions error, re-run it with sudo.</p>
+</article></main><footer><p>Contoso Docs</p></footer>
+
+</body></html>

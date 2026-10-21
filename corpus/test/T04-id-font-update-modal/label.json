@@ -1,0 +1,22 @@
+{
+  "id": "T04-id-font-update-modal",
+  "split": "test",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T2",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://unduh.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#fixmodal",
+  "description": "Modal 'font tidak tersedia' dengan perintah PowerShell dan tombol Salin",
+  "rationale": "Lure fix-it (T2): dalih pembaruan font + perintah unduh-eksekusi.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; written before the M2 extractor existed",
+  "created": "2026-10-21"
+}

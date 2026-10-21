@@ -1,0 +1,22 @@
+{
+  "id": "T03-en-fake-defender-support",
+  "split": "test",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T5",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://pc-help.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#alert",
+  "description": "Fake Windows Defender alert with authority, threat and a PowerShell removal script",
+  "rationale": "Tech-support scam delivering a command; no human-verification pretext, so suspicious is the strongest defensible class.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; written before the M2 extractor existed",
+  "created": "2026-10-21"
+}

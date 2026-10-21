@@ -1,0 +1,22 @@
+{
+  "id": "T21-id-flash-sale",
+  "split": "test",
+  "lang": "id",
+  "category": "benign",
+  "threatClass": "-",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://toko.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Flash sale dengan hitung mundur dan stok terbatas",
+  "rationale": "Urgensi komersial tanpa instruksi eksekusi.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; written before the M2 extractor existed",
+  "created": "2026-10-21"
+}

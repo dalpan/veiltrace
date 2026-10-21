@@ -1,0 +1,22 @@
+{
+  "id": "T09-en-quote-markup-abuse",
+  "split": "test",
+  "lang": "en",
+  "category": "adversarial",
+  "threatClass": "T1",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://video.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#player-gate",
+  "description": "Fake player gate whose instructions are wrapped in <blockquote> markup",
+  "rationale": "Quotation-context evasion: the markup says 'quote' but the overlay addresses the viewer directly.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; written before the M2 extractor existed",
+  "created": "2026-10-21"
+}

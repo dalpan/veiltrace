@@ -69,3 +69,6 @@ Negated actions ("never press Win+R", "jangan pernah tekan…") are not instruct
 
 ### D-021 · Accepted · 2026-10-21 · Git repository initialized; no commit without owner review
 Owner authorized `git init`. Commits wait for review of the M1 implementation and test results.
+
+### D-022 · Accepted · 2026-10-21 · Held-out test split frozen before any M2 extractor or rule work
+`corpus/test` holds 26 HTML scenarios (12 malicious, 14 benign hard negatives, 11 Indonesian) with SHA-256 manifest aggregate `954070c4cab79ba112907810fdc21e02ac5008c2348597b7063f6fed0bdde85e`. Owner-authorized freeze commit. Controls: `tests/corpus.test.ts` fails on any file change, `npm run eval` refuses detection on `--split test` without `--final`, and refreezing needs `--refreeze` plus a new decision entry. The leakage check fails on shared sentences of ≥ 6 words. Six shorter canonical lure phrases overlap with the lexicon by design and are documented in `corpus/test/README.md`. Labels are ground truth of intent assigned without running VEILTRACE. Known bias: same author as the rules.

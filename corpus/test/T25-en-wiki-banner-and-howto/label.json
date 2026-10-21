@@ -1,0 +1,22 @@
+{
+  "id": "T25-en-wiki-banner-and-howto",
+  "split": "test",
+  "lang": "en",
+  "category": "ambiguous",
+  "threatClass": "-",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://wiki.contoso.test/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Wiki: human-verification banner in the header, unrelated Run-dialog how-to in the article",
+  "rationale": "Pretext and instruction in different regions must not correlate.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; written before the M2 extractor existed",
+  "created": "2026-10-21"
+}

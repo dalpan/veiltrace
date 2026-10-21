@@ -33,7 +33,7 @@ export default defineConfig(
     },
   },
   {
-    files: ['scripts/**/*.mjs', 'tests/**/*.ts', '*.config.*'],
+    files: ['scripts/**/*.mjs', 'tests/**/*.ts', 'src/eval/**/*.ts', '*.config.*'],
     languageOptions: { globals: nodeGlobals },
   },
   {

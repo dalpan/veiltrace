@@ -4,6 +4,12 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-21 · M2 step 1 · Held-out test split frozen (D-022)
+
+- Playwright 1.64.1 added (dev) with Chromium headless shell 156. This was the only network access, at tooling install time.
+- `corpus/test`: 26 scenarios written before the extractor existed. Structural validation (`npm run eval -- validate --split test`) passed: labels, hashes, offline loading (0 external requests), interaction steps and evidence selectors. **No detection was run on the test split.**
+- Manifest aggregate `954070c4…de85e`.
+
 ## 2026-10-21 · M1 Detection core · **Provisionally accepted by owner; initial M1 commit**
 
 **Done**

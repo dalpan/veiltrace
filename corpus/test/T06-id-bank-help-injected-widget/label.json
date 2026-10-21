@@ -1,0 +1,22 @@
+{
+  "id": "T06-id-bank-help-injected-widget",
+  "split": "test",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://bantuan.bank-contoh.test/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#promo",
+  "description": "Halaman bantuan bank (domain tepercaya) dengan widget promo yang disusupi",
+  "rationale": "Komponen pihak ketiga yang disusupi di domain sah.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; written before the M2 extractor existed",
+  "created": "2026-10-21"
+}

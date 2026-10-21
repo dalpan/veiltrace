@@ -1,0 +1,22 @@
+{
+  "id": "T11-en-session-restore-urgency",
+  "split": "test",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T3",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://account.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#session",
+  "description": "Session-expired alert with urgency and a copy button carrying a staged command",
+  "rationale": "Delivered command + urgency only (weak pretext) → suspicious.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; written before the M2 extractor existed",
+  "created": "2026-10-21"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "T16-en-it-map-network-drive",
+  "split": "test",
+  "lang": "en",
+  "category": "benign",
+  "threatClass": "-",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://it.corp.test/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Internal IT knowledge-base article: map a network share via Win+R",
+  "rationale": "Internal IT instruction with an authority reference but no manipulation.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; written before the M2 extractor existed",
+  "created": "2026-10-21"
+}

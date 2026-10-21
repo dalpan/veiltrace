@@ -1,0 +1,22 @@
+{
+  "id": "T13-en-real-captcha-interstitial",
+  "split": "test",
+  "lang": "en",
+  "category": "benign",
+  "threatClass": "-",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://shop.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Legitimate bot-check interstitial: checkbox, Ray ID, no instructions to run anything",
+  "rationale": "Human-verification wording without any execution request.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; written before the M2 extractor existed",
+  "created": "2026-10-21"
+}

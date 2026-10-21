@@ -1,0 +1,22 @@
+{
+  "id": "T26-id-browser-game",
+  "split": "test",
+  "lang": "id",
+  "category": "ambiguous",
+  "threatClass": "-",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://game.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Game browser: tekan Enter untuk mulai, tempel kode simpanan",
+  "rationale": "Instruksi keyboard tanpa membuka Run/Terminal.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; written before the M2 extractor existed",
+  "created": "2026-10-21"
+}

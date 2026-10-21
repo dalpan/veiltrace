@@ -1,0 +1,22 @@
+{
+  "id": "T22-id-bank-otp-warning",
+  "split": "test",
+  "lang": "id",
+  "category": "benign",
+  "threatClass": "-",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://bank-contoh.test/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Peringatan keamanan resmi bank tentang OTP",
+  "rationale": "Dalih urgensi/otoritas disebut sebagai peringatan, tanpa instruksi eksekusi.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; written before the M2 extractor existed",
+  "created": "2026-10-21"
+}

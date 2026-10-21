@@ -1,0 +1,26 @@
+{
+  "id": "T12-en-cross-origin-ad-iframe",
+  "split": "test",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://news2.example/",
+      "file": "index.html"
+    },
+    {
+      "url": "https://ads.example/frame.html",
+      "file": "frame.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#ad",
+  "description": "News page; a cross-origin ad iframe contains a ClickFix lure",
+  "rationale": "Coverage limit: cross-origin frames are not inspectable; label reflects ground truth (malicious).",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; written before the M2 extractor existed",
+  "created": "2026-10-21"
+}

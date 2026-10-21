@@ -1,0 +1,22 @@
+{
+  "id": "T02-id-news-dialog-captcha",
+  "split": "test",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T1",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://berita.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#verif",
+  "description": "Portal berita dengan <dialog> CAPTCHA palsu berbahasa Indonesia",
+  "rationale": "ClickFix Indonesia: dalih bukan robot + Win+R/Ctrl+V/Enter, payload PowerShell tersembunyi.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; written before the M2 extractor existed",
+  "created": "2026-10-21"
+}

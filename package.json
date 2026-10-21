@@ -14,7 +14,8 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "check": "npm run typecheck && npm run lint && npm run test"
+    "check": "npm run typecheck && npm run lint && npm run test",
+    "eval": "node scripts/eval.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
@@ -22,6 +23,7 @@
     "@vitest/coverage-v8": "5.0.5",
     "esbuild": "0.28.2",
     "eslint": "10.13.0",
+    "playwright": "1.64.1",
     "typescript": "6.0.3",
     "typescript-eslint": "8.72.0",
     "vitest": "5.0.5"
