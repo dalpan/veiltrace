@@ -1,71 +1,71 @@
 {
   "split": "cred-dev",
   "note": "DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.",
-  "detectorVersion": "cred-0.1.0-exp",
+  "detectorVersion": "cred-0.1.1-exp",
   "clickfixEngineVersion": "0.2.0",
   "extractorVersion": "0.2.0-m5",
   "metrics": {
-    "scenarios": 36,
+    "scenarios": 41,
     "confusion": {
-      "tp": 14,
+      "tp": 18,
       "fp": 0,
-      "tn": 20,
-      "fn": 2
+      "tn": 22,
+      "fn": 1
     },
     "precision": {
-      "k": 14,
-      "n": 14,
+      "k": 18,
+      "n": 18,
       "value": 1,
       "ci95": [
-        0.7847,
+        0.8241,
         1
       ]
     },
     "recall": {
-      "k": 14,
-      "n": 16,
-      "value": 0.875,
+      "k": 18,
+      "n": 19,
+      "value": 0.9474,
       "ci95": [
-        0.6398,
-        0.965
+        0.7536,
+        0.9906
       ]
     },
     "fpr": {
       "k": 0,
-      "n": 20,
+      "n": 22,
       "value": 0,
       "ci95": [
         0,
-        0.1611
+        0.1487
       ]
     },
     "hardNegativeFpr": {
       "k": 0,
-      "n": 20,
+      "n": 22,
       "value": 0,
       "ci95": [
         0,
-        0.1611
+        0.1487
       ]
     },
     "localization": {
-      "k": 14,
-      "n": 14,
+      "k": 18,
+      "n": 18,
       "value": 1,
       "ci95": [
-        0.7847,
+        0.8241,
         1
       ]
     },
     "classMatrix": [
       [
-        4,
+        5,
         0,
         0,
         0
       ],
       [
-        0,
+        1,
         16,
         0,
         0
@@ -77,19 +77,19 @@
         0
       ],
       [
-        1,
+        0,
         1,
         0,
-        11
+        15
       ]
     ],
     "exactClassAgreement": {
-      "k": 34,
-      "n": 36,
-      "value": 0.9444,
+      "k": 39,
+      "n": 41,
+      "value": 0.9512,
       "ci95": [
-        0.8186,
-        0.9846
+        0.8386,
+        0.9865
       ]
     },
     "observedOnNegatives": 16,
@@ -116,21 +116,21 @@
       },
       "id": {
         "recall": {
-          "k": 4,
-          "n": 5,
-          "value": 0.8,
+          "k": 8,
+          "n": 8,
+          "value": 1,
           "ci95": [
-            0.3755,
-            0.9638
+            0.6756,
+            1
           ]
         },
         "fpr": {
           "k": 0,
-          "n": 5,
+          "n": 7,
           "value": 0,
           "ci95": [
             0,
-            0.4345
+            0.3543
           ]
         }
       }
@@ -182,9 +182,11 @@
       "truth": "malicious",
       "expectedClass": "manipulative_instruction",
       "hardNegative": false,
-      "predicted": "none",
-      "findings": [],
-      "localized": null,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "CR1:manipulative_instruction"
+      ],
+      "localized": true,
       "clickfixVerdict": "none",
       "partial": [],
       "requestsDuringScan": 0,
@@ -210,6 +212,57 @@
     {
       "id": "CA05-en-split-inline-elements",
       "lang": "en",
+      "category": "adversarial",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "CR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CA06-id-slang-kirimin-kode-wa",
+      "lang": "id",
+      "category": "adversarial",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "CR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CA07-id-slang-spill-otp",
+      "lang": "id",
+      "category": "adversarial",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "CR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CA08-id-slang-sebutin-angka-sms",
+      "lang": "id",
       "category": "adversarial",
       "truth": "malicious",
       "expectedClass": "manipulative_instruction",
@@ -742,6 +795,36 @@
       "partial": [],
       "requestsDuringScan": 0,
       "fieldsFilled": 1
+    },
+    {
+      "id": "CN21-id-slang-jangan-kasih-angka",
+      "lang": "id",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CN22-id-slang-masukin-kode-di-aplikasi",
+      "lang": "id",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
     }
   ]
 }

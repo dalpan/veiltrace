@@ -1,0 +1,22 @@
+{
+  "id": "CN22-id-slang-masukin-kode-di-aplikasi",
+  "split": "cred-dev",
+  "lang": "id",
+  "category": "benign",
+  "threatClass": "T7",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://bantuan.dompetku.test/otp",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Petunjuk informal: masukin kode yg barusan masuk di aplikasi",
+  "rationale": "Langkah verifikasi biasa (diketik di aplikasi sendiri), tanpa dalih manipulatif.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules); added after owner manual test of CA03, labels written before scanning",
+  "created": "2026-10-21"
+}

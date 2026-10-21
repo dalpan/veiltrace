@@ -3,7 +3,7 @@
 import type {
   CredEvidenceItem, CredFindingSummary, EvidenceItem, FindingSummary, PayEvidenceItem, PayFindingSummary, ScanReport, SupportEvidenceItem, SupportFindingSummary,
 } from '../content/report.js';
-import { classifyUrl, extensionVersion, getTargetTab, runHighlight, runScan, type TargetTab, type UrlClass } from './adapter.js';
+import { classifyUrl, extensionVersion, getTargetTab, isTabView, runHighlight, runScan, type TargetTab, type UrlClass } from './adapter.js';
 import { aggregate, CATEGORIES, type Category, type Dashboard, type FindingGroup, type FindingRef } from './aggregate.js';
 import { detectLang, formatCount, MESSAGES, type HighlightKey, type Lang, type Messages } from './i18n.js';
 import { parseHighlightResult, parseScanReport } from './validate.js';
@@ -405,6 +405,7 @@ async function main(): Promise<void> {
     });
   }
   $('scan').addEventListener('click', () => void scan());
+  if (await isTabView()) document.documentElement.classList.add('fluid');
   state.tab = await getTargetTab().catch(() => null);
   state.urlClass = classifyUrl(state.tab?.url);
   if (!state.tab) Object.assign(state, { phase: 'error', error: 'noPage' });

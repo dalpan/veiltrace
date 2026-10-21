@@ -3,7 +3,7 @@
 **Development data, not a held-out split.** It was written by the same AI assistant (Claude Code, for the VEILTRACE owner) who wrote the experimental rules, on 2026-10-21, and the rules were adjusted on it (DETECTION_MODEL.md §12.7). Results on it are optimistic by construction and must never be reported as held-out or real-world effectiveness.
 
 ## Composition
-- 36 scenarios: 16 malicious (11 positive, 5 adversarial) and 20 benign hard negatives. 26 English, 10 Indonesian.
+- 41 scenarios: 19 malicious (11 positive, 8 adversarial) and 22 benign hard negatives. 26 English, 15 Indonesian. CA06–CA08 and CN21–CN22 (informal Indonesian) were added after the owner's manual test of CA03, with labels written before they were scanned (DETECTION_MODEL.md §12.9).
 - One static page per scenario, served offline under a fictional `.test` host (`label.json` → `pages`). No JavaScript; chat widgets use declarative shadow DOM. Form actions point to `.invalid` or `.test` hosts; nothing is submitted during evaluation.
 - No real organization, brand or person is named. "Contoso" and "Northwind" are conventional fictional names.
 

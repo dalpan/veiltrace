@@ -177,3 +177,26 @@ describe('credential detector: targeted false-positive regressions (M5.1 finaliz
     expect(short(r)).toEqual(['CR5:observed_instruction']);
   });
 });
+
+describe('credential detector: informal Indonesian (cred-0.1.1-exp, after the owner\'s manual test of CA03)', () => {
+  it('CA03: "kasih liat dong angka yg barusan masuk ke hp lu" for "verif akun" → manipulative CR1', () => {
+    const r = analyzeCredentials(snapshot(inContainer('ugc:#p', ['bro buat verif akun, kasih liat dong angka yg barusan masuk ke hp lu, cepetan ya'])));
+    expect(short(r)).toEqual(['CR1:manipulative_instruction']);
+    expect(r.findings[0]).toMatchObject({ requestedAction: 'send', secretTypes: ['otp'] });
+    expect(r.findings[0]!.pretexts).toEqual(['CP.URGENCY', 'CP.VERIFY']);
+  });
+
+  it('other slang requests: kirimin / spill / sebutin → manipulative', () => {
+    for (const t of ['min, kirimin kode verif yg masuk ke wa lo dong, biar akun lo ga kena banned', 'spill otp nya bro biar gw cek, buruan',
+      'halo kak, buat verifikasi tolong sebutin 6 angka dari sms yg baru masuk ya']) {
+      expect(short(analyzeCredentials(snapshot(inContainer('ugc:#c', [t])))), t).toEqual(['CR1:manipulative_instruction']);
+    }
+  });
+
+  it('slang that is advice, an ordinary entry step, or not about a secret never alerts', () => {
+    expect(short(analyzeCredentials(snapshot(['bro jangan pernah kasih angka yg masuk ke hp lu ke siapapun'])))).toEqual([]);
+    expect(analyzeCredentials(snapshot(['masukin kode verif yg masuk ke hp kamu di aplikasi ya, berlaku 5 menit'])).verdict).not.toMatch(/suspicious|manipulative/);
+    expect(short(analyzeCredentials(snapshot(inContainer('ugc:#c', ['spill harga dong kak, kasih liat foto produknya juga, buruan ya']))))).toEqual([]);
+  });
+});
+

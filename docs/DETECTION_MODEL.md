@@ -349,3 +349,15 @@ Corpus: 10 positive, 2 adversarial, 15 hard negatives; 14 EN, 13 ID including in
 | **v1 (`sup-0.1.0-exp`)** | Negation distributes over "or/atau"; attributed alerts ("a pop-up that says …") are unasserted (fixes FP SN08, an awareness list). SA02 added afterwards. Rules evaluated together, strongest wins (found by an E2E markup test; no dev result changed) | **11** | **0** | **15** | **1** |
 
 Miss: **SA02**, a tech-support alarm worded outside the lexicon ("Windows has detected a Zeus trojan"). Precision 11/11 (CI 74.1–100), recall 11/12 (CI 64.6–98.5), hard-negative FPR 0/15 (CI 0–20.4), localization 11/11, exact class 25/27, 0 requests, 0 phone numbers or digit runs in results. ClickFix verdict `none`, credential and payment none/observed on all 27 pages. **Optimistic by construction; not real-world effectiveness.**
+
+### 12.9 cred-0.1.1-exp: informal Indonesian (after the owner's manual test, 2026-10-21)
+The owner's manual Chrome test showed **CA03** ("bro buat verif akun, kasih liat dong angka yg barusan masuk ke hp lu, cepetan ya") with no finding. Cause: the OTP lexicon required the word "kode"/"OTP", and "verif akun" and "cepetan" were not pretexts. Before changing anything, five new informal scenarios were written with labels (CA06–CA08 positive, CN21–CN22 hard negative); the unchanged detector missed all four informal positives (41 scenarios: TP 14, FP 0, TN 22, FN 5).
+
+Lexicon additions (no rule, window or modifier changed): `S.OTP` for codes described as digits that just arrived ("angka yg barusan masuk", "6 angka dari sms") and "kode verif"/"kode yg barusan masuk"; `D.SEND` slang (kirimin, sebutin, kasih liat, bacain, spill, ss/screenshot); `D.ENTER` (masukin, isiin, ketikin); `CP.VERIFY` (verif akun, buat/untuk verifikasi); `CP.URGENCY` (cepetan, buruan, cpt, sebelum expired); `CP.ACCOUNT_THREAT` (bakal/mau di-banned/suspend, kena banned); informal pronouns (lu, lo, elu).
+
+| Version | Scenarios | TP | FP | TN | FN |
+|---|---|---|---|---|---|
+| cred-0.1.0-exp | 41 | 14 | 0 | 22 | 5 |
+| **cred-0.1.1-exp** | 41 | **18** | **0** | **22** | **1** |
+
+Among the 36 original scenarios only CA03 changed (none → manipulative, CR1). Remaining miss: CA02 (blockquote markup). CN22 is predicted none instead of observed (the entry verb follows the code). 0 privacy-sentinel leaks. **Still development data by the same author; the informal vocabulary of real scams is wider than this list.**

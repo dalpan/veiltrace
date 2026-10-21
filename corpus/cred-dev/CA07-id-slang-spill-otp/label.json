@@ -1,0 +1,22 @@
+{
+  "id": "CA07-id-slang-spill-otp",
+  "split": "cred-dev",
+  "lang": "id",
+  "category": "adversarial",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://forum.jualbeli.test/t/120",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#r3",
+  "description": "Komentar slang: \"spill otp nya bro, buruan\"",
+  "rationale": "Permintaan membagikan OTP dengan kata slang \"spill\" dan desakan.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules); added after owner manual test of CA03, labels written before scanning",
+  "created": "2026-10-21"
+}

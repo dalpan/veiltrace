@@ -1,24 +1,24 @@
 # Credential detector: development results (cred-dev)
 
-Detector cred-0.1.0-exp (EXPERIMENTAL), extractor 0.2.0-m5. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
+Detector cred-0.1.1-exp (EXPERIMENTAL), extractor 0.2.0-m5. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
 
-TP 14 · FP 0 · TN 20 · FN 2
+TP 18 · FP 0 · TN 22 · FN 1
 
-- Precision: 100.0% (14/14; 95% CI 78.5%–100.0%)
-- Recall: 87.5% (14/16; 95% CI 64.0%–96.5%)
-- Hard-negative FPR: 0.0% (0/20; 95% CI 0.0%–16.1%)
-- Localization: 100.0% (14/14; 95% CI 78.5%–100.0%)
-- Exact class agreement: 94.4% (34/36; 95% CI 81.9%–98.5%)
+- Precision: 100.0% (18/18; 95% CI 82.4%–100.0%)
+- Recall: 94.7% (18/19; 95% CI 75.4%–99.1%)
+- Hard-negative FPR: 0.0% (0/22; 95% CI 0.0%–14.9%)
+- Localization: 100.0% (18/18; 95% CI 82.4%–100.0%)
+- Exact class agreement: 95.1% (39/41; 95% CI 83.9%–98.7%)
 - Requests during scanning: 0; privacy sentinel leaks: 0 (26 fields filled)
 
 ## Class matrix
 
 | expected \ predicted | none | observed | suspicious | manipulative |
 |---|---|---|---|---|
-| none | 4 | 0 | 0 | 0 |
-| observed | 0 | 16 | 0 | 0 |
+| none | 5 | 0 | 0 | 0 |
+| observed | 1 | 16 | 0 | 0 |
 | suspicious | 0 | 0 | 3 | 0 |
-| manipulative | 1 | 1 | 0 | 11 |
+| manipulative | 0 | 1 | 0 | 15 |
 
 ## Per scenario
 
@@ -26,9 +26,12 @@ TP 14 · FP 0 · TN 20 · FN 2
 |---|---|---|---|---|---|---|
 | CA01-en-planted-tips-live-field | malicious | suspicious | suspicious | CR4:suspicious_correlation | ✓ | none |
 | CA02-en-quoted-support-request | malicious | manipulative | observed | CR1:observed_instruction |  | none |
-| CA03-id-parafrase-informal | malicious | manipulative | none |  |  | none |
+| CA03-id-parafrase-informal | malicious | manipulative | manipulative | CR1:manipulative_instruction | ✓ | none |
 | CA04-en-reported-framing-overlay | malicious | manipulative | manipulative | CR1:manipulative_instruction | ✓ | none |
 | CA05-en-split-inline-elements | malicious | manipulative | manipulative | CR1:manipulative_instruction | ✓ | none |
+| CA06-id-slang-kirimin-kode-wa | malicious | manipulative | manipulative | CR1:manipulative_instruction | ✓ | none |
+| CA07-id-slang-spill-otp | malicious | manipulative | manipulative | CR1:manipulative_instruction | ✓ | none |
+| CA08-id-slang-sebutin-angka-sms | malicious | manipulative | manipulative | CR1:manipulative_instruction | ✓ | none |
 | CD01-en-community-otp-reply | malicious | manipulative | manipulative | CR1:manipulative_instruction | ✓ | none |
 | CD02-en-chat-widget-backup-codes | malicious | manipulative | manipulative | CR1:manipulative_instruction | ✓ | none |
 | CD03-en-wallet-sync-seed | malicious | manipulative | manipulative | CR2:manipulative_instruction | ✓ | none |
@@ -60,3 +63,5 @@ TP 14 · FP 0 · TN 20 · FN 2
 | CN18-id-promo-login | benign | observed | observed | CR5:observed_instruction |  | none |
 | CN19-en-new-signin-alert | benign | none | none |  |  | none |
 | CN20-en-2fa-setup | benign | observed | observed | CR5:observed_instruction |  | none |
+| CN21-id-slang-jangan-kasih-angka | benign | none | none |  |  | none |
+| CN22-id-slang-masukin-kode-di-aplikasi | benign | observed | none |  |  | none |

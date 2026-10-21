@@ -140,6 +140,15 @@ describe('unified threat dashboard', () => {
     await shot(popup, '63-dashboard-partial-id');
   });
 
+  it('as a toolbar popup the width is fixed at 560 px even while the viewport is still small (owner manual test: popup stayed narrow)', async () => {
+    en.pages.set('https://width.test/', html('<p>hello</p>'));
+    const { popup } = await scanUrl(en, 'https://width.test/');
+    expect(await popup.evaluate(() => document.documentElement.classList.contains('fluid'))).toBe(true);
+    await popup.setViewportSize({ width: 400, height: 600 });
+    // Without the tab-view class the body keeps 560 px, which is what makes Chrome open the popup at 560 px.
+    expect(await popup.evaluate(() => { document.documentElement.classList.remove('fluid'); return document.body.getBoundingClientRect().width; })).toBe(560);
+  });
+
   it('long evidence and narrow windows: snippets stay inside the card and the popup never scrolls sideways', async () => {
     const long = `Verify you are human. Press Win+R, then Ctrl+V and press Enter. ${'x'.repeat(260)}`;
     en.pages.set('https://long.test/', html(`<div role="dialog"><p>${long}</p></div>`));

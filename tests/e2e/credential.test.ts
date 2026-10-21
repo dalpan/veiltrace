@@ -84,6 +84,19 @@ describe('credential section in the popup', () => {
     expect(await popup.textContent('.cred-summary h2')).toBe('Manipulative');
   });
 
+  it('CA03 informal Indonesian ("kasih liat dong angka yg barusan masuk ke hp lu") → manipulative in the popup (owner manual-test regression)', async () => {
+    const { target, popup } = await scanUrl(id, addCorpusScenario(id, 'cred-dev', 'CA03-id-parafrase-informal'));
+    expect(await popup.getAttribute('.cred-summary', 'data-verdict')).toBe('manipulative_instruction');
+    expect(await popup.textContent('.threat-summary h2')).toBe('Konten manipulatif terdeteksi');
+    const card = popup.locator('article.finding.cred').first();
+    expect(await card.getAttribute('data-rule')).toBe('CR1');
+    expect(await card.locator('.snippet').allTextContents()).toEqual(expect.arrayContaining(['kasih liat', 'angka yg barusan masuk ke hp lu']));
+    await card.locator('li', { hasText: 'angka yg barusan masuk' }).locator('button.show').click();
+    await popup.waitForSelector('article.finding.cred .hl-status[data-result]');
+    expect(await popup.getAttribute('article.finding.cred .hl-status[data-result]', 'data-result')).toBe('highlighted');
+    expect(await target.evaluate(() => document.querySelector('[data-veiltrace-highlight]') !== null)).toBe(true);
+  });
+
   it('ClickFix demo page: command section unchanged, credential section reports no requests', async () => {
     const site = addDemoSite(en, 'https://help.nusaverta.test/');
     const { popup } = await scanUrl(en, site.lure);

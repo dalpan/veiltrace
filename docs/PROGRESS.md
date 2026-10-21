@@ -4,6 +4,16 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-21 · M5.4 follow-up after the owner's manual Chrome test · **Fixed and committed (owner approved)**
+
+**Owner finding:** CA03 (informal Indonesian OTP request) showed no finding. **Also found in the screenshots:** the popup opened about 430 px wide instead of 560 px.
+
+**Done:** five new informal cred-dev scenarios written and labelled before the change (CA06–CA08, CN21–CN22); credential lexicon extended to `cred-0.1.1-exp` (DETECTION_MODEL.md §12.9; D-079): cred-dev 41 scenarios TP 14 → 18, FP 0 → 0, FN 5 → 1. Popup width fixed (D-079). New unit tests (informal positives and slang hard negatives), an E2E regression for CA03 in the popup, and an E2E width regression.
+
+**Next:** owner re-checks CA03 and the popup width in Chrome. Verification: unit 360/360, browser 183/183, E2E 66/66, verify:extension 31/31.
+
+---
+
 ## 2026-10-21 · M5.4 Unified threat dashboard · **Implemented (UI only); manual Chrome validation pending**
 
 **Done**

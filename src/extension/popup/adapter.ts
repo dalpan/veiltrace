@@ -38,6 +38,15 @@ export function extensionVersion(): string {
   }
 }
 
+/** True when the popup page is open as a tab (tests, keyboard users) rather than as the toolbar popup. */
+export async function isTabView(): Promise<boolean> {
+  try {
+    return (await chrome.tabs.getCurrent()) !== undefined;
+  } catch {
+    return false;
+  }
+}
+
 export async function getTargetTab(): Promise<TargetTab | null> {
   if (__VT_TEST__) {
     // Test build only: Playwright cannot click the toolbar button, so the target tab is passed explicitly.

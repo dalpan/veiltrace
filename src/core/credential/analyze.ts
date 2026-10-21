@@ -12,7 +12,7 @@ import type {
   CredSourceRef, CredentialResult, SecretSignalId, SecretType, TrustContext,
 } from './types.js';
 
-export const CRED_DETECTOR_VERSION = 'cred-0.1.0-exp';
+export const CRED_DETECTOR_VERSION = 'cred-0.1.1-exp';
 
 /** Same clause/sentence breaks as the ClickFix negation and reported-speech binding (observe.ts). */
 const CLAUSE_BREAK = /[,;:.!?]|(?<![\p{L}\p{N}_])(?:and|then|or|but|dan|lalu|kemudian|atau|tapi|tetapi)(?![\p{L}\p{N}_])/u;

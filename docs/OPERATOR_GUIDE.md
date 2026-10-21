@@ -70,7 +70,7 @@ In development builds after M5.1, the popup has a second section, **"Credential 
 - Each finding shows what is asked (send or enter, which secret), the indicators found, where it sits (user content, widget, dialog, form), where the form submits as information only, and its limits. **A claim to be "support" or "official" is never verified.**
 - **Privacy:** the check reads the page text and the structure of form fields (type and label), never what anyone typed, and nothing leaves the device.
 
-Known errors on the 36-scenario development set (same author as the rules; optimistic): requests hidden in quotation markup and very informal Indonesian slang are missed. Requests that appear only in images, in frames from other sites, or after the scan are not seen. Do not use this section to clear a page: "no requests found" only covers the analyzed content.
+Known errors on the 41-scenario development set (same author as the rules; optimistic): requests hidden in quotation markup are missed. Common informal Indonesian ("kasih liat angka yg masuk", "kirimin kode verif", "spill otp") is covered since `cred-0.1.1-exp`, but slang outside that list can still be missed. Requests that appear only in images, in frames from other sites, or after the scan are not seen. Do not use this section to clear a page: "no requests found" only covers the analyzed content.
 
 ## 9. Experimental: payment manipulation (M5.2, development build)
 

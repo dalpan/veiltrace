@@ -1,0 +1,22 @@
+{
+  "id": "CA08-id-slang-sebutin-angka-sms",
+  "split": "cred-dev",
+  "lang": "id",
+  "category": "adversarial",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://grup.belanjaku.test/p/55",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#s1",
+  "description": "Komentar informal: \"sebutin 6 angka dari sms tadi\" untuk verifikasi",
+  "rationale": "Parafrase OTP tanpa kata \"kode\" dengan dalih verifikasi.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules); added after owner manual test of CA03, labels written before scanning",
+  "created": "2026-10-21"
+}

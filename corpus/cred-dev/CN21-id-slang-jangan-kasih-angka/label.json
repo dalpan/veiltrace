@@ -1,0 +1,22 @@
+{
+  "id": "CN21-id-slang-jangan-kasih-angka",
+  "split": "cred-dev",
+  "lang": "id",
+  "category": "benign",
+  "threatClass": "T7",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://forum.jualbeli.test/t/130",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Nasihat informal: jangan pernah kasih angka yang masuk ke HP ke siapa pun",
+  "rationale": "Larangan, bukan permintaan.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules); added after owner manual test of CA03, labels written before scanning",
+  "created": "2026-10-21"
+}

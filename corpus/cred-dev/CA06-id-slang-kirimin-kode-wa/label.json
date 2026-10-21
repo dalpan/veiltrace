@@ -1,0 +1,22 @@
+{
+  "id": "CA06-id-slang-kirimin-kode-wa",
+  "split": "cred-dev",
+  "lang": "id",
+  "category": "adversarial",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://forum.gamenusa.test/t/91",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#q2",
+  "description": "Komentar slang: \"kirimin kode verif yg masuk ke wa lo\" dengan ancaman banned",
+  "rationale": "Permintaan kirim kode OTP dengan singkatan informal dan ancaman akun.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.1 credential dev split (same author as the rules); added after owner manual test of CA03, labels written before scanning",
+  "created": "2026-10-21"
+}
