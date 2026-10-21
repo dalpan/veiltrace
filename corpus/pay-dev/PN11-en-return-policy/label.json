@@ -1,0 +1,22 @@
+{
+  "id": "PN11-en-return-policy",
+  "split": "pay-dev",
+  "lang": "en",
+  "category": "benign",
+  "threatClass": "T-PAY",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://shop.northwind-store.test/returns",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Return policy mentioning refunds and a return shipping fee",
+  "rationale": "Refund wording with a shipping fee but no pay-to-receive condition.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.2 payment dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

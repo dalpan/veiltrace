@@ -1,0 +1,22 @@
+{
+  "id": "PN16-en-legit-prize-no-fee",
+  "split": "pay-dev",
+  "lang": "en",
+  "category": "benign",
+  "threatClass": "T-PAY",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://rewards.northwind-store.test/winner",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Genuine prize notification stating no payment is needed",
+  "rationale": "A prize without any payment request.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.2 payment dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

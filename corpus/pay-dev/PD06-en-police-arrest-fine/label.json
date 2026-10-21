@@ -1,0 +1,22 @@
+{
+  "id": "PD06-en-police-arrest-fine",
+  "split": "pay-dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T-PAY",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://case-portal.example/notice",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#case",
+  "description": "Fake police portal: pay a fine to a personal account or be arrested",
+  "rationale": "Impersonated authority, arrest threat, urgency and a personal account: police do not collect fines this way.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.2 payment dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

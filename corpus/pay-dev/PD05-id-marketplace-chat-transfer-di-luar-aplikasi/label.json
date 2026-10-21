@@ -1,0 +1,22 @@
+{
+  "id": "PD05-id-marketplace-chat-transfer-di-luar-aplikasi",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-PAY",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://jualbeli.test/produk/laptop-bekas",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#chat-penjual",
+  "description": "Komentar penjual di halaman produk meminta transfer langsung ke rekening pribadi di luar aplikasi",
+  "rationale": "Membayar di luar sistem pembayaran platform menghilangkan perlindungan pembeli.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.2 payment dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

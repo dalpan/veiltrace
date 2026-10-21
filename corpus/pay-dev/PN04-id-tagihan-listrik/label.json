@@ -1,0 +1,22 @@
+{
+  "id": "PN04-id-tagihan-listrik",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "benign",
+  "threatClass": "T-PAY",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://pelanggan.listrikku.test/tagihan",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Tagihan listrik bulanan dengan jatuh tempo dan denda keterlambatan",
+  "rationale": "Tagihan resmi dengan denda keterlambatan bukan manipulasi.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.2 payment dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

@@ -236,3 +236,12 @@ Positional field/form locators and fixed hint tokens (no element id, name or raw
 
 ### D-070 · Proposed (pending owner approval) · 2026-10-21 · Extension version 0.6.0 for credential-enabled builds
 The M5.1 commit sets the manifest version to 0.6.0 so that no credential-enabled build can be mistaken for the owner-validated v0.5.0 (M4.4, D-060, D-068). No 0.6.0 artifact has been built, published or validated; manual Chrome validation of the credential section is pending. The owner may choose a different version before any release.
+
+### D-071 · Accepted (pending owner review) · 2026-10-21 · Experimental payment-manipulation detector (M5.2)
+A third, independent detector `analyzePayments()` (`pay-0.1.0-exp`, `src/core/payment/`) reads the same `PageSnapshot` and never changes ClickFix or credential results. Rules PR1–PR4 require combinations (pay-to-receive, off-channel destination with pressure, threat with authority or urgency); a payment request, fee, deadline or claimed support alone is only observed (DETECTION_MODEL.md §13). Development corpus `corpus/pay-dev` and `npm run eval:pay` are separate from the frozen v1 harness; no held-out claim is made.
+
+### D-072 · Accepted (pending owner review) · 2026-10-21 · Payment detector privacy boundary
+The payment detector reads block text only (no form fields, values, url or title). Amount values are never copied into results or the report (`PA.AMOUNT` text is empty, and `parseScanReport` rejects a report that carries one); digit runs of 5+ characters in other evidence are masked. No new permission, storage or network use.
+
+### D-073 · Accepted (pending owner review) · 2026-10-21 · One popup layout for three detectors; ScanReport v3
+The popup shows three sections with uniform names: Command Execution Manipulation, Credential Disclosure Manipulation and Payment Manipulation (the latter two marked Experimental), ordered by verdict with ties in that order. Every finding card shows its category, a **severity** chip derived one-to-one from its classification (manipulative → high, suspicious → medium, observed → informational), confidence, rule, a short explanation, evidence with Show on page, and limitations. There is no combined or weighted score. `ScanReport` v3 adds the `payment` section and `timing.paymentMs`; v2 reports are rejected.

@@ -1,0 +1,22 @@
+{
+  "id": "PD01-en-chat-refund-release-fee",
+  "split": "pay-dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T-PAY",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://help.northwind-store.test/orders",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#chat",
+  "description": "Help-center chat widget: \"support agent\" says a refund is on hold and asks for a release fee first",
+  "rationale": "Advance fee: legitimate refunds never require a payment first; claimed support and urgency in a third-party widget.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.2 payment dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

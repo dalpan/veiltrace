@@ -62,7 +62,7 @@ For fleets, use enterprise force-install with a signed CRX (DEPLOYMENT.md §3, �
 
 ## 8. Experimental: requests for passwords and codes (M5.1, development build)
 
-In development builds after M5.1, the popup has a second section, **"Passwords and codes · Experimental"**, next to the command-execution result. It is produced by a separate detector (`cred-0.1.0-exp`) and has **not** passed an independent evaluation. Treat it as an explanation aid, not a verdict on the site.
+In development builds after M5.1, the popup has a second section, **"Credential Disclosure Manipulation · Experimental"** (named "Passwords and codes" before M5.2), next to the command-execution result. It is produced by a separate detector (`cred-0.1.0-exp`) and has **not** passed an independent evaluation. Treat it as an explanation aid, not a verdict on the site.
 
 - **Manipulative:** the page asks you to *send* a password, code, PIN or recovery phrase to someone (a comment, a chat agent, "tell the agent"), or asks for a wallet recovery phrase with a pretext. Advice: do not share it; legitimate services ask you to type codes into their own sign-in form, never to pass them on.
 - **Suspicious:** a password or code is requested together with a threat to the account ("will be suspended", "akan diblokir"), or inside a comment, widget or embedded frame with a pretext.
@@ -71,3 +71,15 @@ In development builds after M5.1, the popup has a second section, **"Passwords a
 - **Privacy:** the check reads the page text and the structure of form fields (type and label), never what anyone typed, and nothing leaves the device.
 
 Known errors on the 36-scenario development set (same author as the rules; optimistic): requests hidden in quotation markup and very informal Indonesian slang are missed. Requests that appear only in images, in frames from other sites, or after the scan are not seen. Do not use this section to clear a page: "no requests found" only covers the analyzed content.
+
+## 9. Experimental: payment manipulation (M5.2, development build)
+
+A third section, **"Payment Manipulation · Experimental"** (detector `pay-0.1.0-exp`), looks for requests to pay or transfer money combined with scam patterns. It has **not** passed an independent evaluation.
+
+- **Manipulative:** pay first to receive a refund, prize, released funds or an unlocked account, with pressure; payment to a personal account, gift cards or crypto under a claimed authority or threat; payment under threat + claimed authority + urgency. Advice: do not pay; contact the organization through a channel you already know.
+- **Suspicious:** a pay-to-receive request without other pressure, an off-platform transfer, or a payment with a threat and urgency.
+- **Observed (collapsed):** checkouts, invoices, bills, donations and shops. Not an alert.
+- Every finding card in all three sections shows its category, a severity (high / medium / informational, taken directly from the classification; not a score), the explanation, indicators, evidence with **Show on page**, and limits.
+- **Privacy:** only page text is read, never form fields, card numbers or typed values. Amounts are matched but never shown or stored in the report.
+
+Known errors on the 27-scenario development set (same author as the rules; optimistic): very informal Indonesian abbreviations ("tf dl 150rb") are missed. Requests in images, in frames from other sites, or worded unusually are not seen.

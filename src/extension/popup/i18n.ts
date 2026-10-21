@@ -2,6 +2,7 @@
 // Page evidence is never translated. Never says "safe". Severity, confidence and completeness stay distinct.
 import type { ScanGap } from '../../core/coverage.js';
 import type { CredModifierId, CredPretextSignalId, CredRuleId, CredSignalId, SecretType, TrustContext } from '../../core/credential/types.js';
+import type { PayDestination, PayLimitation, PayPressure, PayPromise, PayRuleId, PaySignalId } from '../../core/payment/types.js';
 import type { ActionRisk, Classification, FieldKind, FormDestination, Level, ModifierId, OverrideId, RuleId, SignalId, Verdict } from '../../core/types.js';
 
 export type Lang = 'en' | 'id';
@@ -54,6 +55,8 @@ export interface Messages {
   overrideEvidence: string;
   moreEvidence: (n: number) => string;
   moreFindings: (n: number) => string;
+  /** Per-finding severity, derived one-to-one from the classification (not a score; D-073). */
+  severity: Record<Classification, string>;
   /** M5.1: experimental credential-disclosure detector. */
   cred: {
     categoryCommand: string;
@@ -77,6 +80,26 @@ export interface Messages {
     fieldKind: Record<FieldKind, string>;
     unlabeledField: string;
     limitation: Record<'claimed-identity-unverifiable' | 'destination-not-scored' | 'trust-boundary-heuristic', string>;
+    experimentalNote: string;
+    observedHeading: (n: number) => string;
+  };
+  /** M5.2: experimental payment-manipulation detector. Trust, modifier and highlight labels are shared with `cred`. */
+  pay: {
+    category: string;
+    headline: Record<Verdict, { title: string; detail: string; tone: 'danger' | 'warning' | 'neutral' }>;
+    findingTitle: Record<Classification, string>;
+    ruleChip: (id: PayRuleId) => string;
+    rule: Record<PayRuleId, string>;
+    promise: Record<PayPromise, string>;
+    destination: Record<PayDestination, string>;
+    pressure: Record<PayPressure, string>;
+    promisesLabel: string;
+    destinationsLabel: string;
+    indicators: string;
+    actionRisk: Record<ActionRisk, string>;
+    signal: Record<PaySignalId, string>;
+    amountHidden: string;
+    limitation: Record<PayLimitation, string>;
     experimentalNote: string;
     observedHeading: (n: number) => string;
   };
@@ -186,9 +209,10 @@ const EN: Messages = {
   overrideEvidence: 'Supporting evidence',
   moreEvidence: (n) => `${n} more evidence item(s) not shown.`,
   moreFindings: (n) => `${n} more finding(s) not shown (display limit).`,
+  severity: { manipulative_instruction: 'Severity: high', suspicious_correlation: 'Severity: medium', observed_instruction: 'Severity: informational' },
   cred: {
-    categoryCommand: 'Command execution',
-    categorySecret: 'Passwords and codes',
+    categoryCommand: 'Command Execution Manipulation',
+    categorySecret: 'Credential Disclosure Manipulation',
     experimental: 'Experimental',
     headline: {
       manipulative_instruction: { tone: 'danger', title: 'Manipulative request for a password or code detected',
@@ -252,6 +276,51 @@ const EN: Messages = {
     },
     experimentalNote: 'Experimental: this check has not yet passed an independent evaluation. It looks only at the page text and form structure, never at what you typed.',
     observedHeading: (n) => `Sign-in and code requests without manipulation signs (${n})`,
+  },
+  pay: {
+    category: 'Payment Manipulation',
+    headline: {
+      manipulative_instruction: { tone: 'danger', title: 'Manipulative payment request detected',
+        detail: 'This page asks you to pay in a way scams use: paying first to receive a refund or prize, paying a personal account or gift cards, or paying under a threat. Do not pay.' },
+      suspicious_correlation: { tone: 'warning', title: 'Suspicious payment request detected',
+        detail: 'This page asks for money together with signs often seen in scams. Check with the organization through a channel you already know before paying.' },
+      observed_instruction: { tone: 'neutral', title: 'Payment requests found, without signs of manipulation.',
+        detail: 'Checkouts, invoices and donation pages look like this. Pay only through channels you trust.' },
+      none: { tone: 'neutral', title: 'No payment requests found in the analyzed content.',
+        detail: 'VeilTrace looked for requests to pay or transfer money.' },
+    },
+    findingTitle: { manipulative_instruction: 'Manipulative payment request', suspicious_correlation: 'Suspicious payment request', observed_instruction: 'Payment request' },
+    ruleChip: (id) => `Rule ${id}`,
+    rule: {
+      PR1: 'Asks you to pay first in order to receive something (a refund, a prize, released funds or an unlocked account). Real refunds and prizes never require an upfront payment.',
+      PR2: 'Asks you to pay outside an ordinary checkout (a personal account, off the platform, gift cards or cryptocurrency), together with pressure. Such payments are hard to get back.',
+      PR3: 'Asks for a payment together with a threat (account closure, arrest or legal action) and urgency or a claimed authority.',
+      PR4: 'Asks for a payment with no manipulation signs nearby.',
+    },
+    promise: { refund: 'a refund', prize: 'a prize', 'account-unlock': 'an unlocked account', release: 'released money or goods' },
+    destination: { 'personal-account': 'a personal account', 'off-platform': 'outside the platform', 'gift-card': 'gift cards', crypto: 'cryptocurrency' },
+    pressure: { threat: 'threat', urgency: 'deadline or urgency', 'claimed-authority': 'claims to be support or an authority' },
+    promisesLabel: 'Promised in return',
+    destinationsLabel: 'Payment goes to',
+    indicators: 'Indicators',
+    actionRisk: {
+      high: 'Action risk: high. Money sent this way is usually lost.',
+      medium: 'Action risk: medium. Paying the wrong party can cost you money.',
+    },
+    signal: {
+      'PY.PAY': 'Payment request', 'PA.AMOUNT': 'Amount', 'PF.FEE': 'Fee', 'PF.RELEASE_FEE': 'Fee to release or unlock', 'PD.PERSONAL': 'Personal account',
+      'PD.OFF_PLATFORM': 'Outside the platform', 'PD.GIFT_CARD': 'Gift cards', 'PD.CRYPTO': 'Cryptocurrency', 'PR.REFUND': 'Refund or held money',
+      'PR.PRIZE': 'Prize', 'PR.UNLOCK': 'Account unlock', 'PC.CONDITION': 'Payment as a condition', 'PP.THREAT': 'Threat', 'PP.URGENCY': 'Urgency',
+      'PP.AUTHORITY': 'Claimed support or authority', 'C.NEGATION': 'Negation', 'C.REPORTED': 'Reported speech', 'C.EDUCATIONAL': 'Educational context',
+    },
+    amountHidden: '(amount on the page; the value is not shown)',
+    limitation: {
+      'claimed-identity-unverifiable': 'VeilTrace cannot verify who wrote this. A claim to be support, a bank or the police is not proof.',
+      'trust-boundary-heuristic': 'Whether this content comes from the site or from others is estimated from the page structure.',
+      'amount-not-reported': 'Amounts are matched to understand the request, but their values are never copied into the report.',
+    },
+    experimentalNote: 'Experimental: this check has not yet passed an independent evaluation. It reads only the page text, never form fields, card numbers, balances or what you typed.',
+    observedHeading: (n) => `Payment requests without manipulation signs (${n})`,
   },
   errors: {
     noPageTitle: 'No page to scan', noPageDetail: 'Open a web page, then click the VeilTrace button again.',
@@ -362,9 +431,10 @@ const ID: Messages = {
   overrideEvidence: 'Bukti pendukung',
   moreEvidence: (n) => `${n} bukti lainnya tidak ditampilkan.`,
   moreFindings: (n) => `${n} temuan lainnya tidak ditampilkan (batas tampilan).`,
+  severity: { manipulative_instruction: 'Tingkat keparahan: tinggi', suspicious_correlation: 'Tingkat keparahan: sedang', observed_instruction: 'Tingkat keparahan: informasi' },
   cred: {
-    categoryCommand: 'Menjalankan perintah',
-    categorySecret: 'Kata sandi dan kode',
+    categoryCommand: 'Manipulasi Eksekusi Perintah',
+    categorySecret: 'Manipulasi Pengungkapan Kredensial',
     experimental: 'Eksperimental',
     headline: {
       manipulative_instruction: { tone: 'danger', title: 'Permintaan manipulatif atas kata sandi atau kode terdeteksi',
@@ -428,6 +498,51 @@ const ID: Messages = {
     },
     experimentalNote: 'Eksperimental: pemeriksaan ini belum lulus evaluasi independen. Hanya teks halaman dan struktur formulir yang diperiksa, tidak pernah isian yang Anda ketik.',
     observedHeading: (n) => `Permintaan masuk dan kode tanpa tanda manipulasi (${n})`,
+  },
+  pay: {
+    category: 'Manipulasi Pembayaran',
+    headline: {
+      manipulative_instruction: { tone: 'danger', title: 'Permintaan pembayaran manipulatif terdeteksi',
+        detail: 'Halaman ini meminta Anda membayar dengan cara yang lazim dipakai penipuan: membayar dulu untuk menerima refund atau hadiah, membayar ke rekening pribadi atau kartu hadiah, atau membayar di bawah ancaman. Jangan bayar.' },
+      suspicious_correlation: { tone: 'warning', title: 'Permintaan pembayaran mencurigakan terdeteksi',
+        detail: 'Halaman ini meminta uang disertai tanda yang sering muncul dalam penipuan. Pastikan ke organisasinya lewat saluran yang sudah Anda kenal sebelum membayar.' },
+      observed_instruction: { tone: 'neutral', title: 'Permintaan pembayaran ditemukan, tanpa tanda manipulasi.',
+        detail: 'Halaman checkout, tagihan, dan donasi memang seperti ini. Bayar hanya lewat saluran yang Anda percayai.' },
+      none: { tone: 'neutral', title: 'Tidak ada permintaan pembayaran di konten yang dianalisis.',
+        detail: 'VeilTrace mencari permintaan untuk membayar atau mentransfer uang.' },
+    },
+    findingTitle: { manipulative_instruction: 'Permintaan pembayaran manipulatif', suspicious_correlation: 'Permintaan pembayaran mencurigakan', observed_instruction: 'Permintaan pembayaran' },
+    ruleChip: (id) => `Aturan ${id}`,
+    rule: {
+      PR1: 'Meminta Anda membayar lebih dulu untuk menerima sesuatu (refund, hadiah, dana yang dicairkan, atau akun yang dibuka). Refund dan hadiah asli tidak pernah meminta pembayaran di muka.',
+      PR2: 'Meminta Anda membayar di luar checkout biasa (rekening pribadi, di luar platform, kartu hadiah, atau kripto), disertai tekanan. Pembayaran seperti ini sulit ditarik kembali.',
+      PR3: 'Meminta pembayaran disertai ancaman (penutupan akun, penangkapan, atau tuntutan hukum) dan desakan atau klaim otoritas.',
+      PR4: 'Meminta pembayaran tanpa tanda manipulasi di sekitarnya.',
+    },
+    promise: { refund: 'refund', prize: 'hadiah', 'account-unlock': 'akun yang dibuka kembali', release: 'uang atau barang yang dilepas' },
+    destination: { 'personal-account': 'rekening pribadi', 'off-platform': 'di luar platform', 'gift-card': 'kartu hadiah', crypto: 'aset kripto' },
+    pressure: { threat: 'ancaman', urgency: 'tenggat atau desakan', 'claimed-authority': 'mengaku sebagai petugas atau otoritas' },
+    promisesLabel: 'Dijanjikan sebagai imbalan',
+    destinationsLabel: 'Pembayaran ditujukan ke',
+    indicators: 'Indikator',
+    actionRisk: {
+      high: 'Risiko tindakan: tinggi. Uang yang dikirim dengan cara ini biasanya hilang.',
+      medium: 'Risiko tindakan: sedang. Membayar pihak yang salah dapat merugikan Anda.',
+    },
+    signal: {
+      'PY.PAY': 'Permintaan pembayaran', 'PA.AMOUNT': 'Nominal', 'PF.FEE': 'Biaya', 'PF.RELEASE_FEE': 'Biaya pencairan atau buka blokir', 'PD.PERSONAL': 'Rekening pribadi',
+      'PD.OFF_PLATFORM': 'Di luar platform', 'PD.GIFT_CARD': 'Kartu hadiah', 'PD.CRYPTO': 'Aset kripto', 'PR.REFUND': 'Refund atau dana tertahan',
+      'PR.PRIZE': 'Hadiah', 'PR.UNLOCK': 'Pembukaan akun', 'PC.CONDITION': 'Pembayaran sebagai syarat', 'PP.THREAT': 'Ancaman', 'PP.URGENCY': 'Desakan',
+      'PP.AUTHORITY': 'Mengaku petugas atau otoritas', 'C.NEGATION': 'Negasi', 'C.REPORTED': 'Kalimat dilaporkan', 'C.EDUCATIONAL': 'Konteks edukasi',
+    },
+    amountHidden: '(nominal di halaman; nilainya tidak ditampilkan)',
+    limitation: {
+      'claimed-identity-unverifiable': 'VeilTrace tidak dapat memastikan siapa penulisnya. Pengakuan sebagai petugas, bank, atau polisi bukan bukti.',
+      'trust-boundary-heuristic': 'Apakah konten ini berasal dari situs atau dari pihak lain diperkirakan dari struktur halaman.',
+      'amount-not-reported': 'Nominal dicocokkan untuk memahami permintaan, tetapi nilainya tidak pernah disalin ke laporan.',
+    },
+    experimentalNote: 'Eksperimental: pemeriksaan ini belum lulus evaluasi independen. Hanya teks halaman yang dibaca, tidak pernah kolom formulir, nomor kartu, saldo, atau isian yang Anda ketik.',
+    observedHeading: (n) => `Permintaan pembayaran tanpa tanda manipulasi (${n})`,
   },
   errors: {
     noPageTitle: 'Tidak ada halaman untuk dipindai', noPageDetail: 'Buka sebuah halaman web, lalu klik tombol VeilTrace lagi.',

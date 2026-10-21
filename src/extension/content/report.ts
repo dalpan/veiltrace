@@ -5,11 +5,14 @@ import type {
   CredentialResult, CredModifierId, CredObservation, CredOverrideId, CredPretextSignalId, CredRuleId, CredSignalId, SecretType, TrustContext,
 } from '../../core/credential/types.js';
 import type {
+  PayDestination, PaymentResult, PayLimitation, PayModifierId, PayObservation, PayPressure, PayPromise, PayRuleId, PaySignalId, PayTrustContext,
+} from '../../core/payment/types.js';
+import type {
   ActionRisk, AnalysisResult, Classification, ContextOverride, FieldKind, FormDestination, Level, ModifierId, Observation, OverrideId, PageSnapshot, RuleId, SignalId, Verdict,
 } from '../../core/types.js';
 
-/** v2 (M5.1) adds the experimental `credential` section. */
-export const REPORT_VERSION = 2;
+/** v2 (M5.1) adds the experimental `credential` section; v3 (M5.2) the experimental `payment` section. */
+export const REPORT_VERSION = 3;
 export const MAX_FINDINGS = 50;
 export const MAX_EVIDENCE_PER_FINDING = 12;
 export const MAX_SNIPPET_CHARS = 300;
@@ -79,6 +82,39 @@ export interface CredentialSection {
   findingsTotal: number;
 }
 
+/** Evidence of a payment finding. Amount observations carry no text: amounts and balances never leave the tab. */
+export interface PayEvidenceItem {
+  signal: PaySignalId;
+  text: string;
+  locator: string | null;
+}
+
+export interface PayFindingSummary {
+  id: string;
+  ruleId: PayRuleId;
+  classification: Classification;
+  ruleClassification: Classification;
+  confidence: Level;
+  actionRisk: ActionRisk;
+  promises: PayPromise[];
+  destinations: PayDestination[];
+  pressures: PayPressure[];
+  trustContext: PayTrustContext[];
+  modifiers: PayModifierId[];
+  limitations: PayLimitation[];
+  evidence: PayEvidenceItem[];
+  evidenceTotal: number;
+}
+
+/** EXPERIMENTAL payment-manipulation detector output (M5.2). */
+export interface PaymentSection {
+  detectorVersion: string;
+  experimental: true;
+  verdict: Verdict;
+  findings: PayFindingSummary[];
+  findingsTotal: number;
+}
+
 export interface ScanReport {
   v: typeof REPORT_VERSION;
   engineVersion: string;
@@ -89,7 +125,8 @@ export interface ScanReport {
   status: ScanStatus;
   counts: { blocks: number; hiddenCopyCandidates: number; copyTriggers: number; observations: number; findingsTotal: number };
   credential: CredentialSection;
-  timing: { extractMs: number; analyzeMs: number; credentialMs: number };
+  payment: PaymentSection;
+  timing: { extractMs: number; analyzeMs: number; credentialMs: number; paymentMs: number };
 }
 
 const clip = (s: string): string => (s.length > MAX_SNIPPET_CHARS ? `${s.slice(0, MAX_SNIPPET_CHARS - 1)}…` : s);
@@ -134,12 +171,43 @@ function credentialSection(snapshot: PageSnapshot, cred: CredentialResult): Cred
   return { detectorVersion: cred.detectorVersion, experimental: true, verdict: cred.verdict, findings, findingsTotal: cred.findings.length };
 }
 
+function paymentSection(snapshot: PageSnapshot, pay: PaymentResult): PaymentSection {
+  const obsById = new Map(pay.observations.map((o) => [o.id, o]));
+  const item = (o: PayObservation): PayEvidenceItem => ({
+    signal: o.signal, text: clip(o.text), locator: snapshot.blocks.find((b) => b.id === o.blockId)?.locator ?? null,
+  });
+  const findings = [...pay.findings]
+    .sort((a, b) => RANK[b.classification] - RANK[a.classification])
+    .slice(0, MAX_FINDINGS)
+    .map((f): PayFindingSummary => ({
+      id: f.id,
+      ruleId: f.ruleId,
+      classification: f.classification,
+      ruleClassification: f.ruleClassification,
+      confidence: f.confidence,
+      actionRisk: f.actionRisk,
+      promises: [...f.promises],
+      destinations: [...f.destinations],
+      pressures: [...f.pressures],
+      trustContext: [...f.trustContext],
+      modifiers: f.modifiers.map((m) => m.id),
+      limitations: [...f.limitations],
+      evidence: f.observationIds.slice(0, MAX_EVIDENCE_PER_FINDING).flatMap((id) => {
+        const o = obsById.get(id);
+        return o ? [item(o)] : [];
+      }),
+      evidenceTotal: f.observationIds.length,
+    }));
+  return { detectorVersion: pay.detectorVersion, experimental: true, verdict: pay.verdict, findings, findingsTotal: pay.findings.length };
+}
+
 export function buildReport(
   snapshot: PageSnapshot,
   result: AnalysisResult,
   versions: { engine: string; extractor: string },
-  timing: { extractMs: number; analyzeMs: number; credentialMs?: number },
+  timing: { extractMs: number; analyzeMs: number; credentialMs?: number; paymentMs?: number },
   cred?: CredentialResult,
+  pay?: PaymentResult,
 ): ScanReport {
   const obsById = new Map(result.observations.map((o) => [o.id, o]));
   const item = (o: Observation): EvidenceItem => {
@@ -190,6 +258,11 @@ export function buildReport(
     credential: cred
       ? credentialSection(snapshot, cred)
       : { detectorVersion: '', experimental: true, verdict: 'none', findings: [], findingsTotal: 0 },
-    timing: { extractMs: round(timing.extractMs), analyzeMs: round(timing.analyzeMs), credentialMs: round(timing.credentialMs ?? 0) },
+    payment: pay
+      ? paymentSection(snapshot, pay)
+      : { detectorVersion: '', experimental: true, verdict: 'none', findings: [], findingsTotal: 0 },
+    timing: {
+      extractMs: round(timing.extractMs), analyzeMs: round(timing.analyzeMs), credentialMs: round(timing.credentialMs ?? 0), paymentMs: round(timing.paymentMs ?? 0),
+    },
   };
 }

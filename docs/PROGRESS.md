@@ -4,6 +4,20 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-21 · M5.2 Payment-manipulation detection, stage 1 · **Implemented as experimental (development data only); manual Chrome validation pending**
+
+**Done**
+- **Detector** `pay-0.1.0-exp` (`src/core/payment/`): payment request × fee/amount/destination × pay-to-receive promise × pressure × placement; rules PR1–PR4, modifiers; EN + ID lexicon (DETECTION_MODEL.md §13; D-071). Block text only; amount values never reported (D-072).
+- **Extension:** content script runs the third detector; `ScanReport` v3 with a validated `payment` section; popup shows Command Execution, Credential Disclosure and Payment Manipulation sections with the same layout, a per-finding category and a severity chip mapped from the classification, no combined score (D-073). EN/ID strings in parity.
+- **Corpus and eval:** `corpus/pay-dev` (27 scenarios: 10 positive, 1 adversarial, 16 hard negatives incl. checkouts, invoices, bills, donations, news, awareness pages), `npm run eval:pay` → `eval/results/pay-dev.{json,md}`.
+- **Tests:** `tests/payment.test.ts` (21), `tests/browser/payment.test.ts` (28), `tests/e2e/payment.test.ts` (6), plus report/validation tests in `tests/extension.test.ts`; existing tests updated for the renamed section labels and the severity chip.
+
+**Verification:** typecheck and lint clean; unit 326/326, browser 148/148, E2E 51/51, verify:extension 29/29. pay-dev TP 10 · FP 0 · TN 16 · FN 1 (PA01 informal Indonesian; known miss), 0 sentinel leaks, 0 requests. cred-dev unchanged (TP 14, FP 0, TN 20, FN 2). ClickFix core, `corpus/test`, `eval/runs.md`, preregistration and `eval-freeze-v1` untouched. Manifest permissions unchanged (`activeTab`, `scripting`).
+
+**Next:** owner review; manual Chrome check of the three-section popup. **Blockers:** none. Version for a release still open (D-070).
+
+---
+
 ## 2026-10-21 · M5.1 Credential-disclosure detection, stage 1 · **Conditionally accepted as experimental; manual Chrome validation pending**
 
 **Commit separation:** M4.4 was committed first as its own commit (`feat(demo): prepare hackathon showcase and extension v0.5.0`), reconstructed from the shared working tree by reverting every M5.1 edit and verified separately (identical development-release hashes to the M4.4 review). M5.1 is committed on top. A full backup of the shared working tree was kept outside the repository.

@@ -1,0 +1,22 @@
+{
+  "id": "PD07-en-forum-crypto-recovery-fee",
+  "split": "pay-dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T-PAY",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://forum.coinhelp.test/t/frozen-withdrawal",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#c3",
+  "description": "Forum reply from a \"recovery agent\" asks for a USDT fee to release frozen funds",
+  "rationale": "Pay-to-recover scam: a fee in cryptocurrency to unfreeze funds, posted as user content.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.2 payment dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

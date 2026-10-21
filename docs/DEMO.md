@@ -110,7 +110,7 @@ Build a development release from the M5.1 commit (`npm run release`, version 0.6
 | # | Step | Expected | Evidence to record |
 |---|---|---|---|
 | K1 | Extension Details | Version 0.6.0; Permissions empty; no sites listed | Screenshot |
-| K2 | `CD01-en-community-otp-reply/` → scan | "Passwords and codes · Experimental" card first: "Manipulative request for a password or code detected"; Rule CR1; "Asks you to send: one-time code"; limitation "cannot verify who wrote this"; command section "No suspicious instructions…" | Popup screenshot |
+| K2 | `CD01-en-community-otp-reply/` → scan | "Credential Disclosure Manipulation · Experimental" card first (label renamed at M5.2): "Manipulative request for a password or code detected"; Rule CR1; "Asks you to send: one-time code"; limitation "cannot verify who wrote this"; command section "No suspicious instructions…" | Popup screenshot |
 | K3 | K2 → **Show on page** on "6-digit code" | Box inside the second forum reply | Page screenshot |
 | K4 | `CD04-en-overlay-suspension-password-otp/` → type anything into both fields → scan | Suspicious (CR4); "The form submits to another site."; what you typed appears nowhere in the popup | Popup screenshot |
 | K5 | `CN02-en-mfa-code/` → scan | "Sign-in or code requests found, without signs of manipulation." collapsed; no alert | Screenshot |

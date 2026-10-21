@@ -1,0 +1,22 @@
+{
+  "id": "PA01-id-slang-tf-buka-akun",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "adversarial",
+  "threatClass": "T-PAY",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://forum.gamenusa.test/t/akun-suspend",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#r2",
+  "description": "Komentar berbahasa slang dari \"admin\" meminta transfer 150rb untuk membuka akun",
+  "rationale": "Biaya buka akun dari admin palsu, ditulis dengan singkatan informal (tf, dl, sy, bka, cpt, 150rb) untuk menguji batas lexicon.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.2 payment dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

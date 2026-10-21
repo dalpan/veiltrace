@@ -12,3 +12,7 @@ export type * from './types.js';
 export { analyzeCredentials, CRED_DETECTOR_VERSION, CRED_RULES } from './credential/analyze.js';
 export { CRED_LEXICON } from './credential/lexicon.js';
 export type * from './credential/types.js';
+// EXPERIMENTAL payment-manipulation detector (M5.2). Separate from analyze() and analyzeCredentials(); changes neither.
+export { analyzePayments, PAY_DETECTOR_VERSION, PAY_RULES } from './payment/analyze.js';
+export { PAY_LEXICON } from './payment/lexicon.js';
+export type * from './payment/types.js';

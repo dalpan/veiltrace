@@ -1,6 +1,6 @@
 // Unit tests for the extension's browser-independent pieces (no browser needed).
 import { describe, expect, it } from 'vitest';
-import { analyze, analyzeCredentials } from '../src/core/index.js';
+import { analyze, analyzeCredentials, analyzePayments } from '../src/core/index.js';
 import { buildReport, MAX_SNIPPET_CHARS } from '../src/extension/content/report.js';
 import { parseHighlightResult, parseScanReport } from '../src/extension/popup/validate.js';
 import { isSafeLocator } from '../src/extract/extract.js';
@@ -29,8 +29,9 @@ describe('buildReport (data minimization)', () => {
     expect(r.findings[0]!.evidence[0]!.locator).toBe('#b0');
     expect(r.counts).toEqual({ blocks: 5, hiddenCopyCandidates: 0, copyTriggers: 0, observations: 4, findingsTotal: 1 });
     expect(r.status).toEqual({ complete: true, reasons: [] });
-    expect(r.timing).toEqual({ extractMs: 1.2, analyzeMs: 0.6, credentialMs: 0 });
+    expect(r.timing).toEqual({ extractMs: 1.2, analyzeMs: 0.6, credentialMs: 0, paymentMs: 0 });
     expect(r.credential).toEqual({ detectorVersion: '', experimental: true, verdict: 'none', findings: [], findingsTotal: 0 });
+    expect(r.payment).toEqual({ detectorVersion: '', experimental: true, verdict: 'none', findings: [], findingsTotal: 0 });
   });
 
   it('caps snippet length', () => {
@@ -61,7 +62,8 @@ describe('parseScanReport (boundary validation)', () => {
     expect(parseScanReport(null)).toBeNull();
     expect(parseScanReport('{}')).toBeNull();
     expect(bad((r) => { r.v = 1; })).toBeNull();
-    expect(bad((r) => { r.v = 3; })).toBeNull();
+    expect(bad((r) => { r.v = 2; })).toBeNull();
+    expect(bad((r) => { r.v = 4; })).toBeNull();
     expect(bad((r) => { r.verdict = 'safe'; })).toBeNull();
     expect(bad((r) => { r.findings[0].classification = 'benign'; })).toBeNull();
     expect(bad((r) => { r.findings[0].evidence[0].text = 'x'.repeat(5000); })).toBeNull();
@@ -195,5 +197,44 @@ describe('experimental credential section in the scan report (M5.1)', () => {
     expect(bad((r) => { r.credential.findings[0].evidence[0].value = 'x'; })).toBeNull();
     expect(bad((r) => { r.credential.findings[0].limitations.push('trusted-site'); })).toBeNull();
     expect(bad((r) => { r.timing.extra = 1; })).toBeNull();
+  });
+});
+
+describe('experimental payment section in the scan report (M5.2)', () => {
+  const ACCOUNT = '9876543210123';
+  const paySnap = () => snapshot([
+    { t: 'Customer support here. Your refund of Rp 4.800.000 is on hold.', c: 'widget:#chat' },
+    { t: `Transfer the release fee of Rp 350.000 to account ${ACCOUNT} within 1 hour to receive it.`, c: 'widget:#chat' },
+    { t: 'Your balance: Rp 12.345.678', c: 'main' },
+  ]);
+  const build = () => {
+    const s = paySnap();
+    return buildReport(s, analyze(s), { engine: '0.2.0', extractor: 'x' }, { extractMs: 0, analyzeMs: 0, credentialMs: 0, paymentMs: 0.03 },
+      analyzeCredentials(s), analyzePayments(s));
+  };
+
+  it('carries the payment finding without amounts, balances or account numbers, and survives validation', () => {
+    const r = build();
+    expect(r.verdict).toBe('none');
+    expect(r.payment).toMatchObject({ experimental: true, verdict: 'manipulative_instruction', findingsTotal: 1 });
+    expect(r.payment.findings[0]).toMatchObject({ ruleId: 'PR1', trustContext: ['third-party-widget'], actionRisk: 'high' });
+    const json = JSON.stringify(r);
+    for (const secret of ['4.800.000', '350.000', '12.345.678', ACCOUNT]) expect(json).not.toContain(secret);
+    expect(r.payment.findings[0]!.evidence.filter((e) => e.signal === 'PA.AMOUNT').map((e) => e.text)).toEqual(['']);
+    expect(r.timing.paymentMs).toBe(0);
+    expect(parseScanReport(JSON.parse(json))).toEqual(r);
+  });
+
+  it('rejects unknown or inconsistent payment metadata, including an amount value', () => {
+    const good = JSON.parse(JSON.stringify(build()));
+    const bad = (mut: (r: typeof good) => void) => { const c = structuredClone(good); mut(c); return parseScanReport(c); };
+    const amount = (r: typeof good) => r.payment.findings[0].evidence.find((e: { signal: string }) => e.signal === 'PA.AMOUNT');
+    expect(bad((r) => { delete r.payment; })).toBeNull();
+    expect(bad((r) => { r.payment.experimental = false; })).toBeNull();
+    expect(bad((r) => { r.payment.findings[0].ruleId = 'PR9'; })).toBeNull();
+    expect(bad((r) => { r.payment.findings[0].destinations.push('bank'); })).toBeNull();
+    expect(bad((r) => { r.payment.findings[0].evidence[0].value = 'x'; })).toBeNull();
+    expect(bad((r) => { amount(r).text = 'Rp 350.000'; })).toBeNull();
+    expect(bad((r) => { delete r.timing.paymentMs; })).toBeNull();
   });
 });

@@ -1,0 +1,22 @@
+{
+  "id": "PN15-id-bantuan-marketplace-rekber",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "benign",
+  "threatClass": "T-PAY",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://bantuan.jualbeli.test/bayar-aman",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Halaman bantuan marketplace: selalu bayar lewat aplikasi",
+  "rationale": "Saran perlindungan; larangan transfer di luar aplikasi bukan permintaan.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.2 payment dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

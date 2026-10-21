@@ -1,6 +1,6 @@
 // Popup controller and renderer. Page-derived strings are only ever inserted as text nodes.
 // UI language: English or Indonesian (i18n.ts); page evidence is shown in its original language.
-import type { CredEvidenceItem, CredFindingSummary, EvidenceItem, FindingSummary, ScanReport } from '../content/report.js';
+import type { CredEvidenceItem, CredFindingSummary, EvidenceItem, FindingSummary, PayEvidenceItem, PayFindingSummary, ScanReport } from '../content/report.js';
 import { classifyUrl, getTargetTab, runHighlight, runScan, type TargetTab, type UrlClass } from './adapter.js';
 import { detectLang, formatCount, MESSAGES, type HighlightKey, type Lang, type Messages } from './i18n.js';
 import { parseHighlightResult, parseScanReport } from './validate.js';
@@ -86,9 +86,11 @@ function credFindingCard(f: CredFindingSummary): HTMLElement {
   const demoted = f.classification !== f.ruleClassification;
   const indicators = [...f.pretexts.map((p) => c.pretext[p]), ...f.trustContext.map((x) => c.trust[x])];
   return h('article', { class: 'card finding cred', 'data-rule': f.ruleId, 'data-classification': f.classification },
+    h('div', { class: 'category' }, c.categorySecret),
     h('h4', {}, c.findingTitle[f.classification]),
     h('div', { class: 'chips' },
       h('span', { class: `chip ${f.classification}` }, m.classification[f.classification]),
+      h('span', { class: 'chip severity', 'data-severity': f.classification }, m.severity[f.classification]),
       h('span', { class: 'chip', title: m.confidenceHelp }, m.confidence[f.confidence]),
       h('span', { class: 'chip' }, c.ruleChip(f.ruleId)),
       h('span', { class: 'chip experimental' }, c.experimental),
@@ -105,6 +107,57 @@ function credFindingCard(f: CredFindingSummary): HTMLElement {
     f.evidenceTotal > f.evidence.length && h('p', { class: 'context', 'data-more': 'evidence' }, m.moreEvidence(f.evidenceTotal - f.evidence.length)),
     ...f.limitations.map((l) => h('p', { class: 'limitation', 'data-limitation': l }, c.limitation[l])),
   );
+}
+
+function payEvidenceItem(f: PayFindingSummary, i: number, e: PayEvidenceItem): HTMLElement {
+  const p = t().pay;
+  return evidenceRow(`pay:${f.id}:${i}`, `${p.signal[e.signal]} · ${t().source['visible-text']}`, e.signal === 'PA.AMOUNT' ? p.amountHidden : e.text, e.locator);
+}
+
+function payFindingCard(f: PayFindingSummary): HTMLElement {
+  const m = t();
+  const p = m.pay;
+  const demoted = f.classification !== f.ruleClassification;
+  const indicators = [...f.pressures.map((x) => p.pressure[x]), ...f.trustContext.map((x) => m.cred.trust[x])];
+  return h('article', { class: 'card finding pay', 'data-rule': f.ruleId, 'data-classification': f.classification },
+    h('div', { class: 'category' }, p.category),
+    h('h4', {}, p.findingTitle[f.classification]),
+    h('div', { class: 'chips' },
+      h('span', { class: `chip ${f.classification}` }, m.classification[f.classification]),
+      h('span', { class: 'chip severity', 'data-severity': f.classification }, m.severity[f.classification]),
+      h('span', { class: 'chip', title: m.confidenceHelp }, m.confidence[f.confidence]),
+      h('span', { class: 'chip' }, p.ruleChip(f.ruleId)),
+      h('span', { class: 'chip experimental' }, m.cred.experimental),
+    ),
+    h('p', { class: 'explain' }, p.rule[f.ruleId]),
+    f.promises.length > 0 && h('p', { class: 'context promises' }, `${p.promisesLabel}: ${f.promises.map((x) => p.promise[x]).join(', ')}`),
+    f.destinations.length > 0 && h('p', { class: 'context destinations' }, `${p.destinationsLabel}: ${f.destinations.map((x) => p.destination[x]).join(', ')}`),
+    indicators.length > 0 && h('p', { class: 'context indicators' }, `${p.indicators}: ${indicators.join(' · ')}`),
+    h('p', { class: 'risk' }, p.actionRisk[f.actionRisk]),
+    f.modifiers.length > 0 && h('p', { class: 'context' },
+      `${demoted ? m.loweredFrom(m.classification[f.ruleClassification]) : m.contextPrefix}${f.modifiers.map((x) => m.cred.modifier[x]).join(' ')}`),
+    h('ul', { class: 'evidence', 'aria-label': m.evidenceAria }, ...f.evidence.map((e, i) => payEvidenceItem(f, i, e))),
+    f.evidenceTotal > f.evidence.length && h('p', { class: 'context', 'data-more': 'evidence' }, m.moreEvidence(f.evidenceTotal - f.evidence.length)),
+    ...f.limitations.map((l) => h('p', { class: 'limitation', 'data-limitation': l }, p.limitation[l])),
+  );
+}
+
+/** The experimental payment section, laid out like the credential section. */
+function renderPayment(r: ScanReport): Child[] {
+  const p = t().pay;
+  const sec = r.payment;
+  const head = p.headline[sec.verdict];
+  const alerting = sec.findings.filter((f) => f.classification !== 'observed_instruction');
+  const observed = sec.findings.filter((f) => f.classification === 'observed_instruction');
+  return [
+    h('div', { class: `card pay-summary tone-${head.tone}`, 'data-verdict': sec.verdict },
+      h('div', { class: 'category' }, `${p.category} · ${t().cred.experimental}`), h('h2', {}, head.title),
+      h('p', {}, head.detail + (r.status.complete ? '' : t().partialQualifier))),
+    ...alerting.map(payFindingCard),
+    observed.length > 0 && h('details', { class: 'observed pay-observed' }, h('summary', {}, p.observedHeading(observed.length)), ...observed.map(payFindingCard)),
+    sec.findingsTotal > sec.findings.length && h('p', { class: 'context', 'data-more': 'pay-findings' }, t().moreFindings(sec.findingsTotal - sec.findings.length)),
+    h('p', { class: 'limitation experimental-note' }, p.experimentalNote),
+  ];
 }
 
 const TIER: Record<ScanReport['verdict'], number> = { none: 0, observed_instruction: 1, suspicious_correlation: 2, manipulative_instruction: 3 };
@@ -132,9 +185,11 @@ function findingCard(f: FindingSummary): HTMLElement {
   const demoted = f.classification !== f.ruleClassification;
   const context = f.modifiers.map((x) => m.modifier[x.id]).join(' ');
   return h('article', { class: 'card finding', 'data-rule': f.ruleId, 'data-classification': f.classification },
+    h('div', { class: 'category' }, m.cred.categoryCommand),
     h('h4', {}, m.findingTitle[f.classification]),
     h('div', { class: 'chips' },
       h('span', { class: `chip ${f.classification}` }, m.classification[f.classification]),
+      h('span', { class: 'chip severity', 'data-severity': f.classification }, m.severity[f.classification]),
       h('span', { class: 'chip', title: m.confidenceHelp }, m.confidence[f.confidence]),
       h('span', { class: 'chip', title: f.ruleName }, m.ruleChip(f.ruleId)),
     ),
@@ -172,10 +227,10 @@ function renderReport(r: ScanReport): Child[] {
     observed.length > 0 && h('details', { class: 'observed' }, h('summary', {}, m.observedHeading(observed.length)), ...observed.map(findingCard)),
     r.counts.findingsTotal > r.findings.length && h('p', { class: 'context', 'data-more': 'findings' }, m.moreFindings(r.counts.findingsTotal - r.findings.length)),
   ];
-  // Coverage applies to both detectors; the more severe detector's section comes first.
+  // Coverage applies to all detectors. Sections are ordered by verdict, most severe first (stable: command, credential, payment).
   const coverage = command.splice(1, 1);
-  const cred = renderCredential(r);
-  const [first, ...rest] = TIER[r.credential.verdict] > TIER[r.verdict] ? [...cred, ...command] : [...command, ...cred];
+  const sections: Array<[number, Child[]]> = [[TIER[r.verdict], command], [TIER[r.credential.verdict], renderCredential(r)], [TIER[r.payment.verdict], renderPayment(r)]];
+  const [first, ...rest] = sections.sort((a, b) => b[0] - a[0]).flatMap(([, parts]) => parts);
   return [first, ...coverage, ...rest];
 }
 

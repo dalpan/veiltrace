@@ -1,0 +1,624 @@
+{
+  "split": "pay-dev",
+  "note": "DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.",
+  "detectorVersion": "pay-0.1.0-exp",
+  "extractorVersion": "0.2.0-m5",
+  "metrics": {
+    "scenarios": 27,
+    "confusion": {
+      "tp": 10,
+      "fp": 0,
+      "tn": 16,
+      "fn": 1
+    },
+    "precision": {
+      "k": 10,
+      "n": 10,
+      "value": 1,
+      "ci95": [
+        0.7225,
+        1
+      ]
+    },
+    "recall": {
+      "k": 10,
+      "n": 11,
+      "value": 0.9091,
+      "ci95": [
+        0.6226,
+        0.9838
+      ]
+    },
+    "fpr": {
+      "k": 0,
+      "n": 16,
+      "value": 0,
+      "ci95": [
+        0,
+        0.1936
+      ]
+    },
+    "hardNegativeFpr": {
+      "k": 0,
+      "n": 16,
+      "value": 0,
+      "ci95": [
+        0,
+        0.1936
+      ]
+    },
+    "localization": {
+      "k": 10,
+      "n": 10,
+      "value": 1,
+      "ci95": [
+        0.7225,
+        1
+      ]
+    },
+    "classMatrix": [
+      [
+        2,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        13,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        9
+      ]
+    ],
+    "exactClassAgreement": {
+      "k": 25,
+      "n": 27,
+      "value": 0.9259,
+      "ci95": [
+        0.7663,
+        0.9794
+      ]
+    },
+    "observedOnNegatives": 13,
+    "byLanguage": {
+      "en": {
+        "recall": {
+          "k": 5,
+          "n": 5,
+          "value": 1,
+          "ci95": [
+            0.5655,
+            1
+          ]
+        },
+        "fpr": {
+          "k": 0,
+          "n": 9,
+          "value": 0,
+          "ci95": [
+            0,
+            0.2991
+          ]
+        }
+      },
+      "id": {
+        "recall": {
+          "k": 5,
+          "n": 6,
+          "value": 0.8333,
+          "ci95": [
+            0.4365,
+            0.9699
+          ]
+        },
+        "fpr": {
+          "k": 0,
+          "n": 7,
+          "value": 0,
+          "ci95": [
+            0,
+            0.3543
+          ]
+        }
+      }
+    }
+  },
+  "privacy": {
+    "sentinelLeaks": 0,
+    "fieldsFilled": 3
+  },
+  "scenarios": [
+    {
+      "id": "PA01-id-slang-tf-buka-akun",
+      "lang": "id",
+      "category": "adversarial",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PD01-en-chat-refund-release-fee",
+      "lang": "en",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "PR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PD02-id-undian-pajak-hadiah",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "PR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PD03-id-overlay-akun-diblokir-biaya-verifikasi",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "PR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PD04-en-tax-office-gift-cards",
+      "lang": "en",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "PR2:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PD05-id-marketplace-chat-transfer-di-luar-aplikasi",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "suspicious_correlation",
+      "hardNegative": false,
+      "predicted": "suspicious_correlation",
+      "findings": [
+        "PR4:observed_instruction",
+        "PR2:suspicious_correlation"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PD06-en-police-arrest-fine",
+      "lang": "en",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "PR2:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PD07-en-forum-crypto-recovery-fee",
+      "lang": "en",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "PR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PD08-id-kurir-paket-tertahan-bea-cukai",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "PR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PD09-en-account-locked-unlock-fee",
+      "lang": "en",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "PR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PD10-id-cs-palsu-komentar-refund",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "PR2:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN01-en-checkout",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "PR4:observed_instruction",
+        "PR4:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 3
+    },
+    {
+      "id": "PN02-id-checkout-virtual-account",
+      "lang": "id",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "PR4:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN03-en-invoice",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "PR4:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN04-id-tagihan-listrik",
+      "lang": "id",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "PR4:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN05-en-donation",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "PR4:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN06-id-donasi-yayasan",
+      "lang": "id",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "PR4:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN07-en-news-refund-scam",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "PR1:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN08-id-berita-penipuan-undian",
+      "lang": "id",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "PR1:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN09-en-awareness-payment-scams",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "PR1:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN10-id-edukasi-penipuan-kurir",
+      "lang": "id",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN11-en-return-policy",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "PR4:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN12-id-ewallet-topup-cashback",
+      "lang": "id",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "PR4:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN13-en-gift-card-store",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "PR4:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN14-en-bank-transfer-help",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "PR4:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN15-id-bantuan-marketplace-rekber",
+      "lang": "id",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN16-en-legit-prize-no-fee",
+      "lang": "en",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    }
+  ]
+}

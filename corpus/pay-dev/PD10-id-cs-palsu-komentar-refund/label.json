@@ -1,0 +1,22 @@
+{
+  "id": "PD10-id-cs-palsu-komentar-refund",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-PAY",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://komunitas.belanjaku.test/t/refund-belum-masuk",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#k3",
+  "description": "Komentar dari akun mengaku CS resmi: bayar biaya admin dulu supaya refund bisa dicairkan",
+  "rationale": "CS palsu di konten pengguna meminta pembayaran di muka untuk refund.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.2 payment dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

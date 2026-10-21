@@ -16,7 +16,8 @@ describe('engine 0.2.0 in the popup', () => {
     const card = popup.locator('article.finding').first();
     expect(await card.locator('.context').first().textContent()).toBe('Lowered from suspicious because of context: the instruction is a step in a procedural document.');
     expect(await card.locator('.risk').textContent()).toBe('Action risk: high. Following it would run code on your computer.');
-    expect(await card.locator('.chip').nth(1).textContent()).toBe('Confidence: low');
+    expect(await card.locator('.chip.severity').textContent()).toBe('Severity: informational');
+    expect(await card.locator('.chip').nth(2).textContent()).toBe('Confidence: low');
     expect(await popup.textContent('#meta')).toContain('Engine 0.2.0');
     await shot(popup, '12-procedural-en');
   });

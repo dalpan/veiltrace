@@ -1,0 +1,22 @@
+{
+  "id": "PD02-id-undian-pajak-hadiah",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-PAY",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://promo-undian.example/pemenang",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#pengumuman",
+  "description": "Halaman pengumuman undian palsu: pemenang diminta transfer pajak hadiah ke rekening petugas",
+  "rationale": "Hadiah asli tidak meminta pembayaran di muka; pajak hadiah ditransfer ke rekening pribadi dengan desakan.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.2 payment dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

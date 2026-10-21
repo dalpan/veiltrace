@@ -2,7 +2,9 @@
 // code is ours, but its strings are page-derived, so every field is type-, enum- and length-checked.
 import type { ScanGap, ScanStatus } from '../../core/coverage.js';
 import type { HighlightResult, HighlightStatus } from '../content/highlight.js';
-import type { CredEvidenceItem, CredFindingSummary, CredentialSection, EvidenceItem, FindingSummary, ScanReport } from '../content/report.js';
+import type {
+  CredEvidenceItem, CredFindingSummary, CredentialSection, EvidenceItem, FindingSummary, PayEvidenceItem, PayFindingSummary, PaymentSection, ScanReport,
+} from '../content/report.js';
 import { MAX_EVIDENCE_PER_FINDING, MAX_FINDINGS, MAX_SNIPPET_CHARS, REPORT_VERSION } from '../content/report.js';
 import { isSafeLocator } from '../../extract/extract.js';
 
@@ -17,15 +19,15 @@ const EFFECTS = ['suppressed', 'capped-at-1'] as const;
 
 // Exact key sets: unknown fields (e.g. metadata added by a future engine) make the whole report invalid,
 // so the popup can never silently omit information it does not understand.
-const REPORT_KEYS = ['v', 'engineVersion', 'extractorVersion', 'verdict', 'findings', 'coverage', 'status', 'counts', 'credential', 'timing'];
+const REPORT_KEYS = ['v', 'engineVersion', 'extractorVersion', 'verdict', 'findings', 'coverage', 'status', 'counts', 'credential', 'payment', 'timing'];
 const FINDING_KEYS = ['id', 'ruleId', 'ruleName', 'classification', 'ruleClassification', 'confidence', 'actionRisk', 'summary', 'modifiers', 'overrides', 'evidence', 'evidenceTotal'];
 const EVIDENCE_KEYS = ['signal', 'text', 'source', 'locator', 'deobfuscated'];
 const COVERAGE_KEYS = ['framesSkipped', 'truncated', 'closedShadowRootsSkipped', 'coreTruncated', 'partial'];
 const SIGNALS = ['A.OPEN_RUN', 'A.PASTE', 'A.EXECUTE', 'A.COMMAND', 'A.COPY_TRIGGER', 'P.HUMAN_VERIFY', 'P.FAKE_FIX', 'P.URGENCY', 'P.AUTHORITY', 'C.NEGATION', 'C.REPORTED', 'C.EDUCATIONAL'] as const;
 const SOURCES = ['visible-text', 'hidden-clipboard', 'copy-control'] as const;
 const GAPS: readonly ScanGap[] = ['node-budget', 'block-budget', 'char-budget', 'timeout', 'block-text-capped', 'aux-capped', 'frames-skipped', 'closed-shadow-skipped', 'extractor-truncated', 'core-truncated'];
-// M5.1 experimental credential section.
-const CRED_KEYS = ['detectorVersion', 'experimental', 'verdict', 'findings', 'findingsTotal'];
+// M5.1 experimental credential section (SECTION_KEYS also shapes the M5.2 payment section).
+const SECTION_KEYS = ['detectorVersion', 'experimental', 'verdict', 'findings', 'findingsTotal'];
 const CRED_FINDING_KEYS = ['id', 'ruleId', 'classification', 'ruleClassification', 'confidence', 'actionRisk', 'requestedAction', 'secretTypes', 'pretexts',
   'trustContext', 'formDestination', 'modifiers', 'overrides', 'limitations', 'evidence', 'evidenceTotal'];
 const CRED_EVIDENCE_KEYS = ['signal', 'text', 'source', 'locator', 'fieldKind'];
@@ -40,6 +42,16 @@ const TRUST = ['user-content', 'third-party-widget', 'embedded-frame', 'dialog',
 const DESTINATIONS = ['none', 'same-origin', 'other-origin', 'mailto', 'javascript', 'data', 'other'] as const;
 const LIMITS = ['claimed-identity-unverifiable', 'destination-not-scored', 'trust-boundary-heuristic'] as const;
 const FIELD_KINDS = ['password', 'otp', 'pin', 'recovery-code', 'secret-phrase', 'email', 'text', 'other'] as const;
+// M5.2 experimental payment section.
+const PAY_FINDING_KEYS = ['id', 'ruleId', 'classification', 'ruleClassification', 'confidence', 'actionRisk', 'promises', 'destinations', 'pressures',
+  'trustContext', 'modifiers', 'limitations', 'evidence', 'evidenceTotal'];
+const PAY_RULES = ['PR1', 'PR2', 'PR3', 'PR4'] as const;
+const PAY_SIGNALS = ['PY.PAY', 'PA.AMOUNT', 'PF.FEE', 'PF.RELEASE_FEE', 'PD.PERSONAL', 'PD.OFF_PLATFORM', 'PD.GIFT_CARD', 'PD.CRYPTO',
+  'PR.REFUND', 'PR.PRIZE', 'PR.UNLOCK', 'PC.CONDITION', 'PP.THREAT', 'PP.URGENCY', 'PP.AUTHORITY', 'C.NEGATION', 'C.REPORTED', 'C.EDUCATIONAL'] as const;
+const PROMISES = ['refund', 'prize', 'account-unlock', 'release'] as const;
+const PAY_DESTINATIONS = ['personal-account', 'off-platform', 'gift-card', 'crypto'] as const;
+const PRESSURES = ['threat', 'urgency', 'claimed-authority'] as const;
+const PAY_LIMITS = ['claimed-identity-unverifiable', 'trust-boundary-heuristic', 'amount-not-reported'] as const;
 const HIGHLIGHT: readonly HighlightStatus[] = ['highlighted', 'invalid-locator', 'not-found', 'frame-inaccessible', 'not-visible'];
 
 type Obj = Record<string, unknown>;
@@ -134,11 +146,54 @@ function credFinding(x: unknown): CredFindingSummary | null {
 }
 
 function credentialSection(x: unknown): CredentialSection | null {
-  if (!isObj(x) || !onlyKeys(x, CRED_KEYS) || !str(x.detectorVersion, 40) || x.experimental !== true || !oneOf(x.verdict, VERDICTS)) return null;
+  if (!isObj(x) || !onlyKeys(x, SECTION_KEYS) || !str(x.detectorVersion, 40) || x.experimental !== true || !oneOf(x.verdict, VERDICTS)) return null;
   if (!Array.isArray(x.findings) || x.findings.length > MAX_FINDINGS || !num(x.findingsTotal) || x.findingsTotal < x.findings.length) return null;
   const findings: CredFindingSummary[] = [];
   for (const f of x.findings) {
     const v = credFinding(f);
+    if (!v) return null;
+    findings.push(v);
+  }
+  return { detectorVersion: x.detectorVersion, experimental: true, verdict: x.verdict, findings, findingsTotal: x.findingsTotal };
+}
+
+function payEvidence(x: unknown): PayEvidenceItem | null {
+  if (!isObj(x) || !onlyKeys(x, ['signal', 'text', 'locator']) || !oneOf(x.signal, PAY_SIGNALS) || !str(x.text, MAX_SNIPPET_CHARS)) return null;
+  // Amount values never cross the boundary.
+  if (x.signal === 'PA.AMOUNT' && x.text !== '') return null;
+  return { signal: x.signal, text: x.text, locator: isSafeLocator(x.locator) ? x.locator : null };
+}
+
+function payFinding(x: unknown): PayFindingSummary | null {
+  if (!isObj(x) || !onlyKeys(x, PAY_FINDING_KEYS)) return null;
+  if (!str(x.id, 20) || !oneOf(x.ruleId, PAY_RULES) || !oneOf(x.classification, CLASSES) || !oneOf(x.ruleClassification, CLASSES) || !oneOf(x.confidence, LEVELS)
+    || !oneOf(x.actionRisk, RISKS)) return null;
+  const promises = enumList(x.promises, PROMISES, PROMISES.length);
+  const destinations = enumList(x.destinations, PAY_DESTINATIONS, PAY_DESTINATIONS.length);
+  const pressures = enumList(x.pressures, PRESSURES, PRESSURES.length);
+  const trustContext = enumList(x.trustContext, TRUST, TRUST.length);
+  const modifiers = enumList(x.modifiers, CRED_MODS, CRED_MODS.length);
+  const limitations = enumList(x.limitations, PAY_LIMITS, PAY_LIMITS.length);
+  if (!promises || !destinations || !pressures || !trustContext || !modifiers || !limitations) return null;
+  if (!Array.isArray(x.evidence) || x.evidence.length === 0 || x.evidence.length > MAX_EVIDENCE_PER_FINDING || !num(x.evidenceTotal) || x.evidenceTotal < x.evidence.length) return null;
+  const evidence: PayEvidenceItem[] = [];
+  for (const e of x.evidence) {
+    const v = payEvidence(e);
+    if (!v) return null;
+    evidence.push(v);
+  }
+  return {
+    id: x.id, ruleId: x.ruleId, classification: x.classification, ruleClassification: x.ruleClassification, confidence: x.confidence, actionRisk: x.actionRisk,
+    promises, destinations, pressures, trustContext, modifiers, limitations, evidence, evidenceTotal: x.evidenceTotal as number,
+  };
+}
+
+function paymentSection(x: unknown): PaymentSection | null {
+  if (!isObj(x) || !onlyKeys(x, SECTION_KEYS) || !str(x.detectorVersion, 40) || x.experimental !== true || !oneOf(x.verdict, VERDICTS)) return null;
+  if (!Array.isArray(x.findings) || x.findings.length > MAX_FINDINGS || !num(x.findingsTotal) || x.findingsTotal < x.findings.length) return null;
+  const findings: PayFindingSummary[] = [];
+  for (const f of x.findings) {
+    const v = payFinding(f);
     if (!v) return null;
     findings.push(v);
   }
@@ -163,9 +218,12 @@ export function parseScanReport(x: unknown): ScanReport | null {
   const n = x.counts;
   if (!isObj(n) || !num(n.blocks) || !num(n.hiddenCopyCandidates) || !num(n.copyTriggers) || !num(n.observations) || !num(n.findingsTotal)) return null;
   const t = x.timing;
-  if (!isObj(t) || !onlyKeys(t, ['extractMs', 'analyzeMs', 'credentialMs']) || !num(t.extractMs) || !num(t.analyzeMs) || !num(t.credentialMs)) return null;
+  if (!isObj(t) || !onlyKeys(t, ['extractMs', 'analyzeMs', 'credentialMs', 'paymentMs']) || !num(t.extractMs) || !num(t.analyzeMs) || !num(t.credentialMs)
+    || !num(t.paymentMs)) return null;
   const credential = credentialSection(x.credential);
   if (!credential) return null;
+  const payment = paymentSection(x.payment);
+  if (!payment) return null;
   const status: ScanStatus = { complete: s.complete, reasons: s.reasons as ScanGap[] };
   return {
     v: REPORT_VERSION, engineVersion: x.engineVersion, extractorVersion: x.extractorVersion, verdict: x.verdict, findings,
@@ -176,7 +234,8 @@ export function parseScanReport(x: unknown): ScanReport | null {
     status,
     counts: { blocks: n.blocks, hiddenCopyCandidates: n.hiddenCopyCandidates, copyTriggers: n.copyTriggers, observations: n.observations, findingsTotal: n.findingsTotal },
     credential,
-    timing: { extractMs: t.extractMs, analyzeMs: t.analyzeMs, credentialMs: t.credentialMs },
+    payment,
+    timing: { extractMs: t.extractMs, analyzeMs: t.analyzeMs, credentialMs: t.credentialMs, paymentMs: t.paymentMs },
   };
 }
 

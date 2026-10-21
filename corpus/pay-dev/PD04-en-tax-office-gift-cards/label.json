@@ -1,0 +1,22 @@
+{
+  "id": "PD04-en-tax-office-gift-cards",
+  "split": "pay-dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T-PAY",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://notice-center.example/case/5521",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#notice",
+  "description": "Fake \"tax office\" notice demanding payment in gift cards under threat of arrest",
+  "rationale": "Government agencies never take gift cards; claimed authority plus legal threat and urgency.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.2 payment dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

@@ -66,7 +66,7 @@ export function html(body: string, head = ''): string {
 }
 
 /** Serves every page of a corpus scenario from disk under its fictional URLs. */
-export function addCorpusScenario(l: Loaded, split: 'dev' | 'cred-dev', id: string): string {
+export function addCorpusScenario(l: Loaded, split: 'dev' | 'cred-dev' | 'pay-dev', id: string): string {
   const dir = join('corpus', split, id);
   const label = JSON.parse(readFileSync(join(dir, 'label.json'), 'utf8')) as { pages: Array<{ url: string; file: string }> };
   for (const p of label.pages) l.pages.set(p.url, readFileSync(join(dir, p.file), 'utf8'));

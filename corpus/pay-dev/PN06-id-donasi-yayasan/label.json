@@ -1,0 +1,22 @@
+{
+  "id": "PN06-id-donasi-yayasan",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "benign",
+  "threatClass": "T-PAY",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://peduli-sesama.test/donasi/banjir",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Penggalangan donasi bencana oleh yayasan dengan rekening yayasan",
+  "rationale": "Donasi ke rekening lembaga, tanpa ancaman atau janji imbalan.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.2 payment dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

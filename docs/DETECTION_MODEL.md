@@ -272,3 +272,39 @@ Targeted regressions exposed four weaknesses, fixed without changing any cred-de
 3. Per-request scoring; quoted or code pretexts only count for requests in the same block (interactive awareness exercise stays observed).
 4. The live-field override needs a field of the same secret kind and only sets aside educational framing (a quoted request next to an unrelated login box stays observed).
 Consequence: a credential lure wrapped in quotation markup is not recovered by a nearby live field (consistent with the measured CA02 miss).
+
+## 13. EXPERIMENTAL payment-manipulation detector (M5.2, `pay-0.1.0-exp`)
+
+**Status: experimental, development data only.** `analyzePayments(snapshot)` (`src/core/payment/`) returns its own `PaymentResult`. It changes neither `analyze()` nor `analyzeCredentials()` (tested on every unit fixture and on every pay-dev page). It has **not** passed a frozen evaluation (D-071).
+
+### 13.1 Inputs and privacy
+Block text only. It never reads url, title, form fields or forms, so it never sees card numbers, typed values or balances in inputs. Amounts in page text are matched to tie a request to money, but **their values are never reported** (`PA.AMOUNT` observations carry `text: ""`), and runs of 5+ digits in any other evidence are masked (D-072).
+
+### 13.2 Signals (EN + ID, `src/core/payment/lexicon.ts`)
+| Family | Ids | Notes |
+|---|---|---|
+| Request | `PY.PAY` | pay, transfer, wire, deposit, top up, send money, buy gift cards; bayar, transfer, setor, lunasi, kirim uang, wajib membayar. Past tense is a report, not a request |
+| Object | `PA.AMOUNT`, `PF.FEE`, `PF.RELEASE_FEE` | Release fee = a fee whose purpose is to release or unlock (verification, unlock, release, clearance fee; pajak hadiah, biaya pencairan, biaya buka blokir) |
+| Destination | `PD.PERSONAL`, `PD.OFF_PLATFORM`, `PD.GIFT_CARD`, `PD.CRYPTO` | Only someone else's personal account ("your personal account" is ordinary banking) |
+| Receive | `PR.REFUND`, `PR.PRIZE`, `PR.UNLOCK`, `PC.CONDITION` | What is promised, and the clause that makes payment a precondition ("to receive", "agar dapat dicairkan") |
+| Pressure | `PP.THREAT`, `PP.URGENCY`, `PP.AUTHORITY` | Threat = account closure or arrest/legal action. Urgency = minutes/hours or explicit pressure, not due dates. Authority is a claim, never verified |
+| Context | `C.NEGATION`, `C.REPORTED`, `C.EDUCATIONAL` | Reused read-only from the ClickFix lexicon |
+
+A **request** is a block with a non-negated pay verb and an amount, fee or destination in the same block (or, when the verb has no object, the block just before it), or a release fee stated with an amount. Requests and pressure correlate inside one region and window (K = 8). Pressure inside a quotation or code sample counts only for a request in that same block.
+
+### 13.3 Decision table (first match; keyword-only matches never alert)
+| Rule | Name | Condition | Classification |
+|---|---|---|---|
+| PR1 | ADVANCE_FEE_TO_RECEIVE | A release fee, or a promised refund/prize/unlock nearby **and** a condition clause in the request | manipulative with any of authority, threat, urgency, off-channel destination or untrusted placement; suspicious without |
+| PR2 | OFF_CHANNEL_PAYMENT | Destination is a personal account, off-platform, gift cards or crypto | manipulative with authority or threat; suspicious with urgency, untrusted placement or off-platform |
+| PR3 | PAYMENT_UNDER_THREAT | Threat with authority or urgency; or urgency with authority claimed in the request's own block | manipulative with threat + authority + urgency; suspicious otherwise |
+| PR4 | OBSERVED_PAYMENT_REQUEST | Any other request (checkout, invoice, bill, donation, shop) | observed (informational) |
+
+Rationale: payment requests, fees, deadlines and "customer service" all occur on legitimate checkouts, so none of them alerts alone. Paying first to *receive* something (PR1), paying outside the expected channel under pressure (PR2), and paying under threat from a claimed authority (PR3) are the combinations that legitimate flows do not use.
+
+Modifiers as in §12.5 (`C.QUOTED`, `C.REPORTED`, `C.CODE_EXAMPLE` −2; `C.EDUCATIONAL` −1; cap 2); no override. Confidence: high for manipulative/observed, medium for suspicious, minus one per modifier. Action risk is **high** for PR1 and off-channel destinations (money is rarely recoverable), otherwise **medium**. Limitations: `claimed-identity-unverifiable`, `trust-boundary-heuristic`, `amount-not-reported`.
+
+### 13.4 Development results (pay-dev, 27 synthetic scenarios; NOT held-out)
+Corpus: 10 positive, 1 adversarial, 16 benign hard negatives (checkout, virtual account, invoice, utility bill, donations, news reports, awareness pages, return policy, top-up promo, gift-card shop, own-account transfer, marketplace safety tips, genuine prize notice); 13 EN, 14 ID (`corpus/pay-dev/README.md`). Same author as the rules; labels written before the first run; no rule was changed after it.
+
+TP 10 · FP 0 · TN 16 · FN 1 (`eval/results/pay-dev.md`). Miss: **PA01**, very informal Indonesian abbreviations ("tf dl 150rb ... buat bka akunnya"). Localization 10/10, 0 requests during scanning, 0 privacy-sentinel leaks (card-number-like sentinel typed into every field). ClickFix verdict `none` and credential verdict none/observed on all 27 pages. **Optimistic by construction; not real-world effectiveness.**

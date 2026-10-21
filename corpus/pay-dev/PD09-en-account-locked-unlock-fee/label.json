@@ -1,0 +1,22 @@
+{
+  "id": "PD09-en-account-locked-unlock-fee",
+  "split": "pay-dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T-PAY",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://secure.payflow-wallet.test/locked",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "[role=dialog]",
+  "description": "Dialog: wallet locked, pay an unlock fee to reactivate",
+  "rationale": "A fee to unlock an account combined with a closure threat; legitimate providers do not charge to unlock an account.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.2 payment dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

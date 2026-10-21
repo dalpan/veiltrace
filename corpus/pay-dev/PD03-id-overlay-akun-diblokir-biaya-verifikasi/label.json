@@ -1,0 +1,22 @@
+{
+  "id": "PD03-id-overlay-akun-diblokir-biaya-verifikasi",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-PAY",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://akun.dompetku.test/status",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": ".overlay",
+  "description": "Overlay \"akun diblokir\" meminta biaya verifikasi agar akun dibuka kembali",
+  "rationale": "Biaya untuk membuka akun disertai ancaman pemblokiran dan desakan waktu: pola biaya verifikasi palsu.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.2 payment dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

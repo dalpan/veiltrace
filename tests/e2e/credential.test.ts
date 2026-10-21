@@ -15,7 +15,7 @@ describe('credential section in the popup', () => {
     expect(await verdict(popup)).toBe('none');
     expect(await popup.getAttribute('.cred-summary', 'data-verdict')).toBe('manipulative_instruction');
     expect(await popup.textContent('.cred-summary h2')).toBe('Manipulative request for a password or code detected');
-    expect(await popup.textContent('.cred-summary .category')).toBe('Passwords and codes · Experimental');
+    expect(await popup.textContent('.cred-summary .category')).toBe('Credential Disclosure Manipulation · Experimental');
     // The more severe section comes first.
     expect(await popup.evaluate(() => document.querySelector('#result > .card')?.classList.contains('cred-summary'))).toBe(true);
     const card = popup.locator('article.finding.cred').first();
@@ -23,7 +23,8 @@ describe('credential section in the popup', () => {
     expect(await card.locator('.requested').textContent()).toBe('Asks you to send: one-time code');
     expect(await card.locator('.indicators').textContent()).toBe('Indicators: claims to be support or an official · verification framing · in user-posted content');
     expect(await card.locator('[data-limitation="claimed-identity-unverifiable"]').count()).toBe(1);
-    expect(await popup.locator('.experimental-note').count()).toBe(1);
+    // One note per experimental section (credential and payment).
+    expect(await popup.locator('.experimental-note').count()).toBe(2);
     await card.locator('button:has-text("Show on page")').nth(2).click();
     await popup.waitForSelector('article.finding.cred .hl-status[data-result]');
     expect(await popup.getAttribute('article.finding.cred .hl-status[data-result]', 'data-result')).toBe('highlighted');

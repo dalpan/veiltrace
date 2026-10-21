@@ -1,0 +1,22 @@
+{
+  "id": "PN02-id-checkout-virtual-account",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "benign",
+  "threatClass": "T-PAY",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://belanjaku.test/pembayaran/va",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Halaman pembayaran virtual account dengan batas waktu dan biaya layanan",
+  "rationale": "Alur pembayaran resmi; batas waktu pembayaran adalah hal biasa.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.2 payment dev split (same author as the rules)",
+  "created": "2026-10-21"
+}

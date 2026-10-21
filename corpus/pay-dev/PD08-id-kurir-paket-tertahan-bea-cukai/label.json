@@ -1,0 +1,22 @@
+{
+  "id": "PD08-id-kurir-paket-tertahan-bea-cukai",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-PAY",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://lacak-paket.example/resi",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#status",
+  "description": "Halaman lacak paket palsu: paket tertahan bea cukai, bayar biaya pelepasan ke rekening petugas",
+  "rationale": "Paket \"tertahan\" dengan biaya pelepasan ke rekening pribadi petugas: pola penipuan kurir/bea cukai.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M5.2 payment dev split (same author as the rules)",
+  "created": "2026-10-21"
+}
