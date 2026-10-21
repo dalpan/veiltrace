@@ -4,6 +4,51 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-21 · M3 finalization: manual production validation (stable Google Chrome, owner-run)
+
+Checklist: docs/DEMO.md. Production build `dist/extension` loaded unpacked; pages served offline from `dist/manual` on two local origins.
+
+| Row | Result | Basis |
+|---|---|---|
+| M1 Details: name, version, permissions | Passed | Owner screenshot: "VeilTrace", 0.3.0, Permissions empty, no sites listed under Site access. **Doc correction:** Chrome shows generic "can read and change your data on sites" text for this activeTab-only extension; the M1 expectation was updated |
+| M2 Popup before scan | Passed | Owner confirmation (no screenshot) |
+| M3 Fake CAPTCHA (D01) | Passed | Owner screenshot: "Manipulative instruction detected", "Complete scan", 10 blocks |
+| M4 No persistent host access after scanning | Passed | Owner screenshot taken after all scans: Permissions empty, no sites listed |
+| M5 Technical docs (D16) | Passed | Owner screenshot: "No suspicious instructions detected in the analyzed content." with the observed-instruction note |
+| M6 Show on page | Passed | Owner confirmation (no screenshot) |
+| M7 Highlight cleanup with popup closed | Passed | Owner confirmation (no screenshot) |
+| M8 Stale locator, no false success | Passed | Owner confirmation (no screenshot) |
+| M9 Partial scan, large page | Passed | Owner screenshot: "Partial scan", 5,000-block reason; 536 ms total in stable Chrome |
+| M10 Cross-origin iframe | Passed | Owner screenshot: "Partial scan: Embedded frames from other sites could not be examined" |
+| M11 chrome://settings | Passed | Owner confirmation (no screenshot) |
+| M12 No network requests | Passed | Owner confirmation (no screenshot) |
+
+Screenshots are kept outside git (`screenshoot-demo/`, ignored: they show personal browser UI).
+
+## 2026-10-21 · M3 Chromium extension and evidence UI · **Implemented and accepted (committed)**
+
+**Done**
+- MV3 extension (`src/extension`, built to `dist/extension`):
+  - Popup UI: Scan page, progress, verdict headline (never "safe"), classification/confidence/action-risk chips, rule explanations, evidence snippets, Show on page, complete/partial status with reasons, limitations, error states.
+  - Browser adapter (`executeScript`, ISOLATED world), strict report validation, isolated-world content bundle (extractor + core), overlay highlighter.
+- **Permissions:** production `activeTab` + `scripting` only. CSP `connect-src 'none'`. No background, no messaging, no storage. A separate test build carries the test-only permissions (D-038).
+- Real `chrome.dom.openOrClosedShadowRoot` verified from the isolated world (the open M2 item).
+- Tests:
+  - 9 unit tests (report minimization, validation, locator grammar, URL classification)
+  - 27 E2E tests with the real extension (functional, security/permissions/CSP/XSS/offline, performance)
+- Decisions D-035 … D-040. D-005, D-008 and D-013 accepted.
+
+**Verification**
+- typecheck (4 configs) ✔, lint ✔, **316/316 tests** (280 pre-existing + 36 new).
+- `src/core` unchanged vs `70c5697`. Dev evaluation artifacts byte-identical to M2. `corpus/test` untouched.
+- Extension performance (first scan incl. injection): 31–57 ms on fixtures, 64–211 ms on large synthetic pages. Peak extraction 141 ms vs the 1,500 ms budget.
+
+**Not done / limitations**
+- The toolbar click → activeTab path is not automatable. It was validated manually by the owner on stable Chrome (see the M3 finalization entry).
+- No E2E for the timeout partial reason (it cannot be forced in production; covered by the extractor tests). "Copy report" and the Indonesian UI are not implemented.
+
+**Next:** M4 only after explicit owner approval.
+
 ## 2026-10-21 · M2 finalization (owner review: conditionally accepted)
 
 - **Decisions:**

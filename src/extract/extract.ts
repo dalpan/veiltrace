@@ -100,8 +100,21 @@ function cssPath(el: Element, root: Document | ShadowRoot): string {
   return parts.join(' > ');
 }
 
+/**
+ * Locators are only ever produced by cssPath() below: tag names, #ids matching [A-Za-z][\w-]*,
+ * :nth-of-type(n), " > " and the ::shadow:: / ::frame:: separators. Anything else is rejected before use,
+ * so a locator round-tripped through the popup can never become an arbitrary selector.
+ */
+const LOCATOR_SEGMENT = /^(?:#[A-Za-z][\w-]*|[a-z][a-z0-9-]*(?::nth-of-type\(\d{1,6}\))?)(?: > (?:#[A-Za-z][\w-]*|[a-z][a-z0-9-]*(?::nth-of-type\(\d{1,6}\))?))*$/;
+
+export function isSafeLocator(locator: unknown): locator is string {
+  if (typeof locator !== 'string' || locator.length === 0 || locator.length > 2000) return false;
+  return locator.split(/::shadow::|::frame::/).every((seg) => LOCATOR_SEGMENT.test(seg));
+}
+
 /** Resolves a locator produced by the extractor (supports ::shadow:: and ::frame:: segments). */
 export function resolveLocator(doc: Document, locator: string, getShadowRoot?: (el: Element) => ShadowRoot | null): Element | null {
+  if (!isSafeLocator(locator)) return null;
   const pieces = locator.split(/(::shadow::|::frame::)/);
   let root: Document | ShadowRoot = doc;
   let el = null as Element | null;

@@ -1,6 +1,6 @@
 # Privacy & Security
 
-Status: M0 commitments; verified for the core (M1) and the extractor/harness (M2). Each one has a verification method that must hold before any release. **M1 (core only):** zero runtime dependencies, and a test asserts the esbuild core bundle contains no network or dynamic-code identifiers. The extension-level checks (P1 b/c, P4) apply from M3, when an extension exists.
+Status: M0 commitments; verified for the core (M1), the extractor/harness (M2) and the Chromium extension (M3, §7). Each one has a verification method that must hold before any release. **M1 (core only):** zero runtime dependencies, and a test asserts the esbuild core bundle contains no network or dynamic-code identifiers. The extension-level checks (P1 b/c, P4) apply from M3, when an extension exists.
 
 ## 1. Data handling commitments
 
@@ -61,4 +61,25 @@ Allowed only if all of the following hold. It requires a DECISIONS.md entry and 
 | Tooling network use | Only at install time: `npm install` (Playwright 1.64.1) and `npx playwright install chromium` (Chromium headless shell). Tests and evaluation run fully offline |
 
 Residual: the extractor runs in the page's **main world** in tests (`page.evaluate`). In the M3 extension it runs in an **isolated world**, which must be re-verified there (closed shadow adapter, CSP, no page access to extension state).
+
+## 7. M3 verification (Chromium extension; real extension loaded in Playwright)
+
+| Claim | Verification (tests/e2e/security.test.ts unless noted) |
+|---|---|
+| Production permissions are exactly `activeTab` + `scripting` | Built manifest assertion. Also `chrome.permissions.getAll()` in the installed production extension returns `{ permissions: ['activeTab','scripting'], origins: [] }` |
+| Test-only permissions never ship | The production manifest has no `host_permissions`. The production `popup.js` contains no `?tab=` targeting code (`URLSearchParams` absent). Only `dist/extension-test` carries host permissions for `*.test`/`*.example` |
+| No access without a user gesture | From the installed production extension, `chrome.scripting.executeScript` on an ordinary page is **refused** without the activeTab grant |
+| No network during scanning or highlighting | Request log unchanged across scan + highlight. Popup CSP `connect-src 'none'` blocks `fetch` (tested). The bundles contain no `fetch`/XHR/WebSocket/`sendBeacon`/`eval`/`new Function`/`innerHTML`/messaging identifiers |
+| Hostile page text cannot execute in the popup | Lure text containing `<img onerror>`, `<script>` and `<svg onload>` renders literally. No elements are created from it, no dialogs, title unchanged |
+| Pages cannot impersonate the extension | No messaging surface (lint + bundle check). A page that defines `window.VeiltraceContent`/`VeiltraceExtractor` and floods `postMessage` does not affect the isolated-world scan. The page has no `chrome.runtime.sendMessage` channel |
+| Raw snapshots never leave the tab | `buildReport` sends only findings' evidence (≤ 300 chars each), coverage and counts. A unit test asserts that unrelated page text is absent from the report (tests/extension.test.ts) |
+| Data crossing the API boundary is validated | `parseScanReport` rejects wrong versions, unknown enums, oversize strings and arrays, negative counts, and drops locators that fail the grammar (tests/extension.test.ts) |
+| Highlight does not alter the page's own content | The evidence element's attributes and `outerHTML`, input values and click handlers are unchanged. The overlay is removed after its timeout (tests/e2e/extension.test.ts) |
+| Pages with strict CSP | Scan and highlight work under `default-src 'none'; style-src 'none'; script-src 'none'` (CSSOM styling) |
+| No persistence | The manifest has no `storage` permission and no extension storage API is used |
+
+**Residual/untested:**
+- The real toolbar click that grants `activeTab` cannot be automated in Playwright; it is covered by the manual checklist in `docs/DEMO.md`.
+- Chrome on other OSes and the non-headless UI were not tested.
+- The overlay element is visible to page scripts (they could detect or remove it). It contains no text and no extension data.
 

@@ -19,8 +19,8 @@ The core is `analyze(snapshot) → result` with no browser or DOM APIs. Approved
 ### D-004 · Accepted · 2026-10-21 · On-demand scanning via `activeTab` (no auto-scan in MVP)
 Approved by the owner. **No claim of real-time or proactive protection** may be made in docs, UI or the demo. Auto-scan remains an M6 option behind per-site optional permissions.
 
-### D-005 · Proposed · 2026-10-21 · No background service worker in the MVP
-The popup calls `scripting.executeScript` directly. To be confirmed in M3.
+### D-005 · Accepted · 2026-10-21 · No background service worker in the MVP
+The popup calls `scripting.executeScript` directly. Confirmed in M3: no concrete need for a background arose.
 
 ### D-006 · Accepted · 2026-10-21 · esbuild instead of Vite
 Approved by the owner. Vitest is used for tests.
@@ -28,7 +28,7 @@ Approved by the owner. Vitest is used for tests.
 ### D-007 · Accepted · 2026-10-21 · Decision table instead of an additive weighted score
 The owner instructed to avoid a generic weighted score that undermines explainability. Superseded in part by D-017 for the result model.
 
-### D-008 · Proposed · 2026-10-21 · Inform, don't block
+### D-008 · Accepted · 2026-10-21 · Inform, don't block
 The MVP never blocks navigation or modifies page content (except a user-requested highlight in M3).
 
 ### D-009 · Accepted · 2026-10-21 · English documentation and code; Indonesian conversation with the owner
@@ -43,7 +43,7 @@ Held-out recall ≥ 85%, precision ≥ 90%, hard-negative FPR ≤ 10%, evidence 
 ### D-012 · Accepted · 2026-10-21 · Clean-room implementation; no third-party competitor code
 Approved with the M1 constraints. Pattern lists, regexes and code are not copied. All lexicon entries in `src/core/lexicon/` were written for this project.
 
-### D-013 · Proposed · 2026-10-21 · Test-only build with `http://localhost/*` host permission for e2e
+### D-013 · Accepted (refined by D-038) · 2026-10-21 · Test-only build with host permissions for e2e
 Playwright cannot perform the real toolbar gesture that grants `activeTab`. CI must assert that the shipped manifest does not contain it. Decide in M3.
 
 ### D-014 · Open · Project name
@@ -108,3 +108,21 @@ Owner decision at M2 review. Overlay or dialog presence alone must not disable c
 
 ### D-034 · Accepted · 2026-10-21 · Evaluation artifacts in git
 Only the deterministic, compact artifacts are committed: `eval/results/dev.json`, `dev.md`, `dev.research.json` and `dev.research.md`, which are byte-identical across runs on the same commit. Timing files (`*perf*.json`) are machine-specific and git-ignored. Build output (`dist/`), coverage reports, browser traces and screenshots are never committed.
+
+### D-035 · Accepted · 2026-10-21 · No extension messaging surface
+No `runtime.onMessage`/`onMessageExternal`/`onConnect`, no `sendMessage`, no `externally_connectable`. All popup↔tab data flows through `chrome.scripting.executeScript` return values into the ISOLATED world. Rationale: pages cannot forge messages to a channel that does not exist. Enforced by ESLint on `src/extension` and by bundle checks.
+
+### D-036 · Accepted · 2026-10-21 · Detection runs in the tab's isolated world; the popup receives a minimal report
+`content.js` bundles the extractor and the core. Only `ScanReport` crosses to the popup: verdict, up to 50 findings, up to 12 evidence items each (≤ 300 chars, extractor locators), coverage, scan status, counts and timings. Rationale: data minimization (the raw page snapshot never enters an extension page), plus a small transfer (< 1 ms measured). Trade-off: `content.js` is 75 KB per injection (14–30 ms).
+
+### D-037 · Accepted · 2026-10-21 · Highlight is a temporary overlay box, not a style change on the element
+A single extension-owned `div` (CSSOM-styled, `pointer-events: none`, max z-index) is placed over the element after `scrollIntoView`, and removed after 5 s or at the next scan/highlight. The evidence element is never modified, clicked or focused. Status values are explicit, and the UI never claims a highlight that failed.
+
+### D-038 · Accepted · 2026-10-21 · Separate production and test builds
+`npm run build:ext` → `dist/extension` (production). `npm run build:ext:test` → `dist/extension-test`: host permissions for `https://*.test/*` and `https://*.example/*`, `?tab=` targeting and a 1.5 s highlight duration, all compiled in via `__VT_TEST__`. Tests assert that the production manifest and bundle contain none of it. The toolbar-click activeTab path is verified manually (`docs/DEMO.md`).
+
+### D-039 · Accepted · 2026-10-21 · Pages whose URL Chrome withholds are treated as protected
+Chrome gives no URL (and never an activeTab grant) for `chrome://` pages, other extensions and the Web Store. The popup treats a missing URL like a restricted scheme: it shows "This page cannot be scanned" and does not attempt injection.
+
+### D-040 · Accepted · 2026-10-21 · Extractor locators are validated against a grammar before any use
+`isSafeLocator` accepts only what `cssPath` produces (tag names, simple `#id`, `:nth-of-type(n)`, ` > `, `::shadow::`, `::frame::`). `resolveLocator`, the popup validator and the highlighter all enforce it, so a value round-tripped through the popup can never become an arbitrary selector. Extraction output is unchanged (dev results byte-identical to M2).

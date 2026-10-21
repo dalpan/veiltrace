@@ -1,0 +1,41 @@
+// Injected on demand into the active tab's ISOLATED world (chrome.scripting.executeScript, files: content.js).
+// Bundled as an IIFE exposing `VeiltraceContent` in the isolated world only; page scripts cannot see or
+// replace it. No listeners, no messaging, no network: the popup calls these functions via executeScript.
+import { analyze } from '../../core/analyze.js';
+import { ENGINE_VERSION } from '../../core/constants.js';
+import { EXTRACTOR_VERSION, extractSnapshot } from '../../extract/extract.js';
+import { clearHighlight, highlight, type HighlightResult } from './highlight.js';
+import { buildReport, type ScanReport } from './report.js';
+
+/** chrome.dom.openOrClosedShadowRoot (Chrome 88+) lets content scripts read closed shadow roots. */
+function shadowRootAdapter(): ((el: Element) => ShadowRoot | null) | undefined {
+  const dom = typeof chrome !== 'undefined' ? (chrome as { dom?: { openOrClosedShadowRoot?: (el: HTMLElement) => ShadowRoot | null } }).dom : undefined;
+  const fn = dom?.openOrClosedShadowRoot;
+  if (typeof fn !== 'function') return undefined;
+  return (el: Element) => (el instanceof HTMLElement ? (fn(el) ?? null) : el.shadowRoot);
+}
+
+export function scan(options: { timeBudgetMs?: number } = {}): ScanReport {
+  clearHighlight();
+  const getShadowRoot = shadowRootAdapter();
+  const t0 = performance.now();
+  const { snapshot } = extractSnapshot(document, {
+    ...(typeof options.timeBudgetMs === 'number' ? { timeBudgetMs: options.timeBudgetMs } : {}),
+    ...(getShadowRoot ? { getShadowRoot } : {}),
+  });
+  const t1 = performance.now();
+  const result = analyze(snapshot);
+  const t2 = performance.now();
+  return buildReport(snapshot, result, { engine: ENGINE_VERSION, extractor: EXTRACTOR_VERSION }, { extractMs: t1 - t0, analyzeMs: t2 - t1 });
+}
+
+export function show(locator: unknown, durationMs: number): HighlightResult {
+  return highlight(locator, durationMs, shadowRootAdapter());
+}
+
+export { clearHighlight };
+
+/** Whether the closed-shadow adapter is available in this world (reported for diagnostics/tests). */
+export function capabilities(): { closedShadowAdapter: boolean } {
+  return { closedShadowAdapter: shadowRootAdapter() !== undefined };
+}

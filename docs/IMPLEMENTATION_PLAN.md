@@ -1,6 +1,6 @@
 # Implementation Plan
 
-Status: M1 accepted (`d856fbd`). Held-out split frozen (`407beb0`). M2 conditionally accepted and committed (see PROGRESS.md). M3 not started (requires explicit approval). Every milestone is independently testable and ends with a PROGRESS.md entry. No milestone is started before the previous one's acceptance criteria are met or explicitly waived in DECISIONS.md.
+Status: M1 accepted (`d856fbd`). Held-out split frozen (`407beb0`). M2 accepted (`70c5697`). M3 accepted (manual production validation on stable Chrome recorded in PROGRESS.md). Every milestone is independently testable and ends with a PROGRESS.md entry. No milestone is started before the previous one's acceptance criteria are met or explicitly waived in DECISIONS.md.
 
 ## Milestone overview
 
@@ -99,6 +99,24 @@ Each task produces a written result in `docs/RESEARCH.md` §6 (or a new `docs/EV
 4. Playwright e2e (test build): opening S-P1 and the popup shows verdict **Manipulative instruction**, rule `R1`, ≥ 2 observed snippets, and "Show on page" outlines an element matching the label's `regionContainsSelector`. On S-N1 it shows no suspicious or manipulative finding. The network log shows zero requests initiated by the extension.
 5. XSS test: a fixture whose instruction text contains `<img src=x onerror=…>` renders literally in the popup, and no script executes (a console/dialog listener asserts nothing fired).
 6. Manual demo checklist in `docs/DEMO.md`, executed once with screenshots attached to PROGRESS.md.
+
+### M3 outcome (2026-10-21)
+
+| Owner acceptance criterion | Result |
+|---|---|
+| Production extension installs in Chromium | Met: loaded unpacked in Chromium (Playwright `channel: 'chromium'`, new headless). The popup loads and permissions are verified at runtime |
+| On-demand scan of an eligible page | Met: scanning starts only on "Scan page" (no injection before the click, tested). The real toolbar gesture was validated manually on stable Chrome (docs/DEMO.md, PROGRESS.md) |
+| Popup shows actual core results | Met: the report is built from `analyze()` in the tab and is unit-tested to match the core's decision |
+| Evidence highlighting when resolvable | Met: highlight, cleanup, shadow DOM, same-origin frame and strict-CSP pages tested. Stale and hidden evidence are reported, never claimed |
+| Partial scans and failures clearly reported | Met: block-budget and frames-skipped shown in the UI. Protected page, `file://`, closed-tab and malformed-report states exist (malformed: unit-tested). The timeout reason is covered by the M2 extractor tests, but not E2E, because production has no option to force it |
+| Existing M1/M2 tests green | Met: 280/280 kept (316 total with M3) |
+| Extension E2E tests pass | Met: 27 E2E tests (17 functional, 8 security/permission, 2 performance) |
+| Detection unchanged | Met: `src/core` diff vs M2 = 0 lines; dev evaluation artifacts byte-identical to M2 |
+| No external requests during scanning | Met: request log unchanged across scan + highlight; popup `fetch` blocked by CSP |
+| Minimal production permissions | Met: `activeTab`, `scripting` only. Runtime check passed, and injection without a gesture was refused |
+| Held-out corpus untouched | Met: no diff in `corpus/test`; manifest verified |
+
+The M3 plan items above that the owner brief superseded: the UI was built as a full evidence UI (§4 of the brief) instead of the minimal M0 list. "Copy report" is not implemented (planned).
 
 ## M4: Hardening, held-out evaluation, demo
 

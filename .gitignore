@@ -9,3 +9,6 @@ coverage/
 
 # Machine-specific evaluation timings (not reproducible across machines)
 eval/results/*perf*.json
+
+# Owner manual-test screenshots (contain personal browser UI; not committed)
+screenshoot-demo/

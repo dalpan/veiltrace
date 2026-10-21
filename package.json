@@ -9,16 +9,24 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "node scripts/build.mjs",
-    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.extract.json && tsc --noEmit -p tests/tsconfig.json",
+    "build": "node scripts/build.mjs && node scripts/build-extension.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.extract.json && tsc --noEmit -p tsconfig.extension.json && tsc --noEmit -p tests/tsconfig.json",
     "lint": "eslint .",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "check": "npm run typecheck && npm run lint && npm run test",
-    "eval": "node scripts/eval.mjs"
+    "eval": "node scripts/eval.mjs",
+    "build:ext": "node scripts/build-extension.mjs",
+    "build:ext:test": "node scripts/build-extension.mjs --test",
+    "test:unit": "vitest run --exclude 'tests/browser/**' --exclude 'tests/e2e/**'",
+    "test:browser": "vitest run tests/browser",
+    "test:e2e": "vitest run tests/e2e",
+    "verify:extension": "npm run build:ext && vitest run tests/e2e/security.test.ts tests/architecture.test.ts tests/extension.test.ts",
+    "manual:fixtures": "node scripts/manual-fixtures.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
+    "@types/chrome": "0.3.5",
     "@types/node": "26.6.5",
     "@vitest/coverage-v8": "5.0.5",
     "esbuild": "0.28.2",

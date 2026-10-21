@@ -1,6 +1,6 @@
 # Architecture
 
-Status: updated at M2. **Implemented:** the pure core (`src/core`, §1, M1), the `PageSnapshot` types (§4), the DOM extractor and change watcher (`src/extract`, §3, M2), the offline evaluation harness (`src/eval`, §10, M2) and the toolchain (§5). **Planned, not implemented:** the extension, popup, manifest and on-page highlighting (§2, §6, M3). Cross-browser work (§7) is M5.
+Status: updated at M3. **Implemented:** the pure core (`src/core`, §1, M1), the `PageSnapshot` types (§4), the DOM extractor and change watcher (`src/extract`, §3, M2), the offline evaluation harness (`src/eval`, §10, M2), the Chromium MV3 extension with popup, isolated-world scanning and evidence highlighting (`src/extension`, §2, §6, §9, §11, M3), and the toolchain (§5). **Planned, not implemented:** Firefox desktop/Android (§7, M5), auto-scan, settings and storage (M6), and the "Copy report" action (PRODUCT_SPEC.md §5).
 
 ## 1. Principles that shape the architecture
 
@@ -8,26 +8,33 @@ Status: updated at M2. **Implemented:** the pure core (`src/core`, §1, M1), the
 - **One boundary object:** `PageSnapshot` is a JSON-serializable description of the visible page. It is produced by the extractor, which is the only code that touches a live DOM.
 - **On-demand by default:** nothing runs on a page until the user clicks the toolbar action (`activeTab`). There is no persistent content script, no background service worker and no storage of page content in the MVP **(pending D-004)**.
 
-## 2. Components
+## 2. Components (implemented in M3)
 
 ```
-┌──────────── Extension (Chromium MV3) ─────────────┐
-│ popup.html / popup.ts                             │
-│   1. user clicks action → popup opens             │
-│   2. scripting.executeScript({files:[extractor]}) │──┐ activeTab grant
-│   3. receives PageSnapshot (return value)         │  │
-│   4. analyze(snapshot) ── src/core (bundled)      │  ▼
-│   5. render findings (textContent only)           │  extractor.js (IIFE, isolated world)
-│   6. "Show on page" → executeScript(highlight)    │  - walks DOM incl. open shadow roots
-└───────────────────────────────────────────────────┘  - returns PageSnapshot, mutates nothing
-
-src/core     ← pure TS: normalize, lexicons, signals, regions, correlate, verdict
-src/extract  ← DOM → PageSnapshot (standard DOM APIs only; no chrome.*)
-src/extension← manifest, popup UI, browser adapter (the only place chrome.* appears)
-scripts/eval ← Node harness: Playwright renders fixture → extractor → core → metrics
+ user clicks the toolbar button → popup opens (activeTab granted for this tab)
+┌──────────── popup (extension page, CSP: script-src 'self'; connect-src 'none') ─────────────┐
+│ popup.ts   ── UI: Scan page, progress, verdict, findings, evidence, complete/partial status  │
+│ adapter.ts ── the only chrome.* user: tabs.query, scripting.executeScript (world: ISOLATED)  │
+│ validate.ts── strict schema/enum/length validation of everything returned from the tab      │
+└──────────────┬──────────────────────────────────────────────────────────────────────────────┘
+               │ 1. probe: is VeiltraceContent loaded?   2. files: ['content.js'] if not
+               │ 3. func: VeiltraceContent.scan() → ScanReport (minimal)
+               │ 4. func: VeiltraceContent.show(locator, ms) → HighlightResult
+┌──────────────▼───────────── active tab, ISOLATED world (invisible to page scripts) ─────────┐
+│ content.js (IIFE, global VeiltraceContent in the isolated world only)                        │
+│   extractSnapshot(document, { getShadowRoot: chrome.dom.openOrClosedShadowRoot })  src/extract│
+│   analyze(snapshot)                                                                src/core  │
+│   buildReport(): verdict, findings, evidence snippets + locators, coverage, counts          │
+│   highlight(): validated locator → resolve → scroll → temporary overlay box                  │
+└───────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-Why no background worker: the popup can call `chrome.scripting.executeScript` directly once `activeTab` is granted. That removes service-worker lifecycle bugs, avoids the Firefox-Android service-worker gap (Firefox for Android does not support background service workers, per Extension Workshop) and shrinks the attack surface. A background is introduced only if auto-scan (M6) needs one.
+- **Detection runs in the tab's isolated world.** Only the minimal `ScanReport` crosses to the popup (D-036). It holds no snapshot, and only the evidence text of reported findings, each capped at 300 characters.
+- **No background service worker, no content scripts in the manifest, no messaging** (`runtime.onMessage`/`externally_connectable` are absent and lint-banned; D-035). Pages therefore have no channel to impersonate extension messages. Data returns only as `executeScript` results, and the popup validates it (`parseScanReport`).
+- `VeiltraceContent` lives in the extension's isolated world. Page-defined globals of the same name are invisible to it; this is tested with a spoofing page.
+- `src/core`, `src/extract` and `src/extension/content/report.ts` are shared, unchanged and browser-independent. Only `adapter.ts` and `content/index.ts` touch `chrome.*`.
+
+Why no background worker: the popup calls `chrome.scripting.executeScript` directly once `activeTab` is granted. That removes service-worker lifecycle bugs, avoids the Firefox-Android service-worker gap and shrinks the attack surface (D-005, confirmed in M3).
 
 ## 3. Extraction (src/extract), implemented in M2
 
@@ -58,7 +65,7 @@ A depth-first walk from `<body>` in document order. It descends into open shadow
 
 ### 3.6 Shadow DOM and frames
 - **Open shadow roots** are extracted, with a `widget:` container for the host.
-- **Closed shadow roots** cannot be read from page context. `options.getShadowRoot` accepts an adapter (M3: `chrome.dom.openOrClosedShadowRoot`, Chrome 88+). This was verified with a simulated adapter in tests; the real API in an isolated world is **not yet verified** (M3). Without an adapter, `coverage.closedShadowRootsSkipped` counts *likely* closed hosts: rendered custom elements with no light-DOM children. This is a heuristic.
+- **Closed shadow roots** cannot be read from page context. `options.getShadowRoot` accepts an adapter (M3: `chrome.dom.openOrClosedShadowRoot`, Chrome 88+). This was verified with a simulated adapter in M2, and with the real API from the extension's isolated world in M3 (E2E test: a lure inside a closed shadow root is detected and the scan is complete). Without an adapter, `coverage.closedShadowRootsSkipped` counts *likely* closed hosts: rendered custom elements with no light-DOM children. This is a heuristic.
 - **Same-origin iframes** are extracted inline (container `frame:`). **Cross-origin iframes** are skipped and counted in `coverage.framesSkipped`. `stats.framesInspected` counts the inspected ones.
 
 ### 3.7 Budgets
@@ -133,24 +140,27 @@ Unit-test fixtures are written directly as snapshots. The M2 extractor produces 
 
 Runtime dependencies target: **0**. Everything shipped in the extension is our own code.
 
-## 6. Manifest (MVP, Chromium)
+## 6. Manifest (implemented in M3, `src/extension/manifest.json`)
 
 ```json
 {
   "manifest_version": 3,
-  "name": "VEILTRACE",
-  "version": "0.1.0",
-  "action": { "default_popup": "popup.html" },
+  "name": "VeilTrace",
+  "version": "0.3.0",
+  "minimum_chrome_version": "110",
+  "action": { "default_title": "VeilTrace: scan this page", "default_popup": "popup.html", "default_icon": { "16": "…", "32": "…", "48": "…", "128": "…" } },
+  "icons": { … },
   "permissions": ["activeTab", "scripting"],
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'none'"
+    "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none'; connect-src 'none'; form-action 'none'"
   }
 }
 ```
 
-- `activeTab` shows **no install-time warning** and grants temporary access to the active tab after a user gesture. The grant is revoked on cross-origin navigation (Chrome docs).
-- `connect-src 'none'` on extension pages is a defense-in-depth assertion that the popup cannot fetch. **Verify in M3** that Chrome accepts it.
-- No `host_permissions`, `tabs`, `storage`, `webRequest`, `clipboardRead` or `notifications`.
+- `activeTab` shows **no install-time warning** and grants temporary access to the active tab after the toolbar click. Chrome never grants it on `chrome://` pages, the Web Store or other extensions; the popup detects those (URL withheld or restricted scheme) and does not attempt a scan.
+- `connect-src 'none'` is **accepted by Chrome** (verified at M3): the extension loads, and `fetch` from the popup is blocked (E2E test).
+- No `host_permissions`, `content_scripts`, `background`, `web_accessible_resources`, `externally_connectable`, `tabs`, `storage`, `webRequest`, `clipboard*` or `notifications`. A test asserts all of these absences against the built production manifest.
+- **Test build** (`dist/extension-test`, D-013/D-038): adds `host_permissions: ["https://*.test/*", "https://*.example/*"]` for the fictional fixture hosts, the name "VeilTrace (TEST BUILD)", and `?tab=` targeting compiled in with `__VT_TEST__=true`. The production popup bundle contains no trace of the test path (asserted).
 
 ## 7. Cross-browser plan
 
@@ -164,16 +174,22 @@ Runtime dependencies target: **0**. Everything shipped in the extension is our o
   - On dev fixtures, total scan p50/p95 ≈ 1.3/2 ms.
   - On large synthetic pages (1.8k–15k elements), extraction is 5–118 ms and analysis 29–139 ms, for a total p50 of 34–224 ms.
   - Snapshots are up to 1.2 MB of JSON. The shop and table pages hit the 5,000-block budget.
+- **Extension end-to-end (M3**, TEST build, headless Chromium, `eval/results/extension-perf.json`, not committed):
+  - First scan, including injection of `content.js` (75 KB): **31–57 ms** on dev fixture pages and **64–211 ms** on the large synthetic pages. Injection takes 14–30 ms, transfer to the popup < 1 ms (13 ms once), and render < 10 ms.
+  - Extraction under real extension conditions peaks at **141 ms** (3,000-row table), far below the 1,500 ms budget (D-027 remains provisional until measured on slower hardware).
+  - The shop and table pages report `block-budget` partial scans in the popup.
 - **Analysis dominates on large pages:** 115 lexicon regexes run on every block. The optimization candidate is a cheap prefilter (keyword set) before the regex pass (M4).
 - `getComputedStyle` is called once per element. `Range.getClientRects()` runs once per non-empty text node.
 - Budgets are in §3.7. The M4 acceptance criterion still requires a p95 on fixtures and on ≥ 3 large real pages saved locally (not done in M2: no third-party page content is stored in the repo).
 
-## 9. Security of the extension (summary; details in PRIVACY_SECURITY.md)
+## 9. Security of the extension (summary; verification in PRIVACY_SECURITY.md §7)
 
-- Isolated world only. The MVP never injects into the MAIN world.
-- No message listeners exposed to pages.
-- Page-derived strings are rendered with `textContent` only.
-- No eval, no remote code, no network.
+- Isolated world only. The MAIN world is never used.
+- No messaging surface: no listeners, no `sendMessage`, no `externally_connectable` (lint-enforced).
+- Page-derived strings are rendered only as text nodes. HTML sinks (`innerHTML`, `insertAdjacentHTML`, `document.write`, `DOMParser`) are lint-banned in `src/extension`. An E2E XSS test uses hostile page text.
+- Locators returned to the page for highlighting must match the extractor's locator grammar (`isSafeLocator`), so they can never become arbitrary selectors.
+- No eval, no remote code, no network (popup CSP `connect-src 'none'`, plus a bundle scan in tests).
+- Highlighting adds one extension-owned overlay element styled through CSSOM, which survives page `style-src` CSP. It never modifies the evidence element, never clicks or focuses, and removes itself after 5 s (1.5 s in the test build).
 
 ## 10. Evaluation harness (src/eval, Node-only, never shipped)
 
@@ -182,4 +198,35 @@ Runtime dependencies target: **0**. Everything shipped in the extension is our o
 - **Pipeline per scenario:** load → scripted clicks (`steps`) → in-page extraction → one `PageSnapshot` → every system (`veiltrace`, `B0`, ablations A1/A2, dev-only research variants) analyzes **the same snapshot**. For true positives, evidence locators are resolved in the live page and checked against `evidenceWithin` (crossing shadow and frame boundaries).
 - **Outputs:** `eval/results/<split>.json` (deterministic, byte-identical across runs), `<split>.perf.json` (timings), `<split>.md` (summary), `dev.research.*` and `perf.json`.
 - `tsconfig.json` (core: no DOM, no Node types), `tsconfig.extract.json` (DOM, no Node) and `tests/tsconfig.json` (everything) keep the type boundaries honest.
+
+## 11. Extension behavior details (M3)
+
+**Scan flow.** On the click: probe → inject `content.js` if absent → `scan()` → validate → render.
+- The popup records timings in `data-timing`: injection, call, extraction, analysis, transfer, render and total.
+- A rescan after a page change reuses the injected script. After navigation the probe fails and the script is injected again.
+
+**Failure states shown to the user:**
+- No tab.
+- Protected page: restricted scheme or URL withheld by Chrome.
+- `file://` without "Allow access to file URLs".
+- Injection or tab failure.
+- Malformed report: discarded and never rendered.
+
+**Highlight outcomes** (`HighlightResult.status`; the popup never claims a highlight it did not draw):
+
+| Status | When | Shown to the user |
+|---|---|---|
+| `highlighted` | Locator resolved and the element is rendered | "Highlighted on the page." |
+| `not-found` | Stale locator (element removed or the page re-rendered) | Explains that the page changed and suggests rescanning |
+| `not-visible` | Element exists but has no visible box (e.g. off-screen textarea holding a staged clipboard payload) | Says it is hidden clipboard text |
+| `frame-inaccessible` | Locator crosses a frame that no longer resolves | Says the frame cannot be highlighted |
+| `invalid-locator` | Locator fails the grammar check, or the evidence has no locator | Button disabled with explanation |
+| `failed` (popup-side) | `executeScript` failed (tab closed or navigated to a protected page) | Asks the user to scan again |
+
+**Highlight geometry.**
+- Elements inside fixed-position containers (typical lure overlays) get a `position: fixed` box; other elements get an absolutely positioned box in document coordinates.
+- Same-origin frame elements are offset by the frame's position.
+- Limitations: the box does not follow later layout changes or animations; elements inside a frame that is itself inside a fixed container may be misplaced; transformed or clipped ancestors are not accounted for.
+
+**Closed shadow roots.** In the isolated world, `chrome.dom.openOrClosedShadowRoot` is available. Closed-root content is extracted, and a lure inside one is detected (E2E-verified). This resolves the M2 open item.
 

@@ -2,7 +2,7 @@ import js from '@eslint/js';
 import { defineConfig } from 'eslint/config';
 import tseslint from 'typescript-eslint';
 
-const nodeGlobals = { process: 'readonly', console: 'readonly', URL: 'readonly' };
+const nodeGlobals = { process: 'readonly', console: 'readonly', URL: 'readonly', Buffer: 'readonly' };
 
 // src/core must stay a pure function of its input (ARCHITECTURE.md §1, CLAUDE.md).
 const CORE_FORBIDDEN_GLOBALS = [
@@ -49,6 +49,21 @@ export default defineConfig(
           message: 'src/extract must not mutate the DOM.',
         },
         { selector: "NewExpression[callee.name='Function']", message: 'No dynamic code.' },
+      ],
+    },
+  },
+  {
+    // Extension code renders untrusted page text: no HTML sinks, no dynamic code, no network.
+    files: ['src/extension/**/*.ts'],
+    rules: {
+      'no-restricted-globals': ['error', ...['fetch', 'XMLHttpRequest', 'WebSocket', 'EventSource', 'importScripts', 'eval']
+        .map((name) => ({ name, message: 'src/extension must not use network or dynamic code.' }))],
+      'no-restricted-syntax': [
+        'error',
+        { selector: "AssignmentExpression[left.property.name=/^(innerHTML|outerHTML|srcdoc)$/]", message: 'Render text with textContent / text nodes only.' },
+        { selector: "CallExpression[callee.property.name=/^(insertAdjacentHTML|write|writeln|createContextualFragment|parseFromString)$/]", message: 'No HTML parsing sinks.' },
+        { selector: "NewExpression[callee.name='Function']", message: 'No dynamic code.' },
+        { selector: "CallExpression[callee.object.name='chrome'][callee.property.name=/^(sendMessage|connect)$/], MemberExpression[property.name=/^(onMessage|onMessageExternal|onConnect|onConnectExternal)$/]", message: 'No extension messaging surface (D-035).' },
       ],
     },
   },

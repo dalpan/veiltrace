@@ -18,7 +18,8 @@ Work only inside the current milestone's scope. If a change needs something outs
 - **`src/core` must stay pure:** no `window`, `document`, `chrome`, `browser`, `fetch`, timers or `Date.now`. It takes a `PageSnapshot` and returns data.
 - **Hostname/URL is never a decision input** in the core (D1 differentiator). A test asserts this.
 - **Page-derived strings are rendered only via `textContent`.** Never `innerHTML` & co. with page data.
-- **Permissions:** the shipped manifest has exactly `activeTab` + `scripting`. Adding any permission requires a new DECISIONS.md entry and owner approval.
+- **Permissions:** the shipped manifest has exactly `activeTab` + `scripting`. Adding any permission requires a new DECISIONS.md entry and owner approval. Test-only permissions live **only** in the `--test` build (D-038). Never add them to `src/extension/manifest.json`.
+- **Extension (`src/extension`):** no messaging surface (D-035), no HTML sinks, no network. Detection runs in the tab's isolated world, and the popup gets only the minimal `ScanReport` (D-036), validated by `parseScanReport`. Never claim a highlight that did not succeed (D-037).
 - **No runtime dependencies** without a DECISIONS.md entry. Dev dependencies must be pinned in the lockfile.
 - **Clean room:** do not copy code, regexes or pattern lists from Nehboro (no license), ClipShield (GPL-3.0) or other projects (D-012).
 - **Evaluation integrity:** never tune rules, lexicons, extractor heuristics or thresholds using `corpus/test` or `corpus/realworld`. Never edit, add or delete files in `corpus/test` (hash-checked, D-022). Never open its labels to guide development. Run `npm run eval -- run --split test --final` only when the owner explicitly asks; it logs to `eval/runs.md`. Research variants run on `--split dev` only.
