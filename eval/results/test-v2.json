@@ -1,0 +1,1313 @@
+{
+  "commit": "29dda8ec060692245b3e3c72fc2a2721a6a719f4",
+  "versions": {
+    "engine": "0.3.0",
+    "credential": "cred-0.2.0-exp",
+    "payment": "pay-0.3.0-exp",
+    "support": "sup-0.3.0-exp",
+    "extractor": "0.3.0"
+  },
+  "overall": {
+    "tp": 11,
+    "fp": 5,
+    "tn": 23,
+    "fn": 21,
+    "recall": {
+      "k": 11,
+      "n": 32,
+      "value": 0.3438,
+      "ci95": [
+        0.2041,
+        0.5169
+      ]
+    },
+    "precision": {
+      "k": 11,
+      "n": 16,
+      "value": 0.6875,
+      "ci95": [
+        0.444,
+        0.8584
+      ]
+    },
+    "hardNegativeFpr": {
+      "k": 5,
+      "n": 28,
+      "value": 0.1786,
+      "ci95": [
+        0.0788,
+        0.3559
+      ]
+    },
+    "localization": {
+      "k": 9,
+      "n": 11,
+      "value": 0.8182,
+      "ci95": [
+        0.523,
+        0.9486
+      ]
+    }
+  },
+  "perCategory": {
+    "cmd": {
+      "tp": 3,
+      "fp": 1,
+      "tn": 6,
+      "fn": 5,
+      "recall": {
+        "k": 3,
+        "n": 8,
+        "value": 0.375,
+        "ci95": [
+          0.1368,
+          0.6943
+        ]
+      },
+      "precision": {
+        "k": 3,
+        "n": 4,
+        "value": 0.75,
+        "ci95": [
+          0.3006,
+          0.9544
+        ]
+      },
+      "hardNegativeFpr": {
+        "k": 1,
+        "n": 7,
+        "value": 0.1429,
+        "ci95": [
+          0.0257,
+          0.5131
+        ]
+      },
+      "localization": {
+        "k": 3,
+        "n": 3,
+        "value": 1,
+        "ci95": [
+          0.4385,
+          1
+        ]
+      }
+    },
+    "cred": {
+      "tp": 2,
+      "fp": 2,
+      "tn": 5,
+      "fn": 6,
+      "recall": {
+        "k": 2,
+        "n": 8,
+        "value": 0.25,
+        "ci95": [
+          0.0715,
+          0.5907
+        ]
+      },
+      "precision": {
+        "k": 2,
+        "n": 4,
+        "value": 0.5,
+        "ci95": [
+          0.15,
+          0.85
+        ]
+      },
+      "hardNegativeFpr": {
+        "k": 2,
+        "n": 7,
+        "value": 0.2857,
+        "ci95": [
+          0.0822,
+          0.6411
+        ]
+      },
+      "localization": {
+        "k": 2,
+        "n": 2,
+        "value": 1,
+        "ci95": [
+          0.3424,
+          1
+        ]
+      }
+    },
+    "pay": {
+      "tp": 5,
+      "fp": 2,
+      "tn": 5,
+      "fn": 3,
+      "recall": {
+        "k": 5,
+        "n": 8,
+        "value": 0.625,
+        "ci95": [
+          0.3057,
+          0.8632
+        ]
+      },
+      "precision": {
+        "k": 5,
+        "n": 7,
+        "value": 0.7143,
+        "ci95": [
+          0.3589,
+          0.9178
+        ]
+      },
+      "hardNegativeFpr": {
+        "k": 2,
+        "n": 7,
+        "value": 0.2857,
+        "ci95": [
+          0.0822,
+          0.6411
+        ]
+      },
+      "localization": {
+        "k": 3,
+        "n": 5,
+        "value": 0.6,
+        "ci95": [
+          0.2307,
+          0.8824
+        ]
+      }
+    },
+    "sup": {
+      "tp": 1,
+      "fp": 0,
+      "tn": 7,
+      "fn": 7,
+      "recall": {
+        "k": 1,
+        "n": 8,
+        "value": 0.125,
+        "ci95": [
+          0.0224,
+          0.4709
+        ]
+      },
+      "precision": {
+        "k": 1,
+        "n": 1,
+        "value": 1,
+        "ci95": [
+          0.2065,
+          1
+        ]
+      },
+      "hardNegativeFpr": {
+        "k": 0,
+        "n": 7,
+        "value": 0,
+        "ci95": [
+          0,
+          0.3543
+        ]
+      },
+      "localization": {
+        "k": 1,
+        "n": 1,
+        "value": 1,
+        "ci95": [
+          0.2065,
+          1
+        ]
+      }
+    }
+  },
+  "perLang": {
+    "id": {
+      "tp": 10,
+      "fp": 5,
+      "tn": 12,
+      "fn": 13,
+      "recall": {
+        "k": 10,
+        "n": 23,
+        "value": 0.4348,
+        "ci95": [
+          0.2563,
+          0.6319
+        ]
+      },
+      "precision": {
+        "k": 10,
+        "n": 15,
+        "value": 0.6667,
+        "ci95": [
+          0.4171,
+          0.8482
+        ]
+      },
+      "hardNegativeFpr": {
+        "k": 5,
+        "n": 17,
+        "value": 0.2941,
+        "ci95": [
+          0.1328,
+          0.5313
+        ]
+      },
+      "localization": {
+        "k": 8,
+        "n": 10,
+        "value": 0.8,
+        "ci95": [
+          0.4902,
+          0.9433
+        ]
+      }
+    },
+    "en": {
+      "tp": 1,
+      "fp": 0,
+      "tn": 11,
+      "fn": 8,
+      "recall": {
+        "k": 1,
+        "n": 9,
+        "value": 0.1111,
+        "ci95": [
+          0.0199,
+          0.435
+        ]
+      },
+      "precision": {
+        "k": 1,
+        "n": 1,
+        "value": 1,
+        "ci95": [
+          0.2065,
+          1
+        ]
+      },
+      "hardNegativeFpr": {
+        "k": 0,
+        "n": 11,
+        "value": 0,
+        "ci95": [
+          0,
+          0.2588
+        ]
+      },
+      "localization": {
+        "k": 1,
+        "n": 1,
+        "value": 1,
+        "ci95": [
+          0.2065,
+          1
+        ]
+      }
+    }
+  },
+  "cmdBaselineEngine020": {
+    "tp": 3,
+    "fp": 1,
+    "tn": 6,
+    "fn": 5,
+    "recall": {
+      "k": 3,
+      "n": 8,
+      "value": 0.375,
+      "ci95": [
+        0.1368,
+        0.6943
+      ]
+    },
+    "precision": {
+      "k": 3,
+      "n": 4,
+      "value": 0.75,
+      "ci95": [
+        0.3006,
+        0.9544
+      ]
+    },
+    "hardNegativeFpr": {
+      "k": 1,
+      "n": 7,
+      "value": 0.1429,
+      "ci95": [
+        0.0257,
+        0.5131
+      ]
+    },
+    "localization": {
+      "k": 3,
+      "n": 3,
+      "value": 1,
+      "ci95": [
+        0.4385,
+        1
+      ]
+    }
+  },
+  "requests": 0,
+  "rows": [
+    {
+      "id": "V2-cmd-01-id-captcha-verifikasi",
+      "category": "cmd",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "manipulative_instruction",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "manipulative_instruction",
+      "localized": true,
+      "requests": 0
+    },
+    {
+      "id": "V2-cmd-02-en-doc-unlock",
+      "category": "cmd",
+      "truth": "malicious",
+      "lang": "en",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "observed_instruction",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "observed_instruction",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cmd-03-id-font-mac-terminal",
+      "category": "cmd",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "observed_instruction",
+        "cred": "observed_instruction",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "observed_instruction",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cmd-04-id-forum-mshta-gaul",
+      "category": "cmd",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "observed_instruction",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "observed_instruction",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cmd-05-en-meeting-audio-repair",
+      "category": "cmd",
+      "truth": "malicious",
+      "lang": "en",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "observed_instruction",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "observed_instruction",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cmd-06-id-split-sinonim-unduhan",
+      "category": "cmd",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cmd-07-id-issue-palsu-keamanan",
+      "category": "cmd",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "suspicious_correlation",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "suspicious_correlation",
+      "localized": true,
+      "requests": 0
+    },
+    {
+      "id": "V2-cmd-08-id-dompet-sinkron-terminal",
+      "category": "cmd",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "suspicious_correlation",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "suspicious_correlation",
+      "localized": true,
+      "requests": 0
+    },
+    {
+      "id": "V2-cmd-09-id-dokumentasi-instalasi-cli",
+      "category": "cmd",
+      "truth": "benign",
+      "lang": "id",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cmd-10-en-it-kb-flushdns",
+      "category": "cmd",
+      "truth": "benign",
+      "lang": "en",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "observed_instruction",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "observed_instruction",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cmd-11-id-artikel-waspada-captcha-palsu",
+      "category": "cmd",
+      "truth": "benign",
+      "lang": "id",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "observed_instruction",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "observed_instruction",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cmd-12-id-tutorial-python-terminal",
+      "category": "cmd",
+      "truth": "benign",
+      "lang": "id",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cmd-13-en-login-captcha-asli",
+      "category": "cmd",
+      "truth": "benign",
+      "lang": "en",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "observed_instruction",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cmd-14-id-forum-psa-gaul",
+      "category": "cmd",
+      "truth": "benign",
+      "lang": "id",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "suspicious_correlation",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "suspicious_correlation",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cmd-15-en-panduan-shortcut-windows",
+      "category": "cmd",
+      "truth": "benign",
+      "lang": "en",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cred-01-id-komentar-admin-refund-otp",
+      "category": "cred",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "suspicious_correlation"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cred-02-id-kurir-chat-kode-sms",
+      "category": "cred",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "manipulative_instruction",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": true,
+      "requests": 0
+    },
+    {
+      "id": "V2-cred-03-en-wallet-recovery-phrase",
+      "category": "cred",
+      "truth": "malicious",
+      "lang": "en",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "manipulative_instruction",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": true,
+      "requests": 0
+    },
+    {
+      "id": "V2-cred-04-id-bank-pin-otp-blokir",
+      "category": "cred",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "observed_instruction",
+        "pay": "none",
+        "sup": "observed_instruction"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cred-05-id-giveaway-angka-sms-gaul",
+      "category": "cred",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cred-06-en-forum-pm-password",
+      "category": "cred",
+      "truth": "malicious",
+      "lang": "en",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cred-07-id-topup-game-minta-pw-gaul",
+      "category": "cred",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cred-08-en-mailbox-quota-passphrase",
+      "category": "cred",
+      "truth": "malicious",
+      "lang": "en",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "observed_instruction",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cred-09-id-bank-login-otp-asli",
+      "category": "cred",
+      "truth": "benign",
+      "lang": "id",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cred-10-id-berita-modus-kode-salah-kirim",
+      "category": "cred",
+      "truth": "benign",
+      "lang": "id",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "suspicious_correlation",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cred-11-en-mfa-setup-authenticator",
+      "category": "cred",
+      "truth": "benign",
+      "lang": "en",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "observed_instruction",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cred-12-id-forum-warga-peringatan-otp-gaul",
+      "category": "cred",
+      "truth": "benign",
+      "lang": "id",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "suspicious_correlation",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cred-13-en-wallet-backup-onboarding",
+      "category": "cred",
+      "truth": "benign",
+      "lang": "en",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cred-14-id-reset-kata-sandi",
+      "category": "cred",
+      "truth": "benign",
+      "lang": "id",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "observed_instruction",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-cred-15-id-chat-cs-resmi-tanpa-kode",
+      "category": "cred",
+      "truth": "benign",
+      "lang": "id",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-pay-01-id-kurir-bea-masuk-rek-pribadi",
+      "category": "pay",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "manipulative_instruction",
+        "sup": "observed_instruction"
+      },
+      "baselineCmd": "none",
+      "localized": true,
+      "requests": 0
+    },
+    {
+      "id": "V2-pay-02-id-undian-pajak-hadiah",
+      "category": "pay",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "suspicious_correlation",
+        "sup": "observed_instruction"
+      },
+      "baselineCmd": "none",
+      "localized": false,
+      "requests": 0
+    },
+    {
+      "id": "V2-pay-03-en-refund-overpay-gift-cards",
+      "category": "pay",
+      "truth": "malicious",
+      "lang": "en",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-pay-04-id-marketplace-tf-luar-rekber-gaul",
+      "category": "pay",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "suspicious_correlation",
+        "sup": "suspicious_correlation"
+      },
+      "baselineCmd": "none",
+      "localized": true,
+      "requests": 0
+    },
+    {
+      "id": "V2-pay-05-en-unpaid-toll-final-notice",
+      "category": "pay",
+      "truth": "malicious",
+      "lang": "en",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "observed_instruction",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-pay-06-id-dompet-dibekukan-biaya-aktivasi",
+      "category": "pay",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "manipulative_instruction",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": false,
+      "requests": 0
+    },
+    {
+      "id": "V2-pay-07-id-kerja-online-deposit-misi-gaul",
+      "category": "pay",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "observed_instruction",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-pay-08-id-investasi-kripto-pajak-penarikan",
+      "category": "pay",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "suspicious_correlation",
+        "sup": "observed_instruction"
+      },
+      "baselineCmd": "none",
+      "localized": true,
+      "requests": 0
+    },
+    {
+      "id": "V2-pay-09-id-checkout-virtual-account",
+      "category": "pay",
+      "truth": "benign",
+      "lang": "id",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "observed_instruction",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-pay-10-id-tagihan-air-bulanan",
+      "category": "pay",
+      "truth": "benign",
+      "lang": "id",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "manipulative_instruction",
+        "sup": "observed_instruction"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-pay-11-en-food-bank-donation",
+      "category": "pay",
+      "truth": "benign",
+      "lang": "en",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-pay-12-id-berita-modus-bea-cukai",
+      "category": "pay",
+      "truth": "benign",
+      "lang": "id",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "manipulative_instruction",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-pay-13-en-genuine-prize-no-payment",
+      "category": "pay",
+      "truth": "benign",
+      "lang": "en",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-pay-14-id-penjual-wa-bayar-rekber",
+      "category": "pay",
+      "truth": "benign",
+      "lang": "id",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "observed_instruction"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-pay-15-en-subscription-renewal-reminder",
+      "category": "pay",
+      "truth": "benign",
+      "lang": "en",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-sup-01-en-fake-security-lock-call",
+      "category": "sup",
+      "truth": "malicious",
+      "lang": "en",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-sup-02-id-bank-sinkronisasi-remotedesk",
+      "category": "sup",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "manipulative_instruction",
+        "pay": "none",
+        "sup": "observed_instruction"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-sup-03-id-kurir-wa-apk-foto-paket-gaul",
+      "category": "sup",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-sup-04-id-komentar-satgas-pemulihan-dana",
+      "category": "sup",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "observed_instruction"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-sup-05-id-blokir-palsu-polisi-siber",
+      "category": "sup",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "manipulative_instruction"
+      },
+      "baselineCmd": "none",
+      "localized": true,
+      "requests": 0
+    },
+    {
+      "id": "V2-sup-06-en-it-compliance-remote-session",
+      "category": "sup",
+      "truth": "malicious",
+      "lang": "en",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-sup-07-id-undangan-nikah-apk-gaul",
+      "category": "sup",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-sup-08-id-forum-admin-palsu-telegram-gaul",
+      "category": "sup",
+      "truth": "malicious",
+      "lang": "id",
+      "hardNegative": false,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "observed_instruction"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-sup-09-id-sop-helpdesk-kampus-remote",
+      "category": "sup",
+      "truth": "benign",
+      "lang": "id",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-sup-10-en-insurance-contact-page",
+      "category": "sup",
+      "truth": "benign",
+      "lang": "en",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-sup-11-id-artikel-penipuan-dukungan-teknis",
+      "category": "sup",
+      "truth": "benign",
+      "lang": "id",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-sup-12-id-moderator-resmi-peringatan",
+      "category": "sup",
+      "truth": "benign",
+      "lang": "id",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "observed_instruction"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-sup-13-en-bank-security-center",
+      "category": "sup",
+      "truth": "benign",
+      "lang": "en",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-sup-14-id-unduh-apk-resmi-dishub",
+      "category": "sup",
+      "truth": "benign",
+      "lang": "id",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "observed_instruction"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    },
+    {
+      "id": "V2-sup-15-en-forum-tech-support-warning",
+      "category": "sup",
+      "truth": "benign",
+      "lang": "en",
+      "hardNegative": true,
+      "verdicts": {
+        "cmd": "none",
+        "cred": "none",
+        "pay": "none",
+        "sup": "none"
+      },
+      "baselineCmd": "none",
+      "localized": null,
+      "requests": 0
+    }
+  ]
+}

@@ -17,7 +17,7 @@ The popup is one dashboard: page threat summary, the four categories, advice, an
 
 **Honest status.**
 - The only held-out result is for CMD: 26 synthetic scenarios, run once, with recall 75.0%, precision 81.8% and hard-negative FPR 14.3%. All three are **below the research targets** ([docs/EVALUATION_RESULTS.md](docs/EVALUATION_RESULTS.md)).
-- CRED, PAY and SUP are measured only on development data written by the same author as the rules.
+- A second held-out set (v2, 60 scenarios across all four checks, written blind to the rules) gave **recall 34.4%, precision 68.8%, hard-negative FPR 17.9%** ([docs/EVALUATION_RESULTS_V2.md](docs/EVALUATION_RESULTS_V2.md)): the rules generalize poorly beyond the wording they were written for.
 - None of these numbers are real-world rates. Scanning is on demand by default; automatic scanning on page load is opt-in (badge only for manipulative pages).
 - Progress log: [docs/PROGRESS.md](docs/PROGRESS.md). Hackathon materials (Indonesian): [submission/](submission/).
 

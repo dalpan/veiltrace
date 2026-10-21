@@ -4,6 +4,11 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-22 · Held-out v2 run (owner request) · **Done: targets missed**
+One preregistered run at `29dda8e`: overall TP 11 · FP 5 · TN 23 · FN 21; recall 34.4%, precision 68.8%, hard-negative FPR 17.9% (docs/EVALUATION_RESULTS_V2.md). The rules overfit the author's wording; v2 is now spent. **Next:** class-level fixes measured on real-world data and a new blind set v3.
+
+---
+
 ## 2026-10-22 · P2b web chat (WhatsApp Web prototype) and P2c managed build · **Implemented (D-088, D-089)**
 Extractor 0.3.0 treats chat conversations as user content (dev results unchanged); managed build with automatic scanning from install, no reporting; policy templates in `deploy/`. **Next (owner):** try a real WhatsApp Web chat with VeilTrace (manual scan) and report whether incoming messages are recognized; decide on held-out v2 run timing and PWA hosting.
 
