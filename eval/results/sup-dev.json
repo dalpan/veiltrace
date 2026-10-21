@@ -1,59 +1,59 @@
 {
   "split": "sup-dev",
   "note": "DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.",
-  "detectorVersion": "sup-0.2.0-exp",
+  "detectorVersion": "sup-0.3.0-exp",
   "extractorVersion": "0.2.0-m5",
   "metrics": {
-    "scenarios": 31,
+    "scenarios": 33,
     "confusion": {
-      "tp": 14,
+      "tp": 15,
       "fp": 0,
-      "tn": 17,
+      "tn": 18,
       "fn": 0
     },
     "precision": {
-      "k": 14,
-      "n": 14,
+      "k": 15,
+      "n": 15,
       "value": 1,
       "ci95": [
-        0.7847,
+        0.7961,
         1
       ]
     },
     "recall": {
-      "k": 14,
-      "n": 14,
+      "k": 15,
+      "n": 15,
       "value": 1,
       "ci95": [
-        0.7847,
+        0.7961,
         1
       ]
     },
     "fpr": {
       "k": 0,
-      "n": 17,
+      "n": 18,
       "value": 0,
       "ci95": [
         0,
-        0.1843
+        0.1759
       ]
     },
     "hardNegativeFpr": {
       "k": 0,
-      "n": 17,
+      "n": 18,
       "value": 0,
       "ci95": [
         0,
-        0.1843
+        0.1759
       ]
     },
     "localization": {
       "k": 14,
-      "n": 14,
-      "value": 1,
+      "n": 15,
+      "value": 0.9333,
       "ci95": [
-        0.7847,
-        1
+        0.7018,
+        0.9881
       ]
     },
     "classMatrix": [
@@ -65,7 +65,7 @@
       ],
       [
         1,
-        13,
+        14,
         0,
         0
       ],
@@ -79,19 +79,19 @@
         0,
         0,
         0,
-        12
+        13
       ]
     ],
     "exactClassAgreement": {
-      "k": 30,
-      "n": 31,
-      "value": 0.9677,
+      "k": 32,
+      "n": 33,
+      "value": 0.9697,
       "ci95": [
-        0.8381,
-        0.9943
+        0.8468,
+        0.9946
       ]
     },
-    "observedOnNegatives": 13,
+    "observedOnNegatives": 14,
     "byLanguage": {
       "en": {
         "recall": {
@@ -115,21 +115,21 @@
       },
       "id": {
         "recall": {
-          "k": 7,
-          "n": 7,
+          "k": 8,
+          "n": 8,
           "value": 1,
           "ci95": [
-            0.6457,
+            0.6756,
             1
           ]
         },
         "fpr": {
           "k": 0,
-          "n": 7,
+          "n": 8,
           "value": 0,
           "ci95": [
             0,
-            0.3543
+            0.3244
           ]
         }
       }
@@ -400,6 +400,25 @@
         "SR2:manipulative_instruction"
       ],
       "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SD13-id-catut-pangkat-ancaman-hukum",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "SR3:manipulative_instruction"
+      ],
+      "localized": false,
       "clickfixVerdict": "none",
       "credentialVerdict": "none",
       "paymentVerdict": "none",
@@ -705,6 +724,25 @@
     },
     {
       "id": "SN17-id-realistic-isp-help-whatsapp",
+      "lang": "id",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "SR5:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SN18-id-kontak-babinsa-resmi",
       "lang": "id",
       "category": "benign",
       "truth": "benign",

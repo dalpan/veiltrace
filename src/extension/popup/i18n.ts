@@ -335,7 +335,7 @@ const EN: Messages = {
       PR3: 'Asks for a payment together with a threat (account closure, arrest or legal action) and urgency or a claimed authority.',
       PR4: 'Asks for a payment with no manipulation signs nearby.',
     },
-    promise: { refund: 'a refund', prize: 'a prize', 'account-unlock': 'an unlocked account', release: 'released money or goods' },
+    promise: { refund: 'a refund', prize: 'a prize', 'account-unlock': 'an unlocked account', release: 'released money or goods', recruitment: 'a guaranteed place in a selection' },
     destination: { 'personal-account': 'a personal account', 'off-platform': 'outside the platform', 'gift-card': 'gift cards', crypto: 'cryptocurrency' },
     pressure: { threat: 'threat', urgency: 'deadline or urgency', 'claimed-authority': 'claims to be support or an authority' },
     promisesLabel: 'Promised in return',
@@ -348,7 +348,7 @@ const EN: Messages = {
     signal: {
       'PY.PAY': 'Payment request', 'PA.AMOUNT': 'Amount', 'PF.FEE': 'Fee', 'PF.RELEASE_FEE': 'Fee to release or unlock', 'PD.PERSONAL': 'Personal account',
       'PD.OFF_PLATFORM': 'Outside the platform', 'PD.GIFT_CARD': 'Gift cards', 'PD.CRYPTO': 'Cryptocurrency', 'PR.REFUND': 'Refund or held money',
-      'PR.PRIZE': 'Prize', 'PR.UNLOCK': 'Account unlock', 'PC.CONDITION': 'Payment as a condition', 'PP.THREAT': 'Threat', 'PP.URGENCY': 'Urgency',
+      'PR.PRIZE': 'Prize', 'PR.UNLOCK': 'Account unlock', 'PR.RECRUIT': 'Guaranteed selection', 'PC.CONDITION': 'Payment as a condition', 'PP.THREAT': 'Threat', 'PP.URGENCY': 'Urgency',
       'PP.AUTHORITY': 'Claimed support or authority', 'C.NEGATION': 'Negation', 'C.REPORTED': 'Reported speech', 'C.EDUCATIONAL': 'Educational context',
     },
     amountHidden: '(amount on the page; the value is not shown)',
@@ -370,7 +370,7 @@ const EN: Messages = {
     },
     action: { contact: 'contact someone', 'remote-access': 'allow remote access', install: 'install software' },
     channel: { phone: 'phone number', mobile: 'mobile number', messenger: 'messaging app' },
-    claim: { support: 'support or customer service', bank: 'a bank', administrator: 'an administrator', 'security-team': 'a security team' },
+    claim: { support: 'support or customer service', bank: 'a bank', administrator: 'an administrator', 'security-team': 'a security team', official: 'an official, officer or investigator' },
     indicator: {
       'page-rendered-system-alert': 'virus or lock alarm shown by the web page', 'remote-access-request': 'asks for remote access',
       'software-install-request': 'asks you to install software', 'personal-channel-contact': 'official-sounding claim with a mobile number or messaging app',
@@ -388,7 +388,7 @@ const EN: Messages = {
     signal: {
       'SC.CONTACT': 'Contact direction', 'SA.REMOTE': 'Remote access request', 'SA.INSTALL': 'Install request', 'SX.PHONE': 'Phone number',
       'SX.MOBILE': 'Mobile number', 'SX.MESSENGER': 'Messaging app', 'SI.SUPPORT': 'Claimed support', 'SI.BANK': 'Claimed bank',
-      'SI.ADMIN': 'Claimed administrator', 'SI.SECURITY': 'Claimed security team', 'SW.ALERT': 'Device alarm', 'ST.THREAT': 'Threat',
+      'SI.ADMIN': 'Claimed administrator', 'SI.SECURITY': 'Claimed security team', 'SI.OFFICIAL': 'Claimed official or rank', 'SW.ALERT': 'Device alarm', 'ST.THREAT': 'Threat',
       'SU.URGENCY': 'Urgency', 'SH.UNASSERTED': 'Condition or attribution', 'C.NEGATION': 'Negation', 'C.REPORTED': 'Reported speech', 'C.EDUCATIONAL': 'Educational context',
     },
     contactHidden: '(contact number on the page; not shown)',
@@ -635,7 +635,7 @@ const ID: Messages = {
       PR3: 'Meminta pembayaran disertai ancaman (penutupan akun, penangkapan, atau tuntutan hukum) dan desakan atau klaim otoritas.',
       PR4: 'Meminta pembayaran tanpa tanda manipulasi di sekitarnya.',
     },
-    promise: { refund: 'refund', prize: 'hadiah', 'account-unlock': 'akun yang dibuka kembali', release: 'uang atau barang yang dilepas' },
+    promise: { refund: 'refund', prize: 'hadiah', 'account-unlock': 'akun yang dibuka kembali', release: 'uang atau barang yang dilepas', recruitment: 'kelulusan seleksi yang dijamin' },
     destination: { 'personal-account': 'rekening pribadi', 'off-platform': 'di luar platform', 'gift-card': 'kartu hadiah', crypto: 'aset kripto' },
     pressure: { threat: 'ancaman', urgency: 'tenggat atau desakan', 'claimed-authority': 'mengaku sebagai petugas atau otoritas' },
     promisesLabel: 'Dijanjikan sebagai imbalan',
@@ -648,7 +648,7 @@ const ID: Messages = {
     signal: {
       'PY.PAY': 'Permintaan pembayaran', 'PA.AMOUNT': 'Nominal', 'PF.FEE': 'Biaya', 'PF.RELEASE_FEE': 'Biaya pencairan atau buka blokir', 'PD.PERSONAL': 'Rekening pribadi',
       'PD.OFF_PLATFORM': 'Di luar platform', 'PD.GIFT_CARD': 'Kartu hadiah', 'PD.CRYPTO': 'Aset kripto', 'PR.REFUND': 'Refund atau dana tertahan',
-      'PR.PRIZE': 'Hadiah', 'PR.UNLOCK': 'Pembukaan akun', 'PC.CONDITION': 'Pembayaran sebagai syarat', 'PP.THREAT': 'Ancaman', 'PP.URGENCY': 'Desakan',
+      'PR.PRIZE': 'Hadiah', 'PR.UNLOCK': 'Pembukaan akun', 'PR.RECRUIT': 'Jaminan lulus seleksi', 'PC.CONDITION': 'Pembayaran sebagai syarat', 'PP.THREAT': 'Ancaman', 'PP.URGENCY': 'Desakan',
       'PP.AUTHORITY': 'Mengaku petugas atau otoritas', 'C.NEGATION': 'Negasi', 'C.REPORTED': 'Kalimat dilaporkan', 'C.EDUCATIONAL': 'Konteks edukasi',
     },
     amountHidden: '(nominal di halaman; nilainya tidak ditampilkan)',
@@ -670,7 +670,7 @@ const ID: Messages = {
     },
     action: { contact: 'menghubungi seseorang', 'remote-access': 'memberi akses jarak jauh', install: 'menginstal perangkat lunak' },
     channel: { phone: 'nomor telepon', mobile: 'nomor ponsel', messenger: 'aplikasi pesan' },
-    claim: { support: 'petugas atau layanan pelanggan', bank: 'pihak bank', administrator: 'admin', 'security-team': 'tim keamanan' },
+    claim: { support: 'petugas atau layanan pelanggan', bank: 'pihak bank', administrator: 'admin', 'security-team': 'tim keamanan', official: 'pejabat, aparat, atau penyidik' },
     indicator: {
       'page-rendered-system-alert': 'alarm virus atau kunci yang dibuat halaman web', 'remote-access-request': 'meminta akses jarak jauh',
       'software-install-request': 'meminta Anda menginstal perangkat lunak', 'personal-channel-contact': 'klaim resmi dengan nomor ponsel atau aplikasi pesan',
@@ -688,7 +688,7 @@ const ID: Messages = {
     signal: {
       'SC.CONTACT': 'Arahan menghubungi', 'SA.REMOTE': 'Permintaan akses jarak jauh', 'SA.INSTALL': 'Permintaan instalasi', 'SX.PHONE': 'Nomor telepon',
       'SX.MOBILE': 'Nomor ponsel', 'SX.MESSENGER': 'Aplikasi pesan', 'SI.SUPPORT': 'Mengaku petugas', 'SI.BANK': 'Mengaku pihak bank',
-      'SI.ADMIN': 'Mengaku admin', 'SI.SECURITY': 'Mengaku tim keamanan', 'SW.ALERT': 'Alarm perangkat', 'ST.THREAT': 'Ancaman',
+      'SI.ADMIN': 'Mengaku admin', 'SI.SECURITY': 'Mengaku tim keamanan', 'SI.OFFICIAL': 'Mengaku pejabat atau berpangkat', 'SW.ALERT': 'Alarm perangkat', 'ST.THREAT': 'Ancaman',
       'SU.URGENCY': 'Desakan', 'SH.UNASSERTED': 'Pengandaian atau kutipan', 'C.NEGATION': 'Negasi', 'C.REPORTED': 'Kalimat dilaporkan', 'C.EDUCATIONAL': 'Konteks edukasi',
     },
     contactHidden: '(nomor kontak di halaman; tidak ditampilkan)',

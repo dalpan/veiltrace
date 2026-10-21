@@ -1,71 +1,71 @@
 {
   "split": "pay-dev",
   "note": "DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.",
-  "detectorVersion": "pay-0.2.0-exp",
+  "detectorVersion": "pay-0.3.0-exp",
   "extractorVersion": "0.2.0-m5",
   "metrics": {
-    "scenarios": 31,
+    "scenarios": 35,
     "confusion": {
-      "tp": 13,
+      "tp": 15,
       "fp": 0,
-      "tn": 18,
+      "tn": 20,
       "fn": 0
     },
     "precision": {
-      "k": 13,
-      "n": 13,
+      "k": 15,
+      "n": 15,
       "value": 1,
       "ci95": [
-        0.7719,
+        0.7961,
         1
       ]
     },
     "recall": {
-      "k": 13,
-      "n": 13,
+      "k": 15,
+      "n": 15,
       "value": 1,
       "ci95": [
-        0.7719,
+        0.7961,
         1
       ]
     },
     "fpr": {
       "k": 0,
-      "n": 18,
+      "n": 20,
       "value": 0,
       "ci95": [
         0,
-        0.1759
+        0.1611
       ]
     },
     "hardNegativeFpr": {
       "k": 0,
-      "n": 18,
+      "n": 20,
       "value": 0,
       "ci95": [
         0,
-        0.1759
+        0.1611
       ]
     },
     "localization": {
       "k": 13,
-      "n": 13,
-      "value": 1,
+      "n": 15,
+      "value": 0.8667,
       "ci95": [
-        0.7719,
-        1
+        0.6212,
+        0.9626
       ]
     },
     "classMatrix": [
       [
-        2,
+        3,
         0,
         0,
         0
       ],
       [
         3,
-        13,
+        14,
         0,
         0
       ],
@@ -79,19 +79,19 @@
         0,
         0,
         0,
-        12
+        14
       ]
     ],
     "exactClassAgreement": {
-      "k": 28,
-      "n": 31,
-      "value": 0.9032,
+      "k": 32,
+      "n": 35,
+      "value": 0.9143,
       "ci95": [
-        0.751,
-        0.9665
+        0.7762,
+        0.9704
       ]
     },
-    "observedOnNegatives": 13,
+    "observedOnNegatives": 14,
     "byLanguage": {
       "en": {
         "recall": {
@@ -115,21 +115,21 @@
       },
       "id": {
         "recall": {
-          "k": 7,
-          "n": 7,
+          "k": 9,
+          "n": 9,
           "value": 1,
           "ci95": [
-            0.6457,
+            0.7009,
             1
           ]
         },
         "fpr": {
           "k": 0,
-          "n": 8,
+          "n": 10,
           "value": 0,
           "ci95": [
             0,
-            0.3244
+            0.2775
           ]
         }
       }
@@ -369,6 +369,42 @@
         "PR1:manipulative_instruction"
       ],
       "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PD13-id-rekrutmen-jalur-khusus",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "PR1:manipulative_instruction"
+      ],
+      "localized": false,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PD14-id-catut-dandim-dana-kegiatan",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "PR2:manipulative_instruction"
+      ],
+      "localized": false,
       "clickfixVerdict": "none",
       "credentialVerdict": "none",
       "partial": [],
@@ -683,6 +719,40 @@
       "hardNegative": true,
       "predicted": "none",
       "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN19-id-pengumuman-rekrutmen-resmi",
+      "lang": "id",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN20-id-berita-penipuan-rekrutmen",
+      "lang": "id",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "PR1:observed_instruction"
+      ],
       "localized": null,
       "clickfixVerdict": "none",
       "credentialVerdict": "none",

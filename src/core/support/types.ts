@@ -8,7 +8,7 @@ export type SupportActionSignalId = 'SC.CONTACT' | 'SA.REMOTE' | 'SA.INSTALL';
 /** The channel of a contact direction. Phone numbers are matched but never reported. */
 export type SupportChannelSignalId = 'SX.PHONE' | 'SX.MOBILE' | 'SX.MESSENGER';
 /** Claimed identity: a claim only, never evidence of who wrote the text. */
-export type SupportClaimSignalId = 'SI.SUPPORT' | 'SI.BANK' | 'SI.ADMIN' | 'SI.SECURITY';
+export type SupportClaimSignalId = 'SI.SUPPORT' | 'SI.BANK' | 'SI.ADMIN' | 'SI.SECURITY' | 'SI.OFFICIAL';
 /** Pressure: a page-rendered system or browser alarm, a threat to the account or data, urgency. */
 export type SupportPressureSignalId = 'SW.ALERT' | 'ST.THREAT' | 'SU.URGENCY';
 export type SupportSignalId = SupportActionSignalId | SupportChannelSignalId | SupportClaimSignalId | SupportPressureSignalId
@@ -45,7 +45,7 @@ export type SupportRuleId = 'SR1' | 'SR2' | 'SR3' | 'SR4' | 'SR5';
 export type SupportModifierId = 'C.QUOTED' | 'C.REPORTED' | 'C.EDUCATIONAL' | 'C.CODE_EXAMPLE';
 export type SupportAction = 'contact' | 'remote-access' | 'install';
 export type SupportChannel = 'phone' | 'mobile' | 'messenger';
-export type SupportClaim = 'support' | 'bank' | 'administrator' | 'security-team';
+export type SupportClaim = 'support' | 'bank' | 'administrator' | 'security-team' | 'official';
 export type SupportPressure = 'system-alert' | 'threat' | 'urgency';
 /**
  * Observable impersonation indicators: facts about the page, as opposed to what it claims. None of them proves who wrote it.

@@ -45,7 +45,7 @@ const DESTINATIONS: PayLexiconEntry[] = [
     `${B}(?:my|his|her|their|this|(?:the|our|an?)\\s+agent${APOS}s)\\s+(?:personal|private|own)\\s+(?:bank\\s+)?(?:account|wallet)${E}`,
     ['my personal account', "the agent's personal account"]),
   entry('pay.id.personal', 'PD.PERSONAL', 'id', 'strong',
-    `${B}rekening\\s+(?:(?:pribadi|perorangan)(?!\\s+(?:anda|kamu))(?:\\s+(?:saya|kami|admin|petugas|agen))?|(?:saya|admin|petugas|agen|kurir))${E}`,
+    `${B}rekening\\s+(?:(?:pribadi|perorangan)(?!\\s+(?:anda|kamu))(?:\\s+(?:saya|kami|admin|petugas|agen))?|(?:saya|admin|petugas|agen|kurir|ajudan|staf|sekretaris))${E}`,
     ['rekening pribadi saya', 'rekening pribadi', 'rekening admin']),
   entry('pay.id.personal_informal', 'PD.PERSONAL', 'id', 'strong',
     `${B}(?:rek\\.?|norek|rekening)\\s+(?:admin|sy|aku|gw|gue|petugas|agen|kurir)${E}|${B}(?:dana|ovo|gopay|shopeepay|e-?wallet)\\s+(?:saya|sy|aku|gw|gue|admin|petugas)${E}`,
@@ -81,6 +81,13 @@ const RECEIVE: PayLexiconEntry[] = [
   entry('pay.id.prize', 'PR.PRIZE', 'id', 'weak',
     `${B}(?:anda\\s+(?:telah\\s+|resmi\\s+)?(?:memenangkan|terpilih|menang|mendapatkan\\s+hadiah)|pemenang(?:\\s+(?:undian|program|giveaway))?|hadiah\\s+(?:undian|utama|anda|uang\\s+tunai)|klaim\\s+hadiah|undian\\s+berhadiah)${E}`,
     ['Anda memenangkan', 'pemenang undian', 'hadiah utama', 'klaim hadiah']),
+  // A guaranteed place in a selection (recruitment, admission) is never sold: paying for it is the scam (P2, D-087).
+  entry('pay.id.recruit', 'PR.RECRUIT', 'id', 'strong',
+    `${B}(?:(?:dijamin|pasti|100\\s?%)\\s+(?:lulus|lolos|diterima|masuk)|jalur\\s+(?:khusus|belakang|titipan|orang\\s+dalam)\\s+(?:masuk|seleksi|pendaftaran|penerimaan|rekrutmen|bintara|tamtama|akmil|akpol|polri|tni|cpns|pns|kedinasan)|(?:lewat|melalui|via)\\s+jalur\\s+(?:belakang|titipan|orang\\s+dalam)|uang\\s+(?:pelicin|titipan\\s+(?:seleksi|masuk))|orang\\s+dalam)${E}`,
+    ['dijamin lulus', 'jalur khusus seleksi bintara', 'lewat jalur belakang', 'uang pelicin', 'orang dalam']),
+  entry('pay.en.recruit', 'PR.RECRUIT', 'en', 'strong',
+    `${B}(?:guaranteed\\s+(?:to\\s+pass|admission|acceptance|a\\s+(?:place|spot|seat))|back[\\s-]?door\\s+(?:entry|admission|route)|special\\s+(?:quota|route)\\s+for\\s+(?:a\\s+)?fee)${E}`,
+    ['guaranteed to pass', 'backdoor admission']),
   entry('pay.en.unlock', 'PR.UNLOCK', 'en', 'weak',
     `${B}(?:(?:unlock|unblock|reactivate|re-activate|restore|reopen|unfreeze)\\s+(?:your\\s+|the\\s+)?(?:account|wallet|card|access|profile|withdrawals?)|(?:verify|activate)\\s+(?:your\\s+)?(?:account|wallet))${E}`,
     ['unlock your account', 'reactivate your wallet', 'verify your account']),
@@ -130,6 +137,9 @@ const PRESSURE: PayLexiconEntry[] = [
   entry('pay.id.authority', 'PP.AUTHORITY', 'id', 'weak',
     `${B}(?:customer\\s+service|cs\\s+resmi|layanan\\s+pelanggan|petugas(?:\\s+(?:bank|resmi|bea\\s+cukai|pajak|kepolisian|kurir|ekspedisi))?|pihak\\s+(?:bank|kepolisian|bea\\s+cukai|berwajib)|polisi|kepolisian|bea\\s+cukai|kantor\\s+pajak|admin\\s+resmi|tim\\s+(?:keamanan|resmi|verifikasi)|kurir\\s+resmi)${E}`,
     ['customer service', 'petugas bank', 'pihak kepolisian', 'bea cukai']),
+  // Ranks and positions used to impersonate officials (P2, D-087): a claim only, never verified.
+  entry('pay.id.authority_rank', 'PP.AUTHORITY', 'id', 'weak', `${B}(?:dandim|danrem|pangdam|danyon|danramil|kapolres|kapolda|kapolsek|kasdam|ajudan|babinsa|perwira|komandan|kolonel|letkol|mayor|kapten|lettu|letda|jenderal|brigjen|sertu|serka|pejabat|staf\\s+ahli|penyidik|bagian\\s+penyidikan)${E}`, ['Dandim', 'ajudan', 'Kapten', 'penyidik']),
+  entry('pay.en.authority_rank', 'PP.AUTHORITY', 'en', 'weak', `${B}(?:colonel|captain|lieutenant|commanding\\s+officer|commander|investigator|detective)${E}`, ['colonel', 'investigator']),
 ];
 
 /** Context cues reused unchanged from the ClickFix lexicon (negation, reported speech, educational framing). */

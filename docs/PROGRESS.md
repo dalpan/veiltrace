@@ -4,6 +4,11 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-22 · P2a recruitment scams and rank impersonation · **Implemented (D-087)**
+Pay 0.3.0 and sup 0.3.0; six dev scenarios written before the change; pay-dev FN 0, sup-dev FN 0, no FP. **Next:** P2b WhatsApp Web prototype, P2c managed organizational build.
+
+---
+
 ## 2026-10-22 · Held-out v2 locked; realistic demo gallery; mobile (PWA + Firefox) · **Implemented**
 
 **Done:** held-out v2 (60 scenarios, blind author) validated blind and hash-locked, preregistered, harness `npm run eval:v2 -- --final` (not run) (D-085). Realistic demo gallery `demo/scenes` (8 pages + gallery). "Cek Pesan" PWA with Android share target, offline, phone layout (D-084). Firefox build for desktop and Android (D-086).

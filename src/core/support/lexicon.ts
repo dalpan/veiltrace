@@ -65,6 +65,9 @@ const CLAIMS: SupportLexiconEntry[] = [
   entry('sup.en.claim_security', 'SI.SECURITY', 'en', 'weak',
     `${B}(?:security\\s+(?:team|department|center|centre)|(?:microsoft|windows|apple)\\s+(?:security|defender)|cyber\\s+security\\s+unit)${E}`, ['security team', 'Windows Defender']),
   entry('sup.id.claim_security', 'SI.SECURITY', 'id', 'weak', `${B}(?:tim\\s+keamanan|pusat\\s+keamanan|divisi\\s+keamanan)${E}`, ['tim keamanan']),
+  // Ranks, positions and investigators used to impersonate officials (P2, D-087): a claim only, never verified.
+  entry('sup.id.claim_official', 'SI.OFFICIAL', 'id', 'weak', `${B}(?:dandim|danrem|pangdam|danyon|danramil|kapolres|kapolda|kapolsek|kasdam|ajudan|babinsa|perwira|komandan|kolonel|letkol|mayor|kapten|lettu|letda|jenderal|brigjen|sertu|serka|pejabat|staf\\s+ahli|penyidik|bagian\\s+penyidikan|petugas\\s+kepolisian|pihak\\s+kepolisian)${E}`, ['Kapten', 'penyidik', 'Dandim', 'pihak kepolisian']),
+  entry('sup.en.claim_official', 'SI.OFFICIAL', 'en', 'weak', `${B}(?:colonel|captain|lieutenant|commanding\\s+officer|investigator|detective|police\\s+officer|federal\\s+agent)${E}`, ['investigator', 'police officer']),
 ];
 
 const PRESSURE: SupportLexiconEntry[] = [

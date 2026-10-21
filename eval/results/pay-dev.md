@@ -1,24 +1,24 @@
 # Payment detector: development results (pay-dev)
 
-Detector pay-0.2.0-exp (EXPERIMENTAL), extractor 0.2.0-m5. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
+Detector pay-0.3.0-exp (EXPERIMENTAL), extractor 0.2.0-m5. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
 
-TP 13 · FP 0 · TN 18 · FN 0
+TP 15 · FP 0 · TN 20 · FN 0
 
-- Precision: 100.0% (13/13; 95% CI 77.2%–100.0%)
-- Recall: 100.0% (13/13; 95% CI 77.2%–100.0%)
-- Hard-negative FPR: 0.0% (0/18; 95% CI 0.0%–17.6%)
-- Localization: 100.0% (13/13; 95% CI 77.2%–100.0%)
-- Exact class agreement: 90.3% (28/31; 95% CI 75.1%–96.7%)
+- Precision: 100.0% (15/15; 95% CI 79.6%–100.0%)
+- Recall: 100.0% (15/15; 95% CI 79.6%–100.0%)
+- Hard-negative FPR: 0.0% (0/20; 95% CI 0.0%–16.1%)
+- Localization: 86.7% (13/15; 95% CI 62.1%–96.3%)
+- Exact class agreement: 91.4% (32/35; 95% CI 77.6%–97.0%)
 - Requests during scanning: 0; privacy sentinel leaks: 0 (3 fields filled)
 
 ## Class matrix
 
 | expected \ predicted | none | observed | suspicious | manipulative |
 |---|---|---|---|---|
-| none | 2 | 0 | 0 | 0 |
-| observed | 3 | 13 | 0 | 0 |
+| none | 3 | 0 | 0 | 0 |
+| observed | 3 | 14 | 0 | 0 |
 | suspicious | 0 | 0 | 1 | 0 |
-| manipulative | 0 | 0 | 0 | 12 |
+| manipulative | 0 | 0 | 0 | 14 |
 
 ## Per scenario
 
@@ -37,6 +37,8 @@ TP 13 · FP 0 · TN 18 · FN 0
 | PD10-id-cs-palsu-komentar-refund | malicious | manipulative | manipulative | PR2:manipulative_instruction | ✓ | none | none |
 | PD11-id-realistic-chat-slang-admin-fee | malicious | manipulative | manipulative | PR1:manipulative_instruction | ✓ | none | none |
 | PD12-en-realistic-parcel-customs-fee | malicious | manipulative | manipulative | PR1:manipulative_instruction | ✓ | none | none |
+| PD13-id-rekrutmen-jalur-khusus | malicious | manipulative | manipulative | PR1:manipulative_instruction | ✗ | none | none |
+| PD14-id-catut-dandim-dana-kegiatan | malicious | manipulative | manipulative | PR2:manipulative_instruction | ✗ | none | none |
 | PN01-en-checkout | benign | observed | observed | PR4:observed_instruction, PR4:observed_instruction |  | none | none |
 | PN02-id-checkout-virtual-account | benign | observed | observed | PR4:observed_instruction |  | none | none |
 | PN03-en-invoice | benign | observed | observed | PR4:observed_instruction |  | none | none |
@@ -55,3 +57,5 @@ TP 13 · FP 0 · TN 18 · FN 0
 | PN16-en-legit-prize-no-fee | benign | none | none |  |  | none | none |
 | PN17-id-realistic-checkout-virtual-account | benign | observed | none |  |  | none | none |
 | PN18-en-realistic-donation-campaign | benign | observed | none |  |  | none | none |
+| PN19-id-pengumuman-rekrutmen-resmi | benign | none | none |  |  | none | none |
+| PN20-id-berita-penipuan-rekrutmen | benign | observed | observed | PR1:observed_instruction |  | none | none |

@@ -1,0 +1,22 @@
+{
+  "id": "SN18-id-kontak-babinsa-resmi",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "benign",
+  "threatClass": "T-REC",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://desa-sukamaju.test/kontak",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Halaman desa dengan kontak Babinsa dan Bhabinkamtibmas",
+  "rationale": "Informasi kontak resmi tanpa ancaman atau desakan.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; P2 recruitment and rank-impersonation dev additions (same author as the rules), labels written before the first run",
+  "created": "2026-10-22"
+}

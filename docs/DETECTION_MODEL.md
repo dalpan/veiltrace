@@ -380,3 +380,9 @@ Among the 36 original scenarios only CA03 changed (none → manipulative, CR1). 
 - **Support `sup-0.2.0-exp`:** detection-claim alarms ("has detected a Zeus trojan", "virus terdeteksi", "telah mendeteksi ancaman"), excluding clean statuses ("0 threats detected", "tidak ada ancaman terdeteksi") and without "is at risk" wording common in legitimate antivirus marketing (SA02, SD11).
 
 **Caveats.** Same author for rules and dev data, and some fixes target known dev misses: dev numbers are optimistic by construction. Only the blind, locked held-out v2 (and later the real-world field sample) can show whether this generalizes.
+
+## 16. Recruitment scams and rank impersonation (D-087): pay 0.3.0, sup 0.3.0 (development data only)
+Six dev scenarios (4 malicious, 2 benign) were written with labels before the change. Baseline: PD13 (paid "jalur khusus, dijamin lulus") suspicious, PD14 (claimed Dandim asking for a transfer to an aide's account) missed, SD13 (claimed investigator, legal threat, WhatsApp number) missed; the official recruitment notice and the news report stayed quiet.
+- **Payment:** `PR.RECRUIT` ("dijamin lulus/lolos", "jalur khusus/belakang/titipan" in a selection context, "uang pelicin", "orang dalam"; EN "guaranteed admission", "backdoor admission") counts as pay-to-receive by itself (PR1), promise `recruitment`. Ranks and positions (Dandim, Danrem, Kapten, ajudan, penyidik, …; EN colonel, captain, investigator, …) are claimed authority. "Rekening ajudan/staf/sekretaris" is a personal destination.
+- **Support:** claim kind `official` (`SI.OFFICIAL`) for ranks, positions and investigators.
+- After: pay-dev 35 scenarios TP 15 · FP 0 · TN 20 · FN 0; sup-dev 33 scenarios TP 15 · FP 0 · TN 18 · FN 0. Claims stay unverified and never alert alone; "jalur khusus" outside a selection context (bike lanes, toll lanes) is not a recruitment signal.

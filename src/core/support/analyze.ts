@@ -14,7 +14,7 @@ import type {
   SupportPressure, SupportResult, SupportRuleId, SupportSignalId, SupportSignalKind, SupportTrustContext,
 } from './types.js';
 
-export const SUPPORT_DETECTOR_VERSION = 'sup-0.2.0-exp';
+export const SUPPORT_DETECTOR_VERSION = 'sup-0.3.0-exp';
 
 const CLAUSE_BREAK = /[,;:!?]|\.(?=\s|$)|(?<![\p{L}\p{N}_])(?:and|then|or|but|dan|lalu|kemudian|atau|tapi|tetapi)(?![\p{L}\p{N}_])/u;
 /** Negation distributes over a disjunction ("never install AnyDesk or share your screen"), so "or"/"atau" does not end its scope. */
@@ -31,9 +31,9 @@ const EDUCATIONAL = LEXICON.filter((e) => e.signal === 'C.EDUCATIONAL');
 
 const ACTION_OF: Partial<Record<SupportSignalId, SupportAction>> = { 'SC.CONTACT': 'contact', 'SA.REMOTE': 'remote-access', 'SA.INSTALL': 'install' };
 const CHANNEL_OF: Partial<Record<SupportSignalId, SupportChannel>> = { 'SX.PHONE': 'phone', 'SX.MOBILE': 'mobile', 'SX.MESSENGER': 'messenger' };
-const CLAIM_OF: Partial<Record<SupportSignalId, SupportClaim>> = { 'SI.SUPPORT': 'support', 'SI.BANK': 'bank', 'SI.ADMIN': 'administrator', 'SI.SECURITY': 'security-team' };
+const CLAIM_OF: Partial<Record<SupportSignalId, SupportClaim>> = { 'SI.SUPPORT': 'support', 'SI.BANK': 'bank', 'SI.ADMIN': 'administrator', 'SI.SECURITY': 'security-team', 'SI.OFFICIAL': 'official' };
 const PRESSURE_OF: Partial<Record<SupportSignalId, SupportPressure>> = { 'SW.ALERT': 'system-alert', 'ST.THREAT': 'threat', 'SU.URGENCY': 'urgency' };
-const ORDER: readonly string[] = ['contact', 'remote-access', 'install', 'phone', 'mobile', 'messenger', 'support', 'bank', 'administrator', 'security-team',
+const ORDER: readonly string[] = ['contact', 'remote-access', 'install', 'phone', 'mobile', 'messenger', 'support', 'bank', 'administrator', 'security-team', 'official',
   'system-alert', 'threat', 'urgency', 'page-rendered-system-alert', 'alert-in-overlay', 'remote-access-request', 'software-install-request',
   'personal-channel-contact', 'claim-in-user-content'];
 const ordered = <T extends string>(xs: Iterable<T>): T[] => [...new Set(xs)].sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b));

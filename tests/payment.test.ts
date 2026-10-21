@@ -150,3 +150,20 @@ describe('payment detector pay-0.2.0-exp: informal Indonesian (D-083)', () => {
   });
 });
 
+describe('payment detector pay-0.3.0-exp: recruitment scams and rank impersonation (D-087)', () => {
+  it('a guaranteed place in a selection for a fee, paid to a personal account → manipulative (PR1)', () => {
+    const r = pay(inContainer('ugc:#chat', ['Sy bisa bantu lewat jalur khusus, dijamin lulus sampai pendidikan.', 'Biaya administrasi 35jt, transfer ke rekening pribadi saya dulu ya.']));
+    expect(short(r)).toEqual(['PR1:manipulative_instruction']);
+    expect(r.findings[0]!.promises).toContain('recruitment');
+  });
+
+  it('a claimed commander asking for a transfer to an aide\'s account → manipulative (PR2)', () => {
+    expect(short(pay(inContainer('ugc:#chat', ['Saya Dandim yang baru.', 'Mohon bantu transfer dana kegiatan 15jt ke rekening ajudan saya, segera sebelum jam 12.'])))).toEqual(['PR2:manipulative_instruction']);
+  });
+
+  it('official recruitment notices, dedicated lanes and toll payments are not recruitment scams', () => {
+    expect(pay(['Seluruh tahapan seleksi tidak dipungut biaya. Jangan percaya pihak yang menjanjikan kelulusan dengan imbalan uang.']).verdict).toBe('none');
+    expect(pay(['Bayar tol Rp 12.000 dengan kartu elektronik di jalur khusus e-toll.']).verdict).toBe('observed_instruction');
+  });
+});
+

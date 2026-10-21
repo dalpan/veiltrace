@@ -284,3 +284,6 @@ Chrome for Android does not run extensions, and most scams in Indonesia arrive a
 
 ### D-086 · Accepted · 2026-10-22 · Firefox build (desktop and Android ≥ 128)
 `npm run build:firefox` → `dist/extension-firefox`: the same code and permissions, with a Firefox manifest (event-page `background.scripts`, gecko id `veiltrace@veiltrace.invalid`, strict minimum 128 for desktop and Android). Content scripts use `Element.openOrClosedShadowRoot()` when `chrome.dom` is absent; automatic-scan registration falls back when `persistAcrossSessions` is unsupported; on touch screens the popup follows the screen width. Not yet tested on a Firefox device (Playwright cannot load Firefox extensions); the toolbar badge may not be visible on Android.
+
+### D-087 · Accepted (owner request, P2) · 2026-10-22 · Recruitment-scam and rank-impersonation patterns
+Payment detector `pay-0.3.0-exp` adds the recruitment promise (`PR.RECRUIT`, pay-to-receive on its own) and rank/position claims; support detector `sup-0.3.0-exp` adds the `official` claim kind. Generic, not military-specific: the same patterns cover civil-service and school admissions and any impersonated official, consistent with D-048. Report v4 enums extended (`PR.RECRUIT`, `recruitment`, `SI.OFFICIAL`, `official`). Details and dev counts: DETECTION_MODEL.md §16.

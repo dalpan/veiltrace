@@ -48,8 +48,8 @@ const PAY_FINDING_KEYS = ['id', 'ruleId', 'classification', 'ruleClassification'
   'trustContext', 'modifiers', 'limitations', 'evidence', 'evidenceTotal'];
 const PAY_RULES = ['PR1', 'PR2', 'PR3', 'PR4'] as const;
 const PAY_SIGNALS = ['PY.PAY', 'PA.AMOUNT', 'PF.FEE', 'PF.RELEASE_FEE', 'PD.PERSONAL', 'PD.OFF_PLATFORM', 'PD.GIFT_CARD', 'PD.CRYPTO',
-  'PR.REFUND', 'PR.PRIZE', 'PR.UNLOCK', 'PC.CONDITION', 'PP.THREAT', 'PP.URGENCY', 'PP.AUTHORITY', 'C.NEGATION', 'C.REPORTED', 'C.EDUCATIONAL'] as const;
-const PROMISES = ['refund', 'prize', 'account-unlock', 'release'] as const;
+  'PR.REFUND', 'PR.PRIZE', 'PR.UNLOCK', 'PR.RECRUIT', 'PC.CONDITION', 'PP.THREAT', 'PP.URGENCY', 'PP.AUTHORITY', 'C.NEGATION', 'C.REPORTED', 'C.EDUCATIONAL'] as const;
+const PROMISES = ['refund', 'prize', 'account-unlock', 'release', 'recruitment'] as const;
 const PAY_DESTINATIONS = ['personal-account', 'off-platform', 'gift-card', 'crypto'] as const;
 const PRESSURES = ['threat', 'urgency', 'claimed-authority'] as const;
 const PAY_LIMITS = ['claimed-identity-unverifiable', 'trust-boundary-heuristic', 'amount-not-reported'] as const;
@@ -57,11 +57,11 @@ const PAY_LIMITS = ['claimed-identity-unverifiable', 'trust-boundary-heuristic',
 const SUP_FINDING_KEYS = ['id', 'ruleId', 'classification', 'ruleClassification', 'confidence', 'actionRisk', 'requestedActions', 'channels', 'claims',
   'indicators', 'pressures', 'trustContext', 'modifiers', 'limitations', 'evidence', 'evidenceTotal'];
 const SUP_RULES = ['SR1', 'SR2', 'SR3', 'SR4', 'SR5'] as const;
-const SUP_SIGNALS = ['SC.CONTACT', 'SA.REMOTE', 'SA.INSTALL', 'SX.PHONE', 'SX.MOBILE', 'SX.MESSENGER', 'SI.SUPPORT', 'SI.BANK', 'SI.ADMIN', 'SI.SECURITY',
+const SUP_SIGNALS = ['SC.CONTACT', 'SA.REMOTE', 'SA.INSTALL', 'SX.PHONE', 'SX.MOBILE', 'SX.MESSENGER', 'SI.SUPPORT', 'SI.BANK', 'SI.ADMIN', 'SI.SECURITY', 'SI.OFFICIAL',
   'SW.ALERT', 'ST.THREAT', 'SU.URGENCY', 'SH.UNASSERTED', 'C.NEGATION', 'C.REPORTED', 'C.EDUCATIONAL'] as const;
 const SUP_ACTIONS = ['contact', 'remote-access', 'install'] as const;
 const SUP_CHANNELS = ['phone', 'mobile', 'messenger'] as const;
-const SUP_CLAIMS = ['support', 'bank', 'administrator', 'security-team'] as const;
+const SUP_CLAIMS = ['support', 'bank', 'administrator', 'security-team', 'official'] as const;
 const SUP_INDICATORS = ['page-rendered-system-alert', 'remote-access-request', 'software-install-request', 'personal-channel-contact', 'claim-in-user-content',
   'alert-in-overlay'] as const;
 const SUP_PRESSURES = ['system-alert', 'threat', 'urgency'] as const;

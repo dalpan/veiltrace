@@ -1,0 +1,22 @@
+{
+  "id": "SD13-id-catut-pangkat-ancaman-hukum",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-REC",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://web.obrolanku.test/chat/553",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#msgs",
+  "description": "Akun mengaku perwira menuduh nomor terlibat kasus dan meminta segera menghubungi lewat WA",
+  "rationale": "Klaim pangkat + ancaman proses hukum + desakan + nomor pribadi.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; P2 recruitment and rank-impersonation dev additions (same author as the rules), labels written before the first run",
+  "created": "2026-10-22"
+}

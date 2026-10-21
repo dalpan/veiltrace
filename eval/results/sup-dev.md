@@ -1,14 +1,14 @@
 # Support-impersonation detector: development results (sup-dev)
 
-Detector sup-0.2.0-exp (EXPERIMENTAL), extractor 0.2.0-m5. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
+Detector sup-0.3.0-exp (EXPERIMENTAL), extractor 0.2.0-m5. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
 
-TP 14 · FP 0 · TN 17 · FN 0
+TP 15 · FP 0 · TN 18 · FN 0
 
-- Precision: 100.0% (14/14; 95% CI 78.5%–100.0%)
-- Recall: 100.0% (14/14; 95% CI 78.5%–100.0%)
-- Hard-negative FPR: 0.0% (0/17; 95% CI 0.0%–18.4%)
-- Localization: 100.0% (14/14; 95% CI 78.5%–100.0%)
-- Exact class agreement: 96.8% (30/31; 95% CI 83.8%–99.4%)
+- Precision: 100.0% (15/15; 95% CI 79.6%–100.0%)
+- Recall: 100.0% (15/15; 95% CI 79.6%–100.0%)
+- Hard-negative FPR: 0.0% (0/18; 95% CI 0.0%–17.6%)
+- Localization: 93.3% (14/15; 95% CI 70.2%–98.8%)
+- Exact class agreement: 97.0% (32/33; 95% CI 84.7%–99.5%)
 - Requests during scanning: 0; privacy sentinel leaks: 0 (0 fields filled); phone numbers or digit runs in results: 0
 
 ## Class matrix
@@ -16,9 +16,9 @@ TP 14 · FP 0 · TN 17 · FN 0
 | expected \ predicted | none | observed | suspicious | manipulative |
 |---|---|---|---|---|
 | none | 3 | 0 | 0 | 0 |
-| observed | 1 | 13 | 0 | 0 |
+| observed | 1 | 14 | 0 | 0 |
 | suspicious | 0 | 0 | 2 | 0 |
-| manipulative | 0 | 0 | 0 | 12 |
+| manipulative | 0 | 0 | 0 | 13 |
 
 ## Per scenario
 
@@ -38,6 +38,7 @@ TP 14 · FP 0 · TN 17 · FN 0
 | SD10-id-tim-it-anydesk-informal | malicious | manipulative | manipulative | SR2:manipulative_instruction | ✓ | none | none | none |
 | SD11-en-realistic-blue-alert-zeus | malicious | manipulative | manipulative | SR1:manipulative_instruction | ✓ | none | none | none |
 | SD12-id-realistic-bank-chat-remote-app | malicious | manipulative | manipulative | SR2:manipulative_instruction | ✓ | none | none | none |
+| SD13-id-catut-pangkat-ancaman-hukum | malicious | manipulative | manipulative | SR3:manipulative_instruction | ✗ | none | none | none |
 | SN01-en-help-center-contact | benign | observed | observed | SR5:observed_instruction |  | none | none | none |
 | SN02-id-pusat-bantuan-kontak | benign | observed | observed | SR5:observed_instruction |  | none | none | none |
 | SN03-en-it-helpdesk-remote-procedure | benign | observed | observed | SR5:observed_instruction |  | none | none | none |
@@ -55,3 +56,4 @@ TP 14 · FP 0 · TN 17 · FN 0
 | SN15-en-desktop-app-download | benign | observed | observed | SR5:observed_instruction |  | none | none | none |
 | SN16-en-realistic-antivirus-product-page | benign | observed | observed | SR5:observed_instruction |  | none | none | none |
 | SN17-id-realistic-isp-help-whatsapp | benign | observed | observed | SR5:observed_instruction |  | none | none | none |
+| SN18-id-kontak-babinsa-resmi | benign | observed | observed | SR5:observed_instruction |  | none | none | none |

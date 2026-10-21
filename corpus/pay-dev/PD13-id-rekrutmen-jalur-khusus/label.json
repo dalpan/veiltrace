@@ -1,0 +1,22 @@
+{
+  "id": "PD13-id-rekrutmen-jalur-khusus",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-REC",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://web.obrolanku.test/chat/551",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#msgs",
+  "description": "Chat penawaran \"jalur khusus\" seleksi bintara dengan jaminan lulus dan biaya ke rekening pribadi",
+  "rationale": "Penipuan rekrutmen: bayar dulu agar dijamin lulus, ke rekening pribadi, mengaku orang dalam.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; P2 recruitment and rank-impersonation dev additions (same author as the rules), labels written before the first run",
+  "created": "2026-10-22"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "PN19-id-pengumuman-rekrutmen-resmi",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "benign",
+  "threatClass": "T-REC",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://rekrutmen.lembaga-nusantara.test/pengumuman",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Pengumuman pendaftaran resmi: gratis, waspada calo",
+  "rationale": "Halaman resmi yang memperingatkan calo; tidak meminta pembayaran.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; P2 recruitment and rank-impersonation dev additions (same author as the rules), labels written before the first run",
+  "created": "2026-10-22"
+}

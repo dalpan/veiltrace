@@ -153,3 +153,15 @@ describe('support detector sup-0.2.0-exp: alarm wording (D-083)', () => {
   });
 });
 
+describe('support detector sup-0.3.0-exp: rank and investigator claims (D-087)', () => {
+  it('a claimed investigator with a legal threat, urgency and a WhatsApp mobile number → manipulative (SR3)', () => {
+    const r = sup(['Saya Kapten Rudi dari bagian penyidikan. Nomor Anda terlibat kasus.', 'Segera hubungi saya di WA 0812-0000-7777 dalam 1 jam, kalau tidak rekening Anda akan diblokir.']);
+    expect(short(r)).toEqual(['SR3:manipulative_instruction']);
+    expect(r.findings[0]!.claims).toContain('official');
+  });
+
+  it('an official village contact page (Babinsa, office phone, no threat) stays observed', () => {
+    expect(short(sup(['Babinsa Desa Sukamaju: Sertu Agus, hubungi melalui telepon (0262) 555-0144 pada jam kerja.']))).toEqual(['SR5:observed_instruction']);
+  });
+});
+
