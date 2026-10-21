@@ -1,6 +1,6 @@
 # Evaluation Plan
 
-Status: harness implemented (M2). M4 targets approved (D-011). **Executed on the dev split only** (§9, §10, §11). The frozen held-out split has **not** been evaluated. The single final run is preregistered in **[EVAL_PREREGISTRATION.md](EVAL_PREREGISTRATION.md)** (M4.3A, D-058), which takes precedence over this plan where they differ, and needs owner approval and the `eval-freeze-v1` tag. The M1 snapshot scenarios in `tests/fixtures/scenarios.ts` remain unit fixtures, not part of the evaluation corpus.
+Status: harness implemented (M2). M4 targets approved (D-011). **Held-out evaluation v1 executed once at `eval-freeze-v1` and reported in [EVALUATION_RESULTS.md](EVALUATION_RESULTS.md)**: TP 9, FP 2, TN 12, FN 3, so the recall, precision and hard-negative FPR targets were not achieved. It was accepted with a post-run protocol deviation (D-059). The procedure is in [EVAL_PREREGISTRATION.md](EVAL_PREREGISTRATION.md). The current held-out split is consumed: no further tuning or evaluation against it. Dev results are in §9–§11. The M1 snapshot scenarios in `tests/fixtures/scenarios.ts` remain unit fixtures, not part of the evaluation corpus.
 
 ## 1. Questions the evaluation must answer
 

@@ -4,6 +4,18 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-21 · M4.3B Final held-out evaluation · **Executed once; accepted with a post-run protocol deviation (D-059)**
+
+- Owner-authorized. Frozen state verified (tag `eval-freeze-v1` → `03fa212`, clean tree, preregistration and manifest unchanged), then `npm ci`, `validate --split test`, and **one** `npm run eval -- run --split test --final` (exit 0).
+- **Results (synthetic, n = 26):** TP 9, FP 2, TN 12, FN 3. Recall 75.0% (46.8–91.1), precision 81.8% (52.3–94.9), hard-negative FPR 14.3% (4.0–39.9): targets **missed**. Localization 9/9 and 0 requests: met. Engine 0.2.0 = M1 on every held-out scenario. Details: docs/EVALUATION_RESULTS.md.
+- **Errors:** FN T09, T10 (context-modifier evasion), T12 (cross-origin frame, partial scan); FP T17 (R4), T18 (R3).
+- **Protocol deviation (D-059):** `eval/runs.md` says "(dirty)" because the harness writes its untracked outputs before the status check; tracked files were identical to the tag. The owner accepted the run as the single final run; the marker is preserved, with no rerun (EVALUATION_RESULTS.md §1.1).
+- No rule, lexicon, extractor, harness or corpus change. Manual Chrome checklist V1–V12 confirmed by the owner.
+
+**Committed** as results and docs only (`docs(eval): record frozen held-out evaluation results`); the freeze tag was not moved.
+
+**Next:** M4.4 (hackathon demo preparation), only after owner approval.
+
 ## 2026-10-21 · M4.3A Engine adoption and pre-evaluation freeze · **Implemented (awaiting owner review)**
 
 **Done**

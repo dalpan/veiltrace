@@ -1,0 +1,2002 @@
+{
+  "split": "test",
+  "engineVersion": "0.2.0",
+  "baselineEngineVersion": "0.1.0-m1",
+  "extractorVersion": "0.1.0-m2",
+  "systems": [
+    {
+      "id": "veiltrace",
+      "description": "Production engine 0.2.0 (ruleset m4.1): region-local windows (K=8) + negation + context modifiers + P1b/P2-A/R4-beta"
+    },
+    {
+      "id": "veiltrace-m1",
+      "description": "M1 baseline engine 0.1.0-m1 (ruleset m1)"
+    },
+    {
+      "id": "B0",
+      "description": "Baseline: page-level co-occurrence, same signals and M1 R1–R5 table, no negation, no context modifiers"
+    },
+    {
+      "id": "A1-page+context",
+      "description": "Ablation (M1 table): page-level, with negation and context modifiers"
+    },
+    {
+      "id": "A2-region-only",
+      "description": "Ablation (M1 table): region-local, no negation, no context modifiers"
+    }
+  ],
+  "composition": {
+    "category:adversarial": 3,
+    "category:ambiguous": 2,
+    "category:benign": 12,
+    "category:positive": 9,
+    "hardNegative": 14,
+    "lang:en": 15,
+    "lang:id": 11,
+    "total": 26,
+    "truth:benign": 14,
+    "truth:malicious": 12
+  },
+  "metrics": {
+    "veiltrace": {
+      "scenarios": 26,
+      "confusion": {
+        "tp": 9,
+        "fp": 2,
+        "tn": 12,
+        "fn": 3
+      },
+      "precision": {
+        "k": 9,
+        "n": 11,
+        "value": 0.8182,
+        "ci95": [
+          0.523,
+          0.9486
+        ]
+      },
+      "recall": {
+        "k": 9,
+        "n": 12,
+        "value": 0.75,
+        "ci95": [
+          0.4677,
+          0.9111
+        ]
+      },
+      "fpr": {
+        "k": 2,
+        "n": 14,
+        "value": 0.1429,
+        "ci95": [
+          0.0401,
+          0.3994
+        ]
+      },
+      "hardNegativeFpr": {
+        "k": 2,
+        "n": 14,
+        "value": 0.1429,
+        "ci95": [
+          0.0401,
+          0.3994
+        ]
+      },
+      "localization": {
+        "k": 9,
+        "n": 9,
+        "value": 1,
+        "ci95": [
+          0.7009,
+          1
+        ]
+      },
+      "classMatrix": [
+        [
+          5,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          7,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          0
+        ],
+        [
+          1,
+          2,
+          0,
+          6
+        ]
+      ],
+      "exactClassAgreement": {
+        "k": 21,
+        "n": 26,
+        "value": 0.8077,
+        "ci95": [
+          0.6212,
+          0.9149
+        ]
+      },
+      "observedOnNegatives": 7,
+      "byLanguage": {
+        "en": {
+          "recall": {
+            "k": 6,
+            "n": 8,
+            "value": 0.75,
+            "ci95": [
+              0.4093,
+              0.9285
+            ]
+          },
+          "fpr": {
+            "k": 1,
+            "n": 7,
+            "value": 0.1429,
+            "ci95": [
+              0.0257,
+              0.5131
+            ]
+          }
+        },
+        "id": {
+          "recall": {
+            "k": 3,
+            "n": 4,
+            "value": 0.75,
+            "ci95": [
+              0.3006,
+              0.9544
+            ]
+          },
+          "fpr": {
+            "k": 1,
+            "n": 7,
+            "value": 0.1429,
+            "ci95": [
+              0.0257,
+              0.5131
+            ]
+          }
+        }
+      }
+    },
+    "veiltrace-m1": {
+      "scenarios": 26,
+      "confusion": {
+        "tp": 9,
+        "fp": 2,
+        "tn": 12,
+        "fn": 3
+      },
+      "precision": {
+        "k": 9,
+        "n": 11,
+        "value": 0.8182,
+        "ci95": [
+          0.523,
+          0.9486
+        ]
+      },
+      "recall": {
+        "k": 9,
+        "n": 12,
+        "value": 0.75,
+        "ci95": [
+          0.4677,
+          0.9111
+        ]
+      },
+      "fpr": {
+        "k": 2,
+        "n": 14,
+        "value": 0.1429,
+        "ci95": [
+          0.0401,
+          0.3994
+        ]
+      },
+      "hardNegativeFpr": {
+        "k": 2,
+        "n": 14,
+        "value": 0.1429,
+        "ci95": [
+          0.0401,
+          0.3994
+        ]
+      },
+      "localization": {
+        "k": 9,
+        "n": 9,
+        "value": 1,
+        "ci95": [
+          0.7009,
+          1
+        ]
+      },
+      "classMatrix": [
+        [
+          5,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          7,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          0
+        ],
+        [
+          1,
+          2,
+          0,
+          6
+        ]
+      ],
+      "exactClassAgreement": {
+        "k": 21,
+        "n": 26,
+        "value": 0.8077,
+        "ci95": [
+          0.6212,
+          0.9149
+        ]
+      },
+      "observedOnNegatives": 7,
+      "byLanguage": {
+        "en": {
+          "recall": {
+            "k": 6,
+            "n": 8,
+            "value": 0.75,
+            "ci95": [
+              0.4093,
+              0.9285
+            ]
+          },
+          "fpr": {
+            "k": 1,
+            "n": 7,
+            "value": 0.1429,
+            "ci95": [
+              0.0257,
+              0.5131
+            ]
+          }
+        },
+        "id": {
+          "recall": {
+            "k": 3,
+            "n": 4,
+            "value": 0.75,
+            "ci95": [
+              0.3006,
+              0.9544
+            ]
+          },
+          "fpr": {
+            "k": 1,
+            "n": 7,
+            "value": 0.1429,
+            "ci95": [
+              0.0257,
+              0.5131
+            ]
+          }
+        }
+      }
+    },
+    "B0": {
+      "scenarios": 26,
+      "confusion": {
+        "tp": 11,
+        "fp": 4,
+        "tn": 10,
+        "fn": 1
+      },
+      "precision": {
+        "k": 11,
+        "n": 15,
+        "value": 0.7333,
+        "ci95": [
+          0.4805,
+          0.891
+        ]
+      },
+      "recall": {
+        "k": 11,
+        "n": 12,
+        "value": 0.9167,
+        "ci95": [
+          0.6461,
+          0.9851
+        ]
+      },
+      "fpr": {
+        "k": 4,
+        "n": 14,
+        "value": 0.2857,
+        "ci95": [
+          0.1172,
+          0.5465
+        ]
+      },
+      "hardNegativeFpr": {
+        "k": 4,
+        "n": 14,
+        "value": 0.2857,
+        "ci95": [
+          0.1172,
+          0.5465
+        ]
+      },
+      "localization": {
+        "k": 11,
+        "n": 11,
+        "value": 1,
+        "ci95": [
+          0.7412,
+          1
+        ]
+      },
+      "classMatrix": [
+        [
+          4,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          5,
+          2,
+          2
+        ],
+        [
+          0,
+          0,
+          3,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          8
+        ]
+      ],
+      "exactClassAgreement": {
+        "k": 20,
+        "n": 26,
+        "value": 0.7692,
+        "ci95": [
+          0.5795,
+          0.8897
+        ]
+      },
+      "observedOnNegatives": 6,
+      "byLanguage": {
+        "en": {
+          "recall": {
+            "k": 7,
+            "n": 8,
+            "value": 0.875,
+            "ci95": [
+              0.5291,
+              0.9776
+            ]
+          },
+          "fpr": {
+            "k": 2,
+            "n": 7,
+            "value": 0.2857,
+            "ci95": [
+              0.0822,
+              0.6411
+            ]
+          }
+        },
+        "id": {
+          "recall": {
+            "k": 4,
+            "n": 4,
+            "value": 1,
+            "ci95": [
+              0.5101,
+              1
+            ]
+          },
+          "fpr": {
+            "k": 2,
+            "n": 7,
+            "value": 0.2857,
+            "ci95": [
+              0.0822,
+              0.6411
+            ]
+          }
+        }
+      }
+    },
+    "A1-page+context": {
+      "scenarios": 26,
+      "confusion": {
+        "tp": 9,
+        "fp": 3,
+        "tn": 11,
+        "fn": 3
+      },
+      "precision": {
+        "k": 9,
+        "n": 12,
+        "value": 0.75,
+        "ci95": [
+          0.4677,
+          0.9111
+        ]
+      },
+      "recall": {
+        "k": 9,
+        "n": 12,
+        "value": 0.75,
+        "ci95": [
+          0.4677,
+          0.9111
+        ]
+      },
+      "fpr": {
+        "k": 3,
+        "n": 14,
+        "value": 0.2143,
+        "ci95": [
+          0.0757,
+          0.4759
+        ]
+      },
+      "hardNegativeFpr": {
+        "k": 3,
+        "n": 14,
+        "value": 0.2143,
+        "ci95": [
+          0.0757,
+          0.4759
+        ]
+      },
+      "localization": {
+        "k": 9,
+        "n": 9,
+        "value": 1,
+        "ci95": [
+          0.7009,
+          1
+        ]
+      },
+      "classMatrix": [
+        [
+          5,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          3,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          0
+        ],
+        [
+          1,
+          2,
+          0,
+          6
+        ]
+      ],
+      "exactClassAgreement": {
+        "k": 20,
+        "n": 26,
+        "value": 0.7692,
+        "ci95": [
+          0.5795,
+          0.8897
+        ]
+      },
+      "observedOnNegatives": 6,
+      "byLanguage": {
+        "en": {
+          "recall": {
+            "k": 6,
+            "n": 8,
+            "value": 0.75,
+            "ci95": [
+              0.4093,
+              0.9285
+            ]
+          },
+          "fpr": {
+            "k": 2,
+            "n": 7,
+            "value": 0.2857,
+            "ci95": [
+              0.0822,
+              0.6411
+            ]
+          }
+        },
+        "id": {
+          "recall": {
+            "k": 3,
+            "n": 4,
+            "value": 0.75,
+            "ci95": [
+              0.3006,
+              0.9544
+            ]
+          },
+          "fpr": {
+            "k": 1,
+            "n": 7,
+            "value": 0.1429,
+            "ci95": [
+              0.0257,
+              0.5131
+            ]
+          }
+        }
+      }
+    },
+    "A2-region-only": {
+      "scenarios": 26,
+      "confusion": {
+        "tp": 11,
+        "fp": 3,
+        "tn": 11,
+        "fn": 1
+      },
+      "precision": {
+        "k": 11,
+        "n": 14,
+        "value": 0.7857,
+        "ci95": [
+          0.5241,
+          0.9243
+        ]
+      },
+      "recall": {
+        "k": 11,
+        "n": 12,
+        "value": 0.9167,
+        "ci95": [
+          0.6461,
+          0.9851
+        ]
+      },
+      "fpr": {
+        "k": 3,
+        "n": 14,
+        "value": 0.2143,
+        "ci95": [
+          0.0757,
+          0.4759
+        ]
+      },
+      "hardNegativeFpr": {
+        "k": 3,
+        "n": 14,
+        "value": 0.2143,
+        "ci95": [
+          0.0757,
+          0.4759
+        ]
+      },
+      "localization": {
+        "k": 11,
+        "n": 11,
+        "value": 1,
+        "ci95": [
+          0.7412,
+          1
+        ]
+      },
+      "classMatrix": [
+        [
+          4,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          1,
+          2
+        ],
+        [
+          0,
+          0,
+          3,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          8
+        ]
+      ],
+      "exactClassAgreement": {
+        "k": 21,
+        "n": 26,
+        "value": 0.8077,
+        "ci95": [
+          0.6212,
+          0.9149
+        ]
+      },
+      "observedOnNegatives": 7,
+      "byLanguage": {
+        "en": {
+          "recall": {
+            "k": 7,
+            "n": 8,
+            "value": 0.875,
+            "ci95": [
+              0.5291,
+              0.9776
+            ]
+          },
+          "fpr": {
+            "k": 1,
+            "n": 7,
+            "value": 0.1429,
+            "ci95": [
+              0.0257,
+              0.5131
+            ]
+          }
+        },
+        "id": {
+          "recall": {
+            "k": 4,
+            "n": 4,
+            "value": 1,
+            "ci95": [
+              0.5101,
+              1
+            ]
+          },
+          "fpr": {
+            "k": 2,
+            "n": 7,
+            "value": 0.2857,
+            "ci95": [
+              0.0822,
+              0.6411
+            ]
+          }
+        }
+      }
+    }
+  },
+  "scenarios": [
+    {
+      "id": "T01-en-recipe-captcha-overlay",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "lang": "en",
+      "blocks": 14,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "veiltrace-m1": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "B0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A2-region-only": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "T02-id-news-dialog-captcha",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "lang": "id",
+      "blocks": 10,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "veiltrace-m1": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "B0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A2-region-only": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "T03-en-fake-defender-support",
+      "truth": "malicious",
+      "expectedClass": "suspicious_correlation",
+      "hardNegative": false,
+      "lang": "en",
+      "blocks": 8,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "veiltrace-m1": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "B0": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "A2-region-only": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "T04-id-font-update-modal",
+      "truth": "malicious",
+      "expectedClass": "suspicious_correlation",
+      "hardNegative": false,
+      "lang": "id",
+      "blocks": 10,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "veiltrace-m1": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "B0": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "A2-region-only": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "T05-en-forum-comment-ugc",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "lang": "en",
+      "blocks": 12,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "veiltrace-m1": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "B0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A2-region-only": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "T06-id-bank-help-injected-widget",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "lang": "id",
+      "blocks": 8,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "veiltrace-m1": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "B0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A2-region-only": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "T07-en-macos-document-gate",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "lang": "en",
+      "blocks": 5,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "veiltrace-m1": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "B0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A2-region-only": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "T08-en-obfuscated-split-spans",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "lang": "en",
+      "blocks": 4,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "veiltrace-m1": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "B0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A2-region-only": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "T09-en-quote-markup-abuse",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "lang": "en",
+      "blocks": 2,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
+        "veiltrace-m1": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "T10-id-reported-speech-abuse",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "lang": "id",
+      "blocks": 5,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
+        "veiltrace-m1": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "T11-en-session-restore-urgency",
+      "truth": "malicious",
+      "expectedClass": "suspicious_correlation",
+      "hardNegative": false,
+      "lang": "en",
+      "blocks": 6,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "veiltrace-m1": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "B0": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "A2-region-only": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "T12-en-cross-origin-ad-iframe",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "lang": "en",
+      "blocks": 4,
+      "coverage": {
+        "framesSkipped": 1,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": [
+          "frames-skipped"
+        ]
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "veiltrace-m1": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "T13-en-real-captcha-interstitial",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "lang": "en",
+      "blocks": 6,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "veiltrace-m1": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "T14-en-cli-install-docs",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "en",
+      "blocks": 13,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "veiltrace-m1": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "T15-id-library-install-docs",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "id",
+      "blocks": 7,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "veiltrace-m1": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "T16-en-it-map-network-drive",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "en",
+      "blocks": 5,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "veiltrace-m1": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "T17-id-it-vpn-fix",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "id",
+      "blocks": 6,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "veiltrace-m1": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "T18-en-news-report-fake-captcha",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "en",
+      "blocks": 6,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R3:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "veiltrace-m1": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R3:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R3:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "T19-id-news-report-modus",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "id",
+      "blocks": 5,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "veiltrace-m1": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "T20-en-awareness-negation",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "lang": "en",
+      "blocks": 3,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "veiltrace-m1": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "T21-id-flash-sale",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "lang": "id",
+      "blocks": 7,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "veiltrace-m1": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "T22-id-bank-otp-warning",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "lang": "id",
+      "blocks": 5,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "veiltrace-m1": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "T23-en-qa-execution-policy",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "en",
+      "blocks": 6,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "veiltrace-m1": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "T24-id-security-blog-code-example",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "id",
+      "blocks": 6,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
+        "veiltrace-m1": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "T25-en-wiki-banner-and-howto",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "en",
+      "blocks": 3,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "veiltrace-m1": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R3:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R3:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "T26-id-browser-game",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "lang": "id",
+      "blocks": 4,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "veiltrace-m1": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        }
+      }
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Implementation Plan
 
-Status: M1 accepted (`d856fbd`). Held-out split frozen (`407beb0`). M2 accepted (`70c5697`). M3 accepted (`64e632a`, manual production validation recorded in PROGRESS.md). M4.1 accepted (`7088de0`, experimental rule set `m4.1-rc1`, not default). M4.2 accepted (release engineering, bilingual UI). M4.3A implemented (engine 0.2.0 adopted as default, held-out evaluation preregistered; awaiting owner review). The held-out run (M4.3B) needs owner approval and the `eval-freeze-v1` tag. Every milestone is independently testable and ends with a PROGRESS.md entry. No milestone is started before the previous one's acceptance criteria are met or explicitly waived in DECISIONS.md.
+Status: M1 accepted (`d856fbd`). Held-out split frozen (`407beb0`). M2 accepted (`70c5697`). M3 accepted (`64e632a`, manual production validation recorded in PROGRESS.md). M4.1 accepted (`7088de0`, experimental rule set `m4.1-rc1`, not default). M4.2 accepted (release engineering, bilingual UI). M4.3A accepted (engine 0.2.0, preregistration, tag `eval-freeze-v1`). M4.3B done: held-out evaluation v1 executed once, with targets missed for recall, precision and FPR (docs/EVALUATION_RESULTS.md, D-059). M4.4 not started (requires approval). Every milestone is independently testable and ends with a PROGRESS.md entry. No milestone is started before the previous one's acceptance criteria are met or explicitly waived in DECISIONS.md.
 
 ## Milestone overview
 
