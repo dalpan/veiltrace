@@ -30,7 +30,9 @@
     "release:verify": "node scripts/verify-release.mjs release",
     "release:repro": "node scripts/repro-check.mjs",
     "supply-chain": "node scripts/supply-chain.mjs",
-    "release:candidate": "node scripts/release.mjs --out release --candidate"
+    "release:candidate": "node scripts/release.mjs --out release --candidate",
+    "submission:pdf": "node scripts/submission-pdf.mjs",
+    "submission:video": "VT_VIDEO_DIR=submission/dist/video vitest run tests/e2e/video.test.ts && node scripts/submission-video.mjs submission/dist/video"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

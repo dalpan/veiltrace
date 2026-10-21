@@ -4,6 +4,14 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-21 · P0 hackathon submission package · **Done (owner to fill team details and record the narrated video)**
+
+**Done:** pending CA03/popup fix committed; README introduction rewritten for judges; private GitHub repository `dalpan/veiltrace` created after a history audit (no secrets, keys, screenshots or release files), `main` and `eval-freeze-v1` pushed; `submission/PROPOSAL.md` (Indonesian, 5 pages as PDF) and `submission/VIDEO_SCRIPT.md`; slide deck (11 slides, Indonesian) as a private Slides artifact; automated silent demo video (`npm run submission:video`, 13 cards, about 90 s) (D-080).
+
+**Next:** owner fills team names and repository link in the proposal and slides, records the narrated video, and decides when to make the repository public. Then auto-scan mode (opt-in).
+
+---
+
 ## 2026-10-21 · M5.4 follow-up after the owner's manual Chrome test · **Fixed and committed (owner approved)**
 
 **Owner finding:** CA03 (informal Indonesian OTP request) showed no finding. **Also found in the screenshots:** the popup opened about 430 px wide instead of 560 px.

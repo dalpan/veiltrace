@@ -19,7 +19,7 @@ The popup is one dashboard: page threat summary, the four categories, advice, an
 - The only held-out result is for CMD: 26 synthetic scenarios, run once, with recall 75.0%, precision 81.8% and hard-negative FPR 14.3%. All three are **below the research targets** ([docs/EVALUATION_RESULTS.md](docs/EVALUATION_RESULTS.md)).
 - CRED, PAY and SUP are measured only on development data written by the same author as the rules.
 - None of these numbers are real-world rates. Scanning is on demand, not real-time.
-- Progress log: [docs/PROGRESS.md](docs/PROGRESS.md).
+- Progress log: [docs/PROGRESS.md](docs/PROGRESS.md). Hackathon materials (Indonesian): [submission/](submission/).
 
 ## Install (unpacked, Chrome/Chromium ≥ 110)
 
