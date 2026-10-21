@@ -1,6 +1,6 @@
 # Threat Model
 
-Status: M0, updated at M1 (modifier-evasion rows) · Owner: research lead
+Status: M0, updated at M1 (modifier-evasion rows) and M2 (measured outcomes, extractor limits) · Owner: research lead
 
 This document covers two threat surfaces:
 1. **The user-facing threat:** social engineering instructions on web pages, which is what VEILTRACE detects.
@@ -56,17 +56,19 @@ The Microsoft Threat Intelligence write-up (2025-08-21) documents ClickFix at th
 | Instruction rendered as an image, canvas or SVG path text | Text not extracted, so missed | Out of scope for the MVP. `alt`/`aria-label` are extracted. An optional local OCR is a future research item. |
 | Text split across many elements / interleaved hidden spans | Breaks naive regexes | Use rendered `innerText`-like extraction per block that skips hidden nodes (EXTRACTION §3 in ARCHITECTURE.md), then normalize whitespace |
 | Homoglyphs, zero-width characters, full-width letters | Breaks keyword matching | NFKC normalization, zero-width stripping, and a small confusables fold for Latin and Cyrillic lookalikes (DETECTION_MODEL.md §4) |
-| CSS `::before`/`::after` `content:` text | Not in the DOM text | Known gap. Recorded as a test fixture so we measure it |
-| Closed shadow roots | Not traversable via `shadowRoot` | Chrome exposes `chrome.dom.openOrClosedShadowRoot` (Chrome 88+). Availability inside `executeScript`-injected scripts is **to be verified in M2** |
-| Cross-origin iframes | `activeTab` grants the top-frame origin. Child frames may be inaccessible | MVP scans the top frame plus same-origin frames. The report states "N frames not inspected". Optional host permission later |
+| CSS `::before`/`::after` `content:` text | Not in the DOM text | Known gap (ARCHITECTURE.md §3.9); not yet measured with a fixture |
+| Closed shadow roots | Not traversable via `shadowRoot` | M2: an adapter hook exists and works with a simulated adapter in tests. Without it, closed hosts are counted heuristically in coverage. The real `chrome.dom.openOrClosedShadowRoot` from an isolated world is to be verified in M3 |
+| Cross-origin iframes | Inaccessible from the page's frame | M2: same-origin frames extracted; cross-origin frames counted in `coverage.framesSkipped` (tested). The held-out split contains one such lure (T12) to keep recall honest |
 | Content appears after the scan (timers, after-click reveals) | On-demand scan misses it | The popup offers "Rescan". An auto mode with debounced MutationObserver is M6 |
 | Instruction lives on a second page or step | Single-page scan misses the chain | Each step usually still contains *open → paste → run*. Documented |
 | Paraphrase / novel wording / an unsupported language | Lexicon miss | Coverage is measured per language. Unsupported languages are reported as "language not supported" rather than "safe" |
 | Adversary DOM-detects the scan (e.g. our highlight outline) | Could swap content after the scan | Highlighting happens only on explicit user click. The snapshot is taken before any DOM change |
-| **Modifier misuse: reported speech** ("the attackers instructed visitors to:" before a real lure) | The lure is demoted to `observed_instruction` (still listed, but not a detection) | Known, unmitigated in M1 (DETECTION_MODEL.md §8). M2 research task R-2 |
-| **Modifier misuse: planted educational cues** ("how to spot scams" heading on a lure page) | One-tier demotion: manipulative → suspicious | Bounded by design (educational = −1 only). M2 R-2 |
-| **Modifier misuse: quotation markup** (lure wrapped in `<blockquote>`) | Two-tier demotion | Known, unmitigated in M1. M2 R-2 |
+| **Modifier misuse: reported speech** ("the attackers instructed visitors to:" before a real lure) | The lure is demoted to `observed_instruction` (still listed, but not a detection) | **Measured (M2 dev):** D10 → FN. The P2 form evaluated in M2 recovers it on dev but was rejected (D-032). A redesign that requires direct-instruction evidence is pending |
+| **Modifier misuse: planted educational cues** ("how to spot scams" heading on a lure page) | One-tier demotion: manipulative → suspicious | **Measured (M2 dev):** D11 manipulative → suspicious (still detected). The rejected P2 form restored it; redesign pending (D-032) |
+| **Modifier misuse: quotation markup** (lure wrapped in `<blockquote>`) | Two-tier demotion | **Measured (M2 dev):** D12 → FN. Redesign pending (D-032) |
 | **Negation decoy** ("do not refresh and press Win+R") | Would suppress the action | Mitigated: conjunctions and punctuation end the negation scope (tests S-A3, S-A5) |
+| Visually hidden but rendered text (same color as background, covered by another element) | Counted as visible: a page could plant invisible pretext text near an instruction | Known gap (ARCHITECTURE.md §3.9) |
+| Clipboard payload only inside JavaScript (`navigator.clipboard.writeText("…")`) | Payload not observed; the visible instruction is still analyzed | By design: scripts are not read. Runtime clipboard observation is M6+ |
 | Noise flooding (benign text crafted to trip findings) | Warning fatigue | `observed_instruction` never alerts. Only region-correlated suspicious/manipulative findings surface prominently |
 
 **Honest bottom line:** a browser-content detector is a *speed bump plus explanation layer*, not a guarantee. The measurable claim is narrower. On a defined corpus, it detects the action + pretext chain with element-level evidence while staying quiet on hard benign counterexamples.

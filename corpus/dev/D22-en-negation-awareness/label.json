@@ -1,0 +1,22 @@
+{
+  "id": "D22-en-negation-awareness",
+  "split": "dev",
+  "lang": "en",
+  "category": "benign",
+  "threatClass": "-",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://staysafe.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Awareness page phrased with negation",
+  "rationale": "Negated actions.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M2 dev split",
+  "created": "2026-10-21"
+}

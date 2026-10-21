@@ -6,3 +6,6 @@ coverage/
 *.zip
 .env*
 .DS_Store
+
+# Machine-specific evaluation timings (not reproducible across machines)
+eval/results/*perf*.json

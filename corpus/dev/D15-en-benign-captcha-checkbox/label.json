@@ -1,0 +1,22 @@
+{
+  "id": "D15-en-benign-captcha-checkbox",
+  "split": "dev",
+  "lang": "en",
+  "category": "benign",
+  "threatClass": "-",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://forum2.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Legitimate CAPTCHA widget before posting",
+  "rationale": "Verification wording without execution.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M2 dev split",
+  "created": "2026-10-21"
+}

@@ -5,7 +5,7 @@ import { applyModifiers, TIERS, type HeadingMemo, type ScoredCandidate } from '.
 import { normalize } from './normalize.js';
 import { observeAll, type Obs, type Source } from './observe.js';
 import { buildRegions, unplacedRegion, type RegionInfo } from './regions.js';
-import type { AnalysisResult, AppliedModifier, Finding, PageSnapshot, SourceRef, Verdict } from './types.js';
+import type { AnalysisResult, AnalyzeOptions, AppliedModifier, Finding, PageSnapshot, SourceRef, Verdict } from './types.js';
 
 function validate(s: PageSnapshot): void {
   if (s.schemaVersion !== 1) throw new Error(`Unsupported PageSnapshot schemaVersion: ${String(s.schemaVersion)}`);
@@ -114,11 +114,11 @@ function refKey(r: SourceRef): string {
   return r.type === 'block' ? `b:${r.blockId}` : r.type === 'hiddenCopy' ? `h:${r.candidateId}` : `t:${r.triggerId}`;
 }
 
-export function analyze(snapshot: PageSnapshot): AnalysisResult {
+export function analyze(snapshot: PageSnapshot, options: AnalyzeOptions = {}): AnalysisResult {
   validate(snapshot);
   const regions = buildRegions(snapshot.blocks.slice(0, MAX_BLOCKS));
   const { sources, truncated } = buildSources(snapshot, regions);
-  const { signals, cues } = observeAll(sources);
+  const { signals, cues } = observeAll(sources, options.negation !== false);
 
   const byRegion = new Map<RegionInfo, Obs[]>();
   for (const o of signals) {
@@ -130,7 +130,7 @@ export function analyze(snapshot: PageSnapshot): AnalysisResult {
   const memo: HeadingMemo = new Map();
   const scored: ScoredCandidate[] = [];
   for (const r of regions) {
-    for (const c of findCandidates(r, byRegion.get(r) ?? [])) scored.push(applyModifiers(c, cues, memo));
+    for (const c of findCandidates(r, byRegion.get(r) ?? [], options)) scored.push(applyModifiers(c, cues, memo, options));
   }
   const selected = select(scored);
 

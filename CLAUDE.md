@@ -21,7 +21,9 @@ Work only inside the current milestone's scope. If a change needs something outs
 - **Permissions:** the shipped manifest has exactly `activeTab` + `scripting`. Adding any permission requires a new DECISIONS.md entry and owner approval.
 - **No runtime dependencies** without a DECISIONS.md entry. Dev dependencies must be pinned in the lockfile.
 - **Clean room:** do not copy code, regexes or pattern lists from Nehboro (no license), ClipShield (GPL-3.0) or other projects (D-012).
-- **Evaluation integrity:** never tune rules or lexicons using `corpus/test` or `corpus/realworld`. Never edit frozen test fixtures. Run `--split test --final` only when the owner asks, and log the run.
+- **Evaluation integrity:** never tune rules, lexicons, extractor heuristics or thresholds using `corpus/test` or `corpus/realworld`. Never edit, add or delete files in `corpus/test` (hash-checked, D-022). Never open its labels to guide development. Run `npm run eval -- run --split test --final` only when the owner explicitly asks; it logs to `eval/runs.md`. Research variants run on `--split dev` only.
+- **Extractor (`src/extract`) is read-only:** no DOM writes, clicks, focus or event dispatch, no network, no reading of password/hidden/sensitive or user-typed values (D-025). The ESLint rule enforces most of this; keep the runtime tests green.
+- **`AnalyzeOptions` are research-only (D-028).** Production code calls `analyze(snapshot)` with defaults.
 - **Malicious samples:** defang payloads (`example.invalid`, `192.0.2.0/24`). Never fetch live malicious URLs.
 - **Claims:** do not write "detects X" in docs or UI unless a fixture plus test demonstrates it. Distinguish observed signals from inferred risk. Never call a page "safe". Never claim real-time/proactive protection (D-004). Never claim on-page highlighting before the browser adapter implements it.
 - **Result model (D-017):** a risky instruction alone is `observed_instruction`, not a detection. Keep `classification`, `confidence` and `actionRisk` separate. Do not introduce a generic weighted score.

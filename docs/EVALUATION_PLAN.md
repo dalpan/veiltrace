@@ -1,6 +1,6 @@
 # Evaluation Plan
 
-Status: plan. M4 targets approved (D-011). **Not yet executed:** the M1 snapshot scenarios in `tests/fixtures/scenarios.ts` are dev-split unit fixtures, not an evaluation corpus, and no metrics have been computed. The HTML corpus, harness and B0 arrive in M2.
+Status: harness implemented (M2). M4 targets approved (D-011). **Executed on the dev split only** (§9). The frozen held-out split has **not** been evaluated; that is reserved for M4 (`--final`). The M1 snapshot scenarios in `tests/fixtures/scenarios.ts` remain unit fixtures, not part of the evaluation corpus.
 
 ## 1. Questions the evaluation must answer
 
@@ -12,41 +12,43 @@ Status: plan. M4 targets approved (D-011). **Not yet executed:** the M1 snapshot
 
 Synthetic results answer Q1–Q5 *on our corpus*. They do **not** establish real-world effectiveness (§7).
 
-## 2. Corpus layout
+## 2. Corpus layout (implemented in M2)
 
 ```
 corpus/
-  dev/                 # used freely while designing rules
-    <scenario-id>/page.html
-    <scenario-id>/label.json
-  test/                # HELD-OUT; frozen before rule tuning (see §3)
-  realworld/           # sanitized captures; never used for tuning
-  MANIFEST.md          # table of scenarios, author, date, split, source
+  dev/<id>/index.html (+ extra pages)   # development split: free to read, extend and tune on
+  dev/<id>/label.json
+  test/<id>/...                         # HELD-OUT, frozen (D-022, commit 407beb0)
+  test/MANIFEST.json                    # SHA-256 per file + aggregate
+  test/README.md                        # construction method and known biases
 ```
 
-`label.json`:
+`label.json` (validated by `src/eval/corpus.ts → validateLabel`):
 ```json
 {
-  "id": "pos-id-fake-captcha-01",
-  "split": "dev",
-  "lang": "id",
-  "class": "T1",
-  "expected": {
-    "verdict": "manipulative_instruction",
-    "findings": [{ "ruleId": "R1", "minClassification": "manipulative_instruction", "regionContainsSelector": "#verify-modal" }]
-  },
-  "notes": "Fake Cloudflare-style modal, Indonesian, hidden textarea copy target",
-  "author": "…", "created": "2026-…"
+  "id": "D02-id-download-modal-after-click", "split": "dev", "lang": "id",
+  "category": "positive | benign | ambiguous | adversarial", "threatClass": "T1",
+  "truth": "malicious | benign",
+  "expectedClass": "manipulative_instruction | suspicious_correlation | observed_instruction | none",
+  "hardNegative": false,
+  "pages": [{ "url": "https://filebagi.example/", "file": "index.html" }],
+  "steps": [{ "click": "#dl" }],
+  "evidenceWithin": "#m",
+  "description": "…", "rationale": "…", "author": "…", "created": "2026-10-21"
 }
 ```
-Negatives use `"verdict": "none"` or `"verdict": "observed_instruction"`. Neither is a positive detection. An `observed_instruction` result on a negative is **not** a false positive, but its frequency is reported separately ("informational findings on negatives").
+- `truth` is the ground truth of intent. `expectedClass` is what a correct system should output. Malicious scenarios must expect a positive class, and benign ones `none` or `observed_instruction`.
+- `observed_instruction` on a benign scenario is **not** a false positive. It is reported separately ("observed-instruction results on benign scenarios").
+- Pages use fictional `.example`/`.test` hosts and are served offline (ARCHITECTURE.md §10). Payloads are defanged.
 
-## 3. Leakage controls
+## 3. Leakage controls (implemented in M2)
 
-1. **Split before design.** `test/` scenarios are written *from scenario descriptions* (§6) by a different person where possible, or by us **before** the corresponding rule exists, and are committed in a single "freeze" commit. Their hash is recorded in PROGRESS.md.
-2. **No tuning on test.** The harness refuses to print per-scenario test results unless `--final` is passed. `--final` runs are logged to `eval/runs.md` with the commit SHA. If rules change after a final run, the next run is reported as a *new* run, and both are kept.
-3. **Lexicon independence.** Test fixtures must use phrasing not copied from lexicon entries. A CI check flags any test fixture sentence that matches a lexicon example string verbatim.
-4. **Report dev and test separately, always.**
+1. **Split before design.** `corpus/test` (26 scenarios) was written and frozen **before** the extractor, dev corpus, harness or any M2 rule research existed (D-022). No detection was run on it. The freeze commit is `407beb0`, with manifest aggregate `954070c4…de85e`.
+2. **Integrity.** `tests/corpus.test.ts` recomputes all hashes, and the build fails if any test file changes. Refreezing requires `manifest --split test --refreeze` and a new DECISIONS.md entry.
+3. **No tuning on test.** `npm run eval -- run --split test` refuses without `--final`. `research` and `perf` refuse the test split entirely (tested). Each `--final` run appends the commit SHA and dirty flag to `eval/runs.md`. If rules change after a final run, the next run is reported as a new run, and both are kept.
+4. **Lexicon and fixture independence.** No normalized sentence of ≥ 6 words may be shared between the test split and the M1 unit fixtures, the lexicon examples or the dev corpus (`tests/corpus.test.ts`). Six shorter canonical lure phrases recur by design. They are documented in `corpus/test/README.md`, which also explains why they were not rewritten.
+5. **Report dev and test separately, always.** M2 reports **dev only**.
+6. **Known residual bias:** the same AI author wrote the rules, the dev split and the test split. An independent author for a future test split is recommended.
 
 ## 4. Metrics
 
@@ -70,9 +72,23 @@ Each named scenario gets a pass/fail row in the report. Judges and readers can i
 ### 4.5 Performance
 Extraction + analysis wall time per fixture (p50/p95) in Playwright Chromium on the developer machine, plus 3 large saved real pages (e.g. a long news article, a docs page and a forum thread, saved locally). The hardware is recorded.
 
-## 5. Baseline B0 (for Q3)
+## 5. Baseline B0 and ablations (implemented in M2, `src/eval/systems.ts`)
 
-B0 is our own minimal reimplementation of **page-level co-occurrence**, with the same lexicons and normalization: positive if the open + paste + execute patterns and any pretext pattern match anywhere in the full page text, ignoring regions and context modifiers. It is written by us from the description of the technique, not copied from any project. Reporting VEILTRACE vs B0 on the same corpus isolates the value of regions and context modifiers. We do **not** run or benchmark third-party extensions in the MVP evaluation, because that requires license-compatible, fair configuration and is out of hackathon scope.
+All systems consume the **same extracted `PageSnapshot`**, the same lexicons and the same normalization, and they use the same R1–R5 table. They differ only in correlation scope and context handling:
+
+| System | Correlation scope | Negation | Context modifiers |
+|---|---|---|---|
+| `veiltrace` (M1 model) | region-local, window K = 8 | yes | yes |
+| `B0` baseline | whole page (one region, K = ∞) | no | no |
+| `A1-page+context` | whole page | yes | yes |
+| `A2-region-only` | region-local, K = 8 | no | no |
+
+B0 is our own reimplementation of page-level co-occurrence, not third-party code. Comparing veiltrace with A1 isolates the effect of region locality, and comparing it with A2 isolates the effect of negation and context modifiers.
+
+**Limitations of B0:**
+- It shares VEILTRACE's lexicon, normalization, extractor and R1–R5 table, so it measures *our own* design choices, not any competitor. It must never be presented as "competitor X".
+- Its recall is an upper bound for phrase-level co-occurrence with this lexicon. A real page-level product with different phrases could do better or worse.
+- On compact synthetic pages, page-level and region-level evidence often coincide (B0 localization was 14/14). B0's localization weakness would only show on long, multi-topic pages.
 
 ## 6. Required scenarios (minimum set, each in EN and ID unless noted)
 
@@ -124,3 +140,31 @@ Measured on the **frozen held-out test split** only:
 Secondary (not approved targets, reported descriptively): VEILTRACE vs B0 FP counts, and p95 latency.
 
 These are research targets, not guaranteed outcomes. The report must include raw counts, Wilson 95% intervals, corpus composition (per class, per language, per split) and limitations, whether or not the targets are met. Rules are never tuned against the frozen test split.
+
+## 9. M2 results: dev split only (synthetic; not real-world effectiveness)
+
+Source: `eval/results/dev.json` (byte-identical across repeated runs), `dev.md`, `dev.research.*` and `perf.json`. Engine `0.1.0-m1`, extractor `0.1.0-m2`.
+
+**Corpus:** 36 scenarios. 14 malicious (11 positive, 3 adversarial) and 22 benign hard negatives (1 of them ambiguous). 20 EN and 16 ID, with 11 hard negatives per language. **The dev split was written with knowledge of the M1 risks (R-1, R-2), so it over-represents known failure modes by design.**
+
+| System | TP | FP | TN | FN | Precision | Recall | Hard-neg FPR | Localization |
+|---|---|---|---|---|---|---|---|---|
+| veiltrace | 12 | 4 | 18 | 2 | 75.0% (12/16; CI 50.5–89.8) | 85.7% (12/14; CI 60.1–96.0) | 18.2% (4/22; CI 7.3–38.5) | 12/12 |
+| B0 | 14 | 8 | 14 | 0 | 63.6% (14/22; CI 43.0–80.3) | 100% (14/14; CI 78.5–100) | 36.4% (8/22; CI 19.7–57.0) | 14/14 |
+| A1 page+context | 12 | 5 | 17 | 2 | 70.6% | 85.7% | 22.7% (5/22) | 12/12 |
+| A2 region-only | 14 | 7 | 15 | 0 | 66.7% | 100% | 31.8% (7/22) | 14/14 |
+
+- **Region locality** alone (veiltrace vs A1) removed 1 FP: the cross-region banner + how-to (D24).
+- **Negation and context modifiers** (veiltrace vs A2) removed 3 FPs (news quote D20, educational code blocks D21/D34) and 2 negation-only "observed" outcomes, at the cost of **2 FNs: modifier evasion D10 (planted reported speech) and D12 (planted blockquote)**.
+- **All 4 remaining veiltrace FPs are R4:** troubleshooting docs (D17, D27, "fix this error" + chain) and internal IT notices (D18, D28, authority + chain).
+- **Localization:** all 12 veiltrace TPs had every evidence element inside `evidenceWithin` (95% CI 75.8–100%). The dev lures are compact, so this does not stress localization. B0 also localized 14/14 here.
+- **Network:** 0 requests during any scan.
+- The width of the intervals (n = 36) means none of these differences is statistically established. **No claim of statistical significance is made.**
+
+**Limitations of the 36-scenario dev corpus:**
+- It is synthetic and short, written by one AI author who also wrote the rules. It was deliberately seeded with the M1 risks (R4 docs/IT pages, modifier evasion), so its FP and FN rates are not estimates of any real-world rate.
+- Its class balance (14 malicious : 22 benign) is arbitrary.
+- There are no benign modal/tutorial dialogs (needed for the P2 redesign, D-032), no long multi-topic pages, no real site frameworks, and few informal or code-mixed Indonesian variants.
+- All precision, recall and FPR figures in this section are **development-split, synthetic results**. The frozen held-out split is untouched, and real-world effectiveness is unmeasured (§7).
+- Committed artifacts: `eval/results/dev.json`, `dev.md`, `dev.research.json` and `dev.research.md` (deterministic, D-034). Timings are not committed.
+

@@ -1,0 +1,22 @@
+{
+  "id": "D07-en-shadow-dom-widget-lure",
+  "split": "dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://weather.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#w",
+  "description": "Third-party widget (open shadow DOM) injects a fake verification",
+  "rationale": "Shadow DOM content must be extracted.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M2 dev split",
+  "created": "2026-10-21"
+}

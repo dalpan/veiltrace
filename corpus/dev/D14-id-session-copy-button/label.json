@@ -1,0 +1,22 @@
+{
+  "id": "D14-id-session-copy-button",
+  "split": "dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T3",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://akun-saya.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#s",
+  "description": "Sesi berakhir: urgensi + tombol Salin dengan perintah tersembunyi",
+  "rationale": "Perintah terkirim + urgensi.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M2 dev split",
+  "created": "2026-10-21"
+}

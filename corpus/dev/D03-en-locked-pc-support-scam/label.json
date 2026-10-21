@@ -1,0 +1,22 @@
+{
+  "id": "D03-en-locked-pc-support-scam",
+  "split": "dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T5",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://secure-alert.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#lock",
+  "description": "Full-screen 'computer locked' support scam with a certutil unlock command",
+  "rationale": "Authority + urgency + delivered command, no human-verification pretext.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M2 dev split",
+  "created": "2026-10-21"
+}

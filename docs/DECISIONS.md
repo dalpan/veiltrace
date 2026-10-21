@@ -72,3 +72,39 @@ Owner authorized `git init`. Commits wait for review of the M1 implementation an
 
 ### D-022 · Accepted · 2026-10-21 · Held-out test split frozen before any M2 extractor or rule work
 `corpus/test` holds 26 HTML scenarios (12 malicious, 14 benign hard negatives, 11 Indonesian) with SHA-256 manifest aggregate `954070c4cab79ba112907810fdc21e02ac5008c2348597b7063f6fed0bdde85e`. Owner-authorized freeze commit. Controls: `tests/corpus.test.ts` fails on any file change, `npm run eval` refuses detection on `--split test` without `--final`, and refreezing needs `--refreeze` plus a new decision entry. The leakage check fails on shared sentences of ≥ 6 words. Six shorter canonical lure phrases overlap with the lexicon by design and are documented in `corpus/test/README.md`. Labels are ground truth of intent assigned without running VEILTRACE. Known bias: same author as the rules.
+
+### D-023 · Accepted · 2026-10-21 · `aria-hidden` does not hide text from extraction
+VEILTRACE models what a sighted user sees. `aria-hidden="true"` only affects assistive technology, and an attacker could set it on a visible lure to evade. Visibility is decided by rendering (client rects, computed visibility/opacity/clip), not ARIA. This supersedes the M0 ARCHITECTURE draft, which listed `aria-hidden` as hidden.
+
+### D-024 · Accepted · 2026-10-21 · Extractor semantics (M2)
+Text is visible when its text node has a ≥ 1×1 px client rect that is not off-page, its element's computed `visibility` is `visible` and its `font-size` is non-zero, and no ancestor has `opacity: 0` or is clipped. Blocks are per block-level box, in reading order. Containers come from semantic boundaries (dialog, overlay, ugc, article, section, aside, nav, header, footer, main, form, landmark roles, shadow host, frame, body). Details are in ARCHITECTURE.md §3. Owner review requested, because these choices shape region boundaries.
+
+### D-025 · Accepted · 2026-10-21 · Extractor privacy rules
+The extractor never reads password/hidden/non-text input values, fields whose name, id or autocomplete suggests secrets or personal data, or anything the user typed (`.value`). Only page-authored `defaultValue`, `placeholder` and `data-clipboard-text` are read. Enforced by tests.
+
+### D-026 · Accepted · 2026-10-21 · `data-clipboard-text` payloads are clipboard-staged content even when also visible
+The extractor records them as hidden copy candidates regardless of visibility, because the attribute is what will be copied and may differ from what is shown. Consequence: a docs copy button with a strong command counts as a delivery path. That is still `observed_instruction` without a pretext.
+
+### D-027 · Accepted (provisional) · 2026-10-21 · Extractor time budget 1,500 ms (was 300 ms in the M0 draft)
+Measured extraction on 15k-element pages is ~100–120 ms, so 300 ms would truncate too eagerly on slower devices. The block budget (5,000) is the binding limit in practice. Revisit after M3 measurements on real hardware.
+
+### D-028 · Accepted · 2026-10-21 · `AnalyzeOptions` are research-only
+`analyze(snapshot, options?)` keeps M1 behavior when options are omitted (tested). Baselines, ablations and dev research use options. The extension (M3) must call `analyze(snapshot)` with defaults, and changing a default requires a new decision.
+
+### D-029 · Superseded by D-031 and D-032 · 2026-10-21 · Rule changes P1 (R4 ignores authority-only pretext) and P2 (no context demotion inside dialogs/overlays)
+Evidence on dev only (DETECTION_MODEL.md §10): P1 removes 2 of 4 R4 FPs with no recall loss, and P2 recovers all 3 modifier-evasion lures with no new FP. **Awaiting owner approval.** If approved, apply as a new engine version and validate on the frozen test split at M4. If not approved, the M1 model stays as is.
+
+### D-030 · Accepted · 2026-10-21 · Extractor line coverage is not instrumented (instrument in a future testing milestone if practical)
+The extractor runs inside Chromium, where V8 coverage from Vitest/Node does not reach. It is verified behaviorally instead: 18 targeted Playwright tests, 36 dev scenarios through the real extractor (offsets, offline, evidence resolution), the perf pages, and a lint rule plus bundle checks. Browser-side coverage (Playwright JS coverage) can be added if the owner wants a number.
+
+### D-031 · Accepted (future rule revision; NOT implemented) · 2026-10-21 · P1: R4 does not escalate on an authority-only pretext
+Owner-approved at M2 review. In the next controlled detection-rule revision, R4 must not produce `suspicious_correlation` when `P.AUTHORITY` is the only weak pretext family. The finding must still be reported as `observed_instruction`, and the `P.AUTHORITY` observation is preserved in the output. Until then, the engine stays at the M1 model (`0.1.0-m1`), and `experimental.r4ExcludeAuthorityOnly` exists only for research. The revision must ship as a new engine version, with dev evidence, before any held-out run.
+
+### D-032 · Rejected in current form · 2026-10-21 · P2: unconditional "no demotion inside dialogs/overlays"
+Owner decision at M2 review. Overlay or dialog presence alone must not disable contextual demotion: benign modals and tutorials (cookie/consent dialogs quoting text, in-app tutorials, help overlays with code examples) would lose their protection. A redesign must (a) require evidence of a **direct behavioral instruction targeting the current user** (e.g. second-person imperative steps, interaction controls such as a copy/verify button, or a staged clipboard payload in the same region) before demotion is skipped, and (b) come with benign modal/tutorial counterexamples in the dev split that keep their demotion. `experimental.noDemotionInDialogs` is kept **only to reproduce the M2 research table** and must not be used as a basis for the redesign's claims.
+
+### D-033 · Accepted · 2026-10-21 · Explicit partial-scan reporting
+`SnapshotCoverage.partial?: PartialReason[]` lists why a scan is incomplete: `node-budget`, `block-budget`, `char-budget`, `timeout`, `block-text-capped`, `aux-capped`, `frames-skipped`, `closed-shadow-skipped`. `scanStatus(result.coverage)` in the core returns `{ complete, reasons }` and adds `core-truncated`. These are reporting only and never change findings (tested). As part of this, a defect was fixed: an over-long single block used to stop the whole walk. It now caps only that block (reported as `block-text-capped`) and the scan continues. `ctx.ariaHidden` is recorded as metadata (D-023) at block-owner/container granularity.
+
+### D-034 · Accepted · 2026-10-21 · Evaluation artifacts in git
+Only the deterministic, compact artifacts are committed: `eval/results/dev.json`, `dev.md`, `dev.research.json` and `dev.research.md`, which are byte-identical across runs on the same commit. Timing files (`*perf*.json`) are machine-specific and git-ignored. Build output (`dist/`), coverage reports, browser traces and screenshots are never committed.

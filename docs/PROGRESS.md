@@ -4,6 +4,52 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-21 · M2 finalization (owner review: conditionally accepted)
+
+- **Decisions:**
+  - P1 accepted for the next controlled rule revision but **not implemented** (D-031).
+  - P2 rejected in its current form, with redesign requirements (D-032).
+  - `aria-hidden` kept as metadata (`ctx.ariaHidden`, D-023).
+  - 1,500 ms budget accepted provisionally (D-027).
+  - Extractor coverage instrumentation deferred (D-030).
+- **Partial-scan reporting** (D-033): `coverage.partial` reasons from the extractor and `scanStatus()` in the core. **Defect fixed:** an over-long block no longer stops the scan.
+- **Detection unchanged:** results are identical to commit `d856fbd` on all 30 M1 unit fixtures and on all 36 extracted dev snapshots. Dev metrics are identical to the pre-finalization run.
+- **Artifacts:** only deterministic `eval/results/dev*.{json,md}` are committed; timings are git-ignored (D-034). Byte-identical across two runs.
+- **Held-out:** untouched; manifest verified.
+
+## 2026-10-21 · M2 DOM extraction, evaluation corpus, baseline research · **Implemented**
+
+**Done**
+- **Held-out split frozen first** (`407beb0`, D-022). 26 scenarios, hash-checked; no detection run on it.
+- **Extractor** (`src/extract`, IIFE `dist/extractor.js` ~18 KB):
+  - rendering-based visibility, block segmentation, semantic containers, context flags, heading context
+  - locators across shadow DOM and frames, plus `resolveLocator`
+  - copy triggers and hidden clipboard payloads
+  - privacy filters, budgets, read-only guarantees
+  - `watchForChanges` for dynamic and SPA pages
+  - Limitations are in ARCHITECTURE.md §3.9.
+- **Dev corpus:** 36 HTML scenarios (14 malicious, 22 hard negatives; 11 EN + 11 ID hard negatives). Covers fake CAPTCHA, benign CAPTCHA, docs, tech support, internal IT, news, Indonesian, UGC/widget/shadow/iframe injection, modal after click, cross-region, and modifier-evasion cases.
+- **Harness** (`src/eval`, `npm run eval`): offline routing, scenario metrics, Wilson CIs, confusion and class matrices, localization in the live DOM, JSON/Markdown outputs, held-out guards, `research` and `perf`.
+- **B0 and ablations** (`src/eval/systems.ts`) on identical snapshots.
+- **Core:** `AnalyzeOptions` (research-only; defaults = M1, tested). Optional `BlockContext.overlay`. **No change to the M1 decision model.**
+
+**Verification**
+- `npm run check`: typecheck (3 configs) ✔, lint ✔. See the final test count in the M2 report.
+- Dev results (EVALUATION_PLAN.md §9):
+  - veiltrace: TP 12, FP 4, TN 18, FN 2, localization 12/12
+  - B0: TP 14, FP 8, TN 14, FN 0
+  - 0 network requests during scans
+- Research (DETECTION_MODEL.md §10): P1 and P2 proposed (D-029). K = 8 kept. Semantic containers kept.
+- Perf (`eval/results/perf.json`): dev total p50 ≈ 1.3 ms; large synthetic pages 34–224 ms; 2,000 DOM mutations → 1 notification.
+
+**Not done / deviations**
+- No rule changes applied (owner instruction). P1/P2 await approval.
+- Extractor line coverage is not instrumented (D-030).
+- No real third-party pages were saved for perf (no third-party content in the repo). Synthetic large pages were used instead.
+- The real `chrome.dom.openOrClosedShadowRoot` and isolated-world behavior are deferred to M3.
+
+**Next:** M3 only after explicit owner approval.
+
 ## 2026-10-21 · M2 step 1 · Held-out test split frozen (D-022)
 
 - Playwright 1.64.1 added (dev) with Chromium headless shell 156. This was the only network access, at tooling install time.

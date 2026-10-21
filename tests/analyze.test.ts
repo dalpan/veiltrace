@@ -311,3 +311,26 @@ describe('input contract and bounds', () => {
     expect(r.findings.filter((f) => f.classification !== 'observed_instruction')).toHaveLength(10);
   });
 });
+
+describe('AnalyzeOptions (research ablations)', () => {
+  it('defaults reproduce the M1 model exactly', () => {
+    for (const sc of [...SCENARIOS, ...KNOWN_LIMITATIONS]) {
+      const base = analyze(sc.snapshot);
+      expect(analyze(sc.snapshot, {})).toEqual(base);
+      expect(analyze(sc.snapshot, { windowBlocks: 8, contextModifiers: true, negation: true, experimental: {} })).toEqual(base);
+    }
+  });
+
+  it('switches change behavior only as documented', () => {
+    const n4 = SCENARIOS.find((s) => s.id === 'S-N4-en')!.snapshot;
+    expect(analyze(n4, { contextModifiers: false }).verdict).toBe('manipulative_instruction');
+    const n6 = SCENARIOS.find((s) => s.id === 'S-N6-en')!.snapshot;
+    expect(analyze(n6, { negation: false }).verdict).not.toBe('none');
+    const n8 = KNOWN_LIMITATIONS.find((s) => s.id === 'S-N8-en')!.snapshot;
+    expect(analyze(n8, { experimental: { r4ExcludeAuthorityOnly: true } }).verdict).toBe('observed_instruction');
+    const p3 = SCENARIOS.find((s) => s.id === 'S-P3-en')!.snapshot;
+    expect(analyze(p3, { experimental: { r4MinWeakFamilies: 2 } }).verdict).toBe('observed_instruction');
+    const far = snapshot(inContainer('main', ['Verify you are human', ...Array.from({ length: 9 }, () => 'filler'), 'Press Win+R', 'Press Ctrl+V', 'Press Enter']));
+    expect(analyze(far, { windowBlocks: Infinity }).verdict).toBe('manipulative_instruction');
+  });
+});

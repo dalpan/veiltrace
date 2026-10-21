@@ -1,0 +1,26 @@
+{
+  "id": "D08-en-same-origin-support-iframe",
+  "split": "dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T7",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://shop2.example/",
+      "file": "index.html"
+    },
+    {
+      "url": "https://shop2.example/support.html",
+      "file": "support.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#support",
+  "description": "Same-origin support iframe containing a lure",
+  "rationale": "Same-origin frames are inspected.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M2 dev split",
+  "created": "2026-10-21"
+}

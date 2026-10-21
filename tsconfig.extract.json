@@ -1,0 +1,9 @@
+{
+  // Extractor config: DOM types, no Node types. It may import types (only) from src/core.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": []
+  },
+  "include": ["src/extract/**/*.ts"]
+}

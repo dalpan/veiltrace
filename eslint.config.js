@@ -33,6 +33,26 @@ export default defineConfig(
     },
   },
   {
+    // The extractor reads the page; it must never write to it, dispatch events or talk to the network.
+    files: ['src/extract/**/*.ts'],
+    rules: {
+      'no-restricted-globals': ['error', ...['fetch', 'XMLHttpRequest', 'WebSocket', 'EventSource', 'importScripts', 'eval', 'chrome', 'browser']
+        .map((name) => ({ name, message: 'src/extract must not use network, dynamic code or extension APIs.' }))],
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "CallExpression[callee.property.name=/^(appendChild|append|prepend|removeChild|remove|insertBefore|replaceChild|replaceWith|replaceChildren|before|after|setAttribute|setAttributeNS|removeAttribute|toggleAttribute|insertAdjacentHTML|insertAdjacentElement|insertAdjacentText|click|focus|blur|submit|requestSubmit|write|writeln|attachShadow|showModal|scrollIntoView|scrollTo|dispatchEvent|execCommand|setProperty)$/]",
+          message: 'src/extract must not mutate the DOM or trigger page behavior.',
+        },
+        {
+          selector: "AssignmentExpression[left.type='MemberExpression'][left.property.name=/^(innerHTML|outerHTML|textContent|innerText|outerText|value|nodeValue|data|className|id|src|href|hidden|checked|cssText|scrollTop|scrollLeft)$/]",
+          message: 'src/extract must not mutate the DOM.',
+        },
+        { selector: "NewExpression[callee.name='Function']", message: 'No dynamic code.' },
+      ],
+    },
+  },
+  {
     files: ['scripts/**/*.mjs', 'tests/**/*.ts', 'src/eval/**/*.ts', '*.config.*'],
     languageOptions: { globals: nodeGlobals },
   },

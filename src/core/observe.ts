@@ -105,14 +105,14 @@ function structuralTrigger(src: Source): Obs {
 }
 
 /** Matches every source. Returns action/pretext observations and all context cue candidates. */
-export function observeAll(sources: readonly Source[]): { signals: Obs[]; cues: Obs[] } {
+export function observeAll(sources: readonly Source[], negation = true): { signals: Obs[]; cues: Obs[] } {
   const signals: Obs[] = [];
   const cues: Obs[] = [];
   for (const src of sources) {
     if (src.ref.type === 'copyTrigger' && src.text.length > 0) signals.push(structuralTrigger(src));
     for (const ob of matchSource(src)) (ob.o.kind === 'context' ? cues : signals).push(ob);
   }
-  bindNegation(signals, cues);
+  if (negation) bindNegation(signals, cues);
   bindReported(signals, cues);
   return { signals, cues };
 }

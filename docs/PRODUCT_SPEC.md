@@ -41,7 +41,7 @@ Success is defined by the measured results in EVALUATION_PLAN.md, not by feature
    - 🟠 **Suspicious instruction** (`suspicious_correlation`): "This part of the page asks you to run a command and uses pressure or a 'fix' story. Be careful."
    - ⚪ **No manipulative instructions found in the inspected content.** This also covers `observed_instruction`, which is listed neutrally under Details as "Instructions to run commands were found (no signs of manipulation)". Never "Safe".
 2. **Confidence** is shown separately from the classification ("confidence: medium, the text is inside a quotation"). **Action risk** describes what following the instruction would do ("runs code on your computer").
-3. **Coverage line** (always): "Inspected: 312 text blocks · 2 frames not inspected". Shown when relevant: "Page was truncated".
+3. **Coverage line** (always): "Complete scan · 312 text blocks" or **"Partial scan:** 2 frames not inspected · page too large, first 5,000 blocks analyzed". The text is driven by `scanStatus()` (ARCHITECTURE.md §3.10). On a partial scan, "No manipulative instructions found" must be qualified with "in the inspected content".
 4. **Finding card:** classification, confidence, action risk, the inferred sentence, a list of observed evidence (quoted snippet + signal label, e.g. *"Tekan Windows + R"* → *opens Run dialog*), applied modifiers ("demoted: text is reported speech"), and **Copy report** (user-initiated local clipboard write). **Show on page** is planned for M3. The core already provides locators and offsets, but no highlighting exists yet.
 5. **Rescan** button (dynamic pages).
 6. Observed instructions sit under a collapsed "Details for experts" section.

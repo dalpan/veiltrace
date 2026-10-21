@@ -13,6 +13,10 @@ export interface BlockContext {
   form?: boolean;
   /** Inside a user-generated-content container (comments, reviews). Used from M4. */
   ugc?: boolean;
+  /** Inside a fixed/large positioned overlay (M2 extractor). Ignored by the M1 decision model. */
+  overlay?: boolean;
+  /** Owner block or an ancestor block/container has aria-hidden="true" (metadata only, D-023). Ignored by the decision model. */
+  ariaHidden?: boolean;
 }
 
 export interface Block {
@@ -48,10 +52,17 @@ export interface CopyTrigger {
   locator?: string;
 }
 
+/** Why a scan did not cover the whole rendered page (ARCHITECTURE.md §3.10). */
+export type PartialReason =
+  | 'node-budget' | 'block-budget' | 'char-budget' | 'timeout'
+  | 'block-text-capped' | 'aux-capped' | 'frames-skipped' | 'closed-shadow-skipped';
+
 export interface SnapshotCoverage {
   framesSkipped: number;
   truncated: boolean;
   closedShadowRootsSkipped: number;
+  /** Reasons the scan is partial; empty means complete as far as the extractor can observe. Optional for hand-written snapshots. */
+  partial?: PartialReason[];
 }
 
 export interface PageSnapshot {
@@ -173,6 +184,28 @@ export interface Finding {
   modifiers: AppliedModifier[];
   /** Plain-English inference statement (not localized in M1). */
   summary: string;
+}
+
+/**
+ * Research/ablation switches (M2). Omitting them, or passing {}, reproduces the M1 decision model exactly.
+ * Production callers (the extension) must use the defaults; changing a default requires a DECISIONS.md entry.
+ */
+export interface AnalyzeOptions {
+  /** Correlation window in blocks (default WINDOW_BLOCKS = 8). Infinity = whole region. */
+  windowBlocks?: number;
+  /** Apply C.QUOTED / C.REPORTED / C.EDUCATIONAL / C.CODE_EXAMPLE (default true). */
+  contextModifiers?: boolean;
+  /** Bind negation cues to actions (default true). */
+  negation?: boolean;
+  /** Candidate rule changes under evaluation. Not part of the accepted model. */
+  experimental?: {
+    /** R4 requires at least this many weak pretext families (M1: 1). */
+    r4MinWeakFamilies?: number;
+    /** R4 does not fire when P.AUTHORITY is the only weak pretext family. */
+    r4ExcludeAuthorityOnly?: boolean;
+    /** Context modifiers do not demote findings whose evidence lies entirely in dialogs/overlays. */
+    noDemotionInDialogs?: boolean;
+  };
 }
 
 export interface AnalysisResult {

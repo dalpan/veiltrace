@@ -1,0 +1,22 @@
+{
+  "id": "D04-id-locked-pc-support-scam",
+  "split": "dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T5",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://peringatan-pc.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#lock",
+  "description": "Penipuan dukungan teknis berbahasa Indonesia",
+  "rationale": "Otoritas + urgensi + instruksi PowerShell.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M2 dev split",
+  "created": "2026-10-21"
+}

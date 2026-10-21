@@ -1,0 +1,22 @@
+{
+  "id": "D31-id-negation-awareness",
+  "split": "dev",
+  "lang": "id",
+  "category": "benign",
+  "threatClass": "-",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://aman.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Halaman edukasi dengan kalimat negatif",
+  "rationale": "Aksi yang dinegasikan.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M2 dev split",
+  "created": "2026-10-21"
+}

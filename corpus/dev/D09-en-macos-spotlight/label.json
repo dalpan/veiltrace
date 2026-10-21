@@ -1,0 +1,22 @@
+{
+  "id": "D09-en-macos-spotlight",
+  "split": "dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T1",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://pdfshare.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#g",
+  "description": "macOS ClickFix via Spotlight and Terminal",
+  "rationale": "macOS variant.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M2 dev split",
+  "created": "2026-10-21"
+}

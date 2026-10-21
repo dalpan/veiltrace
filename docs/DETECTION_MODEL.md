@@ -1,6 +1,6 @@
 # Detection Model
 
-Status: M1 (implemented in `src/core`). Engine version is recorded in `ENGINE_VERSION`.
+Status: M1 model, **unchanged in M2** (engine `0.1.0-m1`; equivalence with commit `d856fbd` verified on all unit fixtures and all 36 extracted dev snapshots). M2 added research-only `AnalyzeOptions` (§9) and measured the model on the dev split. Rule decisions after the M2 review are in §10: P1 is accepted for a future revision (not implemented) and P2 is rejected in its current form.
 
 ## 1. Design goals
 
@@ -116,3 +116,30 @@ Matching runs on a normalized copy. Evidence always uses the original text.
 - Lowercase-only and Latin-confusable folding: other scripts (e.g. Armenian lookalikes) are not folded.
 - Region quality depends on the extractor's `containerId` (M2). Hand-written snapshots in M1 assume ideal containers.
 - Performance: a 5,000-block snapshot takes ~210 ms in Node on the development machine (all 115 lexicon regexes run on every block). An optimization pass is planned before the M4 latency measurement.
+
+## 9. Research options (M2, `AnalyzeOptions`)
+
+`analyze(snapshot, options?)`. Omitting `options`, or passing `{}`, reproduces the M1 model exactly; a test asserts deep equality on all unit fixtures. The options exist so that baselines and ablations run on identical input:
+- `windowBlocks` (default 8; `Infinity` = whole region)
+- `contextModifiers` (default true)
+- `negation` (default true)
+- `experimental.r4MinWeakFamilies`, `experimental.r4ExcludeAuthorityOnly`, `experimental.noDemotionInDialogs`, which are candidate rule changes under evaluation (§10)
+
+Production callers (the M3 extension) must use the defaults (D-028).
+
+## 10. M2 findings and proposed changes (dev split only; NOT applied)
+
+Evidence: `eval/results/dev.research.md`. The dev split deliberately contains these failure modes, so the effects below are **upper bounds on benefit**. Each proposal must be validated on the frozen held-out split at M4 **after** the owner approves it, and that validation run is the first and only test-split run.
+
+| Risk | Dev evidence | Proposal | Status |
+|---|---|---|---|
+| R-1: R4 FPs on legitimate docs and IT notices | 4/22 dev FPs, all R4: D17/D27 (`P.FAKE_FIX` only), D18/D28 (`P.AUTHORITY` only) | **P1:** R4 must not escalate when `P.AUTHORITY` is the only weak family; report `observed_instruction` and keep the authority observation. Dev: FP 4→2, recall unchanged (12/14) | **Accepted for the next controlled rule revision; not implemented** (D-031) |
+| R-1 alternative | `r4MinWeakFamilies = 2`: FP 4→0, but recall 12→10, because real fix-it lures D13 and D14 are lost | Rejected: it trades real lures for docs FPs | Rejected |
+| R-1 residual | D17/D27 "to fix this error, open Terminal, paste…, press Enter" + `curl … \| bash` remain FPs under P1 | Open question. Lexically indistinguishable from fix-it lures on these pages; may need presentation signals (overlay, M4 `C.OVERLAY`) | Open |
+| R-2: modifier evasion | D10 (planted "Visitors were asked to complete these steps:") and D12 (lure in `<blockquote>`) demoted to `observed_instruction` = FN. D11 (planted "Security tips") demoted to suspicious (still TP) | **P2 (as evaluated):** context modifiers do not demote a finding whose evidence lies entirely in a dialog/overlay container. Dev: recovers D10, D11 and D12 with no new FP, **but the dev split has no benign modal/tutorial counterexamples**, so that result is uninformative about the cost | **Rejected in this form** (D-032). Redesign must require evidence of a direct behavioral instruction to the current user and must preserve benign modal/tutorial demotion |
+| R-2 residual | Planted reported speech or quotes **outside** an overlay (e.g. in a comment) still demote | Open: candidate syntactic cues (2nd-person imperative after the cue) | Open |
+| R-3: window K | K ∈ {6, 8, 12, 16, ∞} identical on dev. K = 4 demotes D02 (heading + list split by the 3-step list), and K = 2 also loses D03 | Keep K = 8. Dev pages are small, so revisit with larger realistic pages before claiming insensitivity | Keep |
+| Region boundaries | Coarse containers (dialog/overlay/body only) add 1 FP (D24: header banner pretext + article how-to) | Keep semantic containers | Keep |
+
+For the record only: P1 + P2 combined on dev gave TP 14, FP 2, TN 20, FN 0. This is tuned on dev, P2 is rejected, and it must not be cited as a performance claim.
+

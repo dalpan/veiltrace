@@ -1,0 +1,22 @@
+{
+  "id": "D01-en-blog-security-check-overlay",
+  "split": "dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T1",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://travelnotes.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#gate",
+  "description": "Travel blog behind a fake security check with Run-dialog steps and an off-screen payload",
+  "rationale": "Canonical ClickFix overlay.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M2 dev split",
+  "created": "2026-10-21"
+}

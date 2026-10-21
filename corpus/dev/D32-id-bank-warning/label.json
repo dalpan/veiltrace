@@ -1,0 +1,22 @@
+{
+  "id": "D32-id-bank-warning",
+  "split": "dev",
+  "lang": "id",
+  "category": "benign",
+  "threatClass": "-",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://bank-dua.test/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Peringatan bank tentang penipuan",
+  "rationale": "Tanpa instruksi eksekusi.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M2 dev split",
+  "created": "2026-10-21"
+}

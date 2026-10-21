@@ -1,0 +1,2131 @@
+{
+  "split": "dev",
+  "engineVersion": "0.1.0-m1",
+  "extractorVersion": "0.1.0-m2",
+  "systems": [
+    {
+      "id": "veiltrace",
+      "description": "M1 model: region-local windows (K=8) + negation + context modifiers"
+    },
+    {
+      "id": "B0",
+      "description": "Baseline: page-level co-occurrence, same signals and R1–R5 table, no negation, no context modifiers"
+    },
+    {
+      "id": "A1-page+context",
+      "description": "Ablation: page-level, with negation and context modifiers"
+    },
+    {
+      "id": "A2-region-only",
+      "description": "Ablation: region-local, no negation, no context modifiers"
+    }
+  ],
+  "composition": {
+    "category:adversarial": 3,
+    "category:ambiguous": 1,
+    "category:benign": 21,
+    "category:positive": 11,
+    "hardNegative": 22,
+    "lang:en": 20,
+    "lang:id": 16,
+    "total": 36,
+    "truth:benign": 22,
+    "truth:malicious": 14
+  },
+  "metrics": {
+    "veiltrace": {
+      "scenarios": 36,
+      "confusion": {
+        "tp": 12,
+        "fp": 4,
+        "tn": 18,
+        "fn": 2
+      },
+      "precision": {
+        "k": 12,
+        "n": 16,
+        "value": 0.75,
+        "ci95": [
+          0.505,
+          0.8982
+        ]
+      },
+      "recall": {
+        "k": 12,
+        "n": 14,
+        "value": 0.8571,
+        "ci95": [
+          0.6006,
+          0.9599
+        ]
+      },
+      "fpr": {
+        "k": 4,
+        "n": 22,
+        "value": 0.1818,
+        "ci95": [
+          0.0731,
+          0.3852
+        ]
+      },
+      "hardNegativeFpr": {
+        "k": 4,
+        "n": 22,
+        "value": 0.1818,
+        "ci95": [
+          0.0731,
+          0.3852
+        ]
+      },
+      "localization": {
+        "k": 12,
+        "n": 12,
+        "value": 1,
+        "ci95": [
+          0.7575,
+          1
+        ]
+      },
+      "classMatrix": [
+        [
+          7,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          10,
+          4,
+          0
+        ],
+        [
+          0,
+          0,
+          4,
+          0
+        ],
+        [
+          0,
+          2,
+          1,
+          7
+        ]
+      ],
+      "exactClassAgreement": {
+        "k": 28,
+        "n": 36,
+        "value": 0.7778,
+        "ci95": [
+          0.6192,
+          0.8828
+        ]
+      },
+      "observedOnNegatives": 10,
+      "byLanguage": {
+        "en": {
+          "recall": {
+            "k": 8,
+            "n": 9,
+            "value": 0.8889,
+            "ci95": [
+              0.565,
+              0.9801
+            ]
+          },
+          "fpr": {
+            "k": 2,
+            "n": 11,
+            "value": 0.1818,
+            "ci95": [
+              0.0514,
+              0.477
+            ]
+          }
+        },
+        "id": {
+          "recall": {
+            "k": 4,
+            "n": 5,
+            "value": 0.8,
+            "ci95": [
+              0.3755,
+              0.9638
+            ]
+          },
+          "fpr": {
+            "k": 2,
+            "n": 11,
+            "value": 0.1818,
+            "ci95": [
+              0.0514,
+              0.477
+            ]
+          }
+        }
+      }
+    },
+    "B0": {
+      "scenarios": 36,
+      "confusion": {
+        "tp": 14,
+        "fp": 8,
+        "tn": 14,
+        "fn": 0
+      },
+      "precision": {
+        "k": 14,
+        "n": 22,
+        "value": 0.6364,
+        "ci95": [
+          0.4295,
+          0.8027
+        ]
+      },
+      "recall": {
+        "k": 14,
+        "n": 14,
+        "value": 1,
+        "ci95": [
+          0.7847,
+          1
+        ]
+      },
+      "fpr": {
+        "k": 8,
+        "n": 22,
+        "value": 0.3636,
+        "ci95": [
+          0.1973,
+          0.5705
+        ]
+      },
+      "hardNegativeFpr": {
+        "k": 8,
+        "n": 22,
+        "value": 0.3636,
+        "ci95": [
+          0.1973,
+          0.5705
+        ]
+      },
+      "localization": {
+        "k": 14,
+        "n": 14,
+        "value": 1,
+        "ci95": [
+          0.7847,
+          1
+        ]
+      },
+      "classMatrix": [
+        [
+          5,
+          2,
+          0,
+          0
+        ],
+        [
+          1,
+          6,
+          6,
+          2
+        ],
+        [
+          0,
+          0,
+          4,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          10
+        ]
+      ],
+      "exactClassAgreement": {
+        "k": 25,
+        "n": 36,
+        "value": 0.6944,
+        "ci95": [
+          0.5314,
+          0.82
+        ]
+      },
+      "observedOnNegatives": 8,
+      "byLanguage": {
+        "en": {
+          "recall": {
+            "k": 9,
+            "n": 9,
+            "value": 1,
+            "ci95": [
+              0.7009,
+              1
+            ]
+          },
+          "fpr": {
+            "k": 5,
+            "n": 11,
+            "value": 0.4545,
+            "ci95": [
+              0.2127,
+              0.7199
+            ]
+          }
+        },
+        "id": {
+          "recall": {
+            "k": 5,
+            "n": 5,
+            "value": 1,
+            "ci95": [
+              0.5655,
+              1
+            ]
+          },
+          "fpr": {
+            "k": 3,
+            "n": 11,
+            "value": 0.2727,
+            "ci95": [
+              0.0975,
+              0.5656
+            ]
+          }
+        }
+      }
+    },
+    "A1-page+context": {
+      "scenarios": 36,
+      "confusion": {
+        "tp": 12,
+        "fp": 5,
+        "tn": 17,
+        "fn": 2
+      },
+      "precision": {
+        "k": 12,
+        "n": 17,
+        "value": 0.7059,
+        "ci95": [
+          0.4687,
+          0.8672
+        ]
+      },
+      "recall": {
+        "k": 12,
+        "n": 14,
+        "value": 0.8571,
+        "ci95": [
+          0.6006,
+          0.9599
+        ]
+      },
+      "fpr": {
+        "k": 5,
+        "n": 22,
+        "value": 0.2273,
+        "ci95": [
+          0.1012,
+          0.4344
+        ]
+      },
+      "hardNegativeFpr": {
+        "k": 5,
+        "n": 22,
+        "value": 0.2273,
+        "ci95": [
+          0.1012,
+          0.4344
+        ]
+      },
+      "localization": {
+        "k": 12,
+        "n": 12,
+        "value": 1,
+        "ci95": [
+          0.7575,
+          1
+        ]
+      },
+      "classMatrix": [
+        [
+          7,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          9,
+          5,
+          0
+        ],
+        [
+          0,
+          0,
+          4,
+          0
+        ],
+        [
+          0,
+          2,
+          1,
+          7
+        ]
+      ],
+      "exactClassAgreement": {
+        "k": 27,
+        "n": 36,
+        "value": 0.75,
+        "ci95": [
+          0.5893,
+          0.8625
+        ]
+      },
+      "observedOnNegatives": 9,
+      "byLanguage": {
+        "en": {
+          "recall": {
+            "k": 8,
+            "n": 9,
+            "value": 0.8889,
+            "ci95": [
+              0.565,
+              0.9801
+            ]
+          },
+          "fpr": {
+            "k": 3,
+            "n": 11,
+            "value": 0.2727,
+            "ci95": [
+              0.0975,
+              0.5656
+            ]
+          }
+        },
+        "id": {
+          "recall": {
+            "k": 4,
+            "n": 5,
+            "value": 0.8,
+            "ci95": [
+              0.3755,
+              0.9638
+            ]
+          },
+          "fpr": {
+            "k": 2,
+            "n": 11,
+            "value": 0.1818,
+            "ci95": [
+              0.0514,
+              0.477
+            ]
+          }
+        }
+      }
+    },
+    "A2-region-only": {
+      "scenarios": 36,
+      "confusion": {
+        "tp": 14,
+        "fp": 7,
+        "tn": 15,
+        "fn": 0
+      },
+      "precision": {
+        "k": 14,
+        "n": 21,
+        "value": 0.6667,
+        "ci95": [
+          0.4537,
+          0.8281
+        ]
+      },
+      "recall": {
+        "k": 14,
+        "n": 14,
+        "value": 1,
+        "ci95": [
+          0.7847,
+          1
+        ]
+      },
+      "fpr": {
+        "k": 7,
+        "n": 22,
+        "value": 0.3182,
+        "ci95": [
+          0.1636,
+          0.5268
+        ]
+      },
+      "hardNegativeFpr": {
+        "k": 7,
+        "n": 22,
+        "value": 0.3182,
+        "ci95": [
+          0.1636,
+          0.5268
+        ]
+      },
+      "localization": {
+        "k": 14,
+        "n": 14,
+        "value": 1,
+        "ci95": [
+          0.7847,
+          1
+        ]
+      },
+      "classMatrix": [
+        [
+          5,
+          2,
+          0,
+          0
+        ],
+        [
+          1,
+          7,
+          5,
+          2
+        ],
+        [
+          0,
+          0,
+          4,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          10
+        ]
+      ],
+      "exactClassAgreement": {
+        "k": 26,
+        "n": 36,
+        "value": 0.7222,
+        "ci95": [
+          0.5601,
+          0.8415
+        ]
+      },
+      "observedOnNegatives": 9,
+      "byLanguage": {
+        "en": {
+          "recall": {
+            "k": 9,
+            "n": 9,
+            "value": 1,
+            "ci95": [
+              0.7009,
+              1
+            ]
+          },
+          "fpr": {
+            "k": 4,
+            "n": 11,
+            "value": 0.3636,
+            "ci95": [
+              0.1517,
+              0.6462
+            ]
+          }
+        },
+        "id": {
+          "recall": {
+            "k": 5,
+            "n": 5,
+            "value": 1,
+            "ci95": [
+              0.5655,
+              1
+            ]
+          },
+          "fpr": {
+            "k": 3,
+            "n": 11,
+            "value": 0.2727,
+            "ci95": [
+              0.0975,
+              0.5656
+            ]
+          }
+        }
+      }
+    }
+  },
+  "scenarios": [
+    {
+      "id": "D01-en-blog-security-check-overlay",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "lang": "en",
+      "blocks": 10,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "B0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A2-region-only": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "D02-id-download-modal-after-click",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "lang": "id",
+      "blocks": 9,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "B0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A2-region-only": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "D03-en-locked-pc-support-scam",
+      "truth": "malicious",
+      "expectedClass": "suspicious_correlation",
+      "hardNegative": false,
+      "lang": "en",
+      "blocks": 5,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "B0": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "A2-region-only": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "D04-id-locked-pc-support-scam",
+      "truth": "malicious",
+      "expectedClass": "suspicious_correlation",
+      "hardNegative": false,
+      "lang": "id",
+      "blocks": 4,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "B0": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "A2-region-only": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "D05-en-docs-comment-lure",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "lang": "en",
+      "blocks": 6,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "B0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A2-region-only": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "D06-id-recipe-comment-lure",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "lang": "id",
+      "blocks": 4,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "B0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A2-region-only": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "D07-en-shadow-dom-widget-lure",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "lang": "en",
+      "blocks": 5,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "B0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A2-region-only": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "D08-en-same-origin-support-iframe",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "lang": "en",
+      "blocks": 5,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "B0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A2-region-only": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "D09-en-macos-spotlight",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "lang": "en",
+      "blocks": 2,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "B0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A2-region-only": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "D10-en-planted-reported-speech",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "lang": "en",
+      "blocks": 5,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "D11-en-planted-educational-cue",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "lang": "en",
+      "blocks": 2,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R1:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "B0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R1:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "A2-region-only": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "D12-id-planted-blockquote",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "lang": "id",
+      "blocks": 2,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "D13-en-word-error-winx",
+      "truth": "malicious",
+      "expectedClass": "suspicious_correlation",
+      "hardNegative": false,
+      "lang": "en",
+      "blocks": 3,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "B0": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "A2-region-only": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "D14-id-session-copy-button",
+      "truth": "malicious",
+      "expectedClass": "suspicious_correlation",
+      "hardNegative": false,
+      "lang": "id",
+      "blocks": 4,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "B0": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "A1-page+context": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        },
+        "A2-region-only": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": true
+        }
+      }
+    },
+    {
+      "id": "D15-en-benign-captcha-checkbox",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "lang": "en",
+      "blocks": 3,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "D16-en-vendor-install-script",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "en",
+      "blocks": 6,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "D17-en-vendor-troubleshooting-fix",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "en",
+      "blocks": 6,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "D18-en-internal-it-certificate",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "en",
+      "blocks": 5,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "D19-en-internal-it-gpupdate",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "en",
+      "blocks": 3,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "D20-en-news-clickfix-campaign",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "en",
+      "blocks": 5,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R3:observed_instruction"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R3:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R3:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R3:suspicious_correlation"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "D21-en-security-blog-code-example",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "en",
+      "blocks": 5,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "D22-en-negation-awareness",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "lang": "en",
+      "blocks": 3,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "D23-en-checkout-urgency",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "lang": "en",
+      "blocks": 4,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "D24-en-cookie-banner-and-howto",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "en",
+      "blocks": 3,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R3:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R3:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "D25-en-readme-install",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "en",
+      "blocks": 5,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "D26-id-npm-install-docs",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "id",
+      "blocks": 5,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "D27-id-troubleshooting-fix",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "id",
+      "blocks": 4,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "D28-id-it-certificate",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "id",
+      "blocks": 4,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "suspicious_correlation",
+          "rules": [
+            "R4:suspicious_correlation"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "D29-id-it-network-share",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "id",
+      "blocks": 3,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "D30-id-news-clickfix",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "id",
+      "blocks": 3,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "D31-id-negation-awareness",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "lang": "id",
+      "blocks": 3,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "D32-id-bank-warning",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "lang": "id",
+      "blocks": 4,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "D33-id-promo-countdown",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "lang": "id",
+      "blocks": 4,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "D34-id-security-blog-example",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "id",
+      "blocks": 4,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R1:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "manipulative_instruction",
+          "rules": [
+            "R1:manipulative_instruction"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "D35-id-forum-flushdns",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "lang": "id",
+      "blocks": 4,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "observed_instruction",
+          "rules": [
+            "R5:observed_instruction"
+          ],
+          "localized": null
+        }
+      }
+    },
+    {
+      "id": "D36-id-benign-captcha",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "lang": "id",
+      "blocks": 3,
+      "coverage": {
+        "framesSkipped": 0,
+        "truncated": false,
+        "closedShadowRootsSkipped": 0,
+        "partial": []
+      },
+      "requestsDuringScan": 0,
+      "outcomes": {
+        "veiltrace": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "B0": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A1-page+context": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        },
+        "A2-region-only": {
+          "verdict": "none",
+          "rules": [],
+          "localized": null
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "D13-en-word-error-winx",
+  "split": "dev",
+  "lang": "en",
+  "category": "positive",
+  "threatClass": "T2",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://docs-online.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#err",
+  "description": "Fake document error asking for Win+X → Terminal → paste → Enter",
+  "rationale": "Fake fix pretext (weak) with a full chain.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M2 dev split",
+  "created": "2026-10-21"
+}

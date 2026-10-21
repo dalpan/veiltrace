@@ -1,6 +1,6 @@
 # Implementation Plan
 
-Status: M1 complete (pending commit at time of writing; see PROGRESS.md). Every milestone is independently testable and ends with a PROGRESS.md entry. No milestone is started before the previous one's acceptance criteria are met or explicitly waived in DECISIONS.md.
+Status: M1 accepted (`d856fbd`). Held-out split frozen (`407beb0`). M2 conditionally accepted and committed (see PROGRESS.md). M3 not started (requires explicit approval). Every milestone is independently testable and ends with a PROGRESS.md entry. No milestone is started before the previous one's acceptance criteria are met or explicitly waived in DECISIONS.md.
 
 ## Milestone overview
 
@@ -61,6 +61,32 @@ Each task produces a written result in `docs/RESEARCH.md` §6 (or a new `docs/EV
 | R-6 | Measure performance on realistic page structures | Extraction + analysis p50/p95 on fixtures and ≥ 3 large saved real pages. Profile the lexicon pass (115 regexes per block, ~211 ms per 5,000 synthetic blocks at M1) |
 | R-7 | Expand Indonesian and English hard-negative scenarios | Target ≥ 8 hard negatives per language in dev, including informal Indonesian and code-mixed ID/EN text |
 | R-8 | Preserve the frozen held-out test set and prevent evaluation leakage | Author `corpus/test` from scenario descriptions before any R-1/R-2 tuning. Freeze it in a single commit (owner approval) with a recorded hash. Harness refuses `--split test` without `--final`. CI check for verbatim lexicon/test overlap |
+
+### M2 outcome (2026-10-21)
+
+| Acceptance criterion | Result |
+|---|---|
+| 1. Extractor visibility, hidden payloads, shadow DOM, budgets, no mutation | Met. 18 Playwright tests (`tests/browser/extract.test.ts`); budgets hit as designed. A 200k-node page was not used; the node budget was tested at 30k elements with `maxNodes` 20k |
+| 2. Closed-shadow behavior documented with an observed result | Met. Not readable without an adapter (counted heuristically); readable through a simulated adapter. The real `chrome.dom` call from an isolated world is deferred to M3 |
+| 3. `corpus/dev` ≥ 12 scenarios incl. listed IDs, ≥ 40% ID | Met. 36 scenarios, 16 ID (44%) |
+| 4. Offline `npm run eval -- run --split dev` with all metrics for veiltrace and B0 | Met. 0 requests during scans; `dev.json` byte-identical across runs |
+| 5. `corpus/test` frozen with a recorded hash; harness refuses test without `--final` | Met (D-022, `407beb0`, tested) |
+
+| Research task | Outcome (details: DETECTION_MODEL.md §10, EVALUATION_PLAN.md §9) |
+|---|---|
+| R-1 R4 false positives | 4/22 dev FPs, all R4. P1 (no authority-only R4) proposed: −2 FP, no recall loss. `minFamilies=2` rejected (loses 2 real lures). Troubleshooting-doc FPs remain open |
+| R-2 Modifier evasion | Confirmed: planted reported speech and blockquote cause 2 FNs, and a planted educational cue causes a one-tier demotion. P2 (no demotion inside dialogs/overlays) proposed: recovers all 3 with no new FP on dev |
+| R-3 Window K | K = 6…∞ identical on dev, K ≤ 4 loses lures. Keep 8; dev pages are small, so revisit on larger pages |
+| R-4 Region-local vs B0 | Hard-negative FPR: veiltrace 4/22 vs B0 8/22. Recall: 12/14 vs 14/14. Ablations attribute −1 FP to locality and −3 FP to context modifiers |
+| R-5 Evidence localization | 12/12 TPs fully inside `evidenceWithin` (resolved in the live DOM, across shadow/frame). Dev lures are compact, so this is a weak test |
+| R-6 Performance | Dev fixtures: total p50 ≈ 1.3 ms. Large synthetic pages: 34–224 ms. Analysis dominates on big pages. The block budget truncates 2 of 5 perf pages |
+| R-7 Hard negatives | 11 EN + 11 ID dev hard negatives (target ≥ 8 each) |
+| R-8 Held-out protection | Frozen before any M2 work, hash-checked in CI, CLI guards, leakage check (≥ 6-word sentences) |
+
+### Carried forward from the M2 review
+- **Next controlled detection-rule revision** (its own milestone step, before any held-out run): implement P1 (D-031), and design and evaluate P2-v2 (D-032) with benign modal/tutorial dev counterexamples. Ship as a new engine version with a dev report, and keep M1 results for comparison.
+- **Testing milestone:** browser-side coverage instrumentation for `src/extract` if practical (D-030); behavioral tests stay the priority.
+- **Budget review:** re-measure the 1,500 ms extraction budget on real hardware in M3 (D-027 provisional).
 
 ## M3: Chromium extension MVP
 

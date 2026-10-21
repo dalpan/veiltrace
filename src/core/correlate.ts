@@ -2,7 +2,7 @@
 import { WINDOW_BLOCKS } from './constants.js';
 import { isDirect, type Obs } from './observe.js';
 import type { RegionInfo } from './regions.js';
-import type { ActionRisk, Classification, Level, RuleId, SignalId } from './types.js';
+import type { ActionRisk, AnalyzeOptions, Classification, Level, RuleId, SignalId } from './types.js';
 
 export interface RuleDef {
   id: RuleId;
@@ -50,7 +50,7 @@ const of = (list: readonly Obs[], signal: SignalId): Obs[] => list.filter((o) =>
 type Match = Omit<Candidate, 'region' | 'windowStart' | 'windowEnd' | 'spanMin' | 'spanMax'>;
 
 /** Evaluates R1–R5 on one window. `actions` must exclude negated actions. */
-export function evaluateWindow(actions: readonly Obs[], pretexts: readonly Obs[]): Match | null {
+export function evaluateWindow(actions: readonly Obs[], pretexts: readonly Obs[], experimental: AnalyzeOptions['experimental'] = {}): Match | null {
   const opens = of(actions, 'A.OPEN_RUN');
   const pastes = of(actions, 'A.PASTE');
   const execs = of(actions, 'A.EXECUTE');
@@ -86,7 +86,8 @@ export function evaluateWindow(actions: readonly Obs[], pretexts: readonly Obs[]
     return { rule: rule('R3'), actions: partial, pretexts: verify, baseConfidence: 'medium', actionRisk: 'medium', weakFamilies };
   }
   const execution = chain ?? delivered;
-  if (execution && weakFamilies.length > 0) {
+  const r4Families = experimental.r4ExcludeAuthorityOnly && weakFamilies.length === 1 && weakFamilies[0] === 'P.AUTHORITY' ? 0 : weakFamilies.length;
+  if (execution && r4Families > 0 && r4Families >= (experimental.r4MinWeakFamilies ?? 1)) {
     return {
       rule: rule('R4'), actions: execution, pretexts: weak,
       baseConfidence: weakFamilies.length >= 2 ? 'medium' : 'low', actionRisk: 'high', weakFamilies,
@@ -107,16 +108,17 @@ export function evaluateWindow(actions: readonly Obs[], pretexts: readonly Obs[]
  * direct actions only (not reported, not quoted) and once with all non-negated actions, so a reported
  * or quoted decoy cannot absorb a direct lure (the selection step keeps the strongest interpretation).
  */
-export function findCandidates(region: RegionInfo, regionObs: readonly Obs[]): Candidate[] {
+export function findCandidates(region: RegionInfo, regionObs: readonly Obs[], options: AnalyzeOptions = {}): Candidate[] {
+  const k = options.windowBlocks ?? WINDOW_BLOCKS;
   if (region.unplaced) return [];
   const sorted = [...regionObs].sort(readingOrder);
   const n = region.blocks.length;
-  const lastStart = Math.max(0, n - WINDOW_BLOCKS);
+  const lastStart = Math.max(0, n - k);
   const out: Candidate[] = [];
   let lo = 0;
   let hi = 0;
   for (let s = 0; s <= lastStart; s++) {
-    const end = s + WINDOW_BLOCKS;
+    const end = s + k;
     while (lo < sorted.length && (sorted[lo] as Obs).src.pos < s - 0.5) lo++;
     while (hi < sorted.length && (sorted[hi] as Obs).src.pos < end) hi++;
     const win = sorted.slice(lo, hi);
@@ -124,7 +126,7 @@ export function findCandidates(region: RegionInfo, regionObs: readonly Obs[]): C
     const pretexts = win.filter((o) => o.o.kind === 'pretext');
     const seen = new Set<string>();
     for (const pass of [actions.filter(isDirect), actions]) {
-      const m = evaluateWindow(pass, pretexts);
+      const m = evaluateWindow(pass, pretexts, options.experimental);
       if (!m) continue;
       const evidence = [...m.actions, ...m.pretexts];
       const key = `${m.rule.id}|${evidence.map((o) => `${o.src.pos}:${o.src.order}:${o.nStart}:${o.o.signal}`).join(',')}`;

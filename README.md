@@ -4,7 +4,7 @@
 
 An offline-first browser security engine that detects contextual social engineering and deceptive instructions in web pages, including pages on legitimate HTTPS domains.
 
-> **Status: M1, detection core only.** The browser-independent engine (`src/core`) and its tests exist. There is no extension, UI or DOM extractor yet. See [docs/PROGRESS.md](docs/PROGRESS.md).
+> **Status: M2.** The detection core (`src/core`), the DOM extractor (`src/extract`) and an offline evaluation harness (`src/eval`) exist. There is **no browser extension or UI yet** (M3). Results so far are on a synthetic development split only. See [docs/PROGRESS.md](docs/PROGRESS.md) and [docs/EVALUATION_PLAN.md](docs/EVALUATION_PLAN.md) §9.
 
 ## What it does (planned MVP)
 
@@ -16,14 +16,19 @@ When you click the VEILTRACE toolbar icon (planned M3), it reads the visible con
 
 Results distinguish an **observed instruction** (e.g. developer docs telling you to run a command) from **suspicious correlation** and **manipulative instruction**. Confidence and action risk are reported separately. Every finding carries the exact text and source offsets. Highlighting the element on the page is planned for M3. Detection works in English and Indonesian. VEILTRACE analyzes on demand and does **not** provide real-time protection.
 
-## Using the core (M1)
+## Development
 
 ```bash
 npm ci
-npm test          # unit tests
-npm run lint      # includes the core-purity rule
-npm run build     # esbuild bundle of the core → dist/core.mjs
+npx playwright install chromium     # one-time browser download (tooling only)
+npm run check                       # typecheck + lint + all tests (unit + Playwright, offline)
+npm run build                       # dist/core.mjs (ESM) and dist/extractor.js (IIFE)
+npm run eval -- run --split dev     # offline evaluation on the development split → eval/results/
+npm run eval -- research --split dev
+npm run eval -- perf
 ```
+
+The held-out split (`corpus/test`) is frozen and must not be evaluated during development (`--final` only, on owner request).
 
 ```ts
 import { analyze } from './src/core/index.js';

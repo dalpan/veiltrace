@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>IT notice</title><style>body{font-family:Georgia,serif;margin:0;background:#fff;color:#111}
+.top{background:#eee;padding:10px 20px}.wrap{max-width:900px;margin:20px auto;padding:0 20px}
+.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:5000}
+.card{background:#fff;max-width:480px;margin:80px auto;padding:28px;border-radius:6px}
+.hide{position:absolute;left:-10000px;width:2px;height:2px}
+pre{background:#f6f6f6;padding:10px}</style></head>
+<body>
+<div class="top" role="banner"><b>ACME Intranet</b></div><div class="wrap"><article><h1>New root certificate</h1>
+<p>From the IT Security Team: our certificate authority changes on Monday.</p>
+<p>To install the new certificate, open PowerShell, paste the script and press Enter.</p>
+<pre><code>Import-Certificate -FilePath \\it-share\certs\acme-root.cer -CertStoreLocation Cert:\CurrentUser\Root</code></pre></article></div>
+
+</body></html>

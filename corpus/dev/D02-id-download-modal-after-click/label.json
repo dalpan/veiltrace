@@ -1,0 +1,26 @@
+{
+  "id": "D02-id-download-modal-after-click",
+  "split": "dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T1",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://filebagi.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [
+    {
+      "click": "#dl"
+    }
+  ],
+  "evidenceWithin": "#m",
+  "description": "Modal verifikasi muncul setelah pengguna mengklik tombol Unduh",
+  "rationale": "Konten dinamis setelah interaksi.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M2 dev split",
+  "created": "2026-10-21"
+}

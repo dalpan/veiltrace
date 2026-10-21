@@ -50,3 +50,33 @@ describe('core bundle (IMPLEMENTATION_PLAN.md M1 AC9)', () => {
     }
   });
 });
+
+describe('extractor read-only lint rule and bundle (M2)', () => {
+  const eslint = new ESLint();
+  const lint = async (code: string) => (await eslint.lintText(code, { filePath: 'src/extract/__probe.ts' }))[0]!.messages;
+
+  it('rejects DOM mutation, page interaction, network and dynamic code inside src/extract', async () => {
+    for (const code of [
+      'export function f(el: Element) { el.setAttribute("a", "b"); }',
+      'export function f(el: Element) { el.innerHTML = ""; }',
+      'export function f(el: HTMLElement) { el.click(); }',
+      'export function f(el: Element) { el.remove(); }',
+      'export function f(d: Document) { d.body.appendChild(d.createElement("p")); }',
+      'export function f(el: HTMLInputElement) { el.value = "x"; }',
+      'export function f(el: Element) { el.dispatchEvent(new Event("x")); }',
+      "export const g = () => fetch('https://example.invalid');",
+      "export const h = () => eval('1');",
+    ]) {
+      const messages = await lint(code);
+      expect(messages.some((m) => m.ruleId === 'no-restricted-syntax' || m.ruleId === 'no-restricted-globals'), code).toBe(true);
+    }
+  });
+
+  it('builds an IIFE without network or dynamic-code APIs', async () => {
+    const out = await build({ entryPoints: ['src/extract/index.ts'], bundle: true, format: 'iife', globalName: 'VeiltraceExtractor', platform: 'browser', write: false });
+    const code = out.outputFiles[0]!.text;
+    for (const forbidden of ['fetch(', 'XMLHttpRequest', 'WebSocket', 'sendBeacon', 'EventSource', 'eval(', 'new Function', 'chrome.', 'innerHTML =', '.click()']) {
+      expect(code.includes(forbidden), forbidden).toBe(false);
+    }
+  });
+});

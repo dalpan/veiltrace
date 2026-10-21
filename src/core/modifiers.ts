@@ -4,7 +4,7 @@ import type { Candidate } from './correlate.js';
 import { LEXICON } from './lexicon/index.js';
 import { normalize } from './normalize.js';
 import type { Obs } from './observe.js';
-import type { Block, Classification, Level, ModifierId } from './types.js';
+import type { AnalyzeOptions, Block, Classification, Level, ModifierId } from './types.js';
 
 export const TIERS: readonly Classification[] = ['observed_instruction', 'suspicious_correlation', 'manipulative_instruction'];
 const LEVELS: readonly Level[] = ['low', 'medium', 'high'];
@@ -54,8 +54,12 @@ function proseWords(blocks: readonly Block[]): number {
   return words;
 }
 
-export function applyModifiers(c: Candidate, cues: readonly Obs[], memo: HeadingMemo): ScoredCandidate {
+export function applyModifiers(c: Candidate, cues: readonly Obs[], memo: HeadingMemo, options: AnalyzeOptions = {}): ScoredCandidate {
   const mods: PendingModifier[] = [];
+  const evidenceInDialog = [...c.actions, ...c.pretexts].every((o) => o.src.block?.ctx?.dialog || o.src.block?.ctx?.overlay || o.src.ref.type !== 'block');
+  if (options.contextModifiers === false || (options.experimental?.noDemotionInDialogs && evidenceInDialog)) {
+    return { ...c, modifiers: mods, classification: c.rule.classification, confidence: c.baseConfidence };
+  }
   const blockActions = c.actions.filter((a) => a.src.ref.type === 'block');
 
   const quoted = blockActions.filter((a) => a.src.block?.ctx?.quote);

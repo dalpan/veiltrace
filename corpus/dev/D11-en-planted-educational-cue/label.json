@@ -1,0 +1,22 @@
+{
+  "id": "D11-en-planted-educational-cue",
+  "split": "dev",
+  "lang": "en",
+  "category": "adversarial",
+  "threatClass": "T1",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://quiz.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#g",
+  "description": "Overlay lure with a planted 'Security tips' heading",
+  "rationale": "R-2: educational cue misuse.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; M2 dev split",
+  "created": "2026-10-21"
+}
