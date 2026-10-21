@@ -1,0 +1,22 @@
+{
+  "id": "V2-sup-04-id-komentar-satgas-pemulihan-dana",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "adversarial",
+  "threatCategory": "sup",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://nusantarakini.test/ekonomi/korban-robot-trading-menunggu",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#cmt-pemulihan",
+  "description": "Comment under a fraud-victim news story from an account claiming to be an official asset-recovery task force, directing victims to WhatsApp before a month-end deadline.",
+  "rationale": "Recovery-scam pattern: claimed authority in a comment, outside contact, deadline and \"trust only us\"; it asks for no payment yet, so the risk is inferred from the correlation.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

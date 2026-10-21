@@ -1,0 +1,22 @@
+{
+  "id": "V2-cmd-08-id-dompet-sinkron-terminal",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "cmd",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://dompetnusa.example/app/saldo",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#sync-error",
+  "description": "Crypto wallet page claims a sync error that will lose funds within 6 hours and tells macOS users to paste a curl-to-bash command into Terminal.",
+  "rationale": "Loss threat plus deadline plus a remote script run in Terminal, with a reassuring false claim that keys stay private; classic wallet-drainer delivery.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

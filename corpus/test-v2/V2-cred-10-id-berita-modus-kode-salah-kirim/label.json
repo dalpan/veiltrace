@@ -1,0 +1,22 @@
+{
+  "id": "V2-cred-10-id-berita-modus-kode-salah-kirim",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "benign",
+  "threatCategory": "cred",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://wartapagi.test/hukum/sindikat-pembajak-akun-kode-salah-kirim",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "News report that quotes a scam SMS asking for a mistakenly-sent 6-digit code.",
+  "rationale": "The request appears only as a quoted example in journalism; the article itself tells readers never to share codes.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "V2-cmd-06-id-split-sinonim-unduhan",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "adversarial",
+  "threatCategory": "cmd",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://unduhcepat.test/f/skripsi-template-2026",
+      "file": "index.html"
+    }
+  ],
+  "steps": [
+    {
+      "click": "#human-btn"
+    }
+  ],
+  "evidenceWithin": "#gate",
+  "description": "File-download gate uses paraphrased, split-up instructions (logo-window key, letter R, paste prepared content, Enter) after silently copying an encoded PowerShell command.",
+  "rationale": "Same Run-dialog paste lure as a fake CAPTCHA but avoids literal key names and splits phrases across elements; a human recognises it as tricking the user into running hidden code.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

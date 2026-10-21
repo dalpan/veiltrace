@@ -1,0 +1,22 @@
+{
+  "id": "V2-cmd-13-en-login-captcha-asli",
+  "split": "test-v2",
+  "lang": "en",
+  "category": "benign",
+  "threatCategory": "cmd",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://account.parcelo.test/signin",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Ordinary login page with a standard checkbox CAPTCHA widget.",
+  "rationale": "The human check is a normal checkbox with no keyboard-shortcut, clipboard or command instructions; the page only asks the user to sign in on the service itself.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

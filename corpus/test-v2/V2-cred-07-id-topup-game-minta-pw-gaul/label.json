@@ -1,0 +1,22 @@
+{
+  "id": "V2-cred-07-id-topup-game-minta-pw-gaul",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "cred",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://topupkilat.test/arena-legenda",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#cmt-3",
+  "description": "Slang comment on a game top-up page offers free currency in exchange for the account email and password, with a limited-slot pressure line and a Telegram handle.",
+  "rationale": "Asks for full login credentials via an outside channel with a too-good-to-be-true offer and scarcity pressure; the site itself warns against it.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

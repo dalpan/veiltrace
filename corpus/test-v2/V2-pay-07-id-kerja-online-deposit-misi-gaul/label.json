@@ -1,0 +1,22 @@
+{
+  "id": "V2-pay-07-id-kerja-online-deposit-misi-gaul",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "pay",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://obrolan-web.test/g/kerjaonline-rebahan",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#task-deposit",
+  "description": "Group-chat page for an online \"task job\" where a mentor tells the newcomer to deposit money to an admin's personal account to unlock VIP missions, with scarcity pressure and shill testimonials.",
+  "rationale": "Pay-to-earn task scams use small early payouts and fake testimonials; deposit to a personal account with promised 30% return and limited slots is clearly manipulative.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "V2-cmd-15-en-panduan-shortcut-windows",
+  "split": "test-v2",
+  "lang": "en",
+  "category": "benign",
+  "threatCategory": "cmd",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://techsimple.test/guides/windows-shortcuts",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "How-to listicle of Windows shortcuts that mentions using Win+R to type msinfo32.",
+  "rationale": "Neutral educational content: the Run example is a harmless built-in tool, nothing is copied to the clipboard, and the page warns about the paste-to-Run scam.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

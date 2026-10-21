@@ -1,0 +1,22 @@
+{
+  "id": "V2-cred-06-en-forum-pm-password",
+  "split": "test-v2",
+  "lang": "en",
+  "category": "positive",
+  "threatCategory": "cred",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://aquakeepers.test/pm/view/88120",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#pm-body",
+  "description": "Forum private message from a \"Moderator_Team\" account asks the member to reply with their forum and email passwords before a deletion deadline.",
+  "rationale": "Staff never need a user's password to migrate accounts; the loss threat and the extra request for the email password show credential harvesting.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

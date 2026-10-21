@@ -1,0 +1,22 @@
+{
+  "id": "V2-sup-01-en-fake-security-lock-call",
+  "split": "test-v2",
+  "lang": "en",
+  "category": "positive",
+  "threatCategory": "sup",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://pc-securecenter-alert.example/lock/0x80073b01",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#lock-screen",
+  "description": "Full-page fake system alert with a simulated scan claims data theft is in progress and urges the reader to call a \"support\" number without restarting.",
+  "rationale": "A web page cannot detect infections; the fake scan, data-loss threat, no-restart warning and phone number are the standard tech-support scam.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

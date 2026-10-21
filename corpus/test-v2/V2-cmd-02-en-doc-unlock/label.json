@@ -1,0 +1,22 @@
+{
+  "id": "V2-cmd-02-en-doc-unlock",
+  "split": "test-v2",
+  "lang": "en",
+  "category": "positive",
+  "threatCategory": "cmd",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://docuvault-share.example/v/8QX2-7F3K",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#unlock-panel",
+  "description": "Fake shared-document viewer that claims a PDF is encrypted and tells the reader to paste an mshta \"access key\" into an admin terminal.",
+  "rationale": "Opening a document never requires running a command in an elevated terminal; the \"key\" downloads and runs a remote HTA, and a countdown adds pressure.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

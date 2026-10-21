@@ -1,0 +1,22 @@
+{
+  "id": "V2-sup-07-id-undangan-nikah-apk-gaul",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "sup",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://undangan-rizalayu.example/u/8nov",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#apk-download",
+  "description": "Digital wedding invitation requires installing an APK, dismissing the \"harmful\" warning and granting SMS and contacts permissions to see details.",
+  "rationale": "Invitations do not need an app with SMS/contacts access; telling users to ignore the system warning is the core of the APK-invitation malware scam.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

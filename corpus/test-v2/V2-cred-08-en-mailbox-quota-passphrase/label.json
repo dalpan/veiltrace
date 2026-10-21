@@ -1,0 +1,22 @@
+{
+  "id": "V2-cred-08-en-mailbox-quota-passphrase",
+  "split": "test-v2",
+  "lang": "en",
+  "category": "adversarial",
+  "threatCategory": "cred",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://corvane-staffportal.example/messaging/quota",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#quota-notice",
+  "description": "Intranet-styled mailbox-quota notice asks staff to \"confirm\" their sign-in passphrase so a team member can move them to bigger storage before mail bounces.",
+  "rationale": "Uses \"passphrase\" instead of password and an internal look, but it hands the credential to a person under a same-day deadline; storage upgrades never need it.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

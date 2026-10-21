@@ -1,0 +1,22 @@
+{
+  "id": "V2-pay-05-en-unpaid-toll-final-notice",
+  "split": "test-v2",
+  "lang": "en",
+  "category": "positive",
+  "threatCategory": "pay",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://rto-tollresolve.example/case/RTO-26-5518831",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#toll-notice",
+  "description": "Fake government toll portal, reached from a text message, threatens registration suspension and collections tonight unless a small toll is paid by card.",
+  "rationale": "Impersonated authority plus a disproportionate same-day threat to harvest card details via a tiny payment; real agencies use their own domains and mailed notices.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

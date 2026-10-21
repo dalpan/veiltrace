@@ -1,0 +1,22 @@
+{
+  "id": "V2-pay-01-id-kurir-bea-masuk-rek-pribadi",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "pay",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://paketnusa-lacak.example/resi/PN-INT-7781-0092-ID",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#customs-hold",
+  "description": "Courier tracking page says a parcel is held by customs and demands an import-duty transfer to a named individual's account within two hours or the parcel is destroyed.",
+  "rationale": "Customs duties are never paid into a private person's account confirmed via WhatsApp; the countdown and destruction threat are pressure tactics.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

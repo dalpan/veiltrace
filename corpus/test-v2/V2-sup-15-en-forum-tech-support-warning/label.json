@@ -1,0 +1,22 @@
+{
+  "id": "V2-sup-15-en-forum-tech-support-warning",
+  "split": "test-v2",
+  "lang": "en",
+  "category": "benign",
+  "threatCategory": "sup",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://seniornet-community.test/forum/t/locked-screen-warning",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Forum thread in which members describe a fake lock-screen with a phone number and warn others not to call.",
+  "rationale": "Scam elements appear only in personal accounts and warnings; no one asks the reader to call or install anything.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

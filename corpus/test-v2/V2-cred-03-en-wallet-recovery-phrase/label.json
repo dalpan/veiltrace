@@ -1,0 +1,22 @@
+{
+  "id": "V2-cred-03-en-wallet-recovery-phrase",
+  "split": "test-v2",
+  "lang": "en",
+  "category": "positive",
+  "threatCategory": "cred",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://vaultlink-support.example/validate/VL-449120",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#validate-form",
+  "description": "Fake wallet support page demands the full recovery phrase under a freeze countdown, to be reviewed by a \"validation agent\".",
+  "rationale": "A recovery phrase gives full control of funds and is never needed for migration; the freeze threat and timer are pressure tactics.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

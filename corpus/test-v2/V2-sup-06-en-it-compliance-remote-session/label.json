@@ -1,0 +1,22 @@
+{
+  "id": "V2-sup-06-en-it-compliance-remote-session",
+  "split": "test-v2",
+  "lang": "en",
+  "category": "adversarial",
+  "threatCategory": "sup",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://halvorsen-itdesk.example/compliance/endpoint",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#compliance-notice",
+  "description": "Corporate IT-styled notice tells staff to install a remote-access tool for an unsolicited outsourced caller, share the session password and approve an MFA prompt, by a same-day deadline.",
+  "rationale": "Looks like routine IT, but an unsolicited call, a remote session, a request to approve someone else's MFA prompt and a same-day access-loss threat together indicate account takeover.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

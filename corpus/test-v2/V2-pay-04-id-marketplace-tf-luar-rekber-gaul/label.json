@@ -1,0 +1,22 @@
+{
+  "id": "V2-pay-04-id-marketplace-tf-luar-rekber-gaul",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "adversarial",
+  "threatCategory": "pay",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://jualbelikita.test/iklan/kamera-mirrorless-a6-body-98",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#seller-reply",
+  "description": "New seller with no reviews replies in slang offering a discount if the buyer skips the platform escrow and transfers (or pays a 50% deposit) to a personal account via WhatsApp.",
+  "rationale": "Moving payment off the protected escrow to a personal account with competing-buyer pressure is a common marketplace fraud pattern, though phrased casually and without explicit threats.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

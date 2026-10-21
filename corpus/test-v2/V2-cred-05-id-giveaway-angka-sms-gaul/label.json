@@ -1,0 +1,22 @@
+{
+  "id": "V2-cred-05-id-giveaway-angka-sms-gaul",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "adversarial",
+  "threatCategory": "cred",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://sosialgram.test/p/Cx81kQ2-giveaway",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#giveaway-post",
+  "description": "Slang-heavy giveaway post that asks winners to DM the \"6-digit number\" arriving by SMS as proof of winning, before a same-evening deadline.",
+  "rationale": "Avoids the words OTP/code but requests the SMS verification number via DM; framed as a prize with a deadline, it is an account-takeover scheme.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

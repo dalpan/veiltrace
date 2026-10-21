@@ -1,0 +1,22 @@
+{
+  "id": "V2-sup-08-id-forum-admin-palsu-telegram-gaul",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "sup",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://meonglovers.test/forum",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#pinned-admin",
+  "description": "Pinned slang post by an \"admin security team\" threatens account deletion in one hour unless members contact a Telegram/WhatsApp verifier with their username and phone number.",
+  "rationale": "Claimed authority, an off-site contact, a one-hour deletion threat and \"trust no other admin\" are account-takeover social engineering.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

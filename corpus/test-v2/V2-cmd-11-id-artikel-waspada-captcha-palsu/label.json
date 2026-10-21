@@ -1,0 +1,22 @@
+{
+  "id": "V2-cmd-11-id-artikel-waspada-captcha-palsu",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "benign",
+  "threatCategory": "cmd",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://literasisiber.test/artikel/modus-captcha-palsu",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Security-awareness article that quotes the fake-CAPTCHA Win+R/Ctrl+V/Enter steps in order to warn readers.",
+  "rationale": "The quoted steps are reported speech; the page itself tells readers never to follow such instructions and asks nothing risky of them.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

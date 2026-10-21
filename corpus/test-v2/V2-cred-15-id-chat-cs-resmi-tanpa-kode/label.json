@@ -1,0 +1,22 @@
+{
+  "id": "V2-cred-15-id-chat-cs-resmi-tanpa-kode",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "benign",
+  "threatCategory": "cred",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://sayursegar.test/pesanan/SS-20261021-5531",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Grocery app order page with an in-site support chat asking only for the order number and a photo, plus a never-ask-for-OTP notice.",
+  "rationale": "Support requests non-secret order details through the platform's own chat; no credentials are requested and there is no pressure.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

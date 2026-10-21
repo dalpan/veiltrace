@@ -1,0 +1,22 @@
+{
+  "id": "V2-cred-01-id-komentar-admin-refund-otp",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "cred",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://belanjaku.test/p/blender-kaca-2l-turbo-6-pisau",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#reply-9921",
+  "description": "Product review thread where a reply posing as official marketplace admin asks a buyer awaiting a refund to send the 6-digit SMS code to a WhatsApp number within 15 minutes.",
+  "rationale": "Impersonated authority, an outside contact channel, a deadline threat and a request to hand over an SMS verification code: a textbook account-takeover lure.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

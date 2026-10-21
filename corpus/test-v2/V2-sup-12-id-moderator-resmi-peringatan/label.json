@@ -1,0 +1,22 @@
+{
+  "id": "V2-sup-12-id-moderator-resmi-peringatan",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "benign",
+  "threatCategory": "sup",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://meonglovers.test/forum/t/waspada-admin-palsu",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Genuine moderator post warning members that staff never contact them off-site and asking them to use the on-site report button.",
+  "rationale": "Official-sounding but points only to on-platform tools, gives no outside contact and makes no threat.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

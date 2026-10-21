@@ -1,0 +1,22 @@
+{
+  "id": "V2-sup-03-id-kurir-wa-apk-foto-paket-gaul",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "sup",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://chatweb.test/c/kurir-kirimkilat-andi",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#apk-msg",
+  "description": "Chat from a self-described courier sends an APK named as a parcel photo and coaches the recipient to allow unknown sources and grant SMS permission.",
+  "rationale": "A \"photo\" delivered as an Android app, instructions to bypass install warnings and grant SMS access, plus a return-the-parcel threat, is a known mobile banking-malware lure.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

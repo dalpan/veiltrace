@@ -1,0 +1,22 @@
+{
+  "id": "V2-pay-12-id-berita-modus-bea-cukai",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "benign",
+  "threatCategory": "pay",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://suarakonsumen.test/edukasi/waspada-paket-tertahan-bea-cukai",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Consumer-advocacy article quoting a fake customs-duty message to explain the scam's warning signs.",
+  "rationale": "The payment demand is quoted and analysed as an example; the article advises readers not to pay and asks nothing of them.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

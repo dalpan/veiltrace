@@ -1,0 +1,22 @@
+{
+  "id": "V2-cmd-05-en-meeting-audio-repair",
+  "split": "test-v2",
+  "lang": "en",
+  "category": "adversarial",
+  "threatCategory": "cmd",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://huddlr-meet.example/j/q4-vendor-sync",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#audio-fix",
+  "description": "Fake video-meeting lobby blocks joining until the reader copies a \"repair line\" and runs it via the Windows-key+R shortcut; the actual command is only placed on the clipboard.",
+  "rationale": "The visible text never shows the command and uses a glyph instead of \"Windows key\"; a meeting tool never needs a pasted Run-dialog command, and the lobby-removal timer adds pressure.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

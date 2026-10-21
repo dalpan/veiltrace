@@ -1,0 +1,26 @@
+{
+  "id": "V2-cmd-01-id-captcha-verifikasi",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "cmd",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://kabarlintas.test/ekonomi/harga-cabai-rawit-turun",
+      "file": "index.html"
+    }
+  ],
+  "steps": [
+    {
+      "click": "#cf-check"
+    }
+  ],
+  "evidenceWithin": "#verify-box",
+  "description": "News article overlaid by a fake human-verification box that, after a click, silently copies a PowerShell command and tells the reader to paste it into Win+R.",
+  "rationale": "A real CAPTCHA never asks the user to open the Run dialog and paste clipboard content; the copied text is a hidden remote-script command disguised as a verification code.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

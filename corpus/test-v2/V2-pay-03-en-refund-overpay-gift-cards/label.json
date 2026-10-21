@@ -1,0 +1,22 @@
+{
+  "id": "V2-pay-03-en-refund-overpay-gift-cards",
+  "split": "test-v2",
+  "lang": "en",
+  "category": "positive",
+  "threatCategory": "pay",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://securenest-billing.example/refund/55-0193",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#refund-error",
+  "description": "Fake billing page claims an over-refund and tells the victim to repay the difference in gift card codes read over the phone, without telling the cashier.",
+  "rationale": "Gift cards as repayment, a freeze threat, and coaching to hide the purpose from store staff are hallmarks of refund scams.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

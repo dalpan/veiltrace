@@ -1,0 +1,22 @@
+{
+  "id": "V2-cred-09-id-bank-login-otp-asli",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "benign",
+  "threatCategory": "cred",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://ibank.bankcendana.test/login/otp",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Internet-banking login step asking the user to enter the SMS OTP on the bank's own page, with a do-not-share warning.",
+  "rationale": "Entering an OTP into the service that sent it is the normal flow; nothing is sent to a person, there is no threat, and the page warns against sharing.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

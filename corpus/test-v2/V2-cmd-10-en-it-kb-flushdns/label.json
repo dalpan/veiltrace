@@ -1,0 +1,22 @@
+{
+  "id": "V2-cmd-10-en-it-kb-flushdns",
+  "split": "test-v2",
+  "lang": "en",
+  "category": "benign",
+  "threatCategory": "cmd",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://it.northfield-college.test/kb/KB0412",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "College IT knowledge-base article telling users to open Run, type cmd and run ipconfig /flushdns.",
+  "rationale": "Uses Win+R and a command, but the command is visible, harmless, typed by the user, on the institution's own KB, and the page warns against running commands from unknown sources.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

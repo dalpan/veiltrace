@@ -1,0 +1,22 @@
+{
+  "id": "V2-cmd-14-id-forum-psa-gaul",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "benign",
+  "threatCategory": "cmd",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://obrolantek.test/t/psa-captcha-win-r",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Informal forum thread where users warn each other about fake-CAPTCHA pages that ask for Win+R, Ctrl+V and Enter.",
+  "rationale": "The key sequence appears only as a warning; nobody on the page asks the reader to run anything.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "V2-pay-06-id-dompet-dibekukan-biaya-aktivasi",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "pay",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://danaku-aktivasi.example/akun/pulihkan",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#unfreeze",
+  "description": "E-wallet-styled page says the account is frozen and demands an \"activation fee\" transfer to a named person's account within 12 hours or the balance is forfeited.",
+  "rationale": "Paying to unfreeze one's own balance into a private account, with a forfeiture threat, is advance-fee fraud.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

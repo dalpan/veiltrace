@@ -1,0 +1,22 @@
+{
+  "id": "V2-cred-04-id-bank-pin-otp-blokir",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "cred",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://sentosaraya-verifikasi.example/nasabah",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#update-form",
+  "description": "Bank-styled page threatens account blocking within 24 hours and collects card number, ATM PIN and OTP to \"send to a verification officer\".",
+  "rationale": "No legitimate bank asks for the ATM PIN together with an OTP on a web form; the blocking threat and WhatsApp contact are manipulation.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>System Security Center - Threat Alert</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#1d2330;background:#f4f5f7;line-height:1.55;font-size:15px}
+a{color:inherit}
+img,svg{display:block}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+.muted{color:#6b7280}
+.small{font-size:13px}
+.btn{display:inline-block;border:0;border-radius:6px;padding:10px 18px;font-weight:600;cursor:pointer;text-decoration:none;font-size:14px}
+.card{background:#fff;border:1px solid #e3e6ea;border-radius:8px;padding:18px}
+footer.site{margin-top:40px;padding:28px 0;background:#1f2430;color:#b8bec9;font-size:13px}
+footer.site a{color:#d7dbe2;text-decoration:none;margin-right:14px}
+@media(max-width:760px){.grid2,.grid3{display:block!important}.side{margin-top:20px}}
+
+
+body{background:#0a4fa0;color:#fff;font-family:"Segoe UI",Arial,sans-serif;overflow:hidden}
+#lock-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0a4fa0}
+.win{width:760px;max-width:94%;background:#fff;color:#222;border:1px solid #888;box-shadow:0 0 0 9999px rgba(0,0,0,.35)}
+.tb{background:#1f2937;color:#fff;padding:8px 12px;font-size:13px;display:flex;justify-content:space-between}
+.ct{padding:22px 26px}.ct h2{color:#b91c1c;margin:0 0 8px}.scan{font-family:Consolas,monospace;font-size:12px;background:#111;color:#4ade80;padding:10px;height:110px;overflow:hidden}
+.ph{font-size:26px;font-weight:700;color:#0a4fa0;margin:12px 0}.ft{font-size:12px;color:#555;border-top:1px solid #ddd;padding-top:8px}
+
+</style>
+</head>
+<body>
+
+<div id="lock-screen" role="alertdialog">
+<div class="win">
+<div class="tb"><span>System Security Center &mdash; Threat Alert</span><span>&#10005;</span></div>
+<div class="ct">
+<h2>&#9888; Access to this PC has been blocked for security reasons</h2>
+<p>Your computer has been infected with <b>Trojan:Spy/Credstealer.B</b>. The following data is being sent to an unknown server right now:</p>
+<ul class="small"><li>Saved passwords and browser cookies</li><li>Online banking sessions</li><li>Photos and personal files</li></ul>
+<div class="scan">Scanning C:\Windows\System32 ... 3,341 files<br>THREAT FOUND: credstealer.dll &mdash; quarantine FAILED<br>THREAT FOUND: rootkit.sys &mdash; quarantine FAILED<br>Firewall status: COMPROMISED<br>Uploading: banking_session.dat 64%</div>
+<p><b>Do not turn off or restart your computer.</b> Doing so may cause permanent data loss and your system license will be disabled.</p>
+<p>Call Certified Security Support immediately to stop the data transfer:</p>
+<div class="ph">&#9742; Toll-free +1 555 0142</div>
+<p class="ft">Error code: 0x80073b01 &middot; A support technician is waiting for your call. Have your computer turned on when you call.</p>
+</div></div></div>
+<script>
+window.onbeforeunload=function(){return 'Your data is still being uploaded. Call support.';};
+</script>
+</body>
+</html>

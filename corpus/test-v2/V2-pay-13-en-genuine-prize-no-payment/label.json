@@ -1,0 +1,22 @@
+{
+  "id": "V2-pay-13-en-genuine-prize-no-payment",
+  "split": "test-v2",
+  "lang": "en",
+  "category": "benign",
+  "threatCategory": "pay",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://www.brightleafbooks.test/account/rewards",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Bookstore account page announcing a draw win credited automatically as store credit, with an explicit no-fee statement.",
+  "rationale": "A prize notice with nothing to pay, no outside contact and no deadline pressure; the only request is an optional opt-in.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "V2-cmd-04-id-forum-mshta-gaul",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "cmd",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://forumgamer-nusantara.test/thread/88213-arcfall-force-close",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#post-4471",
+  "description": "Informal forum reply tells a user with a game crash to paste an mshta command from a raw IP into Win+R and to disable antivirus.",
+  "rationale": "The reply pushes the reader to run a remote HTA script and pre-emptively explains away the antivirus warning, a typical social-engineering lure hidden among genuine help.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

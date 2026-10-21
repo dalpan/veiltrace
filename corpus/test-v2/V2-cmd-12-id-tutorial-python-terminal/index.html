@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Belajar Python: Ambil Data Cuaca dari API Pertamamu - Ngoding Santai</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#1d2330;background:#f4f5f7;line-height:1.55;font-size:15px}
+a{color:inherit}
+img,svg{display:block}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+.muted{color:#6b7280}
+.small{font-size:13px}
+.btn{display:inline-block;border:0;border-radius:6px;padding:10px 18px;font-weight:600;cursor:pointer;text-decoration:none;font-size:14px}
+.card{background:#fff;border:1px solid #e3e6ea;border-radius:8px;padding:18px}
+footer.site{margin-top:40px;padding:28px 0;background:#1f2430;color:#b8bec9;font-size:13px}
+footer.site a{color:#d7dbe2;text-decoration:none;margin-right:14px}
+@media(max-width:760px){.grid2,.grid3{display:block!important}.side{margin-top:20px}}
+
+
+body{background:#fdfcf8;font-family:Georgia,"Times New Roman",serif}.hd{text-align:center;padding:30px 0 10px}.hd b{font-size:28px}
+.post{max-width:700px;margin:0 auto;padding:0 18px}pre{background:#272822;color:#f8f8f2;padding:12px;border-radius:4px;font-family:Menlo,monospace;font-size:13px;overflow:auto}
+.cm{border-top:1px solid #e5e2d8;margin-top:30px;padding-top:10px}.c{font-family:Arial;font-size:14px;margin:12px 0}.c b{color:#7c2d12}
+
+</style>
+</head>
+<body>
+
+<div class="hd"><b>Ngoding Santai</b><div class="small muted">catatan belajar pemrograman</div></div>
+<div class="post">
+<h1>Belajar Python: Ambil Data Cuaca dari API Pertamamu</h1>
+<p class="muted small">12 Oktober 2026 &middot; Python, Pemula</p>
+<p>Di tulisan ini kita bikin skrip kecil yang membaca data dari API. Sebelum mulai, pastikan Python 3.11+ sudah terpasang.</p>
+<h3>1. Siapkan lingkungan virtual</h3>
+<p>Buka terminal (di Windows bisa pakai PowerShell atau Windows Terminal), lalu masuk ke folder proyek:</p>
+<pre>mkdir cuaca &amp;&amp; cd cuaca
+python -m venv .venv
+.venv\Scripts\activate   # Windows
+source .venv/bin/activate # macOS/Linux</pre>
+<h3>2. Pasang pustaka requests</h3>
+<pre>pip install requests</pre>
+<h3>3. Tulis skripnya</h3>
+<pre>import requests
+r = requests.get("https://api.cuaca-contoh.test/v1/kota/bandung")
+print(r.json()["suhu"])</pre>
+<p>Jalankan dengan <code>python cuaca.py</code>. Kalau muncul angka suhu, selamat, skrip pertamamu jalan!</p>
+<div class="cm"><b style="font-family:Arial">3 komentar</b>
+<div class="c"><b>fikri_dev</b>: mantap kak, tp pas activate di powershell muncul error execution policy, gmn ya?</div>
+<div class="c"><b>Ngoding Santai</b>: Coba pakai Command Prompt biasa dulu, atau baca dokumentasi resmi soal execution policy sebelum mengubahnya ya. Jangan asal ubah ke Unrestricted.</div>
+<div class="c"><b>salsabila</b>: makasih tutorialnya jelas bgt</div></div>
+</div><footer class="site"><div class="wrap"><div><a href="#">Arsip</a><a href="#">Tentang</a></div><p>Ngoding Santai &middot; blog pribadi</p></div></footer>
+</body>
+</html>

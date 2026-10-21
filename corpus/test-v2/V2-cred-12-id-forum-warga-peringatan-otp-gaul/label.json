@@ -1,0 +1,22 @@
+{
+  "id": "V2-cred-12-id-forum-warga-peringatan-otp-gaul",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "benign",
+  "threatCategory": "cred",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://rumpiwarga.test/t/cs-palsu-minta-otp",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Informal neighbourhood forum thread where residents warn each other about a fake CS caller asking for an OTP.",
+  "rationale": "The OTP request is recounted as a warning; nobody on the page asks the reader for any credential.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

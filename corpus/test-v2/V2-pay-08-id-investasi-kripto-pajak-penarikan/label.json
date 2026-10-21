@@ -1,0 +1,22 @@
+{
+  "id": "V2-pay-08-id-investasi-kripto-pajak-penarikan",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "pay",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://zenithtrade-pro.example/app/aset",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#wd-block",
+  "description": "Fake trading dashboard shows huge profits but blocks withdrawal until a 15% \"profit tax\" is deposited in crypto, with an asset-freeze threat.",
+  "rationale": "Paying a fee in crypto to unlock one's own withdrawal, which cannot be deducted from the balance, is the classic pig-butchering exit step.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

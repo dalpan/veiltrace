@@ -1,0 +1,22 @@
+{
+  "id": "V2-sup-10-en-insurance-contact-page",
+  "split": "test-v2",
+  "lang": "en",
+  "category": "benign",
+  "threatCategory": "sup",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://www.larkspurinsurance.test/help/contact",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Insurance help-center contact page listing claim and billing phone numbers and secure messaging.",
+  "rationale": "A company listing its own support numbers on its help center, with no alert, threat or request for remote access.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

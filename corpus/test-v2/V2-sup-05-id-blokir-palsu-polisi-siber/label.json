@@ -1,0 +1,22 @@
+{
+  "id": "V2-sup-05-id-blokir-palsu-polisi-siber",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "sup",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://siber-blokir.example/perkara/SIB2210",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#police-lock",
+  "description": "Full-screen page impersonating a police cyber unit claims the device is blocked for illegal content and pressures the reader to call an \"investigator\" to settle administratively.",
+  "rationale": "Law enforcement does not lock browsers or offer phone settlements; fake authority, recording claims and a 6-hour prosecution threat are extortion tactics.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

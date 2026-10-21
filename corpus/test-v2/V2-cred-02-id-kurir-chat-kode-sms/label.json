@@ -1,0 +1,22 @@
+{
+  "id": "V2-cred-02-id-kurir-chat-kode-sms",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "cred",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://kirimkilat-lacak.test/resi/KK773100459921",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#chat-widget",
+  "description": "Courier tracking page with a chat widget whose agent asks the customer to type the SMS verification code into chat and dismisses the \"do not share\" warning.",
+  "rationale": "Explicitly overrides the code's own \"do not share\" warning, adds a return-to-sender threat, and asks for a code that would let someone take over an account.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

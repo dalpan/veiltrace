@@ -1,0 +1,22 @@
+{
+  "id": "V2-pay-02-id-undian-pajak-hadiah",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "pay",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://undian-mitraberkah.example/pemenang/MTR-26-0045812",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#claim-terms",
+  "description": "Prize-winner page requires paying a \"prize tax\" to a personal notary account before the car and cash are released, with a deadline and secrecy request.",
+  "rationale": "Advance-fee pattern: legitimate prizes deduct tax or never require prepayment to an individual; deadline and \"keep it secret\" are manipulation.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

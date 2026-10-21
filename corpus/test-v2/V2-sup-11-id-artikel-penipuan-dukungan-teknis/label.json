@@ -1,0 +1,22 @@
+{
+  "id": "V2-sup-11-id-artikel-penipuan-dukungan-teknis",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "benign",
+  "threatCategory": "sup",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://literasisiber.test/artikel/penipuan-dukungan-teknis",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Awareness article reconstructing a fake \"your computer is infected, call support\" alert to teach readers to recognise it.",
+  "rationale": "The alert is shown as a labelled example within educational text that tells readers not to call; the page itself makes no such demand.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

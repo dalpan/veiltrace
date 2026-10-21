@@ -1,0 +1,22 @@
+{
+  "id": "V2-cmd-03-id-font-mac-terminal",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "cmd",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://bacadok-viewer.test/d/surat-penawaran-arunika",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#font-alert",
+  "description": "Fake PDF viewer claims a missing font and tells macOS users to paste a base64-obfuscated shell command into Terminal and enter their password.",
+  "rationale": "Fonts are never installed by pasting an encoded command that pipes into bash; the base64 hides a remote script download, and the job-offer lure increases motivation.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

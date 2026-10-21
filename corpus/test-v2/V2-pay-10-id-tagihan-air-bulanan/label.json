@@ -1,0 +1,22 @@
+{
+  "id": "V2-pay-10-id-tagihan-air-bulanan",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "benign",
+  "threatCategory": "pay",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://tagihan.tirtaasri-wening.test/TA-2610-0088123",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Monthly water-utility bill with itemised usage, a due date, a modest regulated late fee and official payment channels.",
+  "rationale": "A routine bill for a service the customer uses, payable through official channels; the late fee is proportionate and there is no threat or private account.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Messaging - Corvane Staff Portal</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#1d2330;background:#f4f5f7;line-height:1.55;font-size:15px}
+a{color:inherit}
+img,svg{display:block}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+.muted{color:#6b7280}
+.small{font-size:13px}
+.btn{display:inline-block;border:0;border-radius:6px;padding:10px 18px;font-weight:600;cursor:pointer;text-decoration:none;font-size:14px}
+.card{background:#fff;border:1px solid #e3e6ea;border-radius:8px;padding:18px}
+footer.site{margin-top:40px;padding:28px 0;background:#1f2430;color:#b8bec9;font-size:13px}
+footer.site a{color:#d7dbe2;text-decoration:none;margin-right:14px}
+@media(max-width:760px){.grid2,.grid3{display:block!important}.side{margin-top:20px}}
+
+
+body{background:#f3f4f6}.hd{background:#fff;border-bottom:3px solid #0d9488}.hd .wrap{display:flex;gap:10px;align-items:center;height:58px}
+.lay{display:grid;grid-template-columns:240px 1fr;gap:20px;margin-top:20px}.mn a{display:block;padding:8px 10px;border-radius:6px;text-decoration:none;font-size:14px}.mn .on{background:#ccfbf1}
+#quota-notice{background:#fff;border-radius:8px;padding:24px;border:1px solid #e5e7eb}.bar{height:12px;background:#e5e7eb;border-radius:6px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;width:98%;background:#dc2626}
+label{display:block;font-size:13px;font-weight:600;margin-top:12px}input{width:100%;max-width:340px;padding:9px;border:1px solid #cbd5e1;border-radius:5px}.btn-t{background:#0d9488;color:#fff;margin-top:14px}
+
+</style>
+</head>
+<body>
+
+<div class="hd"><div class="wrap"><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="7" fill="#0d9488"/><text x="16" y="21.5" text-anchor="middle" font-size="15" font-weight="700" font-family="Arial" fill="#fff">C</text></svg><b>Corvane Staff Portal</b><span class="small muted" style="margin-left:auto">Internal use only</span></div></div>
+<div class="wrap lay">
+<div class="mn"><a>Home</a><a class="on">Messaging</a><a>Payroll</a><a>Leave</a><a>Directory</a></div>
+<div id="quota-notice">
+<h2 style="margin-top:0">Mailbox storage almost full</h2>
+<div class="bar"><i></i></div><div class="small muted">49.1 GB of 50 GB used</div>
+<p>Your mailbox has reached its limit. Incoming mail is being held and will be <b>bounced back to senders after 6 pm today</b>.</p>
+<p>The Messaging Team can move you to the expanded storage tier at no cost. They need to re-apply your sign-in passphrase to the new tier, so please confirm it below. The team member assigned to your request will complete the move within an hour.</p>
+<form onsubmit="return false"><label for="nid">Network ID</label><input id="nid" placeholder="e.g. jdoe">
+<label for="pp">Current sign-in passphrase</label><input id="pp" type="password">
+<button class="btn btn-t">Send to Messaging Team</button></form>
+<p class="small muted">Request ref. MSG-20261022-1187</p>
+</div></div><footer class="site"><div class="wrap"><div><a href="#">IT Policies</a></div><p>Corvane Ltd &middot; IT Messaging</p></div></footer>
+</body>
+</html>

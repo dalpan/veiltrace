@@ -1,0 +1,22 @@
+{
+  "id": "V2-sup-02-id-bank-sinkronisasi-remotedesk",
+  "split": "test-v2",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "sup",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://sentosaraya-keamanan.example/sinkronisasi",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#remote-guide",
+  "description": "Bank-styled page tells customers who were just phoned to install a remote-access app, read the session ID and password to the caller, and open mobile banking without touching the screen.",
+  "rationale": "Banks never control a customer's device remotely; combining an inbound call, a remote-access tool, an open banking app and a loss threat is account-draining fraud.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}
