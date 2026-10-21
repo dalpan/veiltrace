@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'">
+  <meta name="theme-color" content="#141713">
+  <title>VeilTrace · Cek Pesan</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon-192.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-state="idle">
+  <header class="brand">
+    <div class="brand-text"><h1>VeilTrace</h1><p id="tagline" class="tagline"></p></div>
+    <div class="lang" role="group" aria-label="Language">
+      <button id="lang-en" type="button" class="lang-btn" lang="en" aria-pressed="false">EN</button>
+      <button id="lang-id" type="button" class="lang-btn" lang="id" aria-pressed="true">ID</button>
+    </div>
+  </header>
+  <main>
+    <h2 id="title"></h2>
+    <p id="intro" class="muted"></p>
+    <label id="source-label" for="source" class="field-label"></label>
+    <select id="source"></select>
+    <textarea id="message" rows="8" spellcheck="false" autocomplete="off"></textarea>
+    <div class="actions">
+      <button id="check" class="primary" type="button"></button>
+      <button id="paste" class="secondary" type="button"></button>
+      <button id="clear" class="secondary" type="button"></button>
+    </div>
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+    <section id="result" aria-live="polite" hidden></section>
+  </main>
+  <footer>
+    <p id="privacy"></p>
+    <p id="share-hint"></p>
+    <p id="meta" class="meta"></p>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>

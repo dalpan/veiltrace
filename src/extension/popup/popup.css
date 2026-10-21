@@ -29,6 +29,8 @@ body {
 /* A toolbar popup sizes itself to the body, so its width must be fixed: a viewport media query there matches while Chrome is
    still sizing the popup and shrinks it for good. Only a popup opened as a tab (html.fluid) follows the window width. */
 html.fluid body { width: auto; max-width: 100%; }
+/* Phones (Firefox for Android shows the popup as a full-screen sheet): follow the screen width. */
+@media (hover: none) and (pointer: coarse) { body { width: auto; max-width: 100%; } }
 
 /* Header */
 .brand { display: flex; gap: 10px; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--border-strong); background: var(--panel); }

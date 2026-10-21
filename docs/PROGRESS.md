@@ -4,6 +4,14 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-22 · Held-out v2 locked; realistic demo gallery; mobile (PWA + Firefox) · **Implemented**
+
+**Done:** held-out v2 (60 scenarios, blind author) validated blind and hash-locked, preregistered, harness `npm run eval:v2 -- --final` (not run) (D-085). Realistic demo gallery `demo/scenes` (8 pages + gallery). "Cek Pesan" PWA with Android share target, offline, phone layout (D-084). Firefox build for desktop and Android (D-086).
+
+**Next (owner):** decide when to run held-out v2 (once, `--final`); choose hosting for the PWA (HTTPS static host) to install it on a phone; try the Firefox build on an Android phone (Firefox ≥ 128). **Then:** P2 (WhatsApp Web prototype, recruitment and rank-impersonation patterns, managed organizational build).
+
+---
+
 ## 2026-10-22 · Accuracy round 1 · **Dev improvements done (D-083); held-out v2 being authored blind**
 
 **Done:** 20 realistic dev scenarios (labels first, baseline recorded); engine 0.3.0 (ruleset m5) and cred/pay/sup 0.2.0. Dev before → after: ClickFix FP 2→0, FN 5→1; credential FN 2→1; payment FN 2→0; support FN 1→0 (DETECTION_MODEL.md §15). A separate author, blind to the rules, is writing `corpus/test-v2` (60 scenarios across the four categories).

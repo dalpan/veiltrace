@@ -76,6 +76,11 @@ function shade(x, y) {
   return BRAND;
 }
 
+/** One icon of any size (the PWA needs 192 and 512 px). */
+export function iconPng(size) {
+  return render(size, shade);
+}
+
 export function icons() {
   return Object.fromEntries([16, 32, 48, 128].map((s) => [`icon-${s}.png`, render(s, shade)]));
 }

@@ -21,6 +21,10 @@ The popup is one dashboard: page threat summary, the four categories, advice, an
 - None of these numbers are real-world rates. Scanning is on demand by default; automatic scanning on page load is opt-in (badge only for manipulative pages).
 - Progress log: [docs/PROGRESS.md](docs/PROGRESS.md). Hackathon materials (Indonesian): [submission/](submission/).
 
+## On a phone
+- **Cek Pesan (PWA):** `npm run build:pwa` → `dist/pwa` (static files). Served over HTTPS and installed, it checks a pasted message, or on Android a message shared from WhatsApp or Messages, on the device and offline.
+- **Firefox for Android (≥ 128):** `npm run build:firefox` → `dist/extension-firefox`. Not yet tested on a device.
+
 ## Install (unpacked, Chrome/Chromium ≥ 110)
 
 ```bash

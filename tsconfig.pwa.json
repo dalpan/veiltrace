@@ -1,0 +1,7 @@
+{
+  // "Cek Pesan" PWA page (D-084): DOM, no Node or chrome types. The service worker has its own config (tsconfig.sw.json).
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "lib": ["ES2022", "DOM", "DOM.Iterable"], "types": [] },
+  "include": ["src/pwa/**/*.ts"],
+  "exclude": ["src/pwa/sw.ts"]
+}

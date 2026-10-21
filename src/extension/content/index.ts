@@ -9,12 +9,17 @@ import { EXTRACTOR_VERSION, extractSnapshot } from '../../extract/extract.js';
 import { clearHighlight, highlight, type HighlightResult } from './highlight.js';
 import { buildReport, type ScanReport } from './report.js';
 
-/** chrome.dom.openOrClosedShadowRoot (Chrome 88+) lets content scripts read closed shadow roots. */
+/**
+ * Closed shadow roots: chrome.dom.openOrClosedShadowRoot (Chrome 88+) or, in Firefox content scripts,
+ * Element.openOrClosedShadowRoot() (D-086).
+ */
 function shadowRootAdapter(): ((el: Element) => ShadowRoot | null) | undefined {
   const dom = typeof chrome !== 'undefined' ? (chrome as { dom?: { openOrClosedShadowRoot?: (el: HTMLElement) => ShadowRoot | null } }).dom : undefined;
   const fn = dom?.openOrClosedShadowRoot;
-  if (typeof fn !== 'function') return undefined;
-  return (el: Element) => (el instanceof HTMLElement ? (fn(el) ?? null) : el.shadowRoot);
+  if (typeof fn === 'function') return (el: Element) => (el instanceof HTMLElement ? (fn(el) ?? null) : el.shadowRoot);
+  type Gecko = Element & { openOrClosedShadowRoot?: () => ShadowRoot | null };
+  if (typeof (document.documentElement as Gecko).openOrClosedShadowRoot === 'function') return (el: Element) => (el as Gecko).openOrClosedShadowRoot?.() ?? el.shadowRoot;
+  return undefined;
 }
 
 /** `keepHighlight`: automatic rescans (D-081) must not remove a highlight the user just asked for. */

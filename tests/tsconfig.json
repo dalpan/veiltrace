@@ -4,5 +4,7 @@
     "types": ["node", "chrome"],
     "lib": ["ES2022", "DOM", "DOM.Iterable"]
   },
-  "include": ["../src/**/*.ts", "./**/*.ts", "../vitest.config.ts"]
+  "include": ["../src/**/*.ts", "./**/*.ts", "../vitest.config.ts"],
+  // The PWA service worker runs in a worker scope (tsconfig.sw.json).
+  "exclude": ["../src/pwa/sw.ts"]
 }

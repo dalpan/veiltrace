@@ -63,9 +63,10 @@ export async function enableAuto(): Promise<boolean> {
   if (!granted) return false;
   const existing = await chrome.scripting.getRegisteredContentScripts({ ids: [AUTO_SCRIPT_ID] });
   if (existing.length === 0) {
-    await chrome.scripting.registerContentScripts([{
-      id: AUTO_SCRIPT_ID, matches: AUTO_ORIGINS, js: ['content.js', 'auto.js'], runAt: 'document_idle', allFrames: false, persistAcrossSessions: true,
-    }]);
+    const script = { id: AUTO_SCRIPT_ID, matches: AUTO_ORIGINS, js: ['content.js', 'auto.js'], runAt: 'document_idle' as const, allFrames: false };
+    // Firefox versions without persistAcrossSessions reject the option; registration then lasts for the browser session.
+    await chrome.scripting.registerContentScripts([{ ...script, persistAcrossSessions: true }])
+      .catch(() => chrome.scripting.registerContentScripts([script]));
   }
   return true;
 }

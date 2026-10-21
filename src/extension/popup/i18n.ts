@@ -114,6 +114,23 @@ export interface Messages {
     contactHidden: string;
     limitation: Record<SupportLimitation, string>;
   };
+  /** "Cek Pesan" PWA (D-084). */
+  pwa: {
+    title: string;
+    intro: string;
+    sourceLabel: string;
+    source: Record<'chat' | 'sms' | 'email' | 'web', string>;
+    placeholder: string;
+    check: string;
+    clear: string;
+    paste: string;
+    shareHint: string;
+    privacy: string;
+    empty: string;
+    tooLong: string;
+    yourMessage: string;
+    offlineReady: string;
+  };
   /** Opt-in automatic scanning (D-081). */
   auto: {
     actionTitle: string;
@@ -380,6 +397,22 @@ const EN: Messages = {
       'trust-boundary-heuristic': 'Whether this content comes from the site or from others is estimated from the page structure.',
       'contact-details-not-reported': 'Phone numbers are matched to understand the direction, but are never copied into the report.',
     },
+  },
+  pwa: {
+    title: 'Check a message',
+    intro: 'Paste a suspicious message (WhatsApp, SMS, email or text from a website) to see whether it tries to manipulate you.',
+    sourceLabel: 'Where is it from?',
+    source: { chat: 'Chat (WhatsApp, Telegram…)', sms: 'SMS', email: 'Email', web: 'Text from a website' },
+    placeholder: 'Paste the message here…',
+    check: 'Check message',
+    clear: 'Clear',
+    paste: 'Paste from clipboard',
+    shareHint: 'On Android, install this app, then use Share → VeilTrace from WhatsApp or Messages.',
+    privacy: 'Checked on this device only. The message is not sent, saved or shared.',
+    empty: 'Paste or share a message first.',
+    tooLong: 'Only the first 20,000 characters were checked.',
+    yourMessage: 'Your message',
+    offlineReady: 'Ready to work offline.',
   },
   auto: {
     actionTitle: 'VeilTrace: scan this page',
@@ -664,6 +697,22 @@ const ID: Messages = {
       'trust-boundary-heuristic': 'Apakah konten ini berasal dari situs atau dari pihak lain diperkirakan dari struktur halaman.',
       'contact-details-not-reported': 'Nomor telepon dicocokkan untuk memahami arahan, tetapi tidak pernah disalin ke laporan.',
     },
+  },
+  pwa: {
+    title: 'Cek pesan',
+    intro: 'Tempel pesan yang mencurigakan (WhatsApp, SMS, email, atau teks dari situs) untuk melihat apakah pesan itu mencoba memanipulasi Anda.',
+    sourceLabel: 'Dari mana pesannya?',
+    source: { chat: 'Chat (WhatsApp, Telegram…)', sms: 'SMS', email: 'Email', web: 'Teks dari situs' },
+    placeholder: 'Tempel pesan di sini…',
+    check: 'Periksa pesan',
+    clear: 'Hapus',
+    paste: 'Tempel dari clipboard',
+    shareHint: 'Di Android, pasang aplikasi ini, lalu gunakan Bagikan → VeilTrace dari WhatsApp atau Pesan.',
+    privacy: 'Diperiksa hanya di perangkat ini. Pesan tidak dikirim, disimpan, atau dibagikan.',
+    empty: 'Tempel atau bagikan pesan terlebih dahulu.',
+    tooLong: 'Hanya 20.000 karakter pertama yang diperiksa.',
+    yourMessage: 'Pesan Anda',
+    offlineReady: 'Siap dipakai tanpa internet.',
   },
   auto: {
     actionTitle: 'VeilTrace: pindai halaman ini',
