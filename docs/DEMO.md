@@ -31,9 +31,11 @@ Since v0.4.0 the popup follows the browser UI language. In an Indonesian browser
 - `file://` pages need "Allow access to file URLs" on the extension card; otherwise the popup explains this.
 - The popup is 400 px wide and narrows on small viewports (Firefox Android adaptation is M5 and untested).
 
-## v0.4.0 checklist (engine 0.2.0, bilingual UI): not yet executed
+## v0.4.0 checklist (engine 0.2.0, bilingual UI): confirmed by the owner
 
-Build: `npm run release:candidate && npm run release:verify` from a clean commit (or `npm run release` for a development build), unzip the ZIP into an empty folder and **Load unpacked** that folder. Serve the pages with `npm run manual:fixtures` and the two `python3 -m http.server` commands above (D06, D17, D27 and D45 are included in `dist/manual`). A row counts as passed **only when the owner confirms it**; no row below has been confirmed for v0.4.0.
+The owner confirmed on 2026-10-21 that the guided walkthrough V1–V12, which covers categories A–D below except D3 (optional V13, not reported), passed on Chrome stable with the candidate ZIP of `03fa212`.
+
+Build: `npm run release:candidate && npm run release:verify` from a clean commit (or `npm run release` for a development build), unzip the ZIP into an empty folder and **Load unpacked** that folder. Serve the pages with `npm run manual:fixtures` and the two `python3 -m http.server` commands above (D06, D17, D27 and D45 are included in `dist/manual`). A row counts as passed **only when the owner confirms it**.
 
 Engine 0.2.0 (D-055) changes three things a person can see: procedural troubleshooting pages are now *observed* instead of *suspicious*, a hidden clipboard payload next to an educational cue is now *manipulative* with an explanation of why the context was set aside, and the footer reads "Engine 0.2.0".
 
@@ -77,3 +79,26 @@ M1–M12 above passed on v0.3.0 (engine 0.1.0, English UI). They are not automat
 | D1 | Install from the **candidate ZIP** (not `dist/extension`) | Loads without errors; name "VeilTrace", version 0.4.0, no "TEST BUILD" |
 | D2 | Network off (Wi-Fi off), repeat B2, B7 and C5 | Same results; DevTools Network (page and popup) shows no VeilTrace requests |
 | D3 | English Chrome UI (or `--lang=en-US`) → open popup before switching | Popup starts in English |
+
+## v0.5.0 checklist (demo site and release candidate, M4.4): confirmed by the owner
+
+The owner confirmed on 2026-10-21 that rows N1–N14 passed on Chrome stable.
+
+Build and serve as in docs/PRESENTER_GUIDE.md §1 (candidate ZIP `veiltrace-chromium-0.5.0.zip`; demo at `http://localhost:8080/demo/`). Version 0.5.0 changes only the version number relative to the confirmed v0.4.0 build; the engine (0.2.0) and the popup code are unchanged. **No row is passed until the owner confirms it.** For each row, record: pass/fail, date, Chrome version (`chrome://version`), screenshot file name, notes.
+
+| # | Step | Expected | Evidence to record |
+|---|---|---|---|
+| N1 | `cd release && shasum -a 256 -c SHA256SUMS`; install the unzipped candidate | All `OK`; ZIP hash equals the reported candidate hash; name "VeilTrace", **version 0.5.0**, no errors, no "TEST BUILD" | Terminal output; extension card screenshot |
+| N2 | Details before and after a scan | Permissions empty; no sites listed under Site access | Two screenshots |
+| N3 | Open `http://localhost:8080/demo/` | Looks like an ordinary help center; the "Community answers" widget is visibly marked as third-party content; the page itself does nothing when "I'm not a robot" is clicked | Page screenshot |
+| N4 | Toolbar button → **Scan page** | "Manipulative instruction detected", Rule R1, confidence high, action risk high, evidence "Verify you are human", "Windows + R", "Ctrl + V", "Press Enter", "I'm not a robot"; "Complete scan"; footer "Engine 0.2.0" | Popup screenshot with footer |
+| N5 | **Show on page** on "Windows + R" | Amber box on the step inside the community widget, not on the article; disappears after ~5 s | Page screenshot while the box is visible |
+| N6 | **ID**, then **EN** | Whole UI switches; verdict, evidence and the duration number in the footer stay the same (no rescan) | Two screenshots |
+| N7 | `http://localhost:8080/demo/benign.html` → scan | "No suspicious instructions detected in the analyzed content."; no finding; no "safe"/"aman" | Screenshot |
+| N8 | `http://127.0.0.1:8080/demo/` → scan, compare with N4 | Same verdict, rule, confidence and evidence snippets as N4; only the host label differs (domain invariance) | Two screenshots side by side |
+| N9 | `http://localhost:8080/demo/cli.html` → scan → expand the observed section | Headline "No suspicious instructions detected…"; "Observed instructions without manipulation signs (2)", rule R5 | Screenshot |
+| N10 | D45 → scan | As v0.4.0 C5 (override block, context set aside, hidden-clipboard evidence) | Screenshot |
+| N11 | `cross-origin.html` → scan | Partial scan, frames-from-other-sites reason, no finding claimed | Screenshot |
+| N12 | `chrome://settings` → toolbar button | "This page cannot be scanned"; button disabled | Screenshot |
+| N13 | Wi-Fi off; DevTools Network open for the page and the popup; repeat N4, N5, N8 | Same results; no requests caused by VeilTrace; the demo page loads only `style.css` from localhost | Network panel screenshots |
+| N14 | Rehearse the 3-minute script (PRESENTER_GUIDE.md §3) end to end | Finishes within 3 minutes with no failed step | Timing note |

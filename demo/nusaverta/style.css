@@ -1,0 +1,69 @@
+/* Nusaverta: a FICTIONAL company for the VeilTrace demo. No external resources. */
+:root {
+  --ink: #17202e; --muted: #5b6676; --line: #e3e7ee; --bg: #f6f8fb; --card: #ffffff;
+  --brand: #1f6f5c; --brand-ink: #ffffff; --accent: #e9f4f0; --third: #fff8e6; --third-line: #f0d48a;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font: 15px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--ink); background: var(--bg); }
+a { color: var(--brand); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; }
+
+.topbar { background: var(--card); border-bottom: 1px solid var(--line); }
+.topbar .inner { max-width: 1120px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; gap: 28px; }
+.logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; color: var(--ink); }
+.logo svg { display: block; }
+.nav { display: flex; gap: 20px; color: var(--muted); font-size: 14px; }
+.nav a { color: var(--muted); }
+.nav a.active { color: var(--ink); font-weight: 600; }
+.account { margin-left: auto; display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; }
+.avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: var(--brand); display: grid; place-items: center; font-weight: 700; font-size: 13px; }
+
+.hero { background: var(--brand); color: var(--brand-ink); }
+.hero .inner { max-width: 1120px; margin: 0 auto; padding: 22px 20px; }
+.hero p { margin: 0; opacity: .85; font-size: 14px; }
+.hero h1 { margin: 4px 0 0; font-size: 24px; }
+
+.layout { max-width: 1120px; margin: 24px auto 40px; padding: 0 20px; display: grid; grid-template-columns: 220px 1fr 300px; gap: 24px; }
+.toc { font-size: 14px; }
+.toc h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 8px; }
+.toc ul { list-style: none; margin: 0; padding: 0; }
+.toc li { padding: 5px 0; }
+.toc a { color: var(--ink); }
+.toc a.current { color: var(--brand); font-weight: 600; }
+
+.article { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 28px 32px; }
+.crumbs { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+.article h1 { font-size: 26px; margin: 0 0 6px; }
+.meta { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+.article h2 { font-size: 18px; margin: 26px 0 8px; }
+.article ol li { margin: 4px 0; }
+.note { background: var(--accent); border-left: 4px solid var(--brand); padding: 10px 14px; border-radius: 6px; font-size: 14px; }
+.article pre { background: #0f1724; color: #e6edf6; padding: 14px 16px; border-radius: 8px; overflow-x: auto; }
+.codehead { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); margin-top: 14px; }
+.codehead button { font: inherit; border: 1px solid var(--line); background: var(--card); border-radius: 6px; padding: 2px 10px; cursor: pointer; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { border-bottom: 1px solid var(--line); padding: 8px 6px; text-align: left; }
+th { color: var(--muted); font-weight: 600; }
+.helpful { margin-top: 26px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); display: flex; gap: 10px; align-items: center; }
+.helpful button { font: inherit; border: 1px solid var(--line); background: var(--card); border-radius: 6px; padding: 3px 12px; cursor: pointer; }
+
+/* Third-party community widget: visually and structurally separate from first-party content. */
+.side { display: flex; flex-direction: column; gap: 16px; }
+.box { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px; font-size: 14px; }
+.box h2 { font-size: 15px; margin: 0 0 8px; }
+.community { background: var(--third); border: 1px dashed var(--third-line); border-radius: 10px; padding: 14px; font-size: 14px; }
+.community .provenance { font-size: 12px; color: #7a5b12; margin: 0 0 10px; }
+.community h2 { font-size: 15px; margin: 0 0 4px; }
+.post { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 12px; margin-top: 10px; }
+.post .who { font-weight: 600; font-size: 13px; }
+.post .when { color: var(--muted); font-size: 12px; }
+.post ol { padding-left: 20px; margin: 6px 0; }
+.locked { margin-top: 8px; border: 1px solid var(--line); border-radius: 6px; padding: 10px; background: #fafbfc; }
+.locked button { font: inherit; border: 0; background: #2c6bd6; color: #fff; border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+.vh { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+
+.footer { max-width: 1120px; margin: 0 auto 30px; padding: 0 20px; color: var(--muted); font-size: 12px; }
+.footer p { margin: 4px 0; }
+
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .toc { display: none; } }

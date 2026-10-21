@@ -146,7 +146,7 @@ Runtime dependencies target: **0**. Everything shipped in the extension is our o
 {
   "manifest_version": 3,
   "name": "VeilTrace",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "minimum_chrome_version": "110",
   "action": { "default_title": "VeilTrace: scan this page", "default_popup": "popup.html", "default_icon": { "16": "…", "32": "…", "48": "…", "128": "…" } },
   "icons": { … },
@@ -233,4 +233,3 @@ Runtime dependencies target: **0**. Everything shipped in the extension is our o
 **UI language (M4.2, D-049).** The popup renders all text from bundled EN/ID dictionaries. It selects Indonesian when `chrome.i18n.getUILanguage()` is Indonesian; EN/ID buttons switch for the session and re-render from popup state without rescanning. Evidence snippets are page text and stay untranslated (inserted as text nodes with `lang=""`).
 
 **Closed shadow roots.** In the isolated world, `chrome.dom.openOrClosedShadowRoot` is available. Closed-root content is extracted, and a lure inside one is detected (E2E-verified). This resolves the M2 open item.
-

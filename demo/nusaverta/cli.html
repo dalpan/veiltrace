@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Install the Nusaverta CLI · Nusaverta Developers</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- VEILTRACE DEMO PAGE (benign procedural instruction). "Nusaverta" is a fictional company.
+     The install commands point to a .invalid host and the Copy buttons do nothing. -->
+<header class="topbar" role="banner"><div class="inner">
+  <a class="logo" href="index.html"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="7" fill="#1f6f5c"/><path d="M8 19V9l12 10V9" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Nusaverta</a>
+  <nav class="nav" aria-label="Main"><a href="#">Dashboard</a><a href="#">Invoices</a><a href="#">Reports</a><a href="index.html">Help Center</a><a class="active" href="cli.html">Developers</a></nav>
+  <div class="account"><span>PT Contoh Niaga</span><span class="avatar">RA</span></div>
+</div></header>
+
+<div class="hero"><div class="inner"><p>Developers</p><h1>Nusaverta CLI</h1></div></div>
+
+<div class="layout">
+  <aside class="toc" aria-label="Developer topics">
+    <h2>CLI</h2>
+    <ul>
+      <li><a class="current" href="cli.html">Install the CLI</a></li>
+      <li><a href="#">Authenticate</a></li>
+      <li><a href="#">Export invoices</a></li>
+      <li><a href="#">Command reference</a></li>
+    </ul>
+  </aside>
+
+  <main class="article" id="article">
+    <div class="crumbs">Developers › CLI</div>
+    <h1>Install the Nusaverta CLI</h1>
+    <div class="meta">Version 3.2 · Updated last week</div>
+    <p>The CLI lets you export invoices and reports from scripts and scheduled jobs.</p>
+    <h2>macOS and Linux</h2>
+    <p>Open Terminal and run the install script:</p>
+    <div class="codehead"><span>bash</span><button type="button">Copy</button></div>
+    <pre><code>curl -fsSL https://get.nusaverta.example.invalid/install.sh | sh</code></pre>
+    <h2>Windows</h2>
+    <p>Open PowerShell and run:</p>
+    <div class="codehead"><span>PowerShell</span><button type="button">Copy</button></div>
+    <pre><code>irm https://get.nusaverta.example.invalid/install.ps1 | iex</code></pre>
+    <h2>Check the installation</h2>
+    <p>Run <code>nusaverta --version</code>. It prints the installed version, for example <code>3.2.0</code>.</p>
+    <div class="helpful">Was this page helpful? <button type="button">Yes</button><button type="button">No</button></div>
+  </main>
+
+  <aside class="side" aria-label="Related">
+    <section class="box">
+      <h2>Next steps</h2>
+      <ul>
+        <li><a href="#">Create an API token</a></li>
+        <li><a href="#">Export invoices from a script</a></li>
+      </ul>
+    </section>
+  </aside>
+</div>
+
+<footer class="footer">
+  <p>© 2026 Nusaverta (fictional company for a VeilTrace demonstration).</p>
+  <p>Demo states: <a href="index.html">with community post</a> · <a href="benign.html">without community post</a> · <a href="cli.html">developer docs</a></p>
+</footer>
+</body>
+</html>

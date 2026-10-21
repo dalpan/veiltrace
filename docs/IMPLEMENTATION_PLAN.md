@@ -1,6 +1,6 @@
 # Implementation Plan
 
-Status: M1 accepted (`d856fbd`). Held-out split frozen (`407beb0`). M2 accepted (`70c5697`). M3 accepted (`64e632a`, manual production validation recorded in PROGRESS.md). M4.1 accepted (`7088de0`, experimental rule set `m4.1-rc1`, not default). M4.2 accepted (release engineering, bilingual UI). M4.3A accepted (engine 0.2.0, preregistration, tag `eval-freeze-v1`). M4.3B done: held-out evaluation v1 executed once, with targets missed for recall, precision and FPR (docs/EVALUATION_RESULTS.md, D-059). M4.4 not started (requires approval). Every milestone is independently testable and ends with a PROGRESS.md entry. No milestone is started before the previous one's acceptance criteria are met or explicitly waived in DECISIONS.md.
+Status: M1 accepted (`d856fbd`). Held-out split frozen (`407beb0`). M2 accepted (`70c5697`). M3 accepted (`64e632a`, manual production validation recorded in PROGRESS.md). M4.1 accepted (`7088de0`, experimental rule set `m4.1-rc1`, not default). M4.2 accepted (release engineering, bilingual UI). M4.3A accepted (engine 0.2.0, preregistration, tag `eval-freeze-v1`). M4.3B done: held-out evaluation v1 executed once, with targets missed for recall, precision and FPR (docs/EVALUATION_RESULTS.md, D-059). M4.4 accepted (demo site, presenter guide, hard-negative and evasion tables, release candidate v0.5.0; manual checklist N1–N14 confirmed by the owner). Every milestone is independently testable and ends with a PROGRESS.md entry. No milestone is started before the previous one's acceptance criteria are met or explicitly waived in DECISIONS.md.
 
 ## Milestone overview
 
@@ -175,6 +175,33 @@ Out of scope unless separately required and reviewed: centralized monitoring, em
 | Preregistration | docs/EVAL_PREREGISTRATION.md, written before any held-out run (D-058) |
 | Manual validation | DEMO.md v0.4.0 checklist in four categories; not executed |
 | Held-out | Not evaluated; freeze tag not created |
+
+## M4.4: Hackathon demo and release candidate (2026-10-21, accepted)
+
+| Owner requirement | Result |
+|---|---|
+| Frozen engine | Engine 0.2.0 / `m4.1`, extractor, harness, held-out corpus and evaluation records unchanged |
+| Demo site | `demo/nusaverta`: fictional help center with a third-party community widget containing a defanged ClickFix lure; benign state; developer-docs page; no JS, no external resources, no demo-specific code (D-061) |
+| Presenter workflow | docs/PRESENTER_GUIDE.md: setup, 3- and 7-minute scripts, fallbacks, evaluation slide, limitations, Q&A |
+| Domain invariance | Automated: 4 hosts with real extraction (`tests/browser/demo.test.ts`) and 2 hosts in the extension (`tests/e2e/demo.test.ts`); manual row N8 confirmed by the owner |
+| M4 criterion 3 (hard negatives) | EVALUATION_PLAN.md §12 |
+| M4 criterion 6 (evasion table) | THREAT_MODEL.md §5 with measured status; demo trust boundaries in §8 |
+| Release candidate | Version 0.5.0 (D-060); development build verified and reproducible; candidate path verified in a throwaway clone; final candidate hashes after the commit (RELEASE.md §6) |
+| Manual validation | DEMO.md v0.5.0 checklist N1–N14; confirmed by the owner |
+
+### Remaining M4 acceptance criteria
+- Criterion 1 (held-out run, results document) and criterion 2 (targets met or shortfall explained): done in M4.3B; targets missed and explained.
+- Criterion 3: EVALUATION_PLAN.md §12 (the brief's seven types, from the existing unit, dev and recorded held-out evidence).
+- Criterion 4 (trusted-looking local domain, no domain reputation): demo site plus domain-invariance tests.
+- Criterion 5 (p95 timing): held-out total p95 2.4 ms (EVALUATION_RESULTS.md §2), machine-specific.
+- Criterion 6: THREAT_MODEL.md §5.
+
+## Research roadmap after M4: evaluation v2 (not started)
+1. Fix the harness provenance ordering (check `git status` before writing outputs) and test it **before** preregistering v2 (D-059).
+2. Commission a new held-out split from at least one independent author with no access to rules, lexicons or the v1 splits; native-speaker Indonesian; longer, realistic pages; strata for canonical lures, deliberate weakness probes and hard negatives; size chosen so the intervals can test D-011.
+3. Freeze and hash it, then develop any engine revision (e.g. the EVALUATION_RESULTS.md §6 hypotheses) on dev data only, as a new engine version.
+4. Preregister v2 (system, metrics, rerun policy), tag, run once, and publish next to v1.
+5. Separately, a governed real-world sample (EVALUATION_PLAN.md §7) before any real-world claim.
 
 ## M4: Hardening, held-out evaluation, demo
 

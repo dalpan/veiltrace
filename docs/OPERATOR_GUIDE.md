@@ -1,4 +1,4 @@
-# VeilTrace Operator Guide (v0.4.0, engine 0.2.0)
+# VeilTrace Operator Guide (v0.5.0, engine 0.2.0)
 
 For IT/security staff evaluating or deploying the VeilTrace browser extension. VeilTrace is **one awareness layer**. It does **not** replace endpoint protection, secure browsing policies, email/URL filtering or security awareness training.
 

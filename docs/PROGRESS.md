@@ -4,6 +4,26 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-21 · M4.4 Hackathon demo and release candidate · **Accepted; manual checklist N1–N14 confirmed by the owner**
+
+**Done**
+- **Demo site** `demo/nusaverta` (fictional): help-center article plus a third-party "Community answers" widget with a defanged ClickFix lure; benign state; developer-docs page. Static HTML/CSS, no JS, no external resources. Copied to `dist/manual/demo` by `npm run manual:fixtures`. Engine results (real extraction): lure manipulative (R1), benign none, docs observed (R5 × 2). No demo-specific code (tested; D-061).
+- **Presenter guide** (docs/PRESENTER_GUIDE.md): setup, 3- and 7-minute scripts, domain-invariance demonstration, evaluation slide with the held-out numbers and missed targets, limitations, Q&A, browser compatibility.
+- **Domain invariance:** identical extraction and analysis for the 3 demo pages under 4 hosts (browser test), and identical popup results under 2 hosts (E2E).
+- **M4 criteria:** hard-negative assessment (EVALUATION_PLAN.md §12): 5 of the brief's 7 named types pass on all available evidence; S-N5 has one dev FP (D39); S-N4 has one held-out FP (T18); the extra S-N8 row has one held-out FP (T17). Evasion table with measured status (THREAT_MODEL.md §5), plus demo trust boundaries (§8). Corrected an inaccurate claim: there is no "language not supported" notice.
+- **Release candidate v0.5.0** (D-060): development release verified and reproducible; candidate path verified in a throwaway clone (identical in-ZIP files); final candidate hashes after the commit (RELEASE.md §6).
+- **Tests:** `tests/browser/demo.test.ts` (7), `tests/e2e/demo.test.ts` (4); the E2E helper serves CSS with the right content type.
+
+**Verification:** typecheck, ESLint clean; unit 277/277; browser 78/78; E2E 39/39; `verify:extension` 25/25; supply-chain 0 vulnerabilities; `release` + `release:verify` OK; `release:repro` identical.
+
+**Unchanged:** `src/core`, `src/extract`, `src/eval`, lexicons, `corpus/`, `eval/`, EVAL_PREREGISTRATION.md, EVALUATION_RESULTS.md. Held-out not run.
+
+**Manual validation:** the owner confirmed the v0.5.0 checklist N1–N14 (DEMO.md), including the manual domain-invariance row N8.
+
+**Not done:** candidate hashes from the M4.4 commit (recorded after committing); signing and distribution.
+
+**Next:** candidate build from the M4.4 commit.
+
 ## 2026-10-21 · M4.3B Final held-out evaluation · **Executed once; accepted with a post-run protocol deviation (D-059)**
 
 - Owner-authorized. Frozen state verified (tag `eval-freeze-v1` → `03fa212`, clean tree, preregistration and manifest unchanged), then `npm ci`, `validate --split test`, and **one** `npm run eval -- run --split test --final` (exit 0).

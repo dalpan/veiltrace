@@ -52,7 +52,7 @@ export async function launchExtension(kind: 'test' | 'prod', uiLang: 'en-US' | '
     const body = loaded.pages.get(url);
     if (body !== undefined) {
       loaded.served.push(url);
-      await route.fulfill({ status: 200, body, headers: { 'content-type': 'text/html; charset=utf-8' } });
+      await route.fulfill({ status: 200, body, headers: { 'content-type': url.endsWith('.css') ? 'text/css; charset=utf-8' : 'text/html; charset=utf-8' } });
     } else {
       loaded.blocked.push(url);
       await route.abort('blockedbyclient');
@@ -71,6 +71,12 @@ export function addCorpusScenario(l: Loaded, split: 'dev', id: string): string {
   const label = JSON.parse(readFileSync(join(dir, 'label.json'), 'utf8')) as { pages: Array<{ url: string; file: string }> };
   for (const p of label.pages) l.pages.set(p.url, readFileSync(join(dir, p.file), 'utf8'));
   return (label.pages[0] as { url: string }).url;
+}
+
+/** Serves the fictional demo site (demo/nusaverta) under `base` (e.g. https://help.nusaverta.test/); returns page URLs. */
+export function addDemoSite(l: Loaded, base: string): { lure: string; benign: string; cli: string } {
+  for (const f of ['index.html', 'benign.html', 'cli.html', 'style.css']) l.pages.set(base + f, readFileSync(join('demo', 'nusaverta', f), 'utf8'));
+  return { lure: `${base}index.html`, benign: `${base}benign.html`, cli: `${base}cli.html` };
 }
 
 export async function openTarget(l: Loaded, url: string, body?: string): Promise<Page> {

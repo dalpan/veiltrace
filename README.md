@@ -4,7 +4,7 @@
 
 An offline-first browser security engine that detects contextual social engineering and deceptive instructions in web pages, including pages on legitimate HTTPS domains.
 
-> **Status: M4.3B.** Engine 0.2.0 (contextual rule set `m4.1`) is the default. The preregistered held-out evaluation ran once on 26 synthetic scenarios: recall 75.0%, precision 81.8%, hard-negative FPR 14.3%. These are **below the research targets** and are not real-world rates ([docs/EVALUATION_RESULTS.md](docs/EVALUATION_RESULTS.md)). A working Chromium (MV3) extension with an English and Indonesian interface: click the toolbar button, then **Scan page**. The page is analyzed locally in the tab, and the popup shows the verdict, evidence and Show on page. It is built on the detection core (`src/core`) and DOM extractor (`src/extract`), with an offline evaluation harness (`src/eval`). Accuracy figures so far come from a **synthetic development split only**, not real-world use. See [docs/PROGRESS.md](docs/PROGRESS.md).
+> **Status: M4.4 (demo and release candidate v0.5.0, accepted).** A fictional offline demo site is in `demo/nusaverta` ([docs/PRESENTER_GUIDE.md](docs/PRESENTER_GUIDE.md)). **M4.3B:** Engine 0.2.0 (contextual rule set `m4.1`) is the default. The preregistered held-out evaluation ran once on 26 synthetic scenarios: recall 75.0%, precision 81.8%, hard-negative FPR 14.3%. These are **below the research targets** and are not real-world rates ([docs/EVALUATION_RESULTS.md](docs/EVALUATION_RESULTS.md)). A working Chromium (MV3) extension with an English and Indonesian interface: click the toolbar button, then **Scan page**. The page is analyzed locally in the tab, and the popup shows the verdict, evidence and Show on page. It is built on the detection core (`src/core`) and DOM extractor (`src/extract`), with an offline evaluation harness (`src/eval`). Accuracy figures so far come from a **synthetic development split only**, not real-world use. See [docs/PROGRESS.md](docs/PROGRESS.md).
 
 ## What it does
 
@@ -74,6 +74,10 @@ const m1 = analyze(snapshot, { ruleset: 'm1' }); // M1 baseline model (engine 0.
 | [ARCHITECTURE](docs/ARCHITECTURE.md) | Components, snapshot contract, tech choices, manifest |
 | [PRIVACY_SECURITY](docs/PRIVACY_SECURITY.md) | Commitments and how each is verified |
 | [EVALUATION_PLAN](docs/EVALUATION_PLAN.md) | Corpus, leakage controls, metrics, baseline |
+| [EVAL_PREREGISTRATION](docs/EVAL_PREREGISTRATION.md) | Frozen held-out evaluation protocol (v1) |
+| [EVALUATION_RESULTS](docs/EVALUATION_RESULTS.md) | Held-out evaluation v1 results, failures, limitations |
+| [PRESENTER_GUIDE](docs/PRESENTER_GUIDE.md) | Demo setup, 3- and 7-minute scripts, evaluation slide, limitations |
+| [DEMO](docs/DEMO.md) | Manual validation checklists (Chrome stable) |
 | [IMPLEMENTATION_PLAN](docs/IMPLEMENTATION_PLAN.md) | Milestones M1–M7 with acceptance criteria |
 | [DECISIONS](docs/DECISIONS.md) | Decision log |
 | [OPERATOR_GUIDE](docs/OPERATOR_GUIDE.md) | For IT/security staff: results, limits, installation, troubleshooting |
@@ -91,6 +95,7 @@ corpus/          dev / test (held-out) / realworld fixtures with labels
 scripts/         build and evaluation harness
 tests/           unit and e2e tests
 docs/            specification and research
+demo/            fictional offline demo site (not shipped in the extension)
 ```
 
 ## License

@@ -186,3 +186,22 @@ Source: `eval/results/dev.json` (byte-identical across repeated runs), `dev.md`,
 
 The `m4.1` rule set became the default engine `0.2.0` without changes (D-055). Regenerated dev artifacts (`eval/results/dev.*`) list `veiltrace` = 0.2.0 and `veiltrace-m1` = M1; both reproduce the §10 numbers exactly (0.2.0: TP 16, FP 1, TN 28, FN 5; M1: TP 16, FP 6, TN 23, FN 5). Research tables (`dev.research.*`, `dev.m41.*`) still compare variants against the M1 model. Markdown percentages are now computed from k/n (no double rounding), so a few dev Markdown figures moved by 0.1 point (e.g. 1/29 is 3.4%, not 3.5%); JSON is unchanged. The held-out split was not evaluated; its procedure is fixed in EVAL_PREREGISTRATION.md.
 
+
+## 12. Hard-negative assessment (M4.4; existing evidence only)
+
+M4 acceptance criterion 3 asks for a pass/fail row for each of the seven named hard-negative types from the project brief (§6, S-N1 … S-N7). S-N8 (internal IT notices), added at the M1 review, is included as an extra row because it was the main false-positive source.
+
+**Evidence:** unit fixtures (`tests/fixtures/scenarios.ts`) and dev DOM fixtures (`eval/results/dev.json`), both with the default engine 0.2.0, plus the **recorded** held-out v1 outcome (`eval/results/test.json`) where a held-out scenario of that type exists. Nothing was re-run on the held-out split. **Pass** = the page is not flagged (verdict `none` or `observed_instruction`). The dev fixtures were used while developing the rules, so dev passes are optimistic. The held-out column is the only independent evidence, and it is small.
+
+| Type | Unit fixtures (0.2.0) | Dev DOM fixtures (0.2.0) | Held-out v1 (recorded) | Status | Known limitations |
+|---|---|---|---|---|---|
+| **S-N1** Security tutorial showing a dangerous command as an example | S-N1-en, S-N1-id: observed (R1 lowered by context) | D21, D34, D37, D38: observed | T24: observed | **Pass** (dev 4/4, held-out 1/1) | The same context demotion lets lures disguised as quotes or reports through (dev D10, D12, D43, D50; held-out T09, T10) |
+| **S-N2** Legitimate account-security warning | S-N2-en, S-N2-id: none | No dedicated DOM fixture | T22 (bank OTP warning): none | **Pass** (unit only; held-out 1/1) | No dev DOM fixture of the "new sign-in" type; T22 is also the S-N7 held-out example |
+| **S-N3** Normal checkout countdown | S-N3-en: none | D23, D33: none | T21: none | **Pass** (dev 2/2, held-out 1/1) | Urgency alone never alerts by design (no action signal) |
+| **S-N4** News article discussing a campaign and quoting the lure | S-N4-en, S-N4-id: observed | D20, D30, D49: observed | T19: observed; **T18: suspicious (R3) — FP** | **Fail on held-out** (dev 3/3, held-out 1/2) | A news report describing a fake CAPTCHA reached R3 on held-out (EVALUATION_RESULTS.md §3.1) |
+| **S-N5** Developer docs: open Terminal and run a command | S-N5-en, S-N5-id: observed (R5) | D16, D25, D48: observed; D26: none; **D39 (docs quick-start dialog): suspicious (R4) — FP** | T14, T15, T23: observed | **Partial** (dev 4/5, held-out 3/3) | Docs in a dialog with a copy button and "to fix this" wording reach R4 (D39) |
+| **S-N6** Awareness page using negation | S-N6-en, S-N6-id: none | D22, D31: none | T20: none | **Pass** (dev 2/2, held-out 1/1) | Negation scope ends at conjunctions and punctuation |
+| **S-N7** Indonesian bank-scam awareness page | S-N7-id: none | D32: none | T22: none | **Pass** (dev 1/1, held-out 1/1) | One dev fixture; model-written Indonesian |
+| S-N8 (extra) Internal IT / helpdesk instructions | S-N8-en: observed (M1: suspicious) | D18, D19, D28, D29, and troubleshooting D17, D27, D40: observed | T16: observed; **T17: suspicious (R4) — FP** | **Fail on held-out** (dev 7/7, held-out 1/2) | The dev improvement from engine 0.2.0 did not transfer to T17 |
+
+Summary: 5 of the 7 named types pass on all available evidence (S-N2 on unit and held-out only), S-N5 has one dev false positive, and S-N4 has one held-out false positive. The extra S-N8 row has one held-out false positive.

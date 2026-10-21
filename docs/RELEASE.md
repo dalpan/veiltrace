@@ -1,4 +1,4 @@
-# Release Engineering and Supply Chain (M4.2)
+# Release Engineering and Supply Chain (M4.2, updated M4.4)
 
 ## 1. Commands
 ```bash
@@ -96,3 +96,15 @@ Release signing is **required before any official distribution** and is not impl
 
 Plan: DEPLOYMENT.md §5 (offline-generated CRX3 key, signed CRX, internal update manifest, two-machine reproducible build comparison before signing).
 
+
+## 6. Release candidate v0.5.0 (M4.4, not published)
+
+Version 0.5.0 changes only the version field relative to the extension built at `eval-freeze-v1` (D-060). Engine 0.2.0 (ruleset `m4.1`), extractor 0.1.0-m2.
+
+Verification before the M4.4 commit (macOS arm64, Node 26.8.1):
+- `npm run release` (development, dirty working tree) → `release:verify` passed; `SHA256SUMS` OK; the ZIP manifest has version 0.5.0, permissions exactly `activeTab` + `scripting`, no host permissions, and the extension-page CSP `script-src 'self'; object-src 'none'; base-uri 'none'; connect-src 'none'; form-action 'none'`.
+- `npm run release:repro` → two clean builds identical.
+- The candidate path was exercised in a throwaway clone of the working tree, committed only inside that clone and then deleted: `release:candidate` → `release:verify` passed (`releaseType: candidate`, `dirty: false`) and `release:repro` built identical candidate artifacts. The nine files inside its ZIP have the same SHA-256 as those in the development build.
+- `npm run supply-chain`: 0 vulnerabilities; the two MPL-2.0 dev-only packages are unchanged (§4).
+
+The candidate's ZIP, SBOM and manifest hashes depend on the source commit and its timestamp (`SOURCE_DATE_EPOCH`), so the **final candidate hashes exist only after the M4.4 commit**. Procedure after the commit: `npm run release:candidate && npm run release:verify && npm run release:repro`, then record the three hashes in PROGRESS.md. Checksums establish integrity, not publisher authenticity (§5). The candidate is not signed, published or distributed.
