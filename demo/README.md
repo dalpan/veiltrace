@@ -1,6 +1,6 @@
 # VeilTrace demo site (fictional)
 
-`nusaverta/` is a static, fictional help center used in the hackathon demo. "Nusaverta" and all hosts are invented. The pages contain no JavaScript and load no external resources. The community post in `index.html` is a synthetic, defanged social-engineering lure: its hidden command points to a `.invalid` host, and nothing on the page copies, downloads or runs anything.
+`nusaverta/` is a static, fictional help center used in the demo. "Nusaverta" and all hosts are invented. The pages contain no JavaScript and load no external resources. The community post in `index.html` is a synthetic, defanged social-engineering lure: its hidden command points to a `.invalid` host, and nothing on the page copies, downloads or runs anything.
 
 | Page | Purpose | Engine 0.2.0 result (tested) |
 |---|---|---|

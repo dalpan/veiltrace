@@ -2,10 +2,6 @@
 
 **Uncover the manipulation behind the page.** An offline, explainable detector for social-engineering instructions in web pages and messages: fake CAPTCHAs that make you run commands, requests for OTP codes, pay-first refunds, fake bank or support notices, and more. Everything runs on your device.
 
-> **Ringkasan (Bahasa Indonesia).** VeilTrace adalah browser extension dan PWA "Cek Pesan" yang membaca isi halaman atau pesan secara **on-device**, lalu menunjukkan dengan bukti yang bisa di-highlight kapan teks itu mencoba membuat Anda melakukan sesuatu yang merugikan: menjalankan command, menyerahkan OTP atau password, membayar di muka, atau mengikuti "CS bank" palsu. Tanpa server, tanpa telemetry, tanpa AI black-box. Dibuat untuk Kartika Cyber Hackathon 2026, kategori **Penangkalan (Defensive Shield)**. Proposal dan slide: [submission/](submission/). Coba di HP: **https://dalpan.github.io/veiltrace/**.
->
-> VeilTrace adalah proyek independen; tidak berafiliasi dengan, tidak disetujui oleh, dan tidak mewakili TNI AD atau instansi mana pun.
-
 | A fake CAPTCHA on a legitimate-looking site… | …and what VeilTrace shows |
 |---|---|
 | ![Fake human-verification box asking to press Win+R, Ctrl+V, Enter](docs/images/cmd-lure-page.png) | ![VeilTrace popup: manipulative content detected, command execution category](docs/images/cmd-lure-popup.png) |
@@ -86,7 +82,6 @@ tests/             unit, real-browser extraction and end-to-end tests (737 passi
 demo/              fictional, offline demo pages (never shipped)
 deploy/            policy templates for managed deployment
 docs/              technical documentation and decision records: start at docs/README.md
-submission/        hackathon proposal, slides outline, video script, jury Q&A (Indonesian)
 ```
 
 ## Development

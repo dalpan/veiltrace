@@ -20,3 +20,6 @@ release/
 submission/dist/
 kasus-nyata/
 kasus-baru/
+
+# Competition materials (kept local, not part of the project repository)
+submission/

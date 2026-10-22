@@ -116,7 +116,7 @@ Scope: VeilTrace deployed in organizations, possibly high-assurance (D-048). Evi
 
 ## 8. Demo site threat model and trust boundaries (M4.4)
 
-The hackathon demo (`demo/nusaverta`, docs/PRESENTER_GUIDE.md) models threat class **T7: injected instructions on a legitimate page**.
+The demo (`demo/nusaverta`, docs/PRESENTER_GUIDE.md) models threat class **T7: injected instructions on a legitimate page**.
 
 | Zone | On the demo page | Trust |
 |---|---|---|

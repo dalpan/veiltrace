@@ -21,7 +21,7 @@ Success is defined by the measured results in EVALUATION_PLAN.md, not by feature
 |---|---|
 | Non-specialist web user (primary) | "Before I do what this page says, tell me if it's asking me to do something dangerous, and why." |
 | Security-aware user / IT helpdesk | "Show me exactly which element contains the instruction, so I can report or explain it." |
-| Researcher / hackathon judge | "Show me that detection is explainable, measured and not just domain blocklisting." |
+| Researcher / reviewer | "Show me that detection is explainable, measured and not just domain blocklisting." |
 
 ## 4. MVP scope (M1–M4)
 
@@ -65,7 +65,7 @@ Copy guidelines: name the requested action concretely, avoid fear language (we d
 ## 7. Measurable differentiation (from COMPETITIVE_ANALYSIS.md §7)
 D1 no domain bypass · D2 element-local correlation (FP vs B0) · D3 context modifiers (hard-negative pass rate) · D4 DOM-referenced evidence (localization accuracy) · D5 `activeTab` + `scripting` only, zero network · D6 Indonesian + English · D7 published held-out evaluation.
 
-## 8. Demo narrative (hackathon, target 3 minutes)
+## 8. Demo narrative (target 3 minutes)
 1. Open a locally hosted, legitimate-looking (fictional) organization blog. Click VEILTRACE: no high-risk instructions found.
 2. Scroll to a comment that contains a fake "verifikasi" ClickFix instruction. Click VEILTRACE: **Manipulative instruction**, evidence snippets, and (once M3 implements it) **Show on page** highlights the comment.
 3. Open the security tutorial that quotes the same command in a code block: no manipulative finding, and Details shows "demoted: code example in an article".
@@ -74,7 +74,7 @@ D1 no domain bypass · D2 element-local correlation (FP vs B0) · D3 context mod
 
 ## 9. Potential High-Assurance Deployment
 
-Context: VEILTRACE is a hackathon project. Winning projects *may* later be evaluated by organizations such as Satsiber TNI AD (Indonesian Army Cyber Unit). **This is a potential opportunity, not an adoption, endorsement, certification or requirement.** VEILTRACE is not military-grade, certified, approved or endorsed by anyone (D-048).
+Context: organizations with closed or high-assurance networks may evaluate VEILTRACE. **This is a potential opportunity, not an adoption, endorsement, certification or requirement.** VEILTRACE is not military-grade, certified, approved or endorsed by anyone (D-048).
 
 Positioning: a defensive, privacy-preserving, human-centric browser security tool that explains manipulative instructions to the person reading them. It is **not** a monitoring product.
 

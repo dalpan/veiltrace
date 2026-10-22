@@ -1,6 +1,6 @@
 # VeilTrace documentation
 
-Technical documentation for reviewers, operators and contributors. Hackathon materials in Indonesian (proposal, slides, video script, jury Q&A) are in [../submission/](../submission/).
+Technical documentation for reviewers, operators and contributors.
 
 ## Start here (reviewers)
 

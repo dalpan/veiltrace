@@ -1,4 +1,4 @@
-# Presenter Guide: VeilTrace Hackathon Demo (M4.4)
+# Presenter Guide: VeilTrace Demo (M4.4)
 
 For the person presenting VeilTrace v0.5.0 (engine 0.2.0, ruleset `m4.1`). Everything runs offline on the presenter's laptop. The demo uses the **frozen, evaluated engine** with no demo-specific code, and the numbers quoted are the recorded held-out results.
 
