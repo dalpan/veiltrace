@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/brand/logo-512.png" alt="VeilTrace logo" width="112"></p>
+
 # VeilTrace
 
 **Uncover the manipulation behind the page.** An offline, explainable detector for social-engineering instructions in web pages and messages: fake CAPTCHAs that make you run commands, requests for OTP codes, pay-first refunds, fake bank or support notices, and more. Everything runs on your device.
@@ -80,6 +82,7 @@ src/eval/          evaluation harnesses (dev, held-out v1/v2/v3, real-world fiel
 corpus/            labelled scenarios: dev splits, locked held-out sets, redacted real-world records
 tests/             unit, real-browser extraction and end-to-end tests (737 passing)
 demo/              fictional, offline demo pages (never shipped)
+assets/brand/      logo (SVG source), rendered logo and social card (npm run brand)
 deploy/            policy templates for managed deployment
 docs/              technical documentation and decision records: start at docs/README.md
 ```

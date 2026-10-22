@@ -46,3 +46,4 @@ mark { background: rgba(217,154,33,.35); color: var(--text); border-bottom: 2px 
 details.observed > summary { cursor: pointer; color: var(--muted); font: 600 13px var(--mono); margin-top: 14px; }
 footer { max-width: 720px; margin: 0 auto; padding: 8px 16px 28px; color: var(--muted); font-size: 13px; }
 .meta { font: 11px var(--mono); }
+.brand .logo { flex: none; }

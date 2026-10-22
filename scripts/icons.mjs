@@ -1,5 +1,5 @@
 // Generates the extension icons as PNG files with no dependencies (zlib only).
-// Design: indigo rounded square, white eye outline with pupil, dashed "veil" diagonal.
+// Design (assets/brand/logo.svg): dark rounded square, light eye outline, olive iris and pupil, olive trace ticks.
 import { deflateSync } from 'node:zlib';
 
 const CRC_TABLE = Array.from({ length: 256 }, (_, n) => {
@@ -50,30 +50,42 @@ function render(size, shade) {
   return Buffer.concat([Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]), chunk('IHDR', ihdr), chunk('IDAT', deflateSync(raw)), chunk('IEND', Buffer.alloc(0))]);
 }
 
-const BRAND = [67, 56, 202, 1];
-const WHITE = [255, 255, 255, 1];
+const BG = [18, 21, 16, 1];
+const EDGE = [61, 71, 57, 1];
+const LIGHT = [238, 240, 230, 1];
+const OLIVE = [185, 201, 138, 1];
 
-function inRoundedSquare(x, y) {
-  const r = 8, lo = 1, hi = 31;
-  const cx = Math.min(Math.max(x, lo + r), hi - r);
-  const cy = Math.min(Math.max(y, lo + r), hi - r);
-  return x >= lo && x <= hi && y >= lo && y <= hi && (x - cx) ** 2 + (y - cy) ** 2 <= r * r;
+function roundedSquareDistance(x, y) {
+  // Signed distance to the rounded square x,y ∈ [1, 31], corner radius 7 (negative inside).
+  const r = 7;
+  const qx = Math.abs(x - 16) - (15 - r);
+  const qy = Math.abs(y - 16) - (15 - r);
+  return Math.hypot(Math.max(qx, 0), Math.max(qy, 0)) + Math.min(Math.max(qx, qy), 0) - r;
 }
 
+function segmentDistance(x, y, ax, ay, bx, by) {
+  const t = Math.max(0, Math.min(1, ((x - ax) * (bx - ax) + (y - ay) * (by - ay)) / ((bx - ax) ** 2 + (by - ay) ** 2)));
+  return Math.hypot(x - (ax + t * (bx - ax)), y - (ay + t * (by - ay)));
+}
+
+// The eye's lids are two circular arcs through (5,16) and (27,16) with radius 13.75 (centers 8.25 below and above the axis).
+const LID_R = 13.75;
+const TICKS = [[16, 4, 16, 7.5], [16, 24.5, 16, 28]];
+
 function shade(x, y) {
-  if (!inRoundedSquare(x, y)) return null;
+  const sd = roundedSquareDistance(x, y);
+  if (sd > 0.35) return null;
+  if (sd > -0.35) return EDGE;
   const dx = x - 16, dy = y - 16;
-  // Eye outline: two arcs approximated by an ellipse ring.
-  const e = (dx / 11) ** 2 + (dy / 6.5) ** 2;
-  const ring = e <= 1 && e >= 0.62;
-  const pupil = dx * dx + dy * dy <= 3.6 * 3.6;
-  // Diagonal veil band (from bottom-left to top-right).
-  const d = Math.abs(x + y - 32) / Math.SQRT2;
-  const band = d <= 2.4;
-  const dash = d <= 0.9 && Math.floor((x - y + 64) / 2.5) % 2 === 0;
-  if (band) return dash ? WHITE : BRAND;
-  if (ring || pupil) return WHITE;
-  return BRAND;
+  const r = Math.hypot(dx, dy);
+  if (r <= 1.4) return BG;
+  if (r <= 3.6) return OLIVE;
+  if (x >= 4.5 && x <= 27.5) {
+    if (dy <= 0.3 && Math.abs(Math.hypot(dx, y - 24.25) - LID_R) <= 0.9) return LIGHT;
+    if (dy >= -0.3 && Math.abs(Math.hypot(dx, y - 7.75) - LID_R) <= 0.9) return LIGHT;
+  }
+  if (TICKS.some(([ax, ay, bx, by]) => segmentDistance(x, y, ax, ay, bx, by) <= 0.8)) return OLIVE;
+  return BG;
 }
 
 /** One icon of any size (the PWA needs 192 and 512 px). */

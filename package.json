@@ -41,7 +41,8 @@
     "deploy:pwa": "node scripts/deploy-pwa.mjs",
     "build:ai-eval": "node scripts/build-ai-eval.mjs",
     "build:ext:ai": "node scripts/build-extension.mjs --ai",
-    "eval:v3": "node scripts/eval-v3.mjs"
+    "eval:v3": "node scripts/eval-v3.mjs",
+    "brand": "node scripts/render-brand.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
