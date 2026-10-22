@@ -11,6 +11,8 @@ import { detectLang, formatCount, MESSAGES, type HighlightKey, type Lang, type M
 import { parseHighlightResult, parseScanReport } from './validate.js';
 
 declare const __VT_TEST__: boolean;
+/** Optional on-device AI panel (D-093); experimental and off in the standard build after its evaluation (D-095). */
+declare const __VT_AI__: boolean;
 const HIGHLIGHT_MS = __VT_TEST__ ? 1500 : 5000;
 
 type Child = Node | string | null | undefined | false;
@@ -351,7 +353,7 @@ function render(): void {
     : state.phase === 'done' && state.report ? (state.report.status.complete ? 'complete' : 'partial') : 'standby';
   $('scan-state').textContent = m.dash.stateLabel[scanState];
   // Optional on-device AI second opinion (D-093): offered only after a finished scan, below the VeilTrace result.
-  renderAi(state.phase === 'done' && state.report !== null);
+  if (__VT_AI__) renderAi(state.phase === 'done' && state.report !== null);
   $('scan-state').dataset.state = scanState;
   const version = extensionVersion();
   $('version').textContent = version ? `v${version}` : '';
@@ -387,7 +389,7 @@ async function scan(): Promise<void> {
   const tab = state.tab;
   if (!tab) return;
   Object.assign(state, { phase: 'scanning', error: null, report: null, highlights: new Map() });
-  resetAi();
+  if (__VT_AI__) resetAi();
   render();
   document.body.dataset.injections = String(Number(document.body.dataset.injections ?? '0') + 1);
   const t0 = performance.now();
@@ -445,7 +447,7 @@ async function main(): Promise<void> {
     });
   }
   $('scan').addEventListener('click', () => void scan());
-  setupAi({
+  if (__VT_AI__) setupAi({
     t, tabId: () => state.tab?.id ?? null, readText: runAiText,
     alerted: () => state.report !== null && aggregate(state.report).actionable > 0,
   });

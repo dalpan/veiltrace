@@ -113,6 +113,9 @@ describe('production build', () => {
     expect(test.host_permissions).toEqual(['https://*.test/*', 'https://*.example/*']);
     const prodPopup = readFileSync(join(await extensionDir('prod'), 'popup.js'), 'utf8');
     expect(prodPopup).not.toContain('URLSearchParams');
+    // The on-device AI panel is an experiment compiled out of released builds (D-095).
+    expect(prodPopup).not.toContain('LanguageModel');
+    expect(prodPopup).not.toContain('ai-prepare');
     // Messaging exists only in the D-081 channel: auto.js may send, background.js may receive; popup.js and content.js do neither.
     const allowed: Record<string, string[]> = { 'popup.js': [], 'content.js': [], 'auto.js': ['sendMessage'], 'background.js': ['onMessage'] };
     for (const [f, ok] of Object.entries(allowed)) {

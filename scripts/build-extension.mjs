@@ -30,12 +30,16 @@ export function managedManifest(manifest) {
   return { ...rest, name: 'VeilTrace (Managed)', host_permissions: origins };
 }
 
-export async function buildExtension({ test = false, firefox = false, managed = false,
+/**
+ * `ai`: include the optional on-device AI panel (D-095: experimental, off in the standard, Firefox and managed builds after
+ * its evaluation, docs/AI_EVAL.md). The TEST build includes it so its e2e tests keep running.
+ */
+export async function buildExtension({ test = false, firefox = false, managed = false, ai = test,
   outdir = managed ? 'dist/extension-managed' : firefox ? 'dist/extension-firefox' : test ? 'dist/extension-test' : 'dist/extension' } = {}) {
   rmSync(outdir, { recursive: true, force: true });
   mkdirSync(join(outdir, 'icons'), { recursive: true });
   const common = { bundle: true, format: 'iife', platform: 'browser', target: 'chrome110', legalComments: 'none', minifySyntax: true, logLevel: 'warning' };
-  const define = { __VT_TEST__: String(test), __VT_MANAGED__: String(managed) };
+  const define = { __VT_TEST__: String(test), __VT_MANAGED__: String(managed), __VT_AI__: String(ai) };
   await build({ ...common, entryPoints: ['src/extension/popup/popup.ts'], outfile: join(outdir, 'popup.js'), define });
   await build({ ...common, entryPoints: ['src/extension/content/index.ts'], outfile: join(outdir, 'content.js'), globalName: 'VeiltraceContent' });
   await build({ ...common, entryPoints: ['src/extension/auto/content-auto.ts'], outfile: join(outdir, 'auto.js'), define });
@@ -56,5 +60,7 @@ export async function buildExtension({ test = false, firefox = false, managed = 
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const test = process.argv.includes('--test');
-  console.log(`built ${await buildExtension({ test, firefox: process.argv.includes('--firefox'), managed: process.argv.includes('--managed') })}`);
+  const ai = process.argv.includes('--ai') || test;
+  const outdir = process.argv.includes('--ai') && !test ? 'dist/extension-ai' : undefined;
+  console.log(`built ${await buildExtension({ test, ai, firefox: process.argv.includes('--firefox'), managed: process.argv.includes('--managed'), ...(outdir ? { outdir } : {}) })}`);
 }

@@ -1,0 +1,4290 @@
+{
+ "model": "chrome-built-in",
+ "at": "2026-10-22T04:48:57.252Z",
+ "rows": [
+  {
+   "id": "D01-en-blog-security-check-overlay",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "run-command",
+     "remote-access-or-install",
+     "threat-or-urgency",
+     "too-good-to-be-true"
+    ],
+    "lines": [
+     5,
+     7,
+     8,
+     9
+    ],
+    "confidence": "high"
+   },
+   "ms": 13940.799999982119
+  },
+  {
+   "id": "D02-id-download-modal-after-click",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "link-or-reply-lure",
+     "run-command",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     7,
+     8,
+     9
+    ],
+    "confidence": "high"
+   },
+   "ms": 4159.0999999940395
+  },
+  {
+   "id": "D03-en-locked-pc-support-scam",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "run-command"
+    ],
+    "lines": [
+     1,
+     2,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 3849
+  },
+  {
+   "id": "D04-id-locked-pc-support-scam",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "run-command",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     1,
+     2,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 4289
+  },
+  {
+   "id": "D05-en-docs-comment-lure",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "link-or-reply-lure",
+     "run-command",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     2,
+     6
+    ],
+    "confidence": "high"
+   },
+   "ms": 4152.699999988079
+  },
+  {
+   "id": "D06-id-recipe-comment-lure",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "link-or-reply-lure",
+     "run-command"
+    ],
+    "lines": [
+     4
+    ],
+    "confidence": "medium"
+   },
+   "ms": 3657.699999988079
+  },
+  {
+   "id": "D07-en-shadow-dom-widget-lure",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "link-or-reply-lure",
+     "run-command",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     4,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 3917.4000000059605
+  },
+  {
+   "id": "D08-en-same-origin-support-iframe",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "run-command",
+     "remote-access-or-install",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     4,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 3895.2000000178814
+  },
+  {
+   "id": "D09-en-macos-spotlight",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "low"
+   },
+   "ms": 3211.4000000059605
+  },
+  {
+   "id": "D10-en-planted-reported-speech",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "run-command",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 3589.4000000059605
+  },
+  {
+   "id": "D11-en-planted-educational-cue",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "link-or-reply-lure",
+     "run-command"
+    ],
+    "lines": [
+     2
+    ],
+    "confidence": "medium"
+   },
+   "ms": 3570.2999999821186
+  },
+  {
+   "id": "D12-id-planted-blockquote",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "run-command",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     2
+    ],
+    "confidence": "high"
+   },
+   "ms": 3492.4000000059605
+  },
+  {
+   "id": "D13-en-word-error-winx",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "run-command",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     2,
+     3
+    ],
+    "confidence": "high"
+   },
+   "ms": 3568.699999988079
+  },
+  {
+   "id": "D14-id-session-copy-button",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "threat-or-urgency",
+     "run-command",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     2,
+     3
+    ],
+    "confidence": "high"
+   },
+   "ms": 3842.699999988079
+  },
+  {
+   "id": "D15-en-benign-captcha-checkbox",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "high"
+   },
+   "ms": 3180.2999999821186
+  },
+  {
+   "id": "D16-en-vendor-install-script",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "run-command",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 3661.300000011921
+  },
+  {
+   "id": "D17-en-vendor-troubleshooting-fix",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "run-command",
+     "link-or-reply-lure",
+     "threat-or-urgency"
+    ],
+    "lines": [
+     4,
+     5,
+     6
+    ],
+    "confidence": "high"
+   },
+   "ms": 4025.0999999940395
+  },
+  {
+   "id": "D18-en-internal-it-certificate",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "impersonation",
+     "run-command",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 3817.5999999940395
+  },
+  {
+   "id": "D19-en-internal-it-gpupdate",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "run-command"
+    ],
+    "lines": [
+     1,
+     3
+    ],
+    "confidence": "high"
+   },
+   "ms": 3683.9000000059605
+  },
+  {
+   "id": "D20-en-news-clickfix-campaign",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "run-command",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 3784
+  },
+  {
+   "id": "D21-en-security-blog-code-example",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "link-or-reply-lure",
+     "run-command"
+    ],
+    "lines": [
+     4
+    ],
+    "confidence": "medium"
+   },
+   "ms": 3724.5
+  },
+  {
+   "id": "D22-en-negation-awareness",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "threat-or-urgency",
+     "run-command"
+    ],
+    "lines": [
+     2,
+     3
+    ],
+    "confidence": "medium"
+   },
+   "ms": 3606
+  },
+  {
+   "id": "D23-en-checkout-urgency",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "threat-or-urgency",
+     "payment-request"
+    ],
+    "lines": [
+     2,
+     3
+    ],
+    "confidence": "high"
+   },
+   "ms": 3540.699999988079
+  },
+  {
+   "id": "D24-en-cookie-banner-and-howto",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "run-command"
+    ],
+    "lines": [
+     2
+    ],
+    "confidence": "medium"
+   },
+   "ms": 3224.9000000059605
+  },
+  {
+   "id": "D25-en-readme-install",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "run-command",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     3
+    ],
+    "confidence": "high"
+   },
+   "ms": 3516.300000011921
+  },
+  {
+   "id": "D26-id-npm-install-docs",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "run-command",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     3,
+     4
+    ],
+    "confidence": "medium"
+   },
+   "ms": 3599.5999999940395
+  },
+  {
+   "id": "D27-id-troubleshooting-fix",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "run-command",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 3760.0999999940395
+  },
+  {
+   "id": "D28-id-it-certificate",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "run-command",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 3874.199999988079
+  },
+  {
+   "id": "D29-id-it-network-share",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "run-command",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     2,
+     3
+    ],
+    "confidence": "medium"
+   },
+   "ms": 3634.7999999821186
+  },
+  {
+   "id": "D30-id-news-clickfix",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "run-command",
+     "remote-access-or-install",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     2,
+     3
+    ],
+    "confidence": "high"
+   },
+   "ms": 4045.800000011921
+  },
+  {
+   "id": "D31-id-negation-awareness",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "high"
+   },
+   "ms": 3324.2000000178814
+  },
+  {
+   "id": "D32-id-bank-warning",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "high"
+   },
+   "ms": 3397.899999976158
+  },
+  {
+   "id": "D33-id-promo-countdown",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "threat-or-urgency",
+     "payment-request"
+    ],
+    "lines": [
+     2,
+     3
+    ],
+    "confidence": "medium"
+   },
+   "ms": 3753.300000011921
+  },
+  {
+   "id": "D34-id-security-blog-example",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "threat-or-urgency",
+     "link-or-reply-lure",
+     "run-command"
+    ],
+    "lines": [
+     3,
+     4
+    ],
+    "confidence": "medium"
+   },
+   "ms": 4283.299999982119
+  },
+  {
+   "id": "D35-id-forum-flushdns",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "low"
+   },
+   "ms": 3530.300000011921
+  },
+  {
+   "id": "D36-id-benign-captcha",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "link-or-reply-lure",
+     "credential-request"
+    ],
+    "lines": [
+     2,
+     3
+    ],
+    "confidence": "medium"
+   },
+   "ms": 4074.800000011921
+  },
+  {
+   "id": "D37-en-security-tutorial-modal",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "run-command",
+     "remote-access-or-install",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     6,
+     7,
+     8
+    ],
+    "confidence": "high"
+   },
+   "ms": 4768.299999982119
+  },
+  {
+   "id": "D38-en-security-quiz-modal",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "link-or-reply-lure",
+     "run-command"
+    ],
+    "lines": [
+     3
+    ],
+    "confidence": "high"
+   },
+   "ms": 4124.0999999940395
+  },
+  {
+   "id": "D39-en-docs-quickstart-dialog",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "run-command",
+     "remote-access-or-install",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     4,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 4612.5
+  },
+  {
+   "id": "D40-id-troubleshooting-procedure",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "run-command"
+    ],
+    "lines": [
+     3
+    ],
+    "confidence": "medium"
+   },
+   "ms": 4168
+  },
+  {
+   "id": "D41-en-mixed-pretext-portal",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "run-command",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     1,
+     2,
+     3
+    ],
+    "confidence": "high"
+   },
+   "ms": 4857.200000017881
+  },
+  {
+   "id": "D42-id-authority-only-support-overlay",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "run-command",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     1,
+     2
+    ],
+    "confidence": "high"
+   },
+   "ms": 4759.5
+  },
+  {
+   "id": "D43-en-ugc-quoted-lure-comment",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "run-command",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     3
+    ],
+    "confidence": "medium"
+   },
+   "ms": 4536.9000000059605
+  },
+  {
+   "id": "D44-id-informal-paraphrase",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "run-command",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     2,
+     3
+    ],
+    "confidence": "high"
+   },
+   "ms": 4764.4000000059605
+  },
+  {
+   "id": "D45-en-concealed-payload-edu-cue",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "run-command",
+     "link-or-reply-lure",
+     "threat-or-urgency"
+    ],
+    "lines": [
+     2,
+     3
+    ],
+    "confidence": "high"
+   },
+   "ms": 5135.5999999940395
+  },
+  {
+   "id": "D46-id-concealed-payload-blockquote",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "run-command",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     2
+    ],
+    "confidence": "high"
+   },
+   "ms": 4888.9000000059605
+  },
+  {
+   "id": "D47-en-unrelated-regions",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "link-or-reply-lure",
+     "threat-or-urgency",
+     "run-command"
+    ],
+    "lines": [
+     2,
+     3
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5155.199999988079
+  },
+  {
+   "id": "D48-en-verify-windows-version",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "high"
+   },
+   "ms": 4769.9000000059605
+  },
+  {
+   "id": "D49-en-news-reported-list",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "run-command"
+    ],
+    "lines": [
+     5,
+     6,
+     7
+    ],
+    "confidence": "high"
+   },
+   "ms": 4745.5
+  },
+  {
+   "id": "D50-id-direct-lure-reported-framing",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "run-command",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 5114.9000000059605
+  },
+  {
+   "id": "D51-en-realistic-humancheck-clipboard",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "run-command",
+     "remote-access-or-install",
+     "threat-or-urgency",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     16,
+     17,
+     18,
+     19
+    ],
+    "confidence": "high"
+   },
+   "ms": 6739.5999999940395
+  },
+  {
+   "id": "D52-id-realistic-blog-informal-steps",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "run-command",
+     "link-or-reply-lure",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     15,
+     16,
+     17,
+     18
+    ],
+    "confidence": "high"
+   },
+   "ms": 6803.5
+  },
+  {
+   "id": "D53-en-realistic-docs-install-dialog",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "run-command",
+     "link-or-reply-lure",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     9,
+     10,
+     11
+    ],
+    "confidence": "high"
+   },
+   "ms": 6157.5999999940395
+  },
+  {
+   "id": "D54-id-realistic-news-clickfix-figure",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "run-command",
+     "link-or-reply-lure",
+     "threat-or-urgency",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     3,
+     5,
+     6
+    ],
+    "confidence": "high"
+   },
+   "ms": 6363.300000011921
+  },
+  {
+   "id": "D55-en-realistic-awareness-quiz",
+   "split": "dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "link-or-reply-lure",
+     "run-command",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 5732.4000000059605
+  },
+  {
+   "id": "D56-en-realistic-fake-browser-fix",
+   "split": "dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "run-command",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     5,
+     6,
+     7
+    ],
+    "confidence": "high"
+   },
+   "ms": 5807.9000000059605
+  },
+  {
+   "id": "CA01-en-planted-tips-live-field",
+   "split": "cred-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "credential-request"
+    ],
+    "lines": [
+     3,
+     4,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 5498.5
+  },
+  {
+   "id": "CA02-en-quoted-support-request",
+   "split": "cred-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "credential-request",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     3,
+     4,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 5815.5
+  },
+  {
+   "id": "CA03-id-parafrase-informal",
+   "split": "cred-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "credential-request",
+     "threat-or-urgency"
+    ],
+    "lines": [
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 5521.9000000059605
+  },
+  {
+   "id": "CA04-en-reported-framing-overlay",
+   "split": "cred-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "credential-request",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     2,
+     3
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5459.799999982119
+  },
+  {
+   "id": "CA05-en-split-inline-elements",
+   "split": "cred-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "credential-request"
+    ],
+    "lines": [
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 5426.9000000059605
+  },
+  {
+   "id": "CA06-id-slang-kirimin-kode-wa",
+   "split": "cred-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "credential-request",
+     "personal-contact-channel",
+     "threat-or-urgency"
+    ],
+    "lines": [
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 5573.5999999940395
+  },
+  {
+   "id": "CA07-id-slang-spill-otp",
+   "split": "cred-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "credential-request",
+     "threat-or-urgency",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 5794.0999999940395
+  },
+  {
+   "id": "CA08-id-slang-sebutin-angka-sms",
+   "split": "cred-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "credential-request"
+    ],
+    "lines": [
+     2,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 5243.0999999940395
+  },
+  {
+   "id": "CD01-en-community-otp-reply",
+   "split": "cred-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "credential-request",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     6,
+     7
+    ],
+    "confidence": "high"
+   },
+   "ms": 5528.0999999940395
+  },
+  {
+   "id": "CD02-en-chat-widget-backup-codes",
+   "split": "cred-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "credential-request",
+     "threat-or-urgency",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     5,
+     6
+    ],
+    "confidence": "high"
+   },
+   "ms": 5721.300000011921
+  },
+  {
+   "id": "CD03-en-wallet-sync-seed",
+   "split": "cred-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "credential-request"
+    ],
+    "lines": [
+     2,
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 5591.899999976158
+  },
+  {
+   "id": "CD04-en-overlay-suspension-password-otp",
+   "split": "cred-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "credential-request"
+    ],
+    "lines": [
+     4,
+     5,
+     6
+    ],
+    "confidence": "high"
+   },
+   "ms": 5625.9000000059605
+  },
+  {
+   "id": "CD05-id-form-akun-diblokir",
+   "split": "cred-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "credential-request"
+    ],
+    "lines": [
+     3,
+     4,
+     5,
+     6
+    ],
+    "confidence": "high"
+   },
+   "ms": 5584.800000011921
+  },
+  {
+   "id": "CD06-id-komentar-admin-kirim-otp",
+   "split": "cred-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "credential-request",
+     "link-or-reply-lure",
+     "threat-or-urgency"
+    ],
+    "lines": [
+     6,
+     7
+    ],
+    "confidence": "high"
+   },
+   "ms": 6002.600000023842
+  },
+  {
+   "id": "CD07-id-dompet-frasa-pemulihan",
+   "split": "cred-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "credential-request"
+    ],
+    "lines": [
+     1,
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 5596.899999976158
+  },
+  {
+   "id": "CD08-en-it-helpdesk-reply-password",
+   "split": "cred-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "credential-request"
+    ],
+    "lines": [
+     3,
+     4,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 5495.0999999940395
+  },
+  {
+   "id": "CD09-en-airdrop-claim-seed",
+   "split": "cred-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "credential-request",
+     "too-good-to-be-true"
+    ],
+    "lines": [
+     1,
+     4,
+     6
+    ],
+    "confidence": "high"
+   },
+   "ms": 5575.5
+  },
+  {
+   "id": "CD10-id-cs-chat-pembatalan",
+   "split": "cred-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "credential-request",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     5,
+     6
+    ],
+    "confidence": "high"
+   },
+   "ms": 5838.700000017881
+  },
+  {
+   "id": "CD11-en-fraud-dept-tell-pin",
+   "split": "cred-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "credential-request"
+    ],
+    "lines": [
+     3
+    ],
+    "confidence": "high"
+   },
+   "ms": 5429.0999999940395
+  },
+  {
+   "id": "CD12-id-realistic-marketplace-chat-otp",
+   "split": "cred-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "payment-request",
+     "credential-request",
+     "link-or-reply-lure",
+     "threat-or-urgency"
+    ],
+    "lines": [
+     6,
+     9,
+     10
+    ],
+    "confidence": "high"
+   },
+   "ms": 6360.0999999940395
+  },
+  {
+   "id": "CD13-en-realistic-mailbox-suspension",
+   "split": "cred-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "credential-request",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     1,
+     5,
+     6
+    ],
+    "confidence": "high"
+   },
+   "ms": 6146.199999988079
+  },
+  {
+   "id": "CN01-en-login-form",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "low"
+   },
+   "ms": 5121.899999976158
+  },
+  {
+   "id": "CN02-en-mfa-code",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "credential-request",
+     "threat-or-urgency"
+    ],
+    "lines": [
+     2,
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 5281.899999976158
+  },
+  {
+   "id": "CN03-id-ibanking-login",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "impersonation",
+     "credential-request",
+     "threat-or-urgency"
+    ],
+    "lines": [
+     1,
+     3,
+     6
+    ],
+    "confidence": "high"
+   },
+   "ms": 5490.800000011921
+  },
+  {
+   "id": "CN04-en-recovery-codes-help",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [
+     "impersonation"
+    ],
+    "lines": [
+     1
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5163.5
+  },
+  {
+   "id": "CN05-en-awareness-otp-scams",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "high"
+   },
+   "ms": 4920.199999988079
+  },
+  {
+   "id": "CN06-en-cli-api-token-docs",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "run-command",
+     "personal-contact-channel",
+     "credential-request"
+    ],
+    "lines": [
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 5183.700000017881
+  },
+  {
+   "id": "CN07-en-password-manager-help",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "impersonation",
+     "credential-request"
+    ],
+    "lines": [
+     3
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5032
+  },
+  {
+   "id": "CN08-en-html-forms-tutorial",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     4
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5238.0999999940395
+  },
+  {
+   "id": "CN09-id-edukasi-penipuan-otp",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "high"
+   },
+   "ms": 4863.9000000059605
+  },
+  {
+   "id": "CN10-id-halaman-otp-bank",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "credential-request"
+    ],
+    "lines": [
+     1,
+     3,
+     6
+    ],
+    "confidence": "high"
+   },
+   "ms": 5353.699999988079
+  },
+  {
+   "id": "CN11-en-change-password",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "credential-request"
+    ],
+    "lines": [
+     3,
+     4,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 5083.9000000059605
+  },
+  {
+   "id": "CN12-en-support-never-asks",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "high"
+   },
+   "ms": 5056.5
+  },
+  {
+   "id": "CN13-id-ganti-pin-ewallet",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "credential-request",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     3,
+     4,
+     5,
+     6
+    ],
+    "confidence": "high"
+   },
+   "ms": 5306
+  },
+  {
+   "id": "CN14-en-wallet-restore",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "credential-request",
+     "run-command",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 5523.300000011921
+  },
+  {
+   "id": "CN15-en-forum-advice-never-post",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "impersonation",
+     "credential-request",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     2,
+     3
+    ],
+    "confidence": "high"
+   },
+   "ms": 5503.800000011921
+  },
+  {
+   "id": "CN16-en-paywall-login-overlay",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "low"
+   },
+   "ms": 4950.5
+  },
+  {
+   "id": "CN17-en-sso-other-origin",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "impersonation",
+     "credential-request"
+    ],
+    "lines": [
+     2,
+     3,
+     4
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5091.300000011921
+  },
+  {
+   "id": "CN18-id-promo-login",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "threat-or-urgency",
+     "link-or-reply-lure",
+     "credential-request"
+    ],
+    "lines": [
+     3,
+     4,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 5638.0999999940395
+  },
+  {
+   "id": "CN19-en-new-signin-alert",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "link-or-reply-lure",
+     "personal-contact-channel",
+     "threat-or-urgency"
+    ],
+    "lines": [
+     3,
+     4
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5747.0999999940395
+  },
+  {
+   "id": "CN20-en-2fa-setup",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "impersonation",
+     "credential-request",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     2,
+     3,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 5641.200000017881
+  },
+  {
+   "id": "CN21-id-slang-jangan-kasih-angka",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "threat-or-urgency",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     3
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5324.799999982119
+  },
+  {
+   "id": "CN22-id-slang-masukin-kode-di-aplikasi",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "credential-request",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     2,
+     3
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5434.0999999940395
+  },
+  {
+   "id": "CN23-id-realistic-ibanking-otp",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "credential-request",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     1,
+     3,
+     4,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 6176.399999976158
+  },
+  {
+   "id": "CN24-en-realistic-2step-verification",
+   "split": "cred-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "credential-request",
+     "link-or-reply-lure",
+     "threat-or-urgency"
+    ],
+    "lines": [
+     4,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 5813.9000000059605
+  },
+  {
+   "id": "PA01-id-slang-tf-buka-akun",
+   "split": "pay-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "payment-request",
+     "threat-or-urgency",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     4,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 5931.600000023842
+  },
+  {
+   "id": "PD01-en-chat-refund-release-fee",
+   "split": "pay-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "payment-request"
+    ],
+    "lines": [
+     5,
+     6
+    ],
+    "confidence": "high"
+   },
+   "ms": 5786.399999976158
+  },
+  {
+   "id": "PD02-id-undian-pajak-hadiah",
+   "split": "pay-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "payment-request",
+     "too-good-to-be-true",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     2,
+     4,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 6752.5
+  },
+  {
+   "id": "PD03-id-overlay-akun-diblokir-biaya-verifikasi",
+   "split": "pay-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "payment-request"
+    ],
+    "lines": [
+     4,
+     6,
+     7
+    ],
+    "confidence": "high"
+   },
+   "ms": 5952.300000011921
+  },
+  {
+   "id": "PD04-en-tax-office-gift-cards",
+   "split": "pay-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "payment-request",
+     "too-good-to-be-true",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     1,
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 6404.5999999940395
+  },
+  {
+   "id": "PD05-id-marketplace-chat-transfer-di-luar-aplikasi",
+   "split": "pay-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "personal-contact-channel",
+     "payment-request",
+     "too-good-to-be-true",
+     "threat-or-urgency"
+    ],
+    "lines": [
+     5,
+     8
+    ],
+    "confidence": "high"
+   },
+   "ms": 6515
+  },
+  {
+   "id": "PD06-en-police-arrest-fine",
+   "split": "pay-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "payment-request",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 6103.0999999940395
+  },
+  {
+   "id": "PD07-en-forum-crypto-recovery-fee",
+   "split": "pay-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "payment-request",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     6,
+     7
+    ],
+    "confidence": "high"
+   },
+   "ms": 6042.700000017881
+  },
+  {
+   "id": "PD08-id-kurir-paket-tertahan-bea-cukai",
+   "split": "pay-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "payment-request",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     1,
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 6317.9000000059605
+  },
+  {
+   "id": "PD09-en-account-locked-unlock-fee",
+   "split": "pay-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "payment-request",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     5,
+     6,
+     7
+    ],
+    "confidence": "high"
+   },
+   "ms": 6114
+  },
+  {
+   "id": "PD10-id-cs-palsu-komentar-refund",
+   "split": "pay-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "payment-request",
+     "threat-or-urgency",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     6,
+     7,
+     8
+    ],
+    "confidence": "high"
+   },
+   "ms": 6374.5999999940395
+  },
+  {
+   "id": "PD11-id-realistic-chat-slang-admin-fee",
+   "split": "pay-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "too-good-to-be-true",
+     "payment-request",
+     "threat-or-urgency",
+     "personal-contact-channel",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     3,
+     7,
+     11,
+     13
+    ],
+    "confidence": "high"
+   },
+   "ms": 7716.5999999940395
+  },
+  {
+   "id": "PD12-en-realistic-parcel-customs-fee",
+   "split": "pay-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "payment-request",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     7,
+     8,
+     9
+    ],
+    "confidence": "high"
+   },
+   "ms": 6414.4000000059605
+  },
+  {
+   "id": "PD13-id-rekrutmen-jalur-khusus",
+   "split": "pay-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "payment-request"
+    ],
+    "lines": [
+     3,
+     10,
+     11
+    ],
+    "confidence": "high"
+   },
+   "ms": 6333.200000017881
+  },
+  {
+   "id": "PD14-id-catut-dandim-dana-kegiatan",
+   "split": "pay-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "payment-request",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     3,
+     8,
+     9
+    ],
+    "confidence": "high"
+   },
+   "ms": 6329.699999988079
+  },
+  {
+   "id": "PD15-id-wa-lowongan-seragam-ewallet",
+   "split": "pay-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "payment-request",
+     "personal-contact-channel",
+     "too-good-to-be-true"
+    ],
+    "lines": [
+     1,
+     4,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 6720.200000017881
+  },
+  {
+   "id": "PD16-id-email-kerja-tanpa-interview-biaya-admin",
+   "split": "pay-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "too-good-to-be-true",
+     "payment-request",
+     "threat-or-urgency"
+    ],
+    "lines": [
+     1,
+     4,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 6482.799999982119
+  },
+  {
+   "id": "PN01-en-checkout",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "payment-request",
+     "threat-or-urgency"
+    ],
+    "lines": [
+     9
+    ],
+    "confidence": "high"
+   },
+   "ms": 6006.899999976158
+  },
+  {
+   "id": "PN02-id-checkout-virtual-account",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "payment-request",
+     "threat-or-urgency",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 6016.100000023842
+  },
+  {
+   "id": "PN03-en-invoice",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "payment-request"
+    ],
+    "lines": [
+     1,
+     3,
+     4
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5937.4000000059605
+  },
+  {
+   "id": "PN04-id-tagihan-listrik",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "high"
+   },
+   "ms": 5260.9000000059605
+  },
+  {
+   "id": "PN05-en-donation",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "high"
+   },
+   "ms": 5030.800000011921
+  },
+  {
+   "id": "PN06-id-donasi-yayasan",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "impersonation",
+     "payment-request",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     1,
+     3,
+     4
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5550.0999999940395
+  },
+  {
+   "id": "PN07-en-news-refund-scam",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "payment-request"
+    ],
+    "lines": [
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 5746.5999999940395
+  },
+  {
+   "id": "PN08-id-berita-penipuan-undian",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "too-good-to-be-true",
+     "payment-request",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 6539.5
+  },
+  {
+   "id": "PN09-en-awareness-payment-scams",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "high"
+   },
+   "ms": 5440
+  },
+  {
+   "id": "PN10-id-edukasi-penipuan-kurir",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "high"
+   },
+   "ms": 4994
+  },
+  {
+   "id": "PN11-en-return-policy",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "payment-request",
+     "too-good-to-be-true"
+    ],
+    "lines": [
+     4
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5398.0999999940395
+  },
+  {
+   "id": "PN12-id-ewallet-topup-cashback",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "too-good-to-be-true",
+     "payment-request"
+    ],
+    "lines": [
+     2,
+     3
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5748.200000017881
+  },
+  {
+   "id": "PN13-en-gift-card-store",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "low"
+   },
+   "ms": 5147
+  },
+  {
+   "id": "PN14-en-bank-transfer-help",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "payment-request"
+    ],
+    "lines": [
+     1,
+     2,
+     3
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5513.4000000059605
+  },
+  {
+   "id": "PN15-id-bantuan-marketplace-rekber",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "threat-or-urgency",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 5668.799999982119
+  },
+  {
+   "id": "PN16-en-legit-prize-no-fee",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "low"
+   },
+   "ms": 5151.5
+  },
+  {
+   "id": "PN17-id-realistic-checkout-virtual-account",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "payment-request",
+     "personal-contact-channel",
+     "threat-or-urgency",
+     "too-good-to-be-true"
+    ],
+    "lines": [
+     2,
+     3,
+     5,
+     6
+    ],
+    "confidence": "high"
+   },
+   "ms": 6347.699999988079
+  },
+  {
+   "id": "PN18-en-realistic-donation-campaign",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "too-good-to-be-true",
+     "payment-request",
+     "personal-contact-channel",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     2,
+     5,
+     11
+    ],
+    "confidence": "medium"
+   },
+   "ms": 6706.5999999940395
+  },
+  {
+   "id": "PN19-id-pengumuman-rekrutmen-resmi",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "high"
+   },
+   "ms": 5435.800000011921
+  },
+  {
+   "id": "PN20-id-berita-penipuan-rekrutmen",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "payment-request",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 5759.0999999940395
+  },
+  {
+   "id": "PN21-id-lowongan-resmi-tanpa-biaya",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "impersonation",
+     "personal-contact-channel",
+     "threat-or-urgency"
+    ],
+    "lines": [
+     1,
+     4,
+     5
+    ],
+    "confidence": "medium"
+   },
+   "ms": 6098.300000011921
+  },
+  {
+   "id": "PN22-id-pelatihan-biaya-pendaftaran",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "payment-request",
+     "link-or-reply-lure",
+     "too-good-to-be-true"
+    ],
+    "lines": [
+     3,
+     4
+    ],
+    "confidence": "medium"
+   },
+   "ms": 6256.0999999940395
+  },
+  {
+   "id": "PN23-id-wa-undangan-interview-hrd",
+   "split": "pay-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "impersonation",
+     "too-good-to-be-true",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     1,
+     3
+    ],
+    "confidence": "medium"
+   },
+   "ms": 6357.299999982119
+  },
+  {
+   "id": "SA01-id-singkatan-ekstrem",
+   "split": "sup-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     2,
+     3,
+     4
+    ],
+    "confidence": "medium"
+   },
+   "ms": 6018.5
+  },
+  {
+   "id": "SA02-en-alert-unusual-wording",
+   "split": "sup-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "personal-contact-channel",
+     "run-command"
+    ],
+    "lines": [
+     1,
+     2,
+     3
+    ],
+    "confidence": "high"
+   },
+   "ms": 6114.4000000059605
+  },
+  {
+   "id": "SD01-en-fake-virus-overlay-call",
+   "split": "sup-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     4,
+     5,
+     6
+    ],
+    "confidence": "high"
+   },
+   "ms": 6036.4000000059605
+  },
+  {
+   "id": "SD02-id-peringatan-virus-hp-instal-aplikasi",
+   "split": "sup-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "threat-or-urgency",
+     "personal-contact-channel",
+     "link-or-reply-lure",
+     "too-good-to-be-true"
+    ],
+    "lines": [
+     1,
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 6537.700000017881
+  },
+  {
+   "id": "SD03-en-bank-fraud-anydesk",
+   "split": "sup-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     4,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 6109.700000017881
+  },
+  {
+   "id": "SD04-id-cs-palsu-wa-akun-diblokir",
+   "split": "sup-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "threat-or-urgency",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     2,
+     3
+    ],
+    "confidence": "high"
+   },
+   "ms": 5738.300000011921
+  },
+  {
+   "id": "SD05-en-forum-official-support-telegram",
+   "split": "sup-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "link-or-reply-lure",
+     "threat-or-urgency"
+    ],
+    "lines": [
+     6,
+     7
+    ],
+    "confidence": "high"
+   },
+   "ms": 5991.200000017881
+  },
+  {
+   "id": "SD06-id-komentar-admin-informal-japri",
+   "split": "sup-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     4,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 5850.600000023842
+  },
+  {
+   "id": "SD07-id-kurir-apk-informal",
+   "split": "sup-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "link-or-reply-lure",
+     "run-command"
+    ],
+    "lines": [
+     4,
+     5
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5991.5
+  },
+  {
+   "id": "SD08-en-chat-widget-it-admin-remote",
+   "split": "sup-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     5,
+     6
+    ],
+    "confidence": "high"
+   },
+   "ms": 5994.699999988079
+  },
+  {
+   "id": "SD09-en-browser-locked-fullpage",
+   "split": "sup-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "threat-or-urgency",
+     "personal-contact-channel",
+     "run-command"
+    ],
+    "lines": [
+     1,
+     3
+    ],
+    "confidence": "high"
+   },
+   "ms": 5821.5999999940395
+  },
+  {
+   "id": "SD10-id-tim-it-anydesk-informal",
+   "split": "sup-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     2,
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 5910.700000017881
+  },
+  {
+   "id": "SD11-en-realistic-blue-alert-zeus",
+   "split": "sup-dev",
+   "truth": "malicious",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "credential-request",
+     "personal-contact-channel",
+     "run-command",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 7107.5999999940395
+  },
+  {
+   "id": "SD12-id-realistic-bank-chat-remote-app",
+   "split": "sup-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "credential-request",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     5,
+     6
+    ],
+    "confidence": "high"
+   },
+   "ms": 6433.0999999940395
+  },
+  {
+   "id": "SD13-id-catut-pangkat-ancaman-hukum",
+   "split": "sup-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "personal-contact-channel",
+     "credential-request"
+    ],
+    "lines": [
+     3,
+     6,
+     8
+    ],
+    "confidence": "high"
+   },
+   "ms": 6433.9000000059605
+  },
+  {
+   "id": "SD14-id-wa-pemberitahuan-tarif-bank",
+   "split": "sup-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     2,
+     4,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 6461
+  },
+  {
+   "id": "SD15-id-wa-cs-dompet-login-asing-ketik-ya",
+   "split": "sup-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "link-or-reply-lure",
+     "credential-request"
+    ],
+    "lines": [
+     2,
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 6335.199999988079
+  },
+  {
+   "id": "SD16-id-sms-transaksi-kartu-tautan-batal",
+   "split": "sup-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     1,
+     2
+    ],
+    "confidence": "high"
+   },
+   "ms": 6103.9000000059605
+  },
+  {
+   "id": "SD17-id-kuesioner-hadiah-ulang-tahun",
+   "split": "sup-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "too-good-to-be-true",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     1,
+     3,
+     4
+    ],
+    "confidence": "high"
+   },
+   "ms": 6636.100000023842
+  },
+  {
+   "id": "SD18-id-jasa-sadap-wa",
+   "split": "sup-dev",
+   "truth": "malicious",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "illegal-service",
+     "payment-request",
+     "threat-or-urgency"
+    ],
+    "lines": [
+     1,
+     3,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 6242.5
+  },
+  {
+   "id": "SN01-en-help-center-contact",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "high"
+   },
+   "ms": 5248.5999999940395
+  },
+  {
+   "id": "SN02-id-pusat-bantuan-kontak",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [
+     "personal-contact-channel"
+    ],
+    "lines": [
+     3
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5317.0999999940395
+  },
+  {
+   "id": "SN03-en-it-helpdesk-remote-procedure",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "impersonation",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     1,
+     3
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5547
+  },
+  {
+   "id": "SN04-id-bank-notifikasi-blokir-call-center",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     1,
+     2,
+     3
+    ],
+    "confidence": "high"
+   },
+   "ms": 5905.5
+  },
+  {
+   "id": "SN05-en-antivirus-help-hypothetical",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "impersonation",
+     "run-command"
+    ],
+    "lines": [
+     3
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5531.699999988079
+  },
+  {
+   "id": "SN06-en-news-tech-support-scam",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "link-or-reply-lure",
+     "run-command",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     4,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 6339.300000011921
+  },
+  {
+   "id": "SN07-id-berita-penipuan-cs-palsu",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "link-or-reply-lure",
+     "remote-access-or-install"
+    ],
+    "lines": [
+     3,
+     4,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 6673.0999999940395
+  },
+  {
+   "id": "SN08-en-awareness-fake-support",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [
+     "threat-or-urgency"
+    ],
+    "lines": [
+     4,
+     5,
+     6
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5922.699999988079
+  },
+  {
+   "id": "SN09-id-edukasi-modus-anydesk",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "high"
+   },
+   "ms": 5518.4000000059605
+  },
+  {
+   "id": "SN10-en-browser-warning-docs",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "high"
+   },
+   "ms": 5038.5999999940395
+  },
+  {
+   "id": "SN11-id-marketplace-penjual-wa",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "personal-contact-channel"
+    ],
+    "lines": [
+     4,
+     5
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5166.5
+  },
+  {
+   "id": "SN12-en-moderator-help-center",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     3,
+     4
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5690.199999988079
+  },
+  {
+   "id": "SN13-en-signin-alert-legit",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     1,
+     3,
+     4
+    ],
+    "confidence": "medium"
+   },
+   "ms": 6041.700000017881
+  },
+  {
+   "id": "SN14-id-teknisi-jadwal-servis",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency"
+    ],
+    "lines": [
+     1,
+     3
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5704.899999976158
+  },
+  {
+   "id": "SN15-en-desktop-app-download",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "high"
+   },
+   "ms": 5121.0999999940395
+  },
+  {
+   "id": "SN16-en-realistic-antivirus-product-page",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "en",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "low"
+   },
+   "ms": 5287.199999988079
+  },
+  {
+   "id": "SN17-id-realistic-isp-help-whatsapp",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "impersonation",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     2,
+     3,
+     5
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5519.100000023842
+  },
+  {
+   "id": "SN18-id-kontak-babinsa-resmi",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "high"
+   },
+   "ms": 5283.9000000059605
+  },
+  {
+   "id": "SN19-id-sms-notifikasi-transaksi-resmi",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "impersonation",
+     "too-good-to-be-true",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     1,
+     2,
+     3
+    ],
+    "confidence": "medium"
+   },
+   "ms": 6105.300000011921
+  },
+  {
+   "id": "SN20-id-grup-wa-peringatan-pesan-tarif-palsu",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "low"
+   },
+   "ms": 5678.5999999940395
+  },
+  {
+   "id": "SN21-id-halaman-bank-pengumuman-tarif",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "medium"
+   },
+   "ms": 5094.5
+  },
+  {
+   "id": "SN22-id-survei-kepuasan-pelanggan",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "impersonation",
+     "link-or-reply-lure",
+     "payment-request"
+    ],
+    "lines": [
+     1,
+     4,
+     5
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5964.799999982119
+  },
+  {
+   "id": "SN23-id-berita-penangkapan-jasa-sadap",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "high"
+   },
+   "ms": 5602
+  },
+  {
+   "id": "SN24-id-aplikasi-kontrol-orang-tua",
+   "split": "sup-dev",
+   "truth": "benign",
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "link-or-reply-lure",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     3,
+     4
+    ],
+    "confidence": "medium"
+   },
+   "ms": 5578.300000011921
+  },
+  {
+   "id": "RW-0001",
+   "split": "realworld-dev",
+   "truth": null,
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "payment-request",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     1,
+     3,
+     11
+    ],
+    "confidence": "high"
+   },
+   "ms": 6909.200000017881
+  },
+  {
+   "id": "RW-0002",
+   "split": "realworld-dev",
+   "truth": null,
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "payment-request",
+     "personal-contact-channel",
+     "too-good-to-be-true",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     1,
+     6,
+     9,
+     20,
+     22
+    ],
+    "confidence": "high"
+   },
+   "ms": 9042.09999999404
+  },
+  {
+   "id": "RW-0003",
+   "split": "realworld-dev",
+   "truth": null,
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "too-good-to-be-true",
+     "payment-request",
+     "threat-or-urgency",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     3,
+     5,
+     6
+    ],
+    "confidence": "high"
+   },
+   "ms": 8156
+  },
+  {
+   "id": "RW-0004",
+   "split": "realworld-dev",
+   "truth": null,
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "too-good-to-be-true",
+     "payment-request",
+     "personal-contact-channel",
+     "threat-or-urgency"
+    ],
+    "lines": [
+     3,
+     7,
+     8
+    ],
+    "confidence": "high"
+   },
+   "ms": 7334.200000017881
+  },
+  {
+   "id": "RW-0005",
+   "split": "realworld-dev",
+   "truth": null,
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "too-good-to-be-true",
+     "payment-request",
+     "link-or-reply-lure",
+     "threat-or-urgency"
+    ],
+    "lines": [
+     2,
+     5,
+     23
+    ],
+    "confidence": "medium"
+   },
+   "ms": 7805.5
+  },
+  {
+   "id": "RW-0006",
+   "split": "realworld-dev",
+   "truth": null,
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "link-or-reply-lure",
+     "credential-request"
+    ],
+    "lines": [
+     3,
+     7,
+     10
+    ],
+    "confidence": "high"
+   },
+   "ms": 6972.5999999940395
+  },
+  {
+   "id": "RW-0007",
+   "split": "realworld-dev",
+   "truth": null,
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "suspicious",
+    "tactics": [
+     "personal-contact-channel",
+     "threat-or-urgency",
+     "payment-request"
+    ],
+    "lines": [
+     5,
+     6,
+     7
+    ],
+    "confidence": "medium"
+   },
+   "ms": 7254.200000017881
+  },
+  {
+   "id": "RW-0008",
+   "split": "realworld-dev",
+   "truth": null,
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "link-or-reply-lure",
+     "credential-request"
+    ],
+    "lines": [
+     1,
+     2,
+     7,
+     9,
+     14
+    ],
+    "confidence": "high"
+   },
+   "ms": 7974.199999988079
+  },
+  {
+   "id": "RW-0009",
+   "split": "realworld-dev",
+   "truth": null,
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "too-good-to-be-true",
+     "link-or-reply-lure",
+     "payment-request",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     3,
+     5,
+     8,
+     9
+    ],
+    "confidence": "high"
+   },
+   "ms": 7506.5999999940395
+  },
+  {
+   "id": "RW-0010",
+   "split": "realworld-dev",
+   "truth": null,
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "personal-contact-channel",
+     "threat-or-urgency"
+    ],
+    "lines": [
+     1,
+     4,
+     5
+    ],
+    "confidence": "high"
+   },
+   "ms": 6224.9000000059605
+  },
+  {
+   "id": "RW-0011",
+   "split": "realworld-dev",
+   "truth": null,
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "too-good-to-be-true",
+     "payment-request",
+     "personal-contact-channel"
+    ],
+    "lines": [
+     3,
+     4,
+     9
+    ],
+    "confidence": "medium"
+   },
+   "ms": 7076.299999982119
+  },
+  {
+   "id": "RW-0012",
+   "split": "realworld-dev",
+   "truth": null,
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "no-clear-signs",
+    "tactics": [],
+    "lines": [],
+    "confidence": "high"
+   },
+   "ms": 5558.200000017881
+  },
+  {
+   "id": "RW-0013",
+   "split": "realworld-dev",
+   "truth": null,
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     1
+    ],
+    "confidence": "high"
+   },
+   "ms": 5933.4000000059605
+  },
+  {
+   "id": "RW-0014",
+   "split": "realworld-dev",
+   "truth": null,
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": false,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "credential-request",
+     "threat-or-urgency",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     1
+    ],
+    "confidence": "high"
+   },
+   "ms": 6742.899999976158
+  },
+  {
+   "id": "RW-0015",
+   "split": "realworld-dev",
+   "truth": null,
+   "lang": "id",
+   "truncated": false,
+   "veiltraceAlert": true,
+   "ai": {
+    "assessment": "manipulative",
+    "tactics": [
+     "impersonation",
+     "threat-or-urgency",
+     "link-or-reply-lure"
+    ],
+    "lines": [
+     1,
+     2,
+     3
+    ],
+    "confidence": "high"
+   },
+   "ms": 6391.199999988079
+  }
+ ]
+}

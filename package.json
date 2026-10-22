@@ -39,7 +39,8 @@
     "submission:pdf": "node scripts/submission-pdf.mjs",
     "submission:video": "VT_VIDEO_DIR=submission/dist/video vitest run tests/e2e/video.test.ts && node scripts/submission-video.mjs submission/dist/video",
     "deploy:pwa": "node scripts/deploy-pwa.mjs",
-    "build:ai-eval": "node scripts/build-ai-eval.mjs"
+    "build:ai-eval": "node scripts/build-ai-eval.mjs",
+    "build:ext:ai": "node scripts/build-extension.mjs --ai"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

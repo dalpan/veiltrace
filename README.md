@@ -22,7 +22,7 @@ The popup is one dashboard: page threat summary, the four categories, advice, an
 - Progress log: [docs/PROGRESS.md](docs/PROGRESS.md). Hackathon materials (Indonesian): [submission/](submission/).
 
 ## On a phone
-- **Optional AI second opinion (D-093):** after a scan, the popup can ask the AI model built into Chrome desktop (Gemini Nano) for a second opinion on the page text. It runs on the device, shows the masked text first, and never changes the VeilTrace result. Not available in Firefox, on Android or on machines without the model; its accuracy has not been measured.
+- **On-device AI second opinion: evaluated and not used (D-093 … D-095).** An experimental popup panel asks the AI model built into Chrome desktop (Gemini Nano) about the page text. On 185 development scenarios it flagged 71% of benign pages, so it is compiled out of released builds; `npm run build:ext:ai` builds it for experiments ([docs/AI_EVAL.md](docs/AI_EVAL.md)).
 - **Cek Pesan (PWA):** `npm run build:pwa` → `dist/pwa` (static files; published at https://dalpan.github.io/veiltrace/ with `npm run deploy:pwa`). Served over HTTPS and installed, it checks a pasted message, or on Android a message shared from WhatsApp or Messages, on the device and offline.
 - **Firefox for Android (≥ 128):** `npm run build:firefox` → `dist/extension-firefox`. Not yet tested on a device.
 

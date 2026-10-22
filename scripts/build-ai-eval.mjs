@@ -14,7 +14,7 @@ execFileSync(process.execPath, [cli], { stdio: 'inherit' });
 const data = readFileSync('dist/ai-eval-data.json', 'utf8');
 
 const outdir = 'dist/extension-ai-eval';
-await buildExtension({ outdir });
+await buildExtension({ outdir, ai: true });
 await build({
   entryPoints: ['src/extension/ai/eval-page.ts'], outfile: join(outdir, 'ai-eval.js'), bundle: true, format: 'iife', target: 'chrome120',
   define: { __AI_EVAL_DATA__: data.trim() }, logLevel: 'warning',
