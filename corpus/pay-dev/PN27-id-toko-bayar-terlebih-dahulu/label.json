@@ -1,0 +1,22 @@
+{
+  "id": "PN27-id-toko-bayar-terlebih-dahulu",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "negative",
+  "threatClass": "T-PAY",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://sms.pesan.test/pn27-id-toko-bayar-terlebih-dahulu",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "Toko meminta pembayaran terlebih dahulu sebelum pesanan diproses",
+  "rationale": "Permintaan bayar biasa tanpa janji hadiah, refund atau pencairan: hanya teramati.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; message classes seen in the synthetic dataset's train/validation split (D-100), written in own words, labels written before the first run",
+  "created": "2026-10-23",
+  "evidenceWithin": null
+}

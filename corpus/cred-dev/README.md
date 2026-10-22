@@ -19,6 +19,7 @@
 | Positive | CD01–CD11 | Community/UGC OTP requests, chat-widget code requests, wallet seed phishing, suspension overlays, fake IT/fraud departments (EN + ID) |
 | Adversarial | CA01–CA05 | Planted educational heading with a live field, blockquote-wrapped request, informal Indonesian paraphrase, reported framing, text split across inline elements |
 | Hard negative | CN01–CN20 | Login, MFA, Indonesian internet banking, recovery-code help, awareness articles, developer token docs, password-manager help, HTML tutorial, OTP pages with expiry, settings, protective support pages, wallet restore, paywall overlay, SSO to another origin, shop promo login, security alert, 2FA setup |
+| Later additions | CD12–CD14, CN21–CN26 | Realistic additions and message-scam classes (D-100): OTP forwarded to an "officer"; hard negatives: narrated "salah memasukkan PIN", sign-in step that "needs" a code |
 
 ## Known contamination and bias
 - Same author for rules and corpus; wording may track the lexicon.

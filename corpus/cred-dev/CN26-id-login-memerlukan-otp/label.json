@@ -1,0 +1,22 @@
+{
+  "id": "CN26-id-login-memerlukan-otp",
+  "split": "cred-dev",
+  "lang": "id",
+  "category": "benign",
+  "threatClass": "T-neg",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://bantuan.layanan.test/cn26-id-login-memerlukan-otp",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Panduan login: Anda memerlukan kode OTP yang dikirim ke nomor Anda",
+  "rationale": "Menjelaskan langkah login, tidak ada pihak yang meminta kode.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; message classes seen in the synthetic dataset's train/validation split (D-100), written in own words, labels written before the first run",
+  "created": "2026-10-23"
+}

@@ -1,6 +1,7 @@
 // Lexicon of the EXPERIMENTAL fake-support and authority-impersonation detector (M5.3), English and Indonesian (including
 // informal Indonesian). Written for VEILTRACE (D-012). Negation, reported-speech and educational cues are reused read-only
 // from the ClickFix lexicon.
+import { AWARENESS_ID, AWARENESS_ID_EXAMPLES, IMPERSONATION_REPORT_ID, IMPERSONATION_REPORT_ID_EXAMPLES } from '../awareness.js';
 import { LEXICON } from '../lexicon/index.js';
 import { B, E } from '../lexicon/patterns.js';
 import type { Lang, Strength } from '../types.js';
@@ -31,8 +32,8 @@ const ACTIONS: SupportLexiconEntry[] = [
     `${B}(?:(?:install|download|open|run|launch|use|start)\\s+(?:the\\s+|our\\s+)?${REMOTE_TOOL}|(?:allow|grant|give)\\s+(?:us\\s+|me\\s+|the\\s+technician\\s+|our\\s+technician\\s+)?remote\\s+(?:access|control)|share\\s+(?:your|the)\\s+screen|(?:read|send|give)\\s+(?:us\\s+|me\\s+)?the\\s+(?:anydesk|teamviewer)\\s+(?:code|id))${E}`,
     ['install AnyDesk', 'download TeamViewer QuickSupport', 'allow remote access', 'share your screen']),
   entry('sup.id.remote', 'SA.REMOTE', 'id', 'strong',
-    `${B}(?:(?:instal|install|pasang|unduh|download|dl|donlot|buka|jalankan)\\s+${REMOTE_TOOL}|(?:izinkan|berikan|kasih)\\s+akses\\s+(?:jarak\\s+jauh|remote)|(?:bagikan|share|bagi)\\s+layar|(?:kirim|kasih|sebutkan|berikan)\\s+(?:kode|id)\\s+(?:anydesk|teamviewer))${E}`,
-    ['instal AnyDesk', 'izinkan akses jarak jauh', 'share layar', 'kirim kode anydesk']),
+    `${B}(?:(?:instal|install|pasang|unduh|download|dl|donlot|buka|jalankan)\\s+${REMOTE_TOOL}|(?:izinkan|berikan|kasih)\\s+akses\\s+(?:kendali\\s+)?(?:jarak\\s+jauh|remote)|(?:bagikan|share|bagi)\\s+layar|(?:kirim|kasih|sebutkan|berikan)\\s+(?:kode|id)\\s+(?:anydesk|teamviewer))${E}`,
+    ['instal AnyDesk', 'izinkan akses jarak jauh', 'berikan akses kendali jarak jauh', 'share layar', 'kirim kode anydesk']),
   // A reply, choice, link or form that moves the reader into the sender's flow (sup-0.4.0, D-091). "Reply STOP" opt-outs are not.
   entry('sup.id.respond', 'SC.RESPOND', 'id', 'strong',
     `${B}(?:balas(?:lah)?\\s+(?:dengan\\s+)?(?:angka\\s+)?(?:\\d|ya|setuju|pesan\\s+ini)|ketik\\s*[,(]*\\s*\\(?\\s*(?:ya|y|setuju|\\d)\\b|kirim(?:kan)?\\s+(?:jawaban|balasan)|(?:klik|buka|kunjungi|akses)\\s+(?:link|tautan|situs|website)|(?:isi|lengkapi)\\s+(?:formulir|form|data\\s+(?:diri|anda))|(?:melalui|lewat|via)\\s+(?:tautan|link)|konfirmasi\\s*/\\s*persetujuan|(?:di\\s?)?wajib(?:kan)?\\s+(?:melakukan\\s+)?(?:verifikasi|pengosongan|pemulihan|menghubungkan|hubungkan)|wajib\\s+hubungkan)${E}`,
@@ -75,7 +76,7 @@ const CLAIMS: SupportLexiconEntry[] = [
     `${B}(?:(?:customer|technical|tech)\\s+support|support\\s+(?:team|agent|center|centre|line|desk)|help\\s*desk|customer\\s+(?:service|care)|courier|delivery\\s+(?:agent|team)|official\\s+(?:support|account|team)|(?:certified|authori[sz]ed)\\s+technicians?|(?:microsoft|windows|apple|google)\\s+(?:support|technicians?|helpline))${E}`,
     ['technical support', 'support team', 'help desk', 'Windows support', 'certified technician']),
   entry('sup.id.claim_support', 'SI.SUPPORT', 'id', 'weak',
-    `${B}(?:customer\\s+service|cs(?:\\s+(?:resmi|official|kami))?|layanan\\s+pelanggan|call\\s+center|teknisi\\s+resmi|tim\\s+(?:support|dukungan|bantuan)|pusat\\s+bantuan\\s+resmi|kurir(?:\\s+resmi)?|petugas\\s+(?:ekspedisi|pengiriman))${E}`,
+    `${B}(?:customer\\s+service|cs(?:\\s+(?:resmi|official|kami))?|layanan\\s+pelanggan|call\\s+center|teknisi\\s+resmi|tim\\s+(?:support|dukungan|bantuan)|pusat\\s+bantuan\\s+resmi|kurir(?:\\s+resmi)?|petugas(?:\\s+(?:ekspedisi|pengiriman|resmi))?|dukungan\\s+teknis)${E}`,
     ['customer service', 'CS resmi', 'call center', 'teknisi resmi', 'kurir']),
   entry('sup.en.claim_bank', 'SI.BANK', 'en', 'weak',
     `${B}(?:bank\\s+(?:officer|representative|staff|security|fraud\\s+team)|fraud\\s+(?:department|team|prevention\\s+team)|(?:your|the)\\s+bank${"['’]"}s\\s+(?:security|fraud)\\s+team)${E}`,
@@ -113,7 +114,7 @@ const PRESSURE: SupportLexiconEntry[] = [
     `${B}(?:(?:has|have)\\s+detected\\s+(?:an?\\s+)?(?:[\\p{L}-]+\\s+){0,2}?(?:threat|virus(?:es)?|trojan|malware|spyware|infection|intrusion|hack(?:ing)?\\s+attempt)s?|(?<!(?:no|0|zero)\\s)(?:threats?|virus(?:es)?|trojans?|malware|spyware|infections?)\\s+(?:(?:was|were|has\\s+been|have\\s+been)\\s+)?detected(?:\\s+on\\s+(?:this|your)\\s+(?:device|computer|pc|system))?)${E}`,
     ['Windows has detected a Zeus trojan', 'has detected a threat', 'virus detected on this device']),
   entry('sup.id.alert', 'SW.ALERT', 'id', 'strong',
-    `${B}(?:(?:komputer|pc|perangkat|hp|ponsel|laptop|browser)(?:\\s+(?:anda|kamu|mu|nya))?\\s+(?:telah\\s+|sudah\\s+|sedang\\s+)?(?:terinfeksi|diretas|dibajak|kena\\s+(?:virus|hack|retas)|terkunci|diblokir)|virus\\s+(?:terdeteksi|ditemukan)\\s+(?:di|pada)\\s+(?:perangkat|komputer|hp)|jangan\\s+(?:matikan|restart|tutup)\\s+(?:komputer|pc|halaman|jendela))${E}`,
+    `${B}(?:(?:komputer|pc|perangkat|hp|ponsel|laptop|browser)(?:\\s+(?:anda|kamu|mu|nya|bapak\\s*/\\s*ibu))?\\s+(?:telah\\s+|sudah\\s+|sedang\\s+)?(?:terinfeksi|diretas|dibajak|kena\\s+(?:virus|hack|retas)|terkunci|diblokir)|virus\\s+(?:terdeteksi|ditemukan)\\s+(?:di|pada)\\s+(?:perangkat|komputer|hp)|jangan\\s+(?:matikan|restart|tutup)\\s+(?:komputer|pc|halaman|jendela))${E}`,
     ['komputer Anda terinfeksi', 'hp kamu kena virus', 'virus terdeteksi di perangkat', 'jangan matikan komputer']),
   entry('sup.id.alert_detected', 'SW.ALERT', 'id', 'strong',
     `${B}(?:(?:telah\\s+|sudah\\s+)?mendeteksi\\s+(?:adanya\\s+)?(?:ancaman|virus|trojan|malware|spyware|serangan)|(?<!(?:tidak\\s+ada|tak\\s+ada|0)\\s)(?:ancaman|virus|trojan|malware|spyware)\\s+(?:telah\\s+|sudah\\s+)?terdeteksi)${E}`,
@@ -187,8 +188,12 @@ const OWN_CONTEXT: SupportLexiconEntry[] = [
 ];
 
 /** Context cues reused unchanged from the ClickFix lexicon (negation, reported speech, educational framing). */
+/** Awareness phrasing ("waspadai pesan yang mengatasnamakan …"), shared with the credential and payment detectors. */
+const AWARENESS: SupportLexiconEntry[] = [entry('sup.id.awareness', 'C.EDUCATIONAL', 'id', 'strong', AWARENESS_ID, AWARENESS_ID_EXAMPLES),
+  entry('sup.id.impersonation_report', 'C.REPORTED', 'id', 'strong', IMPERSONATION_REPORT_ID, IMPERSONATION_REPORT_ID_EXAMPLES)];
+
 const SHARED_CONTEXT: SupportLexiconEntry[] = LEXICON
   .filter((e) => e.signal === 'C.NEGATION' || e.signal === 'C.REPORTED' || e.signal === 'C.EDUCATIONAL')
   .map((e) => ({ ...e, signal: e.signal as 'C.NEGATION' | 'C.REPORTED' | 'C.EDUCATIONAL' }));
 
-export const SUPPORT_LEXICON: readonly SupportLexiconEntry[] = [...ACTIONS, ...CHANNELS, ...CLAIMS, ...PRESSURE, ...OWN_CONTEXT, ...SHARED_CONTEXT];
+export const SUPPORT_LEXICON: readonly SupportLexiconEntry[] = [...ACTIONS, ...CHANNELS, ...CLAIMS, ...PRESSURE, ...OWN_CONTEXT, ...AWARENESS, ...SHARED_CONTEXT];

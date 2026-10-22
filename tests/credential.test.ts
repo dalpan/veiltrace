@@ -213,3 +213,23 @@ describe('credential detector cred-0.2.0-exp (D-083)', () => {
   });
 });
 
+
+describe('credential detector cred-0.3.0-exp: passing codes on and requesters (D-100)', () => {
+  it('an OTP to be forwarded to an officer → manipulative (CR1)', () => {
+    expect(short(analyzeCredentials(snapshot(inContainer('ugc:#chat', ['Kode OTP untuk rekening Anda perlu diteruskan ke petugas melalui 081200000000.']))))).toEqual(['CR1:manipulative_instruction']);
+  });
+
+  it('a requester who "needs" a one-time login code → manipulative (CR1)', () => {
+    expect(short(analyzeCredentials(snapshot(inContainer('ugc:#chat', ['Admin membutuhkan kode login sekali pakai untuk memulihkan akun Anda.']))))).toEqual(['CR1:manipulative_instruction']);
+  });
+
+  it('a sign-in step that "needs" a code, and a lockout caused by a wrong PIN, are not requests', () => {
+    expect(analyzeCredentials(snapshot(['Untuk masuk, Anda memerlukan kode OTP yang dikirim ke nomor terdaftar.'])).verdict).toBe('none');
+    expect(analyzeCredentials(snapshot(['Akun Anda telah diblokir karena salah memasukkan PIN 3 kali. Hubungi call center.'])).verdict).toBe('none');
+  });
+
+  it('a link to enter login data after an unusual-access alarm → suspicious or higher', () => {
+    expect(analyzeCredentials(snapshot(inContainer('ugc:#chat', ['Akses akun Anda terdeteksi tidak biasa; buka https://link.example.invalid/x untuk memasukkan data login.'])))
+      .verdict).toMatch(/suspicious|manipulative/);
+  });
+});

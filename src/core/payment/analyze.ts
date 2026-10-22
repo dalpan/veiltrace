@@ -13,7 +13,7 @@ import type {
   PaymentResult, PayTrustContext,
 } from './types.js';
 
-export const PAY_DETECTOR_VERSION = 'pay-0.5.0-exp';
+export const PAY_DETECTOR_VERSION = 'pay-0.6.0-exp';
 
 /** Same clause and sentence breaks as the ClickFix binding, except that a period inside a number ("Rp 150.000") is not a break. */
 const CLAUSE_BREAK = /[,;:!?]|\.(?=\s|$)|(?<![\p{L}\p{N}_])(?:and|then|or|but|dan|lalu|kemudian|atau|tapi|tetapi)(?![\p{L}\p{N}_])/u;
@@ -258,6 +258,10 @@ function scoreOne(u: Unit, region: RegionInfo, signals: readonly Ob[], cues: rea
   } else if (threat && (authority || urgency)) {
     ruleId = 'PR3';
     [cls, base] = authority && urgency ? ['manipulative_instruction', 'high'] : ['suspicious_correlation', 'medium'];
+    used.push(...nearby.filter((p) => p.o.kind === 'pressure'));
+  } else if (threat && untrusted) {
+    // A payment demanded under a threat in a message or post from someone else (extortion, "pay or the parcel is returned").
+    [ruleId, cls, base] = ['PR3', 'suspicious_correlation', 'medium'];
     used.push(...nearby.filter((p) => p.o.kind === 'pressure'));
   } else if (authorityHere && urgency) {
     [ruleId, cls, base] = ['PR3', 'suspicious_correlation', 'medium'];

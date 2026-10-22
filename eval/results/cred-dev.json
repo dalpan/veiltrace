@@ -1,65 +1,65 @@
 {
   "split": "cred-dev",
   "note": "DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.",
-  "detectorVersion": "cred-0.2.0-exp",
+  "detectorVersion": "cred-0.3.0-exp",
   "clickfixEngineVersion": "0.3.0",
   "extractorVersion": "0.3.0",
   "metrics": {
-    "scenarios": 45,
+    "scenarios": 48,
     "confusion": {
-      "tp": 20,
+      "tp": 21,
       "fp": 0,
-      "tn": 24,
+      "tn": 26,
       "fn": 1
     },
     "precision": {
-      "k": 20,
-      "n": 20,
+      "k": 21,
+      "n": 21,
       "value": 1,
       "ci95": [
-        0.8389,
+        0.8454,
         1
       ]
     },
     "recall": {
-      "k": 20,
-      "n": 21,
-      "value": 0.9524,
+      "k": 21,
+      "n": 22,
+      "value": 0.9545,
       "ci95": [
-        0.7733,
-        0.9915
+        0.782,
+        0.9919
       ]
     },
     "fpr": {
       "k": 0,
-      "n": 24,
+      "n": 26,
       "value": 0,
       "ci95": [
         0,
-        0.138
+        0.1287
       ]
     },
     "hardNegativeFpr": {
       "k": 0,
-      "n": 24,
+      "n": 26,
       "value": 0,
       "ci95": [
         0,
-        0.138
+        0.1287
       ]
     },
     "localization": {
-      "k": 20,
-      "n": 20,
+      "k": 21,
+      "n": 21,
       "value": 1,
       "ci95": [
-        0.8389,
+        0.8454,
         1
       ]
     },
     "classMatrix": [
       [
-        5,
+        7,
         0,
         0,
         0
@@ -80,16 +80,16 @@
         0,
         1,
         0,
-        16
+        17
       ]
     ],
     "exactClassAgreement": {
-      "k": 44,
-      "n": 45,
-      "value": 0.9778,
+      "k": 47,
+      "n": 48,
+      "value": 0.9792,
       "ci95": [
-        0.8843,
-        0.9961
+        0.891,
+        0.9963
       ]
     },
     "observedOnNegatives": 19,
@@ -116,21 +116,21 @@
       },
       "id": {
         "recall": {
-          "k": 9,
-          "n": 9,
+          "k": 10,
+          "n": 10,
           "value": 1,
           "ci95": [
-            0.7009,
+            0.7225,
             1
           ]
         },
         "fpr": {
           "k": 0,
-          "n": 8,
+          "n": 10,
           "value": 0,
           "ci95": [
             0,
-            0.3244
+            0.2775
           ]
         }
       }
@@ -497,6 +497,23 @@
       "partial": [],
       "requestsDuringScan": 0,
       "fieldsFilled": 1
+    },
+    {
+      "id": "CD14-id-otp-diteruskan-ke-petugas",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "CR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
     },
     {
       "id": "CN01-en-login-form",
@@ -895,6 +912,36 @@
       "partial": [],
       "requestsDuringScan": 0,
       "fieldsFilled": 1
+    },
+    {
+      "id": "CN25-id-salah-memasukkan-pin",
+      "lang": "id",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "CN26-id-login-memerlukan-otp",
+      "lang": "id",
+      "category": "benign",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
     }
   ]
 }

@@ -1,64 +1,64 @@
 {
   "split": "sup-dev",
   "note": "DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.",
-  "detectorVersion": "sup-0.6.0-exp",
+  "detectorVersion": "sup-0.7.0-exp",
   "extractorVersion": "0.3.0",
   "metrics": {
-    "scenarios": 48,
+    "scenarios": 50,
     "confusion": {
-      "tp": 22,
+      "tp": 23,
       "fp": 0,
-      "tn": 26,
+      "tn": 27,
       "fn": 0
     },
     "precision": {
-      "k": 22,
-      "n": 22,
+      "k": 23,
+      "n": 23,
       "value": 1,
       "ci95": [
-        0.8513,
+        0.8569,
         1
       ]
     },
     "recall": {
-      "k": 22,
-      "n": 22,
+      "k": 23,
+      "n": 23,
       "value": 1,
       "ci95": [
-        0.8513,
+        0.8569,
         1
       ]
     },
     "fpr": {
       "k": 0,
-      "n": 26,
+      "n": 27,
       "value": 0,
       "ci95": [
         0,
-        0.1287
+        0.1246
       ]
     },
     "hardNegativeFpr": {
       "k": 0,
-      "n": 26,
+      "n": 27,
       "value": 0,
       "ci95": [
         0,
-        0.1287
+        0.1246
       ]
     },
     "localization": {
-      "k": 22,
-      "n": 22,
+      "k": 23,
+      "n": 23,
       "value": 1,
       "ci95": [
-        0.8513,
+        0.8569,
         1
       ]
     },
     "classMatrix": [
       [
-        8,
+        9,
         0,
         0,
         0
@@ -79,16 +79,16 @@
         0,
         0,
         0,
-        19
+        20
       ]
     ],
     "exactClassAgreement": {
-      "k": 44,
-      "n": 48,
-      "value": 0.9167,
+      "k": 46,
+      "n": 50,
+      "value": 0.92,
       "ci95": [
-        0.8045,
-        0.9671
+        0.8116,
+        0.9685
       ]
     },
     "observedOnNegatives": 14,
@@ -115,21 +115,21 @@
       },
       "id": {
         "recall": {
-          "k": 15,
-          "n": 15,
+          "k": 16,
+          "n": 16,
           "value": 1,
           "ci95": [
-            0.7961,
+            0.8064,
             1
           ]
         },
         "fpr": {
           "k": 0,
-          "n": 16,
+          "n": 17,
           "value": 0,
           "ci95": [
             0,
-            0.1936
+            0.1843
           ]
         }
       }
@@ -550,6 +550,25 @@
       "predicted": "manipulative_instruction",
       "findings": [
         "SR9:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SD21-id-akses-kendali-jarak-jauh",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "SR2:manipulative_instruction"
       ],
       "localized": true,
       "clickfixVerdict": "none",
@@ -1014,6 +1033,23 @@
     },
     {
       "id": "SN26-id-sms-pengumuman-undian-resmi",
+      "lang": "id",
+      "category": "negative",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SN27-id-petugas-tidak-meminta-akses",
       "lang": "id",
       "category": "negative",
       "truth": "benign",

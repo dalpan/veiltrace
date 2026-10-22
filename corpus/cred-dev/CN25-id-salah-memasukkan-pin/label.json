@@ -1,0 +1,22 @@
+{
+  "id": "CN25-id-salah-memasukkan-pin",
+  "split": "cred-dev",
+  "lang": "id",
+  "category": "benign",
+  "threatClass": "T-neg",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://bantuan.layanan.test/cn25-id-salah-memasukkan-pin",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": null,
+  "description": "Pemberitahuan akun terblokir karena salah memasukkan PIN, arahan ke kantor cabang",
+  "rationale": "\"Memasukkan\" di sini menceritakan kejadian, bukan meminta PIN.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; message classes seen in the synthetic dataset's train/validation split (D-100), written in own words, labels written before the first run",
+  "created": "2026-10-23"
+}

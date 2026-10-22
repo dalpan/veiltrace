@@ -1,0 +1,22 @@
+{
+  "id": "PD19-id-pesan-ancaman-sebar-data",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-PAY",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://sms.pesan.test/pd19-id-pesan-ancaman-sebar-data",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#log",
+  "description": "Pemerasan lewat pesan: data dan foto akan disebar kalau tidak membayar ke rekening",
+  "rationale": "Permintaan bayar ke nomor rekening dengan ancaman penyebaran data (PR2).",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; message classes seen in the synthetic dataset's train/validation split (D-100), written in own words, labels written before the first run",
+  "created": "2026-10-23"
+}

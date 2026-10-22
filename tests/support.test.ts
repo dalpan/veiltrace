@@ -237,3 +237,14 @@ describe('support detector sup-0.6.0-exp: SMS prize notices and proxy redirects 
     expect(sup(inContainer('ugc:#sms', ['Selamat! Anda mendapat bonus kuota 1GB. Cek di *888#.'])).verdict).toBe('none');
   });
 });
+
+describe('support detector sup-0.7.0-exp: remote access in Indonesian (D-100)', () => {
+  it('"berikan akses kendali jarak jauh ke petugas" in a message → manipulative (SR2)', () => {
+    const r = analyzeSupport(snapshot(inContainer('ugc:#chat', ['Untuk menyelesaikan gangguan rekening Anda, berikan akses kendali jarak jauh ke petugas sekarang juga.'])));
+    expect(r.findings.map((f) => `${f.ruleId}:${f.classification}`)).toEqual(['SR2:manipulative_instruction']);
+  });
+
+  it('a help page saying officers never ask for remote access stays quiet', () => {
+    expect(analyzeSupport(snapshot(['Petugas kami tidak pernah meminta Anda memberikan akses kendali jarak jauh ke perangkat.'])).verdict).toBe('none');
+  });
+});

@@ -4,6 +4,11 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-23 · Synthetic Indonesian scam corpus and message-scam phrasing (D-100)
+The owner's 12,150-message synthetic corpus became a second external set (`corpus/external/synthetic-id/`, git-ignored; test split hash-locked, template leakage noted). Dev baseline: 397 of 6,480 scam alerted, 10 of 4,455 benign. After cred 0.3.0, pay 0.6.0 and sup 0.7.0: 2,908 of 6,480 scam alerted, 0 of 4,455 benign (development numbers, synthetic). SMS dataset dev half and field sample unchanged; 10 new dev fixtures; cred-dev, pay-dev and sup-dev FP 0; typecheck and lint clean; `npm test` 774 passed. **Next:** owner decides on the single locked runs (v3, SMS test half, synthetic test split); rebuild the release and site so the live app carries the new detector versions.
+
+---
+
 ## 2026-10-23 · External SMS dataset and SMS-era patterns (D-099)
 Indonesian SMS spam dataset as an external set (hash split, locked test half). Dev half: *penipuan* alerted 11 → 94 of 178, *normal* 1 of 318, *promo* 1 of 120. pay 0.5.0 (phone credit, bare accounts, redirected payments, claimed family on a new number), sup 0.6.0 (SMS prize notices, SR9 third-party redirect). 8 new dev fixtures; pay-dev and sup-dev FP 0; `npm test` green apart from known load-sensitive tests that pass alone. **Next:** owner decides when to run the external test half and held-out v3 (once each).
 

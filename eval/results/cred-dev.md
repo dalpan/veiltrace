@@ -1,24 +1,24 @@
 # Credential detector: development results (cred-dev)
 
-Detector cred-0.2.0-exp (EXPERIMENTAL), extractor 0.3.0. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
+Detector cred-0.3.0-exp (EXPERIMENTAL), extractor 0.3.0. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
 
-TP 20 · FP 0 · TN 24 · FN 1
+TP 21 · FP 0 · TN 26 · FN 1
 
-- Precision: 100.0% (20/20; 95% CI 83.9%–100.0%)
-- Recall: 95.2% (20/21; 95% CI 77.3%–99.2%)
-- Hard-negative FPR: 0.0% (0/24; 95% CI 0.0%–13.8%)
-- Localization: 100.0% (20/20; 95% CI 83.9%–100.0%)
-- Exact class agreement: 97.8% (44/45; 95% CI 88.4%–99.6%)
+- Precision: 100.0% (21/21; 95% CI 84.5%–100.0%)
+- Recall: 95.5% (21/22; 95% CI 78.2%–99.2%)
+- Hard-negative FPR: 0.0% (0/26; 95% CI 0.0%–12.9%)
+- Localization: 100.0% (21/21; 95% CI 84.5%–100.0%)
+- Exact class agreement: 97.9% (47/48; 95% CI 89.1%–99.6%)
 - Requests during scanning: 0; privacy sentinel leaks: 0 (34 fields filled)
 
 ## Class matrix
 
 | expected \ predicted | none | observed | suspicious | manipulative |
 |---|---|---|---|---|
-| none | 5 | 0 | 0 | 0 |
+| none | 7 | 0 | 0 | 0 |
 | observed | 0 | 19 | 0 | 0 |
 | suspicious | 0 | 0 | 4 | 0 |
-| manipulative | 0 | 1 | 0 | 16 |
+| manipulative | 0 | 1 | 0 | 17 |
 
 ## Per scenario
 
@@ -45,6 +45,7 @@ TP 20 · FP 0 · TN 24 · FN 1
 | CD11-en-fraud-dept-tell-pin | malicious | manipulative | manipulative | CR1:manipulative_instruction | ✓ | none |
 | CD12-id-realistic-marketplace-chat-otp | malicious | manipulative | manipulative | CR1:manipulative_instruction | ✓ | none |
 | CD13-en-realistic-mailbox-suspension | malicious | suspicious | suspicious | CR4:suspicious_correlation | ✓ | none |
+| CD14-id-otp-diteruskan-ke-petugas | malicious | manipulative | manipulative | CR1:manipulative_instruction | ✓ | none |
 | CN01-en-login-form | benign | observed | observed | CR5:observed_instruction |  | none |
 | CN02-en-mfa-code | benign | observed | observed | CR5:observed_instruction |  | none |
 | CN03-id-ibanking-login | benign | observed | observed | CR5:observed_instruction |  | none |
@@ -69,3 +70,5 @@ TP 20 · FP 0 · TN 24 · FN 1
 | CN22-id-slang-masukin-kode-di-aplikasi | benign | observed | observed | CR5:observed_instruction |  | none |
 | CN23-id-realistic-ibanking-otp | benign | observed | observed | CR5:observed_instruction |  | none |
 | CN24-en-realistic-2step-verification | benign | observed | observed | CR5:observed_instruction |  | none |
+| CN25-id-salah-memasukkan-pin | benign | none | none |  |  | none |
+| CN26-id-login-memerlukan-otp | benign | none | none |  |  | none |

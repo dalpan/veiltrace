@@ -1,14 +1,14 @@
 # Payment detector: development results (pay-dev)
 
-Detector pay-0.5.0-exp (EXPERIMENTAL), extractor 0.3.0. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
+Detector pay-0.6.0-exp (EXPERIMENTAL), extractor 0.3.0. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
 
-TP 19 · FP 0 · TN 25 · FN 0
+TP 22 · FP 0 · TN 27 · FN 0
 
-- Precision: 100.0% (19/19; 95% CI 83.2%–100.0%)
-- Recall: 100.0% (19/19; 95% CI 83.2%–100.0%)
-- Hard-negative FPR: 0.0% (0/25; 95% CI 0.0%–13.3%)
-- Localization: 100.0% (19/19; 95% CI 83.2%–100.0%)
-- Exact class agreement: 93.2% (41/44; 95% CI 81.8%–97.7%)
+- Precision: 100.0% (22/22; 95% CI 85.1%–100.0%)
+- Recall: 100.0% (22/22; 95% CI 85.1%–100.0%)
+- Hard-negative FPR: 0.0% (0/27; 95% CI 0.0%–12.5%)
+- Localization: 100.0% (22/22; 95% CI 85.1%–100.0%)
+- Exact class agreement: 93.9% (46/49; 95% CI 83.5%–97.9%)
 - Requests during scanning: 0; privacy sentinel leaks: 0 (3 fields filled)
 
 ## Class matrix
@@ -16,9 +16,9 @@ TP 19 · FP 0 · TN 25 · FN 0
 | expected \ predicted | none | observed | suspicious | manipulative |
 |---|---|---|---|---|
 | none | 6 | 0 | 0 | 0 |
-| observed | 3 | 16 | 0 | 0 |
+| observed | 3 | 18 | 0 | 0 |
 | suspicious | 0 | 0 | 2 | 0 |
-| manipulative | 0 | 0 | 0 | 17 |
+| manipulative | 0 | 0 | 0 | 20 |
 
 ## Per scenario
 
@@ -43,6 +43,9 @@ TP 19 · FP 0 · TN 25 · FN 0
 | PD16-id-email-kerja-tanpa-interview-biaya-admin | malicious | manipulative | manipulative | PR1:manipulative_instruction | ✓ | none | none |
 | PD17-id-sms-nomor-baru-minta-pulsa | malicious | manipulative | manipulative | PR2:manipulative_instruction | ✓ | none | none |
 | PD18-id-sms-pembayaran-dikuasakan | malicious | suspicious | suspicious | PR2:suspicious_correlation | ✓ | none | none |
+| PD19-id-pesan-ancaman-sebar-data | malicious | manipulative | manipulative | PR2:manipulative_instruction | ✓ | none | none |
+| PD20-id-pemenang-ongkir-dulu | malicious | manipulative | manipulative | PR1:manipulative_instruction | ✓ | none | none |
+| PD21-id-kerja-online-deposit | malicious | manipulative | manipulative | PR1:manipulative_instruction | ✓ | none | none |
 | PN01-en-checkout | benign | observed | observed | PR4:observed_instruction, PR4:observed_instruction |  | none | none |
 | PN02-id-checkout-virtual-account | benign | observed | observed | PR4:observed_instruction |  | none | none |
 | PN03-en-invoice | benign | observed | observed | PR4:observed_instruction |  | none | none |
@@ -68,3 +71,5 @@ TP 19 · FP 0 · TN 25 · FN 0
 | PN23-id-wa-undangan-interview-hrd | benign | none | none |  |  | none | none |
 | PN24-id-sms-nomor-baru-tanpa-permintaan | benign | none | none |  |  | none | none |
 | PN25-id-sms-tagihan-sewa-rekening-perusahaan | benign | observed | observed | PR4:observed_instruction |  | none | none |
+| PN26-id-himbauan-mengatasnamakan-petugas | benign | observed | observed | PR2:observed_instruction |  | none | none |
+| PN27-id-toko-bayar-terlebih-dahulu | benign | observed | observed | PR4:observed_instruction |  | none | none |

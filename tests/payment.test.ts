@@ -213,3 +213,28 @@ describe('payment detector pay-0.5.0-exp: SMS-era requests (D-099)', () => {
     expect(pay(['Petugas tidak pernah meminta pembayaran lewat pesan pribadi.']).verdict).not.toMatch(/suspicious|manipulative/);
   });
 });
+
+describe('payment detector pay-0.6.0-exp: message-scam phrasing (D-100)', () => {
+  it('extortion: pay to an account or the data is spread → manipulative (PR2); without a destination → suspicious (PR3)', () => {
+    expect(short(pay(inContainer('ugc:#sms', ['Data pribadi kamu akan disebarkan kalau tidak membayar Rp 2.000.000 ke 9876543210.'])))).toEqual(['PR2:manipulative_instruction']);
+    expect(short(pay(inContainer('ugc:#sms', ['Ada biaya tambahan Rp 25.000 untuk pengiriman; bayar sebelum paket dikembalikan.'])))).toEqual(['PR3:suspicious_correlation']);
+  });
+
+  it('"terlebih dahulu" ties a fee to a prize; the same words at a shop checkout stay observed', () => {
+    expect(short(pay(inContainer('ugc:#sms', ['Pengumuman pemenang undian: transfer biaya pengiriman Rp 175.000 terlebih dahulu.'])))).toEqual(['PR1:manipulative_instruction']);
+    expect(pay(['Silakan transfer Rp 85.000 terlebih dahulu, pesanan diproses setelah pembayaran terkonfirmasi.']).verdict).toBe('observed_instruction');
+  });
+
+  it('task scams: a deposit before the commission can be withdrawn → manipulative (PR1)', () => {
+    expect(short(pay(inContainer('ugc:#chat', ['Dapatkan komisi Rp 300.000 dari tugas like produk; cairkan setelah deposit aktivasi.'])))).toEqual(['PR1:manipulative_instruction']);
+  });
+
+  it('a donation that must go to an account "tanpa perlu verifikasi" → suspicious (PR2)', () => {
+    expect(short(pay(inContainer('ugc:#chat', ['Donasi darurat harus dikirim sekarang ke 1234567890 tanpa perlu verifikasi lembaga.'])))).toEqual(['PR2:suspicious_correlation']);
+  });
+
+  it('awareness text that reports what impersonators ask for is not a request to the reader', () => {
+    const r = pay(inContainer('ugc:#sms', ['Waspadai pesan yang mengatasnamakan petugas pajak dan meminta transfer biaya ke rekening pribadi.']));
+    expect(r.verdict).not.toMatch(/suspicious|manipulative/);
+  });
+});

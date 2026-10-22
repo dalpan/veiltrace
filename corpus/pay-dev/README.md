@@ -18,5 +18,6 @@
 | Positive | PD01–PD10 | Fake refund release fee in a chat widget, prize tax, account-unlock / verification fees, gift cards for a fake tax office, off-platform marketplace transfer, fake police fine, crypto recovery fee, customs-held parcel, fake CS refund in comments (EN + ID) |
 | Adversarial | PA01 | Very informal Indonesian abbreviations ("tf dl 150rb ... buat bka akunnya"). Known miss |
 | Hard negative | PN01–PN16 | Checkout with card form, virtual-account payment, invoice, utility bill, donations, news reports quoting scams, security-awareness pages, return policy, top-up cashback, gift-card shop, own-account bank transfer, marketplace safety tips, genuine prize notice |
+| Later additions | PD11–PD21, PN17–PN27 | Field-sample, SMS-era (D-091, D-099) and message-scam (D-100) classes: extortion to an account, prize fee "terlebih dahulu", task-scam deposit; hard negatives: awareness text reporting impersonators, shop asking to pay first |
 
 Run: `npm run eval:pay` (writes `eval/results/pay-dev.{json,md}`). A card-number-like sentinel is typed into every visible field before each scan and must never appear in any output.

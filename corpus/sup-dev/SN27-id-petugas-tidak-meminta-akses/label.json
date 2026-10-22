@@ -1,0 +1,22 @@
+{
+  "id": "SN27-id-petugas-tidak-meminta-akses",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "negative",
+  "threatClass": "T-SUP",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://bantuan.layanan.test/sn27-id-petugas-tidak-meminta-akses",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "Halaman bantuan: petugas tidak pernah meminta akses kendali jarak jauh",
+  "rationale": "Pernyataan kewaspadaan dengan negasi.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; message classes seen in the synthetic dataset's train/validation split (D-100), written in own words, labels written before the first run",
+  "created": "2026-10-23",
+  "evidenceWithin": null
+}

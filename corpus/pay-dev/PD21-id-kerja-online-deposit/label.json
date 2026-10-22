@@ -1,0 +1,22 @@
+{
+  "id": "PD21-id-kerja-online-deposit",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-PAY",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://sms.pesan.test/pd21-id-kerja-online-deposit",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#log",
+  "description": "Kerja online: komisi baru bisa dicairkan setelah deposit",
+  "rationale": "Deposit sebagai syarat pencairan komisi tugas (PR1).",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; message classes seen in the synthetic dataset's train/validation split (D-100), written in own words, labels written before the first run",
+  "created": "2026-10-23"
+}
