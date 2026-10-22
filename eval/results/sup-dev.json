@@ -1,70 +1,70 @@
 {
   "split": "sup-dev",
   "note": "DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.",
-  "detectorVersion": "sup-0.3.0-exp",
+  "detectorVersion": "sup-0.4.0-exp",
   "extractorVersion": "0.3.0",
   "metrics": {
-    "scenarios": 33,
+    "scenarios": 39,
     "confusion": {
-      "tp": 15,
+      "tp": 18,
       "fp": 0,
-      "tn": 18,
+      "tn": 21,
       "fn": 0
     },
     "precision": {
-      "k": 15,
-      "n": 15,
+      "k": 18,
+      "n": 18,
       "value": 1,
       "ci95": [
-        0.7961,
+        0.8241,
         1
       ]
     },
     "recall": {
-      "k": 15,
-      "n": 15,
+      "k": 18,
+      "n": 18,
       "value": 1,
       "ci95": [
-        0.7961,
+        0.8241,
         1
       ]
     },
     "fpr": {
       "k": 0,
-      "n": 18,
+      "n": 21,
       "value": 0,
       "ci95": [
         0,
-        0.1759
+        0.1546
       ]
     },
     "hardNegativeFpr": {
       "k": 0,
-      "n": 18,
+      "n": 21,
       "value": 0,
       "ci95": [
         0,
-        0.1759
+        0.1546
       ]
     },
     "localization": {
-      "k": 15,
-      "n": 15,
+      "k": 18,
+      "n": 18,
       "value": 1,
       "ci95": [
-        0.7961,
+        0.8241,
         1
       ]
     },
     "classMatrix": [
       [
-        3,
+        5,
         0,
         0,
         0
       ],
       [
-        1,
+        2,
         14,
         0,
         0
@@ -79,16 +79,16 @@
         0,
         0,
         0,
-        13
+        16
       ]
     ],
     "exactClassAgreement": {
-      "k": 32,
-      "n": 33,
-      "value": 0.9697,
+      "k": 37,
+      "n": 39,
+      "value": 0.9487,
       "ci95": [
-        0.8468,
-        0.9946
+        0.8311,
+        0.9858
       ]
     },
     "observedOnNegatives": 14,
@@ -115,21 +115,21 @@
       },
       "id": {
         "recall": {
-          "k": 8,
-          "n": 8,
+          "k": 11,
+          "n": 11,
           "value": 1,
           "ci95": [
-            0.6756,
+            0.7412,
             1
           ]
         },
         "fpr": {
           "k": 0,
-          "n": 8,
+          "n": 11,
           "value": 0,
           "ci95": [
             0,
-            0.3244
+            0.2588
           ]
         }
       }
@@ -417,6 +417,63 @@
       "predicted": "manipulative_instruction",
       "findings": [
         "SR3:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SD14-id-wa-pemberitahuan-tarif-bank",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "SR6:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SD15-id-wa-cs-dompet-login-asing-ketik-ya",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "SR6:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SD16-id-sms-transaksi-kartu-tautan-batal",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "SR6:manipulative_instruction"
       ],
       "localized": true,
       "clickfixVerdict": "none",
@@ -756,6 +813,57 @@
       "clickfixVerdict": "none",
       "credentialVerdict": "none",
       "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SN19-id-sms-notifikasi-transaksi-resmi",
+      "lang": "id",
+      "category": "negative",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SN20-id-grup-wa-peringatan-pesan-tarif-palsu",
+      "lang": "id",
+      "category": "negative",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SN21-id-halaman-bank-pengumuman-tarif",
+      "lang": "id",
+      "category": "negative",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "observed_instruction",
       "partial": [],
       "requestsDuringScan": 0,
       "fieldsFilled": 0

@@ -1,0 +1,22 @@
+{
+  "id": "SD15-id-wa-cs-dompet-login-asing-ketik-ya",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-SUP",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://chat.obrolan.test/c/2",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#log",
+  "description": "CS e-wallet palsu: percobaan login perangkat lain, minta ketik YA segera",
+  "rationale": "Klaim layanan pelanggan + alarm akun + permintaan balasan + desakan, di chat (SR6).",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; accuracy round 2 dev additions modelled on scam classes in the owner's field sample (same author as the rules), written in own words, labels written before the first run",
+  "created": "2026-10-22"
+}

@@ -14,7 +14,7 @@ import type {
   SupportPressure, SupportResult, SupportRuleId, SupportSignalId, SupportSignalKind, SupportTrustContext,
 } from './types.js';
 
-export const SUPPORT_DETECTOR_VERSION = 'sup-0.3.0-exp';
+export const SUPPORT_DETECTOR_VERSION = 'sup-0.4.0-exp';
 
 const CLAUSE_BREAK = /[,;:!?]|\.(?=\s|$)|(?<![\p{L}\p{N}_])(?:and|then|or|but|dan|lalu|kemudian|atau|tapi|tetapi)(?![\p{L}\p{N}_])/u;
 /** Negation distributes over a disjunction ("never install AnyDesk or share your screen"), so "or"/"atau" does not end its scope. */
@@ -29,12 +29,12 @@ const TIERS: readonly Classification[] = ['observed_instruction', 'suspicious_co
 const LEVELS: readonly Level[] = ['low', 'medium', 'high'];
 const EDUCATIONAL = LEXICON.filter((e) => e.signal === 'C.EDUCATIONAL');
 
-const ACTION_OF: Partial<Record<SupportSignalId, SupportAction>> = { 'SC.CONTACT': 'contact', 'SA.REMOTE': 'remote-access', 'SA.INSTALL': 'install' };
-const CHANNEL_OF: Partial<Record<SupportSignalId, SupportChannel>> = { 'SX.PHONE': 'phone', 'SX.MOBILE': 'mobile', 'SX.MESSENGER': 'messenger' };
+const ACTION_OF: Partial<Record<SupportSignalId, SupportAction>> = { 'SC.CONTACT': 'contact', 'SC.RESPOND': 'respond', 'SA.REMOTE': 'remote-access', 'SA.INSTALL': 'install' };
+const CHANNEL_OF: Partial<Record<SupportSignalId, SupportChannel>> = { 'SX.PHONE': 'phone', 'SX.MOBILE': 'mobile', 'SX.MESSENGER': 'messenger', 'SX.LINK': 'link' };
 const CLAIM_OF: Partial<Record<SupportSignalId, SupportClaim>> = { 'SI.SUPPORT': 'support', 'SI.BANK': 'bank', 'SI.ADMIN': 'administrator', 'SI.SECURITY': 'security-team', 'SI.OFFICIAL': 'official' };
-const PRESSURE_OF: Partial<Record<SupportSignalId, SupportPressure>> = { 'SW.ALERT': 'system-alert', 'ST.THREAT': 'threat', 'SU.URGENCY': 'urgency' };
-const ORDER: readonly string[] = ['contact', 'remote-access', 'install', 'phone', 'mobile', 'messenger', 'support', 'bank', 'administrator', 'security-team', 'official',
-  'system-alert', 'threat', 'urgency', 'page-rendered-system-alert', 'alert-in-overlay', 'remote-access-request', 'software-install-request',
+const PRESSURE_OF: Partial<Record<SupportSignalId, SupportPressure>> = { 'SW.ALERT': 'system-alert', 'SW.ACCOUNT': 'account-alarm', 'ST.THREAT': 'threat', 'SU.URGENCY': 'urgency', 'SP.REWARD': 'reward' };
+const ORDER: readonly string[] = ['contact', 'respond', 'remote-access', 'install', 'phone', 'mobile', 'messenger', 'link', 'support', 'bank', 'administrator', 'security-team', 'official',
+  'system-alert', 'account-alarm', 'threat', 'urgency', 'reward', 'page-rendered-system-alert', 'alert-in-overlay', 'remote-access-request', 'software-install-request',
   'personal-channel-contact', 'claim-in-user-content'];
 const ordered = <T extends string>(xs: Iterable<T>): T[] => [...new Set(xs)].sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b));
 
@@ -45,6 +45,7 @@ export const SUPPORT_RULES: Readonly<Record<SupportRuleId, { name: string; class
   SR3: { name: 'SUPPORT_REDIRECT_UNDER_THREAT', classification: 'manipulative_instruction' },
   SR4: { name: 'CLAIMED_SUPPORT_IN_USER_CONTENT', classification: 'manipulative_instruction' },
   SR5: { name: 'OBSERVED_SUPPORT_DIRECTION', classification: 'observed_instruction' },
+  SR6: { name: 'IMPERSONATED_NOTICE_LURE', classification: 'manipulative_instruction' },
 };
 
 const SUMMARY: Record<SupportRuleId, string> = {
@@ -53,6 +54,7 @@ const SUMMARY: Record<SupportRuleId, string> = {
   SR3: 'A claimed support, bank or administrator directs the reader to an outside contact together with a threat to the account or data, and urgency or a personal contact channel.',
   SR4: 'A comment or other user-posted content presents itself as official support and directs the reader to an outside contact.',
   SR5: 'A direction to contact support, install software or allow remote access was found with no impersonation or pressure signs nearby (for example, a help-center contact page).',
+  SR6: 'A message presented as a notice from a bank, e-wallet, marketplace or its support raises an account alarm, a threat or a reward and asks the reader to reply, choose an option, open a link or fill in a form. Banks and platforms do not settle such matters through a reply or a link in a chat or text message.',
 };
 
 interface Src {
@@ -81,13 +83,13 @@ function kindOfSignal(s: SupportSignalId): SupportSignalKind {
   if (s.startsWith('SC.') || s.startsWith('SA.')) return 'action';
   if (s.startsWith('SX.')) return 'channel';
   if (s.startsWith('SI.')) return 'claim';
-  if (s.startsWith('SW.') || s.startsWith('ST.') || s.startsWith('SU.')) return 'pressure';
+  if (s.startsWith('SW.') || s.startsWith('ST.') || s.startsWith('SU.') || s.startsWith('SP.')) return 'pressure';
   return 'context';
 }
 
 /** Reported page text: phone numbers are never reported; other digit runs and @handles are masked. */
 function reportedText(signal: SupportSignalId, text: string): string {
-  if (signal === 'SX.PHONE' || signal === 'SX.MOBILE') return '';
+  if (signal === 'SX.PHONE' || signal === 'SX.MOBILE' || signal === 'SX.LINK') return '';
   return text.replace(/\d{5,}/gu, (d) => '•'.repeat(d.length)).replace(/@[\p{L}\p{N}_.]+/gu, '@•');
 }
 
@@ -175,15 +177,16 @@ function directionUnits(sources: readonly Src[], signals: readonly Ob[]): Unit[]
     const here = signals.filter((s) => s.src === src && !s.o.negated);
     const isChannel = (s: Ob): boolean => s.o.kind === 'channel';
     const around = signals.filter((s) => s.src.region === src.region && Math.abs(s.src.pos - src.pos) === 1 && isChannel(s) && !s.o.negated);
-    const remoteOrInstall = here.filter((s) => s.o.signal === 'SA.REMOTE' || s.o.signal === 'SA.INSTALL');
+    const remoteOrInstall = here.filter((s) => s.o.signal === 'SA.REMOTE' || s.o.signal === 'SA.INSTALL' || s.o.signal === 'SC.RESPOND');
+    const links = here.filter((s) => s.o.signal === 'SX.LINK');
     const contacts = here.filter((s) => s.o.signal === 'SC.CONTACT');
-    const channelsHere = here.filter(isChannel);
+    const channelsHere = here.filter((s) => isChannel(s) && s.o.signal !== 'SX.LINK');
     const channels = channelsHere.length > 0 ? channelsHere : contacts.length > 0 ? around : [];
     const numberHere = channelsHere.some((s) => s.o.signal !== 'SX.MESSENGER');
     const messengerWithNumber = channelsHere.some((s) => s.o.signal === 'SX.MESSENGER') && numberHere;
     const actions = [...remoteOrInstall, ...(channels.length > 0 && (contacts.length > 0 || messengerWithNumber) ? contacts : [])];
-    if (actions.length === 0 && !messengerWithNumber) continue;
-    units.push({ src, actions, channels: actions.some((a) => a.o.signal === 'SC.CONTACT') || messengerWithNumber ? channels : [] });
+    if (actions.length === 0 && !messengerWithNumber && links.length === 0) continue;
+    units.push({ src, actions, channels: [...(actions.some((a) => a.o.signal === 'SC.CONTACT') || messengerWithNumber ? channels : []), ...links] });
   }
   return units;
 }
@@ -232,7 +235,7 @@ interface Scored {
   modifiers: Array<Omit<SupportModifier, 'evidence'> & { evidence: Array<Ob | string> }>;
 }
 
-const RULE_RANK: Readonly<Record<SupportRuleId, number>> = { SR1: 0, SR2: 1, SR3: 2, SR4: 3, SR5: 4 };
+const RULE_RANK: Readonly<Record<SupportRuleId, number>> = { SR1: 0, SR2: 1, SR3: 2, SR4: 3, SR6: 4, SR5: 5 };
 
 function scoreOne(u: Unit, region: RegionInfo, signals: readonly Ob[], cues: readonly Ob[]): Scored {
   // Claims and pressure count when near the direction and addressed to the reader: inside a quotation or code sample, only in the same block.
@@ -243,7 +246,12 @@ function scoreOne(u: Unit, region: RegionInfo, signals: readonly Ob[], cues: rea
   const claims = nearby.filter((p) => p.o.kind === 'claim');
   const actions = ordered(u.actions.map((a) => ACTION_OF[a.o.signal] as SupportAction));
   const channels = ordered(u.channels.map((c) => CHANNEL_OF[c.o.signal] as SupportChannel));
-  const contact = u.channels.length > 0;
+  const contact = u.channels.some((c) => c.o.signal !== 'SX.LINK');
+  // A lure moves the reader into the sender's flow: a reply or choice, a form, or a link (SR6). Calling a published call-center
+  // line is how genuine notices end; a personal number or messenger with a claim and a threat is SR3's case.
+  const lure = actions.includes('respond') || channels.includes('link');
+  const accountAlarms = nearby.filter((p) => p.o.signal === 'SW.ACCOUNT');
+  const rewards = nearby.filter((p) => p.o.signal === 'SP.REWARD');
   const remote = actions.includes('remote-access');
   const install = actions.includes('install');
   const personal = channels.includes('mobile') || channels.includes('messenger');
@@ -265,6 +273,15 @@ function scoreOne(u: Unit, region: RegionInfo, signals: readonly Ob[], cues: rea
   }
   if (contact && ugc && claims.some((c) => trustOf(c.src).includes('user-content'))) {
     candidates.push(['SR4', threats.length > 0 || urgency.length > 0 ? 'manipulative_instruction' : 'suspicious_correlation', pressure]);
+  }
+  // SR6: an impersonated notice. A claim, a lure and an alarm, threat or reward. Manipulative when the alarm or threat comes with
+  // urgency, a personal channel or user content (a chat, SMS or comment), or when both an alarm and a threat are present.
+  // Only in a message from someone else (chat, SMS, email, comment) or with a personal channel: an institution's own page that
+  // announces a change and links to its site is ordinary, and the page address is never used to tell them apart.
+  if (lure && hasClaim && (untrusted || personal) && (accountAlarms.length > 0 || threats.length > 0 || rewards.length > 0)) {
+    const danger = accountAlarms.length > 0 || threats.length > 0;
+    const strong = danger && (urgency.length > 0 || personal || ugc || (accountAlarms.length > 0 && threats.length > 0));
+    candidates.push(['SR6', strong ? 'manipulative_instruction' : 'suspicious_correlation', [...pressure, ...accountAlarms, ...rewards]]);
   }
   const [ruleId, cls, used] = candidates.sort((x, y) => TIERS.indexOf(y[1]) - TIERS.indexOf(x[1]) || RULE_RANK[x[0]] - RULE_RANK[y[0]])[0]
     ?? ['SR5', 'observed_instruction', []];
@@ -343,7 +360,10 @@ export function analyzeSupport(snapshot: PageSnapshot): SupportResult {
   }
   bindContext(signals, cues);
 
-  const scored = cluster(directionUnits(sources, signals)).map((c) => score(c.units, c.region, signals, cues));
+  // A link alone is not a direction: link-only clusters are kept only when they form an impersonated notice (SR6).
+  const linkOnly = (u: Unit): boolean => u.actions.length === 0 && u.channels.every((c) => c.o.signal === 'SX.LINK');
+  const scored = cluster(directionUnits(sources, signals)).map((c) => score(c.units, c.region, signals, cues))
+    .filter((s) => !(s.ruleId === 'SR5' && s.units.every(linkOnly)));
 
   const used = new Set<Ob>();
   for (const s of scored) {

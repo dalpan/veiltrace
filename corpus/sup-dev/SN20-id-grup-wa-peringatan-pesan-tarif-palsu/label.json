@@ -1,0 +1,21 @@
+{
+  "id": "SN20-id-grup-wa-peringatan-pesan-tarif-palsu",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "negative",
+  "threatClass": "T-SUP",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://chat.obrolan.test/c/5",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "Pesan grup keluarga yang memperingatkan modus perubahan tarif palsu",
+  "rationale": "Peringatan dengan larangan klik dan balas: tidak boleh dianggap umpan.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; accuracy round 2 dev additions modelled on scam classes in the owner's field sample (same author as the rules), written in own words, labels written before the first run",
+  "created": "2026-10-22"
+}

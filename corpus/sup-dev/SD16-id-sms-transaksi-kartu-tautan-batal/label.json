@@ -1,0 +1,22 @@
+{
+  "id": "SD16-id-sms-transaksi-kartu-tautan-batal",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-SUP",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://sms.pesan.test/t/3",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#log",
+  "description": "SMS palsu transaksi kartu kredit dengan tautan pembatalan",
+  "rationale": "Klaim kartu bank + transaksi tak dikenal + tautan + desakan, di pesan (SR6).",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; accuracy round 2 dev additions modelled on scam classes in the owner's field sample (same author as the rules), written in own words, labels written before the first run",
+  "created": "2026-10-22"
+}

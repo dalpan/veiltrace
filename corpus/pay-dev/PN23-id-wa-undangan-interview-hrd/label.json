@@ -1,0 +1,21 @@
+{
+  "id": "PN23-id-wa-undangan-interview-hrd",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "negative",
+  "threatClass": "T-PAY",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://chat.obrolan.test/c/8",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "Undangan wawancara asli lewat chat, tanpa biaya",
+  "rationale": "Pesan rekrutmen tanpa permintaan pembayaran.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; accuracy round 2 dev additions modelled on scam classes in the owner's field sample (same author as the rules), written in own words, labels written before the first run",
+  "created": "2026-10-22"
+}

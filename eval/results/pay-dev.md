@@ -1,24 +1,24 @@
 # Payment detector: development results (pay-dev)
 
-Detector pay-0.3.0-exp (EXPERIMENTAL), extractor 0.3.0. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
+Detector pay-0.4.0-exp (EXPERIMENTAL), extractor 0.3.0. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
 
-TP 15 · FP 0 · TN 20 · FN 0
+TP 17 · FP 0 · TN 23 · FN 0
 
-- Precision: 100.0% (15/15; 95% CI 79.6%–100.0%)
-- Recall: 100.0% (15/15; 95% CI 79.6%–100.0%)
-- Hard-negative FPR: 0.0% (0/20; 95% CI 0.0%–16.1%)
-- Localization: 100.0% (15/15; 95% CI 79.6%–100.0%)
-- Exact class agreement: 91.4% (32/35; 95% CI 77.6%–97.0%)
+- Precision: 100.0% (17/17; 95% CI 81.6%–100.0%)
+- Recall: 100.0% (17/17; 95% CI 81.6%–100.0%)
+- Hard-negative FPR: 0.0% (0/23; 95% CI 0.0%–14.3%)
+- Localization: 100.0% (17/17; 95% CI 81.6%–100.0%)
+- Exact class agreement: 92.5% (37/40; 95% CI 80.1%–97.4%)
 - Requests during scanning: 0; privacy sentinel leaks: 0 (3 fields filled)
 
 ## Class matrix
 
 | expected \ predicted | none | observed | suspicious | manipulative |
 |---|---|---|---|---|
-| none | 3 | 0 | 0 | 0 |
-| observed | 3 | 14 | 0 | 0 |
+| none | 5 | 0 | 0 | 0 |
+| observed | 3 | 15 | 0 | 0 |
 | suspicious | 0 | 0 | 1 | 0 |
-| manipulative | 0 | 0 | 0 | 14 |
+| manipulative | 0 | 0 | 0 | 16 |
 
 ## Per scenario
 
@@ -39,6 +39,8 @@ TP 15 · FP 0 · TN 20 · FN 0
 | PD12-en-realistic-parcel-customs-fee | malicious | manipulative | manipulative | PR1:manipulative_instruction | ✓ | none | none |
 | PD13-id-rekrutmen-jalur-khusus | malicious | manipulative | manipulative | PR1:manipulative_instruction | ✓ | none | none |
 | PD14-id-catut-dandim-dana-kegiatan | malicious | manipulative | manipulative | PR2:manipulative_instruction | ✓ | none | none |
+| PD15-id-wa-lowongan-seragam-ewallet | malicious | manipulative | manipulative | PR1:manipulative_instruction | ✓ | none | none |
+| PD16-id-email-kerja-tanpa-interview-biaya-admin | malicious | manipulative | manipulative | PR1:manipulative_instruction | ✓ | none | none |
 | PN01-en-checkout | benign | observed | observed | PR4:observed_instruction, PR4:observed_instruction |  | none | none |
 | PN02-id-checkout-virtual-account | benign | observed | observed | PR4:observed_instruction |  | none | none |
 | PN03-en-invoice | benign | observed | observed | PR4:observed_instruction |  | none | none |
@@ -59,3 +61,6 @@ TP 15 · FP 0 · TN 20 · FN 0
 | PN18-en-realistic-donation-campaign | benign | observed | none |  |  | none | none |
 | PN19-id-pengumuman-rekrutmen-resmi | benign | none | none |  |  | none | none |
 | PN20-id-berita-penipuan-rekrutmen | benign | observed | observed | PR1:observed_instruction |  | none | none |
+| PN21-id-lowongan-resmi-tanpa-biaya | benign | none | none |  |  | none | none |
+| PN22-id-pelatihan-biaya-pendaftaran | benign | observed | observed | PR4:observed_instruction |  | none | none |
+| PN23-id-wa-undangan-interview-hrd | benign | none | none |  |  | none | none |

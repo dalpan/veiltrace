@@ -4,6 +4,11 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-22 · Accuracy round 2 from the owner's field sample (D-091)
+15 redacted field records (RW-0001 … RW-0015, all `seen`, dev half). Before: 2 of 14 scams alerted. After `sup-0.4.0-exp` (SR6 impersonated-notice lure) and `pay-0.4.0-exp` (job-offer fees): 11 of 14, genuine bank SMS observed only (dev numbers, same author). sup-dev TP 18 · FP 0 · TN 21 · FN 0; pay-dev TP 17 · FP 0 · TN 23 · FN 0; cred-dev and ClickFix dev unchanged. `npm test`: 716 passed, 1 skipped. Owner's demo report (pay-lure, cred-lure not flagged) traced to a stale extension build: current build flags both in the real popup; extension version bumped to 0.7.0. **Next:** owner labels the records (annotator A) and finds annotator B; more field records go in unseen (test half). **Blockers:** labels; real-device tests.
+
+---
+
 ## 2026-10-22 · Held-out v2 run (owner request) · **Done: targets missed**
 One preregistered run at `29dda8e`: overall TP 11 · FP 5 · TN 23 · FN 21; recall 34.4%, precision 68.8%, hard-negative FPR 17.9% (docs/EVALUATION_RESULTS_V2.md). The rules overfit the author's wording; v2 is now spent. **Next:** class-level fixes measured on real-world data and a new blind set v3.
 

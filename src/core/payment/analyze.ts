@@ -13,7 +13,7 @@ import type {
   PaymentResult, PayTrustContext,
 } from './types.js';
 
-export const PAY_DETECTOR_VERSION = 'pay-0.3.0-exp';
+export const PAY_DETECTOR_VERSION = 'pay-0.4.0-exp';
 
 /** Same clause and sentence breaks as the ClickFix binding, except that a period inside a number ("Rp 150.000") is not a break. */
 const CLAUSE_BREAK = /[,;:!?]|\.(?=\s|$)|(?<![\p{L}\p{N}_])(?:and|then|or|but|dan|lalu|kemudian|atau|tapi|tetapi)(?![\p{L}\p{N}_])/u;
@@ -27,11 +27,11 @@ const DESTINATION_OF: Partial<Record<PaySignalId, PayDestination>> = {
   'PD.PERSONAL': 'personal-account', 'PD.OFF_PLATFORM': 'off-platform', 'PD.GIFT_CARD': 'gift-card', 'PD.CRYPTO': 'crypto',
 };
 const PROMISE_OF: Partial<Record<PaySignalId, PayPromise>> = {
-  'PR.REFUND': 'refund', 'PR.PRIZE': 'prize', 'PR.UNLOCK': 'account-unlock', 'PF.RELEASE_FEE': 'release', 'PR.RECRUIT': 'recruitment',
+  'PR.REFUND': 'refund', 'PR.PRIZE': 'prize', 'PR.UNLOCK': 'account-unlock', 'PF.RELEASE_FEE': 'release', 'PR.RECRUIT': 'recruitment', 'PR.JOB': 'job',
 };
 const PRESSURE_OF: Partial<Record<PaySignalId, PayPressure>> = { 'PP.THREAT': 'threat', 'PP.URGENCY': 'urgency', 'PP.AUTHORITY': 'claimed-authority' };
 /** Reporting order of the finding's lists (deterministic, independent of where the evidence sits on the page). */
-const ORDER: readonly string[] = ['refund', 'prize', 'account-unlock', 'release', 'recruitment', 'personal-account', 'off-platform', 'gift-card', 'crypto', 'claimed-authority', 'threat', 'urgency'];
+const ORDER: readonly string[] = ['refund', 'prize', 'account-unlock', 'release', 'recruitment', 'job', 'personal-account', 'off-platform', 'gift-card', 'crypto', 'claimed-authority', 'threat', 'urgency'];
 const ordered = <T extends string>(xs: Iterable<T>): T[] => [...new Set(xs)].sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b));
 
 /** Highest classification each rule can produce; the actual one depends on the pressure found (DETECTION_MODEL.md §13). */
@@ -85,7 +85,8 @@ function kindOfSignal(s: PaySignalId): PaySignalKind {
 
 /** Page text of an observation: amounts are never reported, and long digit runs (account or card numbers) are masked. */
 function reportedText(signal: PaySignalId, text: string): string {
-  return signal === 'PA.AMOUNT' ? '' : text.replace(/\d{5,}/gu, (d) => '•'.repeat(d.length));
+  // Grouped numbers ("0813 0000 2222") are masked as a whole, like long digit runs.
+  return signal === 'PA.AMOUNT' ? '' : text.replace(/\d(?:[\d\s-]{7,}\d)|\d{5,}/gu, (d) => d.replace(/\d/gu, '•'));
 }
 
 function match(src: Src): Ob[] {

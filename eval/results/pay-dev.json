@@ -1,71 +1,71 @@
 {
   "split": "pay-dev",
   "note": "DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.",
-  "detectorVersion": "pay-0.3.0-exp",
+  "detectorVersion": "pay-0.4.0-exp",
   "extractorVersion": "0.3.0",
   "metrics": {
-    "scenarios": 35,
+    "scenarios": 40,
     "confusion": {
-      "tp": 15,
+      "tp": 17,
       "fp": 0,
-      "tn": 20,
+      "tn": 23,
       "fn": 0
     },
     "precision": {
-      "k": 15,
-      "n": 15,
+      "k": 17,
+      "n": 17,
       "value": 1,
       "ci95": [
-        0.7961,
+        0.8157,
         1
       ]
     },
     "recall": {
-      "k": 15,
-      "n": 15,
+      "k": 17,
+      "n": 17,
       "value": 1,
       "ci95": [
-        0.7961,
+        0.8157,
         1
       ]
     },
     "fpr": {
       "k": 0,
-      "n": 20,
+      "n": 23,
       "value": 0,
       "ci95": [
         0,
-        0.1611
+        0.1431
       ]
     },
     "hardNegativeFpr": {
       "k": 0,
-      "n": 20,
+      "n": 23,
       "value": 0,
       "ci95": [
         0,
-        0.1611
+        0.1431
       ]
     },
     "localization": {
-      "k": 15,
-      "n": 15,
+      "k": 17,
+      "n": 17,
       "value": 1,
       "ci95": [
-        0.7961,
+        0.8157,
         1
       ]
     },
     "classMatrix": [
       [
-        3,
+        5,
         0,
         0,
         0
       ],
       [
         3,
-        14,
+        15,
         0,
         0
       ],
@@ -79,19 +79,19 @@
         0,
         0,
         0,
-        14
+        16
       ]
     ],
     "exactClassAgreement": {
-      "k": 32,
-      "n": 35,
-      "value": 0.9143,
+      "k": 37,
+      "n": 40,
+      "value": 0.925,
       "ci95": [
-        0.7762,
-        0.9704
+        0.8014,
+        0.9742
       ]
     },
-    "observedOnNegatives": 14,
+    "observedOnNegatives": 15,
     "byLanguage": {
       "en": {
         "recall": {
@@ -115,21 +115,21 @@
       },
       "id": {
         "recall": {
-          "k": 9,
-          "n": 9,
+          "k": 11,
+          "n": 11,
           "value": 1,
           "ci95": [
-            0.7009,
+            0.7412,
             1
           ]
         },
         "fpr": {
           "k": 0,
-          "n": 10,
+          "n": 13,
           "value": 0,
           "ci95": [
             0,
-            0.2775
+            0.2281
           ]
         }
       }
@@ -403,6 +403,42 @@
       "predicted": "manipulative_instruction",
       "findings": [
         "PR2:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PD15-id-wa-lowongan-seragam-ewallet",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "PR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PD16-id-email-kerja-tanpa-interview-biaya-admin",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "PR1:manipulative_instruction"
       ],
       "localized": true,
       "clickfixVerdict": "none",
@@ -753,6 +789,56 @@
       "findings": [
         "PR1:observed_instruction"
       ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN21-id-lowongan-resmi-tanpa-biaya",
+      "lang": "id",
+      "category": "negative",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN22-id-pelatihan-biaya-pendaftaran",
+      "lang": "id",
+      "category": "negative",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "PR4:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN23-id-wa-undangan-interview-hrd",
+      "lang": "id",
+      "category": "negative",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
       "localized": null,
       "clickfixVerdict": "none",
       "credentialVerdict": "none",

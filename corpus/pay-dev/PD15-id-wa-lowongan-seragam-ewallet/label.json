@@ -1,0 +1,22 @@
+{
+  "id": "PD15-id-wa-lowongan-seragam-ewallet",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-PAY",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://chat.obrolan.test/c/6",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#log",
+  "description": "Lowongan palsu via WA: karyawan baru wajib beli seragam, bayar ke e-wallet pribadi malam ini",
+  "rationale": "Janji pekerjaan + kewajiban membayar sebelum mulai + e-wallet pribadi + desakan (PR1).",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; accuracy round 2 dev additions modelled on scam classes in the owner's field sample (same author as the rules), written in own words, labels written before the first run",
+  "created": "2026-10-22"
+}

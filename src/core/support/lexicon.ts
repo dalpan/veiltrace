@@ -13,6 +13,9 @@ function entry(id: string, signal: SupportLexiconEntry['signal'], lang: Lang, st
 const REMOTE_TOOL = '(?:anydesk|teamviewer(?:\\s+quick\\s*support)?|quick\\s*support|rustdesk|ultraviewer|supremo|airdroid|remote\\s+desktop|remote\\s+access\\s+(?:app|tool|software))';
 const APP = '(?:apps?|application|software|program|tool|apk|\\.apk|aplikasi|apl|file\\s+apk)';
 
+// Indonesian banks, e-wallets and marketplaces most often named in impersonated notices (sup-0.4.0, D-091). A name is a claim only.
+const BRAND_ID = '(?:bri|bni|bca|mandiri|bsi|btn|cimb(?:\\s+niaga)?|danamon|permata|dana|ovo|gopay|shopee(?:pay)?|tokopedia|lazada|bukalapak|blibli|akulaku|kredivo|jne|j&t|sicepat)';
+
 const ACTIONS: SupportLexiconEntry[] = [
   entry('sup.en.contact', 'SC.CONTACT', 'en', 'strong',
     `${B}(?:call|phone|ring|dial|contact|reach|text|message|chat\\s+with|speak\\s+(?:to|with)|talk\\s+to|get\\s+in\\s+touch\\s+with)${E}`,
@@ -27,6 +30,13 @@ const ACTIONS: SupportLexiconEntry[] = [
   entry('sup.id.remote', 'SA.REMOTE', 'id', 'strong',
     `${B}(?:(?:instal|install|pasang|unduh|download|dl|donlot|buka|jalankan)\\s+${REMOTE_TOOL}|(?:izinkan|berikan|kasih)\\s+akses\\s+(?:jarak\\s+jauh|remote)|(?:bagikan|share|bagi)\\s+layar|(?:kirim|kasih|sebutkan|berikan)\\s+(?:kode|id)\\s+(?:anydesk|teamviewer))${E}`,
     ['instal AnyDesk', 'izinkan akses jarak jauh', 'share layar', 'kirim kode anydesk']),
+  // A reply, choice, link or form that moves the reader into the sender's flow (sup-0.4.0, D-091). "Reply STOP" opt-outs are not.
+  entry('sup.id.respond', 'SC.RESPOND', 'id', 'strong',
+    `${B}(?:balas(?:lah)?\\s+(?:dengan\\s+)?(?:angka\\s+)?(?:\\d|ya|setuju|pesan\\s+ini)|ketik\\s*[,(]*\\s*\\(?\\s*(?:ya|y|setuju|\\d)\\b|kirim(?:kan)?\\s+(?:jawaban|balasan)|(?:klik|buka|kunjungi|akses)\\s+(?:link|tautan|situs|website)|(?:isi|lengkapi)\\s+(?:formulir|form|data\\s+(?:diri|anda))|(?:melalui|lewat|via)\\s+(?:tautan|link)|konfirmasi\\s*/\\s*persetujuan|(?:di\\s?)?wajib(?:kan)?\\s+(?:melakukan\\s+)?(?:verifikasi|pengosongan|pemulihan|menghubungkan|hubungkan)|wajib\\s+hubungkan)${E}`,
+    ['balas 1 atau 2', 'ketik,(YA)', 'kirim jawaban', 'klik link', 'isi formulir', 'melalui tautan', 'KONFIRMASI/PERSETUJUAN', 'di wajibkan melakukan verifikasi']),
+  entry('sup.en.respond', 'SC.RESPOND', 'en', 'strong',
+    `${B}(?:reply\\s+(?:with\\s+)?(?:yes|y|\\d)|(?:click|tap|open|visit)\\s+(?:on\\s+)?(?:the\\s+|this\\s+)?(?:link|here)|fill\\s+(?:in|out)\\s+(?:the\\s+|this\\s+)?form|(?:via|through|using)\\s+the\\s+link)${E}`,
+    ['reply YES', 'click the link', 'fill out the form', 'via the link']),
   // Installing an app or file the page or message points to.
   entry('sup.en.install', 'SA.INSTALL', 'en', 'strong',
     `${B}(?:install|download)\\s+(?:the\\s+|this\\s+|our\\s+|a\\s+)?(?:[\\p{L}-]+\\s+){0,2}?${APP}${E}`,
@@ -37,6 +47,10 @@ const ACTIONS: SupportLexiconEntry[] = [
 ];
 
 const CHANNELS: SupportLexiconEntry[] = [
+  // A link in the text. Only its presence counts; the address is never reported or judged (no domain lists, D1).
+  entry('sup.link', 'SX.LINK', 'en', 'strong',
+    `${B}(?:https?://[^\\s<>"']+|www\\.[^\\s<>"']+|[a-z0-9-]+(?:\\.[a-z0-9-]+)*\\.(?:com|id|net|org|xyz|top|site|online|info|link|me|io|app|ly|cc|biz|click|icu|vip|shop)/[^\\s<>"']*)`,
+    ['https://example.invalid/x', 'www.example.invalid', 'bio.site/konfirmasi']),
   // Phone numbers (9–15 digits, checked in analyze.ts). The number itself is never reported.
   entry('sup.phone', 'SX.PHONE', 'en', 'strong',
     `${B}(?:\\+\\s?\\d{1,3}[\\s.-]?)?(?:\\(\\d{1,4}\\)\\s?)?\\d{2,5}(?:[\\s.-]\\d{2,5}){1,4}${E}|${B}\\+?\\d{9,15}${E}`,
@@ -59,6 +73,13 @@ const CLAIMS: SupportLexiconEntry[] = [
     `${B}(?:bank\\s+(?:officer|representative|staff|security|fraud\\s+team)|fraud\\s+(?:department|team|prevention\\s+team)|(?:your|the)\\s+bank${"['’]"}s\\s+(?:security|fraud)\\s+team)${E}`,
     ['bank officer', 'fraud department']),
   entry('sup.id.claim_bank', 'SI.BANK', 'id', 'weak', `${B}(?:petugas\\s+bank|pihak\\s+bank|staf\\s+bank|tim\\s+fraud|cs\\s+bank)${E}`, ['petugas bank', 'pihak bank']),
+  // A notice addressed to a bank's customers or signed as a bank (sup-0.4.0): still a claim, never verified.
+  entry('sup.id.claim_bank_notice', 'SI.BANK', 'id', 'weak',
+    `${B}(?:(?:kepada|yth\\.?)\\s+(?:bpk\\s*/\\s*ibu\\s+|bapak\\s*/\\s*ibu\\s+)?nasabah|nasabah\\s+(?:yang\\s+terhormat|yth|bank)|pt\\.?\\s+bank\\s+\\p{L}+|bank\\s+${BRAND_ID}|${BRAND_ID}\\s+info|kartu\\s+kredit\\s+${BRAND_ID}|kartu\\s+(?:kredit|debit)\\s+(?:bank\\s+)?\\p{L}+(?:\\s+\\p{L}+)?\\s+anda)${E}`,
+    ['Kepada Nasabah', 'Nasabah Yang Terhormat', 'PT. Bank Negara', 'Bank BRI', 'BRI Info', 'Kartu Kredit BNI']),
+  entry('sup.id.claim_brand_support', 'SI.SUPPORT', 'id', 'weak',
+    `${B}(?:${BRAND_ID}\\s+(?:care|cs|official|support|affiliate|indonesia)|(?:cs|customer(?:\\s+service)?|layanan(?:\\s+pelanggan)?|pelayanan|admin|tim|pihak)\\s+(?:resmi\\s+)?${BRAND_ID}|pt\\.?\\s+${BRAND_ID})${E}`,
+    ['DANA Care', 'CUSTOMER DANA', 'Layanan Pelanggan Shopee', 'Admin Shopee', 'PT SHOPEE']),
   entry('sup.en.claim_admin', 'SI.ADMIN', 'en', 'weak',
     `${B}(?:(?:system|site|network|it)\\s+administrator|administrator|admin\\s+team|it\\s+department|moderator\\s+team)${E}`, ['system administrator', 'IT department']),
   entry('sup.id.claim_admin', 'SI.ADMIN', 'id', 'weak', `${B}(?:admin(?:istrator)?(?:\\s+(?:resmi|grup|sistem))?|mimin|tim\\s+it|bagian\\s+it)${E}`, ['admin', 'mimin', 'tim IT']),
@@ -91,11 +112,28 @@ const PRESSURE: SupportLexiconEntry[] = [
   entry('sup.id.threat', 'ST.THREAT', 'id', 'weak',
     `${B}(?:(?:akun|rekening|kartu|data|file|nomor)(?:nya|\\s+(?:anda|kamu|mu))?\\s+(?:akan\\s+|bakal\\s+|telah\\s+|sudah\\s+|mau\\s+)?(?:di)?(?:blokir|suspend|nonaktifkan|tutup|bekukan|hapus|banned)|kena\\s+(?:blokir|suspend|banned))${E}`,
     ['akun Anda akan diblokir', 'akunnya bakal disuspend', 'kena blokir']),
+  // Account alarms used to open impersonated notices: an unfamiliar sign-in, an unrecognized transaction, a feature or tariff the
+  // reader did not ask for (sup-0.4.0, D-091). Genuine notices raise them too; they count only with a claim and a lure.
+  entry('sup.id.account_alarm', 'SW.ACCOUNT', 'id', 'weak',
+    `${B}(?:percobaan\\s+login|login\\s+(?:dari\\s+perangkat\\s+(?:lain|baru)|tidak\\s+(?:di\\s?)?kenal)|terdeteksi\\s+login|(?:aktivitas|tindakan|transaksi)\\s+(?:yang\\s+)?(?:tidak\\s+biasa|mencurigakan)|(?:trx|transaksi)\\s+(?:yang\\s+)?tidak\\s+(?:anda\\s+)?(?:kenal|kenali)|tidak\\s+merasa\\s+(?:melakukan|mengaktifkan|mengajukan)|perubahan\\s+(?:skema\\s+)?tarif|tarif\\s+baru)${E}`,
+    ['Percobaan Login', 'login tidak di kenal', 'aktivitas tidak biasa', 'Trx Tidak Anda Kenal', 'tidak merasa mengaktifkan', 'Perubahan Tarif']),
+  entry('sup.en.account_alarm', 'SW.ACCOUNT', 'en', 'weak',
+    `${B}(?:(?:unusual|suspicious)\\s+(?:activity|sign-?in|login|transaction)|(?:sign-?in|login)\\s+attempt|unrecogni[sz]ed\\s+(?:transaction|purchase|charge|device|login)|(?:did\\s+not|didn${"['’]"}t)\\s+(?:make|authori[sz]e|request)\\s+this)${E}`,
+    ['unusual activity', 'sign-in attempt', 'unrecognized transaction', "didn't authorize this"]),
+  // A consequence that applies unless the reader answers, or a criminal penalty (sup-0.4.0).
+  entry('sup.id.default_threat', 'ST.THREAT', 'id', 'weak',
+    `${B}(?:jika\\s+tidak\\s+ada\\s+(?:konfirmasi|balasan|jawaban)|(?:di\\s?)?anggap\\s+(?:setuju|aktif|menyetujui)|agar\\s+tidak\\s+(?:di\\s?)?(?:berlakukan|kenakan|bebankan)|sanksi\\s+pidana|(?:di\\s?)?pidana\\s+penjara|denda\\s+paling\\s+banyak|auto\\s*debet)${E}`,
+    ['JIKA TIDAK ADA KONFIRMASI', 'DI ANGGAP AKTIF', 'agar tidak diberlakukan', 'sanksi pidana', 'di pidana penjara']),
+  // A reward offered to start the exchange (points to redeem, vouchers, cash).
+  entry('sup.id.reward', 'SP.REWARD', 'id', 'weak',
+    `${B}(?:poin\\s+(?:[\\p{L}]+\\s+){0,4}?(?:dapat|bisa)\\s+(?:di\\s?)?tukar(?:kan)?|tukar(?:kan)?\\s+poin|voucher\\s+belanja|uang\\s+tunai|hadiah\\s+(?:undian|langsung|uang))${E}`,
+    ['poin Dapat di tukar', 'voucher belanja', 'uang tunai']),
+  entry('sup.en.reward', 'SP.REWARD', 'en', 'weak', `${B}(?:redeem\\s+(?:your\\s+)?points|reward\\s+points|cash\\s+prize|shopping\\s+voucher)${E}`, ['redeem your points', 'cash prize']),
   entry('sup.en.urgency', 'SU.URGENCY', 'en', 'weak',
     `${B}(?:(?<!(?:expires?|valid\\s+for|valid)\\s)within\\s+\\d+\\s+(?:minutes?|mins?|hours?|hrs?)|immediately|right\\s+now|act\\s+now|urgent(?:ly)?|as\\s+soon\\s+as\\s+possible|asap|final\\s+warning)${E}`,
     ['immediately', 'within 5 minutes', 'urgent']),
   entry('sup.id.urgency', 'SU.URGENCY', 'id', 'weak',
-    `${B}(?:dalam\\s+(?:waktu\\s+)?\\d+\\s+(?:menit|jam)|segera|sekarang\\s+juga|secepatnya|buruan|cpt|cepetan|skrg\\s+juga|hari\\s+ini\\s+juga|peringatan\\s+terakhir)${E}`,
+    `${B}(?:dalam\\s+(?:waktu\\s+)?\\d+\\s+(?:menit|jam)|segerah?|secepat\\s+mungkin|sekarang\\s+juga|secepatnya|buruan|cpt|cepetan|skrg\\s+juga|hari\\s+ini\\s+juga|peringatan\\s+terakhir)${E}`,
     ['segera', 'buruan', 'cpt', 'dalam 10 menit']),
 ];
 

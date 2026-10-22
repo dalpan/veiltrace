@@ -53,6 +53,12 @@ describe('records, split and lock', () => {
     expect(validateRecord(rec('RW-0001', 'x', [{ annotator: 'A', truth: 'benign', category: 'cred', expected: 'manipulative' }])).join(' ')).toMatch(/inconsistent/);
   });
 
+  it('a record the rule author saw before the split is always dev (D-091)', () => {
+    const testId = ['RW-0001', 'RW-0002', 'RW-0003', 'RW-0004', 'RW-0005'].find((id) => splitFor(id) === 'test')!;
+    expect(validateRecord(rec(testId, 'x', [], { split: 'dev', seen: 'rule author' }))).toEqual([]);
+    expect(validateRecord(rec(testId, 'x', [], { split: 'test', seen: 'rule author' })).join(' ')).toMatch(/deterministic/);
+  });
+
   it('detects a changed or missing locked record and test records added after the lock', () => {
     const records = [rec('RW-0001', 'a'), rec('RW-0002', 'b'), rec('RW-0003', 'c'), rec('RW-0004', 'd')];
     const testOnes = records.filter((r) => r.split === 'test');

@@ -1,0 +1,22 @@
+{
+  "id": "SD14-id-wa-pemberitahuan-tarif-bank",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-SUP",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://chat.obrolan.test/c/1",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#log",
+  "description": "Pesan WA mengaku bank: perubahan tarif, minta balas 1/2, diam dianggap setuju",
+  "rationale": "Klaim bank + alarm perubahan tarif + ancaman \"dianggap setuju\" + permintaan balasan, di pesan chat (SR6).",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; accuracy round 2 dev additions modelled on scam classes in the owner's field sample (same author as the rules), written in own words, labels written before the first run",
+  "created": "2026-10-22"
+}

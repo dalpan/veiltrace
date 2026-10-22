@@ -165,3 +165,46 @@ describe('support detector sup-0.3.0-exp: rank and investigator claims (D-087)',
   });
 });
 
+
+describe('support detector sup-0.4.0-exp: impersonated notices (SR6, D-091)', () => {
+  it('a bank tariff notice in a chat that asks for a reply and treats silence as consent → manipulative', () => {
+    const r = sup(inContainer('ugc:#chat', ['Kepada Nasabah Yth, PT Bank Nusantara mengubah tarif transaksi menjadi Rp 150.000 per bulan.',
+      'Balas 1 untuk SETUJU atau 2 untuk TIDAK SETUJU.', 'Jika tidak ada konfirmasi, nasabah dianggap setuju dengan tarif baru.']));
+    expect(r.detectorVersion).toBe(SUPPORT_DETECTOR_VERSION);
+    expect(short(r)).toEqual(['SR6:manipulative_instruction']);
+    expect(r.findings[0]).toMatchObject({ requestedActions: ['respond'], claims: ['bank'], pressures: expect.arrayContaining(['account-alarm', 'threat']) });
+  });
+
+  it('an e-wallet support message about a sign-in from another device that asks to type YES → manipulative', () => {
+    expect(short(sup(inContainer('ugc:#chat', ['Halo kak, saya dari Layanan Pelanggan DompetKu.', 'Ada percobaan login dari perangkat lain di akun kakak.',
+      'Kalau bukan kakak, segera ketik YA supaya kami bantu.'])))).toEqual(['SR6:manipulative_instruction']);
+  });
+
+  it('a card transaction SMS with a cancellation link → manipulative; the link is never reported', () => {
+    const r = sup(inContainer('ugc:#sms', ['Transaksi Kartu Kredit Bank Nusantara Anda Rp 3.250.000 berhasil. Bila trx tidak Anda kenali, batalkan segera di https://batal.example.invalid/k9']));
+    expect(r.verdict).toBe('manipulative_instruction');
+    expect(r.findings[0]!.channels).toEqual(['link']);
+    expect(JSON.stringify(r)).not.toContain('example.invalid');
+    expect(r.observations.filter((o) => o.signal === 'SX.LINK').every((o) => o.text === '')).toBe(true);
+  });
+
+  it('a points-for-voucher offer from claimed support asking for a choice → suspicious only', () => {
+    expect(short(sup(inContainer('ugc:#chat', ['Kami dari customer service DompetKu.', 'Poin transaksi kakak dapat ditukar dengan voucher belanja Rp 500.000.',
+      'Silakan balas 1 atau 2 sesuai pilihan kakak.'])))).toEqual(['SR6:suspicious_correlation']);
+  });
+
+  it('a genuine transaction SMS that points to the call center stays observed', () => {
+    expect(sup(inContainer('ugc:#sms', ['Transaksi Kartu Kredit Bank Nusantara Anda Rp 150.000 berhasil.', 'Jika bukan transaksi Anda, hubungi Nusantara Call 1500-123.'])).verdict)
+      .not.toMatch(/suspicious|manipulative/);
+  });
+
+  it('a family-group warning that forbids clicking and replying is not a lure', () => {
+    expect(sup(inContainer('ugc:#chat', ['Hati-hati, beredar pesan palsu mengatasnamakan Bank BRI soal perubahan tarif.',
+      'Jangan klik link dan jangan balas pesan seperti itu.'])).verdict).toBe('none');
+  });
+
+  it("a bank's own announcement page with a link to its site is not a lure (SR6 needs a message context)", () => {
+    expect(sup(['Kepada Nasabah Yth, mulai Desember ada perubahan tarif transfer antarbank menjadi Rp 2.500.',
+      'Informasi lengkap: https://www.banknusantara.example/tarif']).verdict).toBe('none');
+  });
+});

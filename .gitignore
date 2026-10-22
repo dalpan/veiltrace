@@ -18,3 +18,4 @@ release/
 
 # Generated submission PDFs (npm run submission:pdf)
 submission/dist/
+kasus-nyata/

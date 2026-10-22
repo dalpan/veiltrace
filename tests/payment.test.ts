@@ -167,3 +167,31 @@ describe('payment detector pay-0.3.0-exp: recruitment scams and rank impersonati
   });
 });
 
+
+describe('payment detector pay-0.4.0-exp: job-offer fees (D-091)', () => {
+  it('a job call that requires new hires to buy a uniform, paid to an e-wallet tonight → manipulative (PR1)', () => {
+    const r = pay(inContainer('ugc:#chat', ['Panggilan kerja untuk posisi pencuci mobil, mulai besok.',
+      'Karyawan baru wajib membeli seragam Rp 120.000, dibayar lewat e-wallet DANA 0813 0000 2222 malam ini juga.']));
+    expect(r.detectorVersion).toBe(PAY_DETECTOR_VERSION);
+    expect(short(r)).toEqual(['PR1:manipulative_instruction']);
+    expect(r.findings[0]!.promises).toContain('job');
+    expect(JSON.stringify(r)).not.toContain('0813');
+  });
+
+  it('hired without a test on condition of an administration fee → manipulative (PR1)', () => {
+    expect(short(pay(inContainer('ugc:#mail', ['Anda bisa langsung bergabung tanpa tes maupun wawancara, langsung tanda tangan kontrak.',
+      'Dengan syarat biaya administrasi Rp 300.000. Segera konfirmasi.'])))).toEqual(['PR1:manipulative_instruction']);
+  });
+
+  it('a job page that states recruitment is free and warns about uniform fees is not a request', () => {
+    expect(pay(['Lowongan: Staf Gudang. Gaji Rp 4.800.000 per bulan.', 'Seluruh proses rekrutmen tidak dipungut biaya. Waspadai pihak yang meminta biaya seragam atas nama kami.']).verdict).toBe('none');
+  });
+
+  it('a paid course that mentions job openings stays observed', () => {
+    expect(pay(['Biaya pendaftaran Rp 750.000, bayar melalui virtual account setelah mengisi formulir.', 'Peserta yang lulus mendapat informasi lowongan kerja dari mitra kami.']).verdict).toBe('observed_instruction');
+  });
+
+  it('"atas nama" the reader is not a personal payee', () => {
+    expect(pay(['Resi pengiriman atas nama masnya, baru selesaikan pembayaran Rp 2.000.000 setelah barang dikirim.']).verdict).not.toMatch(/suspicious|manipulative/);
+  });
+});

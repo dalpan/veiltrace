@@ -37,6 +37,8 @@ export interface RecordV1 {
   /** "public: <defanged reference>" or "private: volunteer submission". */
   origin: string;
   split: 'dev' | 'test';
+  /** Set when the rule author saw the record before the split (D-091): it is then always dev, never held out. */
+  seen?: string;
   labels: Label[];
   /** Set by adjudication when annotators disagree. */
   final?: Omit<Label, 'annotator'>;
@@ -131,7 +133,8 @@ export function validateRecord(r: RecordV1): string[] {
   req(['wa', 'sms', 'web-comment', 'web-page', 'email', 'social', 'other'].includes(r.source), 'invalid source');
   req(['chat', 'comment', 'page', 'dialog'].includes(r.context), 'invalid context');
   req(typeof r.text === 'string' && r.text.length > 0 && r.text.length <= 4000, 'text must be 1–4000 characters');
-  req(r.split === splitFor(r.id), 'split must match the deterministic assignment');
+  req(r.split === (r.seen ? 'dev' : splitFor(r.id)), 'split must match the deterministic assignment (dev when seen)');
+  req(r.seen === undefined || (typeof r.seen === 'string' && r.seen.length > 0), 'seen must be a non-empty reason');
   req(/^(public|private): /.test(r.origin), 'origin must start with "public: " or "private: "');
   for (const p of privacyProblems(r.text)) e.push(`${r.id}: contains ${p}; redact it`);
   for (const l of r.labels) {
@@ -175,8 +178,17 @@ const CONTAINER: Record<Context, string> = { chat: 'ugc:#message', comment: 'ugc
  * A text record shown as the content a detector would see: one block per non-empty line, inside a container that matches
  * where such text appears (a chat message or comment is content written by someone else). An approximation of a page.
  */
+/**
+ * Redaction placeholders stand for a link, a number or an address that was in the message. The detectors see a fictional value of
+ * the same shape, as they would in the original message; nothing of the original is restored.
+ */
+export function restorePlaceholders(text: string): string {
+  return text.replace(/\[TAUTAN\]/gu, 'https://link.example.invalid/x').replace(/\[NOMOR\]/gu, '081200000000')
+    .replace(/\[EMAIL\]/gu, 'someone@example.invalid').replace(/\[ANGKA\]/gu, '1234567890');
+}
+
 export function snapshotOf(r: RecordV1): PageSnapshot {
-  const lines = r.text.split('\n').map((t) => t.trim()).filter(Boolean);
+  const lines = restorePlaceholders(r.text).split('\n').map((t) => t.trim()).filter(Boolean);
   return {
     schemaVersion: 1, url: 'about:blank', title: '', lang: r.lang,
     blocks: lines.map((t, i) => ({ id: `b${i}`, text: t, containerId: CONTAINER[r.context], locator: `#b${i}`, ctx: r.context === 'dialog' ? { dialog: true } : {}, headingContext: null })),
@@ -242,8 +254,9 @@ async function main(): Promise<void> {
     const rec: RecordV1 = {
       id, schema: 1, lang: (arg('lang') ?? 'id') as RecordV1['lang'], source: (arg('source') ?? 'other') as Source, context: (arg('context') ?? 'chat') as Context,
       text: r.text, collected: arg('collected') ?? new Date().toISOString().slice(0, 10), collector: arg('collector') ?? 'unknown',
-      origin: arg('origin') ?? 'private: volunteer submission', split: splitFor(id), labels: [],
+      origin: arg('origin') ?? 'private: volunteer submission', split: arg('seen') ? 'dev' : splitFor(id), labels: [],
     };
+    if (arg('seen')) rec.seen = arg('seen');
     const errors = validateRecord(rec);
     if (errors.length > 0) throw new Error(`not added:\n${errors.join('\n')}`);
     mkdirSync(RECORDS, { recursive: true });

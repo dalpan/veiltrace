@@ -4,6 +4,7 @@ Real messages (WhatsApp, SMS, web comments and pages, email, social media) **col
 
 ## Rules
 - **Only redacted text enters the repository.** Raw screenshots and exports stay with the collector and are deleted after redaction. `npm run realworld -- redact` masks numbers, accounts, links, emails and handles; names and short codes must be checked by hand (the tool warns). CI rejects records that still contain a phone number, a long number, an email address or a link.
+- **Records the rule author has read stay dev (D-091).** Add them with `--seen "<reason>"`; the split is then always dev and validation enforces it.
 - **Split before anyone looks.** Each record's dev/test half is fixed by a hash of its id when it is added. The **dev** half may be used to extend the rules and lexicons. The **test** half is never used for tuning and is locked (`LOCK.json`, hash per record) before it is evaluated. The test half is evaluated only with `--final`, at the owner's request.
 - **Two annotators.** Each record gets independent labels from annotators A and B (`truth`, `category`, `expected`). `npm run realworld -- agree` reports Cohen's kappa and the disagreements; a third person adjudicates them (`final`). Only agreed or adjudicated records are evaluated.
 - **No live malicious content.** Links are replaced; nobody opens scam links or installs attached files to collect a sample.

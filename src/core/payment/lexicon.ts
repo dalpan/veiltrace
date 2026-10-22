@@ -17,8 +17,8 @@ const REQUESTS: PayLexiconEntry[] = [
     `${B}(?:pay|make\\s+(?:a\\s+|the\\s+)?payment|transfer|wire|deposit|top\\s+up|send\\s+(?:the\\s+|a\\s+|us\\s+|me\\s+)?(?:money|funds|payment|fee|amount|deposit)|(?:buy|purchase|get)\\s+(?:[\\p{L}\\d$]+\\s+){0,3}?(?:gift|google\\s+play|itunes|steam|apple)\\s+cards?)${E}`,
     ['pay', 'make a payment', 'transfer', 'send the money', 'buy three Google Play gift cards']),
   entry('pay.id.pay', 'PY.PAY', 'id', 'strong',
-    `${B}(?:bayar(?:kan|lah)?|transfer(?:kan|lah)?|tf|lakukan\\s+(?:pembayaran|transfer)|setor(?:kan)?|top\\s*-?up|lunasi|kirim(?:kan)?\\s+(?:uang|dana|biaya|pembayaran)|(?:harus|wajib|perlu|diharuskan|segera|mohon|silakan|cukup)\\s+(?:membayar|mentransfer|menyetor|melunasi|mengirim(?:kan)?\\s+(?:uang|dana|biaya))|beli(?:kan)?\\s+(?:voucher|kartu\\s+hadiah))${E}`,
-    ['bayar', 'transfer', 'lakukan pembayaran', 'kirimkan uang', 'wajib membayar', 'belikan voucher']),
+    `${B}(?:bayar(?:kan|lah)?|transfer(?:kan|lah)?|tf|lakukan\\s+(?:pembayaran|transfer)|setor(?:kan)?|top\\s*-?up|lunasi|kirim(?:kan)?\\s+(?:uang|dana|biaya|pembayaran)|(?:harus|wajib|perlu|diharuskan|segera|mohon|silakan|cukup)\\s+(?:membayar|mentransfer|menyetor|melunasi|mengirim(?:kan)?\\s+(?:uang|dana|biaya))|beli(?:kan)?\\s+(?:voucher|kartu\\s+hadiah)|(?:di)?wajib(?:kan)?\\s+(?:membeli|dibayar(?:kan)?)|(?:harus|wajib)\\s+(?:sudah\\s+)?di\\s?bayar(?:kan)?)${E}`,
+    ['bayar', 'transfer', 'lakukan pembayaran', 'kirimkan uang', 'wajib membayar', 'belikan voucher', 'wajib membeli', 'diwajibkan dibayarkan']),
 ];
 
 const OBJECTS: PayLexiconEntry[] = [
@@ -35,8 +35,8 @@ const OBJECTS: PayLexiconEntry[] = [
     `${B}(?:(?:account\\s+)?(?:verification|unlock(?:ing)?|unblock(?:ing)?|reactivation|account\\s+activation|release|clearance|anti-?money\\s+laundering|aml)\\s+(?:fees?|charges?|deposits?|tax(?:es)?)|(?:prize|winnings|lottery)\\s+(?:tax(?:es)?|fees?)|(?:tax(?:es)?|fees?)\\s+on\\s+(?:your\\s+)?(?:prize|winnings))${E}`,
     ['verification fee', 'unlock fee', 'release fee', 'clearance fee', 'prize tax', 'tax on your winnings']),
   entry('pay.id.release_fee', 'PF.RELEASE_FEE', 'id', 'strong',
-    `${B}(?:biaya\\s+(?:verifikasi|aktivasi\\s+akun|buka\\s+blokir|pembukaan\\s+blokir|pencairan|pelepasan|klaim(?:\\s+hadiah)?|pengurusan\\s+hadiah)|pajak\\s+(?:hadiah|undian|pemenang)|uang\\s+jaminan)${E}`,
-    ['biaya verifikasi', 'biaya buka blokir', 'biaya pencairan', 'pajak hadiah', 'uang jaminan']),
+    `${B}(?:biaya\\s+(?:verifikasi|aktivasi\\s+akun|buka\\s+blokir|pembukaan\\s+blokir|pencairan|pelepasan|klaim(?:\\s+hadiah)?|pengurusan\\s+hadiah)|pajak\\s+(?:hadiah|undian|pemenang)|uang\\s+jaminan|(?:dengan\\s+)?syarat\\s+biaya\\s+(?:admin(?:istrasi)?|pendaftaran)|biaya\\s+(?:seragam|id\\s*card)|(?:pembayaran\\s+)?(?:kaos\\s+)?seragam\\s+karyawan)${E}`,
+    ['biaya verifikasi', 'biaya buka blokir', 'biaya pencairan', 'pajak hadiah', 'uang jaminan', 'syarat biaya admin', 'pembayaran kaos seragam karyawan']),
 ];
 
 const DESTINATIONS: PayLexiconEntry[] = [
@@ -50,6 +50,9 @@ const DESTINATIONS: PayLexiconEntry[] = [
   entry('pay.id.personal_informal', 'PD.PERSONAL', 'id', 'strong',
     `${B}(?:rek\\.?|norek|rekening)\\s+(?:admin|sy|aku|gw|gue|petugas|agen|kurir)${E}|${B}(?:dana|ovo|gopay|shopeepay|e-?wallet)\\s+(?:saya|sy|aku|gw|gue|admin|petugas)${E}`,
     ['rek admin', 'norek sy', 'dana sy', 'ovo admin']),
+  entry('pay.id.personal_wallet', 'PD.PERSONAL', 'id', 'strong',
+    `${B}(?:e-?wallet\\s+)?(?:dana|ovo|gopay|shopeepay|linkaja)\\s+\\+?\\d[\\d\\s-]{8,}\\d${E}|${B}(?:a\\s?/\\s?n|a\\.n\\.?|atas\\s+nama)\\s+(?!pt${E}|cv${E}|yayasan|koperasi|bank|perusahaan|anda|kamu|mas|mbak|kak|bapak|ibu|penerima|pengirim)\\p{L}`,
+    ['E-WALLET DANA 081200000000', 'A/N Budi']),
   entry('pay.en.off_platform', 'PD.OFF_PLATFORM', 'en', 'strong',
     `${B}(?:(?:outside|off)\\s+(?:of\\s+)?(?:the\\s+|this\\s+)?(?:app|platform|marketplace|website|site|escrow)|directly\\s+to\\s+(?:me|my\\s+(?:account|number|wallet))|(?:skip|avoid|bypass|instead\\s+of)\\s+(?:using\\s+)?(?:the\\s+)?(?:checkout|escrow|platform\\s+payment|app\\s+payment))${E}`,
     ['outside the app', 'directly to me', 'instead of using the checkout']),
@@ -83,8 +86,15 @@ const RECEIVE: PayLexiconEntry[] = [
     ['Anda memenangkan', 'pemenang undian', 'hadiah utama', 'klaim hadiah']),
   // A guaranteed place in a selection (recruitment, admission) is never sold: paying for it is the scam (P2, D-087).
   entry('pay.id.recruit', 'PR.RECRUIT', 'id', 'strong',
-    `${B}(?:(?:dijamin|pasti|100\\s?%)\\s+(?:lulus|lolos|diterima|masuk)|jalur\\s+(?:khusus|belakang|titipan|orang\\s+dalam)\\s+(?:masuk|seleksi|pendaftaran|penerimaan|rekrutmen|bintara|tamtama|akmil|akpol|polri|tni|cpns|pns|kedinasan)|(?:lewat|melalui|via)\\s+jalur\\s+(?:belakang|titipan|orang\\s+dalam)|uang\\s+(?:pelicin|titipan\\s+(?:seleksi|masuk))|orang\\s+dalam)${E}`,
-    ['dijamin lulus', 'jalur khusus seleksi bintara', 'lewat jalur belakang', 'uang pelicin', 'orang dalam']),
+    `${B}(?:(?:dijamin|pasti|100\\s?%)\\s+(?:lulus|lolos|diterima|masuk)|jalur\\s+(?:khusus|belakang|titipan|orang\\s+dalam)\\s+(?:masuk|seleksi|pendaftaran|penerimaan|rekrutmen|bintara|tamtama|akmil|akpol|polri|tni|cpns|pns|kedinasan)|(?:lewat|melalui|via)\\s+jalur\\s+(?:belakang|titipan|orang\\s+dalam)|uang\\s+(?:pelicin|titipan\\s+(?:seleksi|masuk))|orang\\s+dalam|jaminan\\s+100\\s?%|tanpa\\s+(?:tes|test|seleksi|interview|wawancara)(?:\\s+(?:ataupun|atau|maupun|dan)\\s+(?:tes|test|interview|wawancara))?|langsung\\s+(?:ttd|tanda\\s+tangan)\\s+kontrak)${E}`,
+    ['dijamin lulus', 'jalur khusus seleksi bintara', 'lewat jalur belakang', 'uang pelicin', 'orang dalam', 'tanpa Tes ataupun Interview', 'JAMINAN 100%']),
+  // A job offer: something the reader is promised to receive. A fee or purchase required for it is pay-to-receive (pay-0.4.0).
+  entry('pay.id.job', 'PR.JOB', 'id', 'weak',
+    `${B}(?:panggilan\\s+kerja|lowongan(?:\\s+kerja)?|karyawan\\s+baru|calon\\s+(?:karyawan|pekerja|mitra)|diterima\\s+(?:kerja|bekerja)|siap\\s+kerja|kerja\\s+(?:di\\s?sini|besok))${E}`,
+    ['Panggilan kerja', 'lowongan', 'karyawan baru', 'calon mitra', 'siap kerja']),
+  entry('pay.en.job', 'PR.JOB', 'en', 'weak',
+    `${B}(?:job\\s+offer|you(?:${APOS}ve|\\s+have)\\s+been\\s+(?:hired|selected\\s+for\\s+the\\s+(?:job|position))|new\\s+(?:hire|employee)s?|(?:work|job)\\s+from\\s+home\\s+(?:job|position))${E}`,
+    ['job offer', "you've been hired", 'new employees']),
   entry('pay.en.recruit', 'PR.RECRUIT', 'en', 'strong',
     `${B}(?:guaranteed\\s+(?:to\\s+pass|admission|acceptance|a\\s+(?:place|spot|seat))|back[\\s-]?door\\s+(?:entry|admission|route)|special\\s+(?:quota|route)\\s+for\\s+(?:a\\s+)?fee)${E}`,
     ['guaranteed to pass', 'backdoor admission']),
@@ -103,6 +113,9 @@ const RECEIVE: PayLexiconEntry[] = [
   entry('pay.id.condition', 'PC.CONDITION', 'id', 'weak',
     `${B}(?:agar|supaya|untuk|sebelum|baru)\\s+(?:(?:dapat|bisa)\\s+)?(?:menerima|mencairkan|dicairkan|mengklaim|diklaim|membuka|dibuka|mengaktifkan|diaktifkan|menarik|ditarik|memulihkan|dipulihkan|dilepas)${E}`,
     ['agar dapat dicairkan', 'untuk mencairkan', 'supaya bisa dibuka']),
+  entry('pay.id.condition_obligation', 'PC.CONDITION', 'id', 'weak',
+    `${B}(?:(?:di)?wajib(?:kan)?\\s+(?:membeli|membayar|dibayar(?:kan)?|bayar)|dengan\\s+syarat|sebagai\\s+syarat|(?:harus|wajib)\\s+(?:sudah\\s+)?di\\s?bayar(?:kan)?)${E}`,
+    ['wajib membeli', 'diwajibkan dibayarkan', 'dengan syarat', 'harus sudah di bayarkan']),
   entry('pay.id.condition_informal', 'PC.CONDITION', 'id', 'weak',
     `${B}(?:(?:abis|habis|setelah|sesudah)\\s+(?:itu|bayar|transfer|tf)|baru(?:\\s+(?:bisa|dapat))?)\\s+(?:langsung\\s+)?(?:cair|dicair(?:kan|in)|masuk|dikirim|aktif|dibuka|kebuka)${E}`,
     ['abis itu langsung cair', 'setelah transfer langsung masuk', 'baru bisa cair']),
@@ -129,7 +142,7 @@ const PRESSURE: PayLexiconEntry[] = [
     `${B}(?:(?<!(?:berlaku|kedaluwarsa|kadaluarsa|hangus)\\s)dalam\\s+(?:waktu\\s+)?\\d+\\s+(?:menit|jam)|segera|sekarang\\s+juga|hari\\s+ini\\s+juga|peringatan\\s+terakhir|mendesak|secepatnya|kesempatan\\s+terakhir)${E}`,
     ['dalam 30 menit', 'segera', 'sekarang juga', 'secepatnya']),
   entry('pay.id.urgency_informal', 'PP.URGENCY', 'id', 'weak',
-    `${B}(?:buruan|cepetan|cpt|sebelum\\s+jam\\s+\\d+|sampe\\s+jam\\s+\\d+|slot(?:nya)?\\s+(?:cuma|terbatas))${E}`, ['buruan', 'cpt', 'sampe jam 12', 'slotnya cuma']),
+    `${B}(?:buruan|cepetan|cpt|sebelum\\s+jam\\s+\\d+|sampe\\s+jam\\s+\\d+|slot(?:nya)?\\s+(?:cuma|terbatas)|(?:paling\\s+lambat\\s+)?malam\\s+ini|(?:lowongan|kuota)\\s+(?:hanya|cuma)\\s+untuk\\s+\\d+)${E}`, ['buruan', 'cpt', 'sampe jam 12', 'slotnya cuma', 'malam ini', 'lowongan hanya untuk 2']),
   // Claimed identity or authority. Never verified; never escalates on its own.
   entry('pay.en.authority', 'PP.AUTHORITY', 'en', 'weak',
     `${B}(?:customer\\s+(?:support|service|care)(?:\\s+(?:team|agent|officer|representative))?|support\\s+(?:team|agent|staff|desk)|help\\s*desk|(?:security|fraud|billing|compliance|verification)\\s+(?:team|department|officer|agent)|bank\\s+(?:officer|representative|staff|manager)|police(?:\\s+(?:officer|department))?|customs\\s+(?:office|officer|department|authority)|tax\\s+(?:office|officer|authority|department)|court\\s+(?:officer|order)|(?:government|federal)\\s+agent|official\\s+(?:support|agent|representative|account))${E}`,

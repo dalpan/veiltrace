@@ -4,13 +4,13 @@
 import type { ActionRisk, Classification, Lang, Level, Strength, Verdict } from '../types.js';
 
 /** What the reader is directed to do. */
-export type SupportActionSignalId = 'SC.CONTACT' | 'SA.REMOTE' | 'SA.INSTALL';
+export type SupportActionSignalId = 'SC.CONTACT' | 'SC.RESPOND' | 'SA.REMOTE' | 'SA.INSTALL';
 /** The channel of a contact direction. Phone numbers are matched but never reported. */
-export type SupportChannelSignalId = 'SX.PHONE' | 'SX.MOBILE' | 'SX.MESSENGER';
+export type SupportChannelSignalId = 'SX.PHONE' | 'SX.MOBILE' | 'SX.MESSENGER' | 'SX.LINK';
 /** Claimed identity: a claim only, never evidence of who wrote the text. */
 export type SupportClaimSignalId = 'SI.SUPPORT' | 'SI.BANK' | 'SI.ADMIN' | 'SI.SECURITY' | 'SI.OFFICIAL';
-/** Pressure: a page-rendered system or browser alarm, a threat to the account or data, urgency. */
-export type SupportPressureSignalId = 'SW.ALERT' | 'ST.THREAT' | 'SU.URGENCY';
+/** Pressure: a page-rendered system or browser alarm, an account alarm, a threat to the account or data, urgency, a reward. */
+export type SupportPressureSignalId = 'SW.ALERT' | 'SW.ACCOUNT' | 'ST.THREAT' | 'SU.URGENCY' | 'SP.REWARD';
 export type SupportSignalId = SupportActionSignalId | SupportChannelSignalId | SupportClaimSignalId | SupportPressureSignalId
   | 'SH.UNASSERTED' | 'C.NEGATION' | 'C.REPORTED' | 'C.EDUCATIONAL';
 export type SupportSignalKind = 'action' | 'channel' | 'claim' | 'pressure' | 'context';
@@ -33,7 +33,7 @@ export interface SupportObservation {
   /** UTF-16 offsets into the block text. */
   start: number;
   end: number;
-  /** Matched page text with digit runs and @handles masked. Always "" for phone numbers. */
+  /** Matched page text with digit runs and @handles masked. Always "" for phone numbers and links. */
   text: string;
   regionId: string;
   /** Negated ("never call"), or for an alert, unasserted ("if your computer is infected", "a pop-up that says …"). */
@@ -41,12 +41,12 @@ export interface SupportObservation {
   reported: boolean;
 }
 
-export type SupportRuleId = 'SR1' | 'SR2' | 'SR3' | 'SR4' | 'SR5';
+export type SupportRuleId = 'SR1' | 'SR2' | 'SR3' | 'SR4' | 'SR5' | 'SR6';
 export type SupportModifierId = 'C.QUOTED' | 'C.REPORTED' | 'C.EDUCATIONAL' | 'C.CODE_EXAMPLE';
-export type SupportAction = 'contact' | 'remote-access' | 'install';
-export type SupportChannel = 'phone' | 'mobile' | 'messenger';
+export type SupportAction = 'contact' | 'respond' | 'remote-access' | 'install';
+export type SupportChannel = 'phone' | 'mobile' | 'messenger' | 'link';
 export type SupportClaim = 'support' | 'bank' | 'administrator' | 'security-team' | 'official';
-export type SupportPressure = 'system-alert' | 'threat' | 'urgency';
+export type SupportPressure = 'system-alert' | 'account-alarm' | 'threat' | 'urgency' | 'reward';
 /**
  * Observable impersonation indicators: facts about the page, as opposed to what it claims. None of them proves who wrote it.
  * - page-rendered-system-alert: a virus/lock alarm drawn by the web page (browsers and operating systems do not alert inside pages)

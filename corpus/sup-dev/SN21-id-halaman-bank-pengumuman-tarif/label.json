@@ -1,0 +1,21 @@
+{
+  "id": "SN21-id-halaman-bank-pengumuman-tarif",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "negative",
+  "threatClass": "T-SUP",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://www.banknusantara.example/info/tarif",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "Halaman pengumuman perubahan tarif di situs bank sendiri, dengan tautan informasi",
+  "rationale": "Pengumuman institusi di halamannya sendiri bukan pesan dari pihak lain: SR6 tidak berlaku.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; accuracy round 2 dev additions modelled on scam classes in the owner's field sample (same author as the rules), written in own words, labels written before the first run",
+  "created": "2026-10-22"
+}
