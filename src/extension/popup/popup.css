@@ -186,3 +186,4 @@ details.mode[data-mode="automatic"] .mode-chip { color: var(--accent-text); }
 .ai-assessment { margin: 0 0 4px; font-weight: 600; }
 .ai-confidence { margin: 0 0 8px; font-size: 12px; }
 .ai-tactics, .ai-lines { margin: 0 0 8px; padding-left: 20px; font-size: 12px; }
+.ai-disagree { margin: 0 0 8px; padding: 6px 8px; font-size: 12px; border: 1px solid var(--warn); color: var(--warn-text); background: var(--warn-bg); }

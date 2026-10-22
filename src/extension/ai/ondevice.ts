@@ -2,7 +2,7 @@
 // Runs only in the popup, only after the user has seen the payload and clicked, and only on the device: this module makes no
 // network request (Chrome downloads the model itself the first time). Where the API is missing (Firefox, Android, older
 // Chrome) the feature reports "unsupported" and nothing else happens.
-import { AI_RESPONSE_SCHEMA, AI_SYSTEM_PROMPT, buildAiPrompt, parseAiOpinion, type AiOpinion } from './opinion.js';
+import { AI_EXAMPLES, AI_RESPONSE_SCHEMA, AI_SYSTEM_PROMPT, buildAiPrompt, parseAiOpinion, type AiOpinion } from './opinion.js';
 
 export type AiAvailability = 'unsupported' | 'unavailable' | 'downloadable' | 'downloading' | 'available';
 
@@ -43,7 +43,10 @@ export async function askAi(lines: readonly string[], onProgress: (fraction: num
   if (!lm) return null;
   const session = await lm.create({
     ...LANGUAGES,
-    initialPrompts: [{ role: 'system', content: AI_SYSTEM_PROMPT }],
+    initialPrompts: [
+      { role: 'system', content: AI_SYSTEM_PROMPT },
+      ...AI_EXAMPLES.flatMap((e) => [{ role: 'user', content: buildAiPrompt(e.lines) }, { role: 'assistant', content: JSON.stringify(e.answer) }]),
+    ],
     monitor: (m: Monitor) => m.addEventListener('downloadprogress', (e) => onProgress(e.loaded)),
     ...(signal ? { signal } : {}),
   });

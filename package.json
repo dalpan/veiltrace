@@ -38,7 +38,8 @@
     "release:candidate": "node scripts/release.mjs --out release --candidate",
     "submission:pdf": "node scripts/submission-pdf.mjs",
     "submission:video": "VT_VIDEO_DIR=submission/dist/video vitest run tests/e2e/video.test.ts && node scripts/submission-video.mjs submission/dist/video",
-    "deploy:pwa": "node scripts/deploy-pwa.mjs"
+    "deploy:pwa": "node scripts/deploy-pwa.mjs",
+    "build:ai-eval": "node scripts/build-ai-eval.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

@@ -152,6 +152,8 @@ export interface Messages {
     tacticsLabel: string;
     citedLines: string;
     caveat: string;
+    disagreeAlert: string;
+    disagreeQuiet: string;
   };
   /** Opt-in automatic scanning (D-081). */
   auto: {
@@ -464,6 +466,8 @@ const EN: Messages = {
     confidence: { low: 'AI confidence: low', medium: 'AI confidence: medium', high: 'AI confidence: high' },
     tacticsLabel: 'Tactics the AI names',
     citedLines: 'Lines the AI points to',
+    disagreeAlert: 'The AI and VeilTrace disagree. VeilTrace found no documented manipulation pattern on this page. Read the lines the AI points to yourself: the AI may be wrong.',
+    disagreeQuiet: 'The AI and VeilTrace disagree. The AI does not see what VeilTrace found; VeilTrace\'s findings above show the evidence they are based on.',
     caveat: 'An opinion from a language model: it can be wrong or misled by the page itself, and Indonesian is not one of its supported languages. It does not change the VeilTrace result.',
   },
   auto: {
@@ -794,6 +798,8 @@ const ID: Messages = {
     confidence: { low: 'Keyakinan AI: rendah', medium: 'Keyakinan AI: sedang', high: 'Keyakinan AI: tinggi' },
     tacticsLabel: 'Taktik yang disebut AI',
     citedLines: 'Baris yang ditunjuk AI',
+    disagreeAlert: 'AI dan VeilTrace berbeda pendapat. VeilTrace tidak menemukan pola manipulasi yang terdokumentasi di halaman ini. Baca sendiri baris yang ditunjuk AI: AI bisa keliru.',
+    disagreeQuiet: 'AI dan VeilTrace berbeda pendapat. AI tidak melihat apa yang ditemukan VeilTrace; temuan VeilTrace di atas menunjukkan bukti yang menjadi dasarnya.',
     caveat: 'Pendapat dari model bahasa: bisa keliru atau terkecoh oleh halaman itu sendiri, dan bahasa Indonesia belum termasuk bahasa yang didukungnya. Tidak mengubah hasil VeilTrace.',
   },
   auto: {

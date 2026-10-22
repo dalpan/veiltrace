@@ -4,6 +4,11 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-22 · AI opinion after the first device test (D-094)
+Gemini Nano runs in the owner's Chrome, but called a legitimate checkout "manipulative". Prompt guidance + four worked examples; a disagreement note in the panel; `npm run build:ai-eval` page to measure the model on 200 development items in the owner's Chrome. `npm test` 734 passed. **Next:** owner runs the eval page and saves the JSON; numbers go into docs/AI_EVAL.md.
+
+---
+
 ## 2026-10-22 · Optional on-device AI second opinion (D-093)
 Popup panel "AI second opinion · optional, on this device": payload preview first, then Chrome's built-in model; fixed-value JSON answer validated strictly; VeilTrace result unchanged. Unit tests (masking, validation, injection-shaped answers rejected) and e2e (unavailable state; full flow with a stand-in model: masked text, second-click only, labels, unchanged verdict, 0 requests). `npm test` 734 passed. **Not yet:** a run on a machine with Gemini Nano, and any accuracy measurement of the AI opinion. **Next:** owner tries it on Chrome desktop (chrome://on-device-internals shows model status).
 

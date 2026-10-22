@@ -22,6 +22,8 @@ interface Deps {
   t: () => Messages;
   tabId: () => number | null;
   readText: (tabId: number) => Promise<unknown>;
+  /** Whether the deterministic VeilTrace result alerted (suspicious or manipulative). */
+  alerted: () => boolean;
 }
 let deps: Deps | null = null;
 
@@ -66,10 +68,17 @@ export function setupAi(d: Deps): void {
   void aiAvailability().then((a) => { panel.availability = a; renderAi(!$('ai').hidden); });
 }
 
-function opinionView(m: Messages, o: AiOpinion, payload: AiPayload): HTMLElement {
+function opinionView(m: Messages, o: AiOpinion, payload: AiPayload, alerted: boolean): HTMLElement {
   const box = h('div', 'ai-opinion');
   box.dataset.assessment = o.assessment;
   box.append(h('p', 'ai-result-title', m.ai.resultTitle), h('p', 'ai-assessment', m.ai.assessment[o.assessment]), h('p', 'ai-confidence', m.ai.confidence[o.confidence]));
+  // Say so plainly when the two disagree, so the opinion is never read as a correction of the documented result.
+  const aiAlerts = o.assessment !== 'no-clear-signs';
+  if (aiAlerts !== alerted) {
+    const note = h('p', 'ai-disagree', aiAlerts ? m.ai.disagreeAlert : m.ai.disagreeQuiet);
+    note.dataset.disagree = aiAlerts ? 'ai-alerts' : 'ai-quiet';
+    box.append(note);
+  }
   if (o.tactics.length > 0) {
     const list = h('ul', 'ai-tactics');
     for (const tac of o.tactics) list.append(h('li', '', m.ai.tactic[tac]));
@@ -114,5 +123,5 @@ export function renderAi(visible: boolean): void {
     : panel.stage === 'failed' ? m.ai.failed : panel.stage === 'no-text' ? m.ai.noText : '';
   const result = $('ai-result');
   result.hidden = !(panel.stage === 'done' && panel.opinion && panel.payload);
-  result.replaceChildren(...(panel.stage === 'done' && panel.opinion && panel.payload ? [opinionView(m, panel.opinion, panel.payload)] : []));
+  result.replaceChildren(...(panel.stage === 'done' && panel.opinion && panel.payload ? [opinionView(m, panel.opinion, panel.payload, deps?.alerted() ?? false)] : []));
 }

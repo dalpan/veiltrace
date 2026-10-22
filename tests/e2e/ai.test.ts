@@ -58,6 +58,9 @@ describe('AI second opinion panel', () => {
     expect(await popup.$$eval('.ai-tactics li', (els) => els.map((e) => e.textContent))).toEqual(['claims to be a bank, company, support or official', 'prize, refund or job that is too good to be true']);
     expect(await popup.$$eval('.ai-lines li', (els) => els.map((e) => e.textContent))).toEqual([lines[1]]);
     expect(await popup.getAttribute('.threat-summary', 'data-verdict')).toBe(verdictBefore);
+    // The page has no documented pattern, so the panel says plainly that the AI and VeilTrace disagree.
+    expect(verdictBefore).not.toMatch(/suspicious|manipulative/);
+    expect(await popup.getAttribute('.ai-disagree', 'data-disagree')).toBe('ai-alerts');
     expect(fake.blocked).toEqual([]);
   });
 });

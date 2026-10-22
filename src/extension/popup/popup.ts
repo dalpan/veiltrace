@@ -445,7 +445,10 @@ async function main(): Promise<void> {
     });
   }
   $('scan').addEventListener('click', () => void scan());
-  setupAi({ t, tabId: () => state.tab?.id ?? null, readText: runAiText });
+  setupAi({
+    t, tabId: () => state.tab?.id ?? null, readText: runAiText,
+    alerted: () => state.report !== null && aggregate(state.report).actionable > 0,
+  });
   $('mode-toggle').addEventListener('click', () => void toggleMode());
   if (await isTabView()) document.documentElement.classList.add('fluid');
   state.auto = await autoEnabled();
