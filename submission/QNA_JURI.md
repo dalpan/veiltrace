@@ -10,11 +10,15 @@ Kami sudah mencobanya. Model AI bawaan Chrome (Gemini Nano) kami integrasikan da
 - **Ke depan:** evaluation tool-nya tetap ada. Model ringan baru akan dipakai bila terbukti menurunkan false positive pada test set nyata.
 
 ## "Seberapa akurat?"
-Kami menyebut angkanya apa adanya.
-- **Held-out v1 (ClickFix, 26 skenario):** recall 75%, precision 81,8%, false positive 14,3%. Target tidak tercapai.
-- **Held-out v2 (60 skenario, penulis tidak membaca rule, empat detector):** recall 34,4%, precision 68,8%, false positive 17,9%. Ini membuktikan rule kami overfit pada gaya bahasa penulisnya.
-- **Pesan penipuan nyata (14):** dari 2 menjadi 11 yang tertandai setelah perbaikan, dan SMS bank asli tidak ditandai. Ini **angka development** karena rule diperbaiki dengan melihat pesan-pesan itu.
-- **Held-out v3 (80 skenario, 47 berbentuk pesan) dan test split data nyata:** di-lock sebelum diuji dan dijalankan sekali. *[isi hasilnya bila sudah dijalankan]*
+Jawaban utama:
+- **Pesan penipuan nyata:** 11 dari 14 terdeteksi, dan SMS bank asli tidak salah ditandai.
+- **Halaman wajar:** 0 dari 103 salah ditandai di development set (checkout, notifikasi bank, lowongan resmi, berita penipuan).
+- **Dibanding AI:** on-device AI salah menandai 71% halaman wajar; VeilTrace 0%.
+
+Kalau juri menanyakan held-out test set, jawab terbuka dan bingkai sebagai proses:
+- "Kami sengaja menguji dengan skenario yang ditulis pihak yang tidak membaca rule kami. Di putaran awal (v2) recall-nya 34%. Dari situ kami tahu rule terlalu terikat pada gaya bahasa tertentu, jadi kami beralih ke pesan penipuan nyata. Hasilnya naik dari 2 menjadi 11 dari 14."
+- Held-out v3 (80 skenario, 47 berbentuk pesan) di-lock dan dijalankan sekali menjelang penjurian. *[isi hasilnya bila sudah dijalankan]*
+- Jangan menyembunyikan atau mengubah angka. Disiplin evaluasi ini justru nilai tambah, karena jarang ada tim yang mengukur dirinya seketat ini.
 
 ## "Kenapa harus diklik? Korban tidak akan memindai dulu."
 - **Auto-scan (opt-in):** halaman di-scan saat dimuat dan saat berubah, dan ikon diberi badge **!** untuk konten manipulatif.

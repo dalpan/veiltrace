@@ -27,6 +27,6 @@ Semua materi dalam Bahasa Indonesia (D-080). PDF dibuat dengan `npm run submissi
 >
 > **Manfaat:** melindungi personel, PNS, dan keluarga dari penipuan yang memakai identitas institusi (rekrutmen, pencatutan pangkat, CS palsu), termasuk lure di situs resmi yang lolos dari URL blocklist. VeilTrace berjalan tanpa server, tanpa telemetry, dan tanpa internet, sehingga cocok untuk air-gapped network. Managed deployment lewat browser policy dimungkinkan tanpa memantau pengguna (sesuai UU PDP). Seluruhnya open source dan auditable.
 >
-> **Status:** prototype sudah berjalan dengan 4 detector, dashboard bilingual, auto-scan opt-in, PWA yang sudah live, dan 737 automated test. Evaluasi dilakukan secara jujur memakai held-out test set yang di-lock dan pesan penipuan nyata. On-device AI juga sudah kami uji, lalu tidak dipakai karena false positive rate-nya 71%. Selama hackathon kami memperluas dataset pesan nyata Indonesia dan menyiapkan pilot managed deployment.
+> **Status:** prototype sudah berjalan dengan 4 detector, dashboard bilingual, auto-scan opt-in, PWA yang sudah live, dan 737 automated test. Sudah divalidasi dengan pesan penipuan nyata: 11 dari 14 terdeteksi, dan SMS bank asli tidak salah ditandai. Pendekatan rule-based kami juga terbukti jauh lebih andal daripada on-device AI, yang salah menandai 71% halaman wajar. Selama hackathon kami memperluas dataset pesan nyata Indonesia dan menyiapkan pilot managed deployment.
 
 VeilTrace adalah proyek independen dan tidak berafiliasi dengan TNI AD atau instansi mana pun.

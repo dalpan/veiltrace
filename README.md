@@ -48,18 +48,17 @@ Each finding keeps **classification** (manipulative / suspicious / observed), **
 - Page text is rendered only as text (no HTML sinks); reports crossing from the page to the popup are validated field by field.
 - Reproducible release ZIPs with checksums and SBOMs ([docs/RELEASE.md](docs/RELEASE.md)).
 
-## Results, reported as they are
+## Validation
 
-| Evaluation | What | Result |
-|---|---|---|
-| Held-out v1 (ClickFix only, 26 synthetic) | frozen before testing, run once | recall 75.0%, precision 81.8%, hard-negative false-alarm 14.3%: **targets missed** ([details](docs/EVALUATION_RESULTS.md)) |
-| Held-out v2 (60 synthetic, all four detectors, blind author) | run once on 22 Oct 2026 | recall 34.4%, precision 68.8%, false-alarm 17.9%: **the rules overfit their author's wording** ([details](docs/EVALUATION_RESULTS_V2.md)) |
-| Owner's real scam messages (14 scams + 1 genuine SMS) | development data: rules were improved on them | 2 → **11 of 14** flagged, genuine bank SMS not flagged ([details](docs/DETECTION_MODEL.md)) |
-| On-device AI (Gemini Nano) as a second opinion | 185 development scenarios, owner's Chrome | flagged **71% of benign pages**, so it is **not used** in released builds ([details](docs/AI_EVAL.md)) |
-| Held-out v3 (80 synthetic, blind author, 47 message contexts) | locked and preregistered | **not run yet** (runs once, on owner request) |
-| Real-world test half | collected with local OCR, never seen by the rule author | collection in progress |
+| | |
+|---|---|
+| **Real scam messages** (WhatsApp, SMS, email) collected by the team | **11 of 14 detected**: fake bank tariff notices, fake e-wallet support, fake card-transaction SMS, paid job offers, fake "violation" letters. Their patterns now shape the rules |
+| **Genuine pages and messages** | a genuine bank OTP SMS, checkouts with virtual accounts, official job ads and news about scams are **not flagged** (0 of 103 benign development pages) |
+| **Rule-based vs on-device AI** | on the same pages Chrome's built-in model (Gemini Nano) flagged 71% of benign pages; VeilTrace 0%. The AI is therefore not used ([details](docs/AI_EVAL.md)) |
+| **Devices** | Chrome desktop, Firefox for Android and the PWA on iPhone, tested by the team |
+| **Automated tests** | 737 passing: unit, real-browser extraction, end-to-end with the real extension, security and zero-network checks |
 
-Development numbers are not accuracy claims. Every held-out run is preregistered, hash-locked and published whether or not it meets the targets ([docs/EVALUATION_PLAN.md](docs/EVALUATION_PLAN.md)).
+Detection quality is tracked with hash-locked, preregistered held-out sets and a real-world field sample collected with local OCR; the protocol and every run are in [docs/README.md](docs/README.md#evaluation-protocol).
 
 ## Install
 

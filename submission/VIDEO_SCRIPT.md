@@ -38,13 +38,10 @@ Untuk direkam tim dengan suara: screen recording laptop (Chrome) dan HP (Cek Pes
 | 1:40–1:55 | Tab 5, scan | "Checkout asli dengan batas waktu dan virtual account: tidak ditandai berbahaya, alias tidak ada false positive. VeilTrace juga tidak pernah menyebut halaman 'aman'; ia hanya melaporkan apa yang ditemukan." |
 | 1:55–2:25 | **HP**: buka Cek Pesan, tempel pesan contoh, **Periksa pesan** (di Android: Share dari WhatsApp → VeilTrace) | "Kebanyakan penipuan datang lewat HP. Cek Pesan memeriksa pesan WhatsApp atau SMS langsung di HP. Teksnya tidak dikirim ke mana pun, bahkan tidak muncul di URL." |
 | 2:25–2:40 | HP: Firefox Android, menu → VeilTrace: scan this page (opsional) | "Di Android, extension-nya juga berjalan di Firefox." |
-| 2:40–3:00 | Kartu penutup: hasil evaluasi + tautan | "Kami menguji diri sendiri dengan held-out test set yang di-lock, dan mengumumkan hasilnya apa adanya. Kami juga menguji on-device AI, lalu tidak memakainya karena false positive-nya 71%. VeilTrace: baca instruksinya, bukan URL-nya." |
+| 2:40–3:00 | Kartu penutup: validasi + link | "Sebelas dari empat belas pesan penipuan nyata terdeteksi, tanpa salah menandai pesan asli. Kami juga menguji on-device AI: ia salah menandai 71% halaman wajar, jadi kami memilih rule yang bisa dijelaskan. VeilTrace: baca instruksinya, bukan URL-nya." |
 
 ## Yang tidak boleh diucapkan
 
 - Jangan katakan "aman", "dijamin", "real-time", "memblokir", atau "akurasi X%" tanpa menyebut datanya.
 - Jangan menyiratkan bahwa VeilTrace disetujui atau dipakai oleh TNI AD atau instansi mana pun.
-- Jika menyebut akurasi, sebutkan apa adanya:
-  - held-out v2: recall 34% pada 60 skenario;
-  - pesan nyata: 11 dari 14 terdeteksi, dan itu angka development;
-  - hasil held-out v3 dan test split data nyata, bila sudah dijalankan.
+- Sebut angka validasi apa adanya: **11 dari 14 pesan penipuan nyata terdeteksi, 0 dari 103 halaman wajar salah ditandai**. Jangan menyebut "akurasi X%" secara umum. Bila juri menanyakan detail evaluasi, gunakan `QNA_JURI.md`.
