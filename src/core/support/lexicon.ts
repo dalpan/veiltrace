@@ -14,7 +14,7 @@ const REMOTE_TOOL = '(?:anydesk|teamviewer(?:\\s+quick\\s*support)?|quick\\s*sup
 const APP = '(?:apps?|application|software|program|tool|apk|\\.apk|aplikasi|apl|file\\s+apk)';
 
 // Indonesian banks, e-wallets and marketplaces most often named in impersonated notices (sup-0.4.0, D-091). A name is a claim only.
-const BRAND_ID = '(?:bri|bni|bca|mandiri|bsi|btn|cimb(?:\\s+niaga)?|danamon|permata|dana|ovo|gopay|shopee(?:pay)?|tokopedia|lazada|bukalapak|blibli|akulaku|kredivo|jne|j&t|sicepat)';
+const BRAND_ID = '(?:bri|bni|bca|mandiri|bsi|btn|cimb(?:\\s+niaga)?|danamon|permata|dana|ovo|gopay|shopee(?:pay)?|tokopedia|lazada|bukalapak|blibli|akulaku|kredivo|jne|j&t|sicepat|pln|pertamina|telkomsel|indosat|bpjs(?:\\s+kesehatan)?|pos\\s+indonesia|indomaret|alfamart)';
 
 const ACTIONS: SupportLexiconEntry[] = [
   entry('sup.en.contact', 'SC.CONTACT', 'en', 'strong',
@@ -37,6 +37,11 @@ const ACTIONS: SupportLexiconEntry[] = [
   entry('sup.en.respond', 'SC.RESPOND', 'en', 'strong',
     `${B}(?:reply\\s+(?:with\\s+)?(?:yes|y|\\d)|(?:click|tap|open|visit)\\s+(?:on\\s+)?(?:the\\s+|this\\s+)?(?:link|here)|fill\\s+(?:in|out)\\s+(?:the\\s+|this\\s+)?form|(?:via|through|using)\\s+the\\s+link)${E}`,
     ['reply YES', 'click the link', 'fill out the form', 'via the link']),
+  // A quiz or questionnaire the reader is asked to answer (sup-0.5.0, prize-survey lures).
+  entry('sup.id.survey', 'SC.SURVEY', 'id', 'strong',
+    `${B}(?:kuesioner|kuisioner|survei|pertanyaan\\s+\\d+\\s+dari\\s+\\d+|jawab(?:lah)?\\s+(?:\\d+\\s+)?pertanyaan)${E}`, ['kuesioner', 'Pertanyaan 1 dari 4', 'jawab 4 pertanyaan']),
+  entry('sup.en.survey', 'SC.SURVEY', 'en', 'strong',
+    `${B}(?:questionnaire|survey|question\\s+\\d+\\s+of\\s+\\d+|answer\\s+(?:\\d+\\s+)?(?:simple\\s+)?questions)${E}`, ['questionnaire', 'Question 1 of 4']),
   // Installing an app or file the page or message points to.
   entry('sup.en.install', 'SA.INSTALL', 'en', 'strong',
     `${B}(?:install|download)\\s+(?:the\\s+|this\\s+|our\\s+|a\\s+)?(?:[\\p{L}-]+\\s+){0,2}?${APP}${E}`,
@@ -80,6 +85,10 @@ const CLAIMS: SupportLexiconEntry[] = [
   entry('sup.id.claim_brand_support', 'SI.SUPPORT', 'id', 'weak',
     `${B}(?:${BRAND_ID}\\s+(?:care|cs|official|support|affiliate|indonesia)|(?:cs|customer(?:\\s+service)?|layanan(?:\\s+pelanggan)?|pelayanan|admin|tim|pihak)\\s+(?:resmi\\s+)?${BRAND_ID}|pt\\.?\\s+${BRAND_ID})${E}`,
     ['DANA Care', 'CUSTOMER DANA', 'Layanan Pelanggan Shopee', 'Admin Shopee', 'PT SHOPEE']),
+  // A company or institution named with an anniversary, prize or promotion (sup-0.5.0): a claim only, never verified.
+  entry('sup.id.claim_org', 'SI.ORG', 'id', 'weak',
+    `${B}(?:${BRAND_ID}\\s*[-–·:]?\\s*(?:\\d+\\s*(?:th\\s+)?)?(?:anniversary|hut|ulang\\s+tahun|hadiah|promo)|(?:hut|ulang\\s+tahun|anniversary)\\s+(?:ke-?\\s*\\d+\\s+)?${BRAND_ID})${E}`,
+    ['PLN - 81 anniversary', 'HUT ke-81 PLN', 'Pertamina hadiah']),
   entry('sup.en.claim_admin', 'SI.ADMIN', 'en', 'weak',
     `${B}(?:(?:system|site|network|it)\\s+administrator|administrator|admin\\s+team|it\\s+department|moderator\\s+team)${E}`, ['system administrator', 'IT department']),
   entry('sup.id.claim_admin', 'SI.ADMIN', 'id', 'weak', `${B}(?:admin(?:istrator)?(?:\\s+(?:resmi|grup|sistem))?|mimin|tim\\s+it|bagian\\s+it)${E}`, ['admin', 'mimin', 'tim IT']),
@@ -128,6 +137,22 @@ const PRESSURE: SupportLexiconEntry[] = [
   entry('sup.id.reward', 'SP.REWARD', 'id', 'weak',
     `${B}(?:poin\\s+(?:[\\p{L}]+\\s+){0,4}?(?:dapat|bisa)\\s+(?:di\\s?)?tukar(?:kan)?|tukar(?:kan)?\\s+poin|voucher\\s+belanja|uang\\s+tunai|hadiah\\s+(?:undian|langsung|uang))${E}`,
     ['poin Dapat di tukar', 'voucher belanja', 'uang tunai']),
+  entry('sup.id.reward_chance', 'SP.REWARD', 'id', 'weak',
+    `${B}(?:berkesempatan\\s+(?:untuk\\s+)?(?:mendapatkan|memenangkan|meraih)\\s+(?:uang\\s+)?(?:tunai\\s+)?(?:rp\\.?\\s?\\d[\\d.,]*|hadiah|saldo)|hadiah\\s+(?:tahun\\s+baru|ulang\\s+tahun|hut|anniversary|lebaran|natal|spesial)|anniversary\\s+hadiah|bantuan\\s+(?:sosial|tunai)\\s+(?:sebesar\\s+)?rp)${E}`,
+    ['berkesempatan mendapatkan Rp1500000', 'Hadiah Tahun Baru', 'anniversary Hadiah']),
+  // Congratulating the reader on a prize they did not enter for.
+  entry('sup.id.won', 'SP.WON', 'id', 'weak',
+    `${B}(?:selamat\\s*!|selamat\\s*[,!]?\\s*(?:anda|kamu|kak(?:ak)?)\\s+(?:terpilih|mendapatkan|memenangkan|berhak)|anda\\s+(?:terpilih|beruntung|berhak\\s+mendapatkan))`,
+    ['Selamat!', 'Selamat, Anda terpilih', 'Anda berhak mendapatkan']),
+  entry('sup.en.won', 'SP.WON', 'en', 'weak', `${B}(?:congratulations|you(?:${"['’]"}ve|\\s+have)\\s+been\\s+selected|you\\s+are\\s+(?:our\\s+)?(?:lucky|selected))${E}`, ['Congratulations', "you've been selected"]),
+  // An offer to get into someone else's messages, account or phone (sup-0.5.0): such services are illegal, and paying for
+  // them is a common scam.
+  entry('sup.id.illicit', 'SO.ILLICIT', 'id', 'strong',
+    `${B}(?:(?:jasa\\s+)?(?:sadap|menyadap|penyadap(?:an)?)\\s+(?:wa|whatsapp|hp|ponsel|telepon|chat|percakapan|akun)|jasa\\s+(?:sadap|hack(?:er)?|bobol|retas|peretas(?:an)?)|(?:hack|bobol|retas|bajak)\\s+akun\\s+(?:wa|whatsapp|ig|instagram|fb|facebook|tiktok|gmail|email|orang)|tanpa\\s+(?:sepengetahuan|diketahui)\\s+(?:target|pemilik|pasangan)|(?:hp|ponsel|nomor|akun)\\s+target)${E}`,
+    ['jasa sadap WA', 'menyadap WA', 'hack akun IG', 'tanpa sepengetahuan target', 'HP target']),
+  entry('sup.en.illicit', 'SO.ILLICIT', 'en', 'strong',
+    `${B}(?:(?:hack|spy\\s+on|monitor)\\s+(?:someone(?:${"['’]"}s)?|any(?:one(?:${"['’]"}s)?)?|your\\s+(?:partner|spouse)(?:${"['’]"}s)?)\\s+(?:whats\\s?app|phone|account|messages)|hacker\\s+for\\s+hire|without\\s+(?:them|the\\s+target)\\s+knowing|target(?:${"['’]"}s)?\\s+phone)${E}`,
+    ["hack someone's WhatsApp", 'hacker for hire', 'without them knowing', "target's phone"]),
   entry('sup.en.reward', 'SP.REWARD', 'en', 'weak', `${B}(?:redeem\\s+(?:your\\s+)?points|reward\\s+points|cash\\s+prize|shopping\\s+voucher)${E}`, ['redeem your points', 'cash prize']),
   entry('sup.en.urgency', 'SU.URGENCY', 'en', 'weak',
     `${B}(?:(?<!(?:expires?|valid\\s+for|valid)\\s)within\\s+\\d+\\s+(?:minutes?|mins?|hours?|hrs?)|immediately|right\\s+now|act\\s+now|urgent(?:ly)?|as\\s+soon\\s+as\\s+possible|asap|final\\s+warning)${E}`,

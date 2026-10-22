@@ -39,6 +39,10 @@ const state: State = {
 
 const t = (): Messages => MESSAGES[state.lang];
 
+
+/** Engine plus the experimental detector versions, so testers can tell builds apart (D-091). */
+const engineLabel = (r: ScanReport): string =>
+  `${r.engineVersion} · ${r.credential.detectorVersion} · ${r.payment.detectorVersion} · ${r.support.detectorVersion}`;
 function h(tag: string, attrs: Record<string, string> = {}, ...children: Child[]): HTMLElement {
   const el = document.createElement(tag);
   for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
@@ -359,7 +363,7 @@ function render(): void {
   $('limits-summary').textContent = m.limitsSummary;
   $('limits').textContent = m.limitsText;
   $('meta').textContent = state.report && state.phase === 'done'
-    ? m.meta(state.report.engineVersion, state.report.extractorVersion, state.totalMs)
+    ? m.meta(engineLabel(state.report), state.report.extractorVersion, state.totalMs)
     : m.metaIdle;
   const result = $('result');
   if (state.error) {
@@ -395,7 +399,7 @@ async function scan(): Promise<void> {
     render();
     const t1 = performance.now();
     state.totalMs = Math.round(t1 - t0);
-    $('meta').textContent = t().meta(report.engineVersion, report.extractorVersion, state.totalMs);
+    $('meta').textContent = t().meta(engineLabel(report), report.extractorVersion, state.totalMs);
     document.body.dataset.timing = JSON.stringify({
       injectMs: round(call.injectMs), callMs: round(call.callMs), extractMs: report.timing.extractMs, analyzeMs: report.timing.analyzeMs,
       transferMs: round(Math.max(0, call.callMs - report.timing.extractMs - report.timing.analyzeMs)), renderMs: round(t1 - tr), totalMs: round(t1 - t0),

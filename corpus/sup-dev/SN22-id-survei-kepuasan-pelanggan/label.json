@@ -1,0 +1,21 @@
+{
+  "id": "SN22-id-survei-kepuasan-pelanggan",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "negative",
+  "threatClass": "T-SUP",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://www.listriknusantara.example/survei",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "Survei kepuasan resmi dengan undian voucher",
+  "rationale": "Kuesioner dan hadiah undian tanpa ucapan selamat atas hadiah yang belum diikuti.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; accuracy round 3 dev additions modelled on the owner's device recordings (same author as the rules), written in own words with fictional brands, labels written before the first run",
+  "created": "2026-10-22"
+}

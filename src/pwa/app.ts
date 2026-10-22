@@ -4,7 +4,7 @@
 import type { ScanReport } from '../extension/content/report.js';
 import { aggregate, type Category } from '../extension/popup/aggregate.js';
 import { detectLang, formatCount, MESSAGES, type Lang, type Messages } from '../extension/popup/i18n.js';
-import { checkMessage, MAX_MESSAGE_CHARS, type MessageSource } from './message.js';
+import { checkMessage, isLinkOnly, MAX_MESSAGE_CHARS, type MessageSource } from './message.js';
 
 declare const __VT_VERSION__: string;
 
@@ -144,7 +144,7 @@ function check(): void {
   }
   state.text = text;
   state.report = checkMessage(text, $<HTMLSelectElement>('source').value as MessageSource);
-  state.note = text.length > MAX_MESSAGE_CHARS ? t().pwa.tooLong : null;
+  state.note = isLinkOnly(text) ? t().pwa.linkOnly : text.length > MAX_MESSAGE_CHARS ? t().pwa.tooLong : null;
   document.body.dataset.state = 'done';
   render();
   $('result').scrollIntoView({ block: 'start', behavior: 'smooth' });

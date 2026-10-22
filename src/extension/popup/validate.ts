@@ -56,15 +56,15 @@ const PAY_LIMITS = ['claimed-identity-unverifiable', 'trust-boundary-heuristic',
 // M5.3 experimental support section.
 const SUP_FINDING_KEYS = ['id', 'ruleId', 'classification', 'ruleClassification', 'confidence', 'actionRisk', 'requestedActions', 'channels', 'claims',
   'indicators', 'pressures', 'trustContext', 'modifiers', 'limitations', 'evidence', 'evidenceTotal'];
-const SUP_RULES = ['SR1', 'SR2', 'SR3', 'SR4', 'SR5', 'SR6'] as const;
-const SUP_SIGNALS = ['SC.CONTACT', 'SC.RESPOND', 'SA.REMOTE', 'SA.INSTALL', 'SX.PHONE', 'SX.MOBILE', 'SX.MESSENGER', 'SX.LINK', 'SI.SUPPORT', 'SI.BANK', 'SI.ADMIN', 'SI.SECURITY', 'SI.OFFICIAL',
-  'SW.ALERT', 'SW.ACCOUNT', 'ST.THREAT', 'SU.URGENCY', 'SP.REWARD', 'SH.UNASSERTED', 'C.NEGATION', 'C.REPORTED', 'C.EDUCATIONAL'] as const;
-const SUP_ACTIONS = ['contact', 'respond', 'remote-access', 'install'] as const;
+const SUP_RULES = ['SR1', 'SR2', 'SR3', 'SR4', 'SR5', 'SR6', 'SR7', 'SR8'] as const;
+const SUP_SIGNALS = ['SC.CONTACT', 'SC.RESPOND', 'SC.SURVEY', 'SA.REMOTE', 'SA.INSTALL', 'SX.PHONE', 'SX.MOBILE', 'SX.MESSENGER', 'SX.LINK', 'SI.SUPPORT', 'SI.BANK', 'SI.ADMIN', 'SI.SECURITY', 'SI.OFFICIAL', 'SI.ORG',
+  'SW.ALERT', 'SW.ACCOUNT', 'ST.THREAT', 'SU.URGENCY', 'SP.REWARD', 'SP.WON', 'SO.ILLICIT', 'SH.UNASSERTED', 'C.NEGATION', 'C.REPORTED', 'C.EDUCATIONAL'] as const;
+const SUP_ACTIONS = ['contact', 'respond', 'survey', 'remote-access', 'install'] as const;
 const SUP_CHANNELS = ['phone', 'mobile', 'messenger', 'link'] as const;
-const SUP_CLAIMS = ['support', 'bank', 'administrator', 'security-team', 'official'] as const;
+const SUP_CLAIMS = ['support', 'bank', 'administrator', 'security-team', 'official', 'organization'] as const;
 const SUP_INDICATORS = ['page-rendered-system-alert', 'remote-access-request', 'software-install-request', 'personal-channel-contact', 'claim-in-user-content',
   'alert-in-overlay'] as const;
-const SUP_PRESSURES = ['system-alert', 'account-alarm', 'threat', 'urgency', 'reward'] as const;
+const SUP_PRESSURES = ['system-alert', 'account-alarm', 'threat', 'urgency', 'reward', 'pre-won', 'illicit-access'] as const;
 const SUP_LIMITS = ['claimed-identity-unverifiable', 'trust-boundary-heuristic', 'contact-details-not-reported'] as const;
 const HIGHLIGHT: readonly HighlightStatus[] = ['highlighted', 'invalid-locator', 'not-found', 'frame-inaccessible', 'not-visible'];
 

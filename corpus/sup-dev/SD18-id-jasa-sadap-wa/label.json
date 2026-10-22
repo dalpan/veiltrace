@@ -1,0 +1,22 @@
+{
+  "id": "SD18-id-jasa-sadap-wa",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-SUP",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://jasa-sadap.example/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#main",
+  "description": "Iklan jasa sadap WA dengan kontak WhatsApp pribadi",
+  "rationale": "Tawaran akses ke HP orang lain + arahan kontak nomor ponsel + desakan (SR8).",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; accuracy round 3 dev additions modelled on the owner's device recordings (same author as the rules), written in own words with fictional brands, labels written before the first run",
+  "created": "2026-10-22"
+}

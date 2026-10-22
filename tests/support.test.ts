@@ -208,3 +208,21 @@ describe('support detector sup-0.4.0-exp: impersonated notices (SR6, D-091)', ()
       'Informasi lengkap: https://www.banknusantara.example/tarif']).verdict).toBe('none');
   });
 });
+
+describe('support detector sup-0.5.0-exp: prize quizzes (SR7) and illegal access services (SR8)', () => {
+  it('a company-anniversary cash prize behind a quiz → manipulative in the company\'s name, suspicious without a known name', () => {
+    const lines = ['PLN - 81 anniversary Hadiah', 'Selamat!', 'Melalui kuesioner, Anda berkesempatan mendapatkan Rp1500000', 'Pertanyaan 1 dari 4: Apakah kamu tahu PLN?'];
+    expect(short(sup(lines))).toEqual(['SR7:manipulative_instruction']);
+    expect(short(sup(['Selamat!', 'Melalui kuesioner, Anda berkesempatan mendapatkan Rp1500000', 'Pertanyaan 1 dari 4: Apakah kamu suka listrik?']))).toEqual(['SR7:suspicious_correlation']);
+  });
+
+  it('a customer-satisfaction survey with a voucher draw is not a prize lure and produces no finding', () => {
+    expect(sup(['Survei kepuasan pelanggan: isi kuesioner singkat.', 'Sepuluh responden dipilih acak untuk menerima voucher belanja Rp 100.000.']).findings).toEqual([]);
+  });
+
+  it('a WhatsApp-hacking service with a mobile contact → manipulative; a news report about one stays quiet', () => {
+    expect(short(sup(['Jasa sadap WA, baca chat dari HP target tanpa sepengetahuan pemiliknya.', 'Hubungi admin via WhatsApp 0812 0000 4444.']))).toEqual(['SR8:manipulative_instruction']);
+    expect(sup(['Polisi menangkap penjual jasa sadap WA.', 'Menurut penyidik, pelaku meminta calon pembeli menghubungi nomor WhatsApp dan membayar di muka.']).verdict)
+      .not.toMatch(/suspicious|manipulative/);
+  });
+});

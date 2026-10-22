@@ -4,6 +4,11 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-22 · Device findings: prize quizzes, illegal access services (D-092)
+Owner tested Firefox for Android (works) and the PWA on a phone. Missed: a fake "PLN anniversary" prize quiz reached from WhatsApp, and a "jasa sadap WA" page; the PWA gave no explanation when only a link was pasted. `sup-0.5.0-exp` adds SR7/SR8; the PWA explains link-only input; the popup footer shows all detector versions. sup-dev TP 20 · FP 0 · TN 24 · FN 0; others unchanged; `npm test` 726 passed. **Next:** optional AI check (design decision pending owner), labels and consent for field records.
+
+---
+
 ## 2026-10-22 · Accuracy round 2 from the owner's field sample (D-091)
 15 redacted field records (RW-0001 … RW-0015, all `seen`, dev half). Before: 2 of 14 scams alerted. After `sup-0.4.0-exp` (SR6 impersonated-notice lure) and `pay-0.4.0-exp` (job-offer fees): 11 of 14, genuine bank SMS observed only (dev numbers, same author). sup-dev TP 18 · FP 0 · TN 21 · FN 0; pay-dev TP 17 · FP 0 · TN 23 · FN 0; cred-dev and ClickFix dev unchanged. `npm test`: 716 passed, 1 skipped. Owner's demo report (pay-lure, cred-lure not flagged) traced to a stale extension build: current build flags both in the real popup; extension version bumped to 0.7.0. **Next:** owner labels the records (annotator A) and finds annotator B; more field records go in unseen (test half). **Blockers:** labels; real-device tests.
 

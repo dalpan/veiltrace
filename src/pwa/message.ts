@@ -27,6 +27,16 @@ export function messageSnapshot(text: string, source: MessageSource): PageSnapsh
   };
 }
 
+/**
+ * True when the input is little more than a link. VeilTrace reads what a message says and never judges a web address (D1), so
+ * the app asks for the whole message instead of reporting "no findings" as if it had checked something.
+ */
+export function isLinkOnly(text: string): boolean {
+  const links = text.match(/https?:\/\/\S+|www\.\S+|\b[a-z0-9-]+(?:\.[a-z0-9-]+)+\/\S*/giu) ?? [];
+  const rest = text.replace(/https?:\/\/\S+|www\.\S+|\b[a-z0-9-]+(?:\.[a-z0-9-]+)+\/\S*/giu, ' ').match(/\p{L}{2,}/gu) ?? [];
+  return links.length > 0 && rest.length < 3;
+}
+
 export function checkMessage(text: string, source: MessageSource): ScanReport {
   const s = messageSnapshot(text, source);
   const t0 = performance.now();

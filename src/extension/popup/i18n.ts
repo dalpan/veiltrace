@@ -128,6 +128,7 @@ export interface Messages {
     privacy: string;
     empty: string;
     tooLong: string;
+    linkOnly: string;
     yourMessage: string;
     offlineReady: string;
   };
@@ -369,16 +370,18 @@ const EN: Messages = {
       SR4: 'A comment or other user-posted content presents itself as official support and sends you to an outside contact.',
       SR5: 'Directs you to contact support, install software or allow remote access, with no impersonation or pressure signs nearby.',
       SR6: 'A message presented as a notice from a bank, e-wallet, marketplace or its support raises an alarm, a threat or a reward and asks you to reply, choose an option, open a link or fill in a form. Banks and platforms do not settle such matters through a reply or a link in a message.',
+      SR7: 'Congratulates you on a cash prize you did not enter for and asks you to answer a quiz, often in a company\'s name. Such quizzes lead people to share the link or hand over data or money.',
+      SR8: 'Offers to get into someone else\'s messages, account or phone and sends you to a contact. Such services are illegal, and buyers are commonly cheated or blackmailed.',
     },
-    action: { contact: 'contact someone', respond: 'reply, choose an option, open a link or fill in a form', 'remote-access': 'allow remote access', install: 'install software' },
+    action: { contact: 'contact someone', respond: 'reply, choose an option, open a link or fill in a form', survey: 'answer a quiz or questionnaire', 'remote-access': 'allow remote access', install: 'install software' },
     channel: { phone: 'phone number', mobile: 'mobile number', messenger: 'messaging app', link: 'link' },
-    claim: { support: 'support or customer service', bank: 'a bank', administrator: 'an administrator', 'security-team': 'a security team', official: 'an official, officer or investigator' },
+    claim: { support: 'support or customer service', bank: 'a bank', administrator: 'an administrator', 'security-team': 'a security team', official: 'an official, officer or investigator', organization: 'a company or institution' },
     indicator: {
       'page-rendered-system-alert': 'virus or lock alarm shown by the web page', 'remote-access-request': 'asks for remote access',
       'software-install-request': 'asks you to install software', 'personal-channel-contact': 'official-sounding claim with a mobile number or messaging app',
       'claim-in-user-content': 'official claim inside user-posted content', 'alert-in-overlay': 'alarm in an overlay covering the page',
     },
-    pressure: { 'system-alert': 'device alarm', 'account-alarm': 'account alarm (sign-in, transaction or tariff)', threat: 'threat to the account or data', urgency: 'deadline or urgency', reward: 'reward or points' },
+    pressure: { 'system-alert': 'device alarm', 'account-alarm': 'account alarm (sign-in, transaction or tariff)', threat: 'threat to the account or data', urgency: 'deadline or urgency', reward: 'reward or points', 'pre-won': 'congratulations on a prize you did not enter for', 'illicit-access': 'offer to get into someone else\'s account or phone' },
     asksLabel: 'Asks you to',
     claimsLabel: 'Claims to be (not verified)',
     indicatorsLabel: 'Observed indicators',
@@ -388,10 +391,10 @@ const EN: Messages = {
       medium: 'Action risk: medium. Contacting a fake support line can lead to requests for money, codes or access.',
     },
     signal: {
-      'SC.CONTACT': 'Contact direction', 'SC.RESPOND': 'Reply, link or form request', 'SA.REMOTE': 'Remote access request', 'SA.INSTALL': 'Install request', 'SX.PHONE': 'Phone number',
+      'SC.CONTACT': 'Contact direction', 'SC.RESPOND': 'Reply, link or form request', 'SC.SURVEY': 'Quiz or questionnaire', 'SA.REMOTE': 'Remote access request', 'SA.INSTALL': 'Install request', 'SX.PHONE': 'Phone number',
       'SX.MOBILE': 'Mobile number', 'SX.MESSENGER': 'Messaging app', 'SX.LINK': 'Link', 'SI.SUPPORT': 'Claimed support', 'SI.BANK': 'Claimed bank',
       'SI.ADMIN': 'Claimed administrator', 'SI.SECURITY': 'Claimed security team', 'SI.OFFICIAL': 'Claimed official or rank', 'SW.ALERT': 'Device alarm', 'ST.THREAT': 'Threat',
-      'SU.URGENCY': 'Urgency', 'SW.ACCOUNT': 'Account alarm', 'SP.REWARD': 'Reward', 'SH.UNASSERTED': 'Condition or attribution', 'C.NEGATION': 'Negation', 'C.REPORTED': 'Reported speech', 'C.EDUCATIONAL': 'Educational context',
+      'SU.URGENCY': 'Urgency', 'SW.ACCOUNT': 'Account alarm', 'SP.REWARD': 'Reward', 'SP.WON': 'Unentered prize', 'SO.ILLICIT': 'Illegal access offer', 'SI.ORG': 'Claimed company or institution', 'SH.UNASSERTED': 'Condition or attribution', 'C.NEGATION': 'Negation', 'C.REPORTED': 'Reported speech', 'C.EDUCATIONAL': 'Educational context',
     },
     contactHidden: '(contact number on the page; not shown)',
     limitation: {
@@ -413,6 +416,7 @@ const EN: Messages = {
     privacy: 'Checked on this device only. The message is not sent, saved or shared.',
     empty: 'Paste or share a message first.',
     tooLong: 'Only the first 20,000 characters were checked.',
+    linkOnly: 'Only a link was pasted. VeilTrace checks what a message says and does not judge web addresses. Paste the whole message, including the text around the link. Do not open the link just to check it.',
     yourMessage: 'Your message',
     offlineReady: 'Ready to work offline.',
   },
@@ -671,16 +675,18 @@ const ID: Messages = {
       SR4: 'Komentar atau konten kiriman pengguna mengaku sebagai dukungan resmi dan mengarahkan Anda ke kontak luar.',
       SR5: 'Mengarahkan Anda menghubungi petugas, menginstal perangkat lunak, atau memberi akses jarak jauh, tanpa tanda peniruan atau tekanan di sekitarnya.',
       SR6: 'Pesan yang tampil sebagai pemberitahuan dari bank, e-wallet, marketplace, atau layanan pelanggannya membunyikan alarm, ancaman, atau hadiah, lalu meminta Anda membalas, memilih opsi, membuka tautan, atau mengisi formulir. Bank dan platform tidak menyelesaikan urusan seperti ini lewat balasan atau tautan di pesan.',
+      SR7: 'Mengucapkan selamat atas hadiah uang yang tidak pernah Anda ikuti, lalu meminta Anda menjawab kuis, sering atas nama ulang tahun perusahaan. Kuis seperti ini menggiring orang untuk menyebarkan tautan atau menyerahkan data atau uang.',
+      SR8: 'Menawarkan akses ke pesan, akun, atau HP orang lain lalu mengarahkan Anda ke kontak. Jasa seperti ini ilegal, dan pembelinya sering ditipu atau diperas.',
     },
-    action: { contact: 'menghubungi seseorang', respond: 'membalas, memilih opsi, membuka tautan, atau mengisi formulir', 'remote-access': 'memberi akses jarak jauh', install: 'menginstal perangkat lunak' },
+    action: { contact: 'menghubungi seseorang', respond: 'membalas, memilih opsi, membuka tautan, atau mengisi formulir', survey: 'menjawab kuis atau kuesioner', 'remote-access': 'memberi akses jarak jauh', install: 'menginstal perangkat lunak' },
     channel: { phone: 'nomor telepon', mobile: 'nomor ponsel', messenger: 'aplikasi pesan', link: 'tautan' },
-    claim: { support: 'petugas atau layanan pelanggan', bank: 'pihak bank', administrator: 'admin', 'security-team': 'tim keamanan', official: 'pejabat, aparat, atau penyidik' },
+    claim: { support: 'petugas atau layanan pelanggan', bank: 'pihak bank', administrator: 'admin', 'security-team': 'tim keamanan', official: 'pejabat, aparat, atau penyidik', organization: 'perusahaan atau instansi' },
     indicator: {
       'page-rendered-system-alert': 'alarm virus atau kunci yang dibuat halaman web', 'remote-access-request': 'meminta akses jarak jauh',
       'software-install-request': 'meminta Anda menginstal perangkat lunak', 'personal-channel-contact': 'klaim resmi dengan nomor ponsel atau aplikasi pesan',
       'claim-in-user-content': 'klaim resmi di dalam konten kiriman pengguna', 'alert-in-overlay': 'alarm di overlay yang menutupi halaman',
     },
-    pressure: { 'system-alert': 'alarm perangkat', 'account-alarm': 'alarm akun (login, transaksi, atau tarif)', threat: 'ancaman terhadap akun atau data', urgency: 'tenggat atau desakan', reward: 'hadiah atau poin' },
+    pressure: { 'system-alert': 'alarm perangkat', 'account-alarm': 'alarm akun (login, transaksi, atau tarif)', threat: 'ancaman terhadap akun atau data', urgency: 'tenggat atau desakan', reward: 'hadiah atau poin', 'pre-won': 'ucapan selamat atas hadiah yang tidak Anda ikuti', 'illicit-access': 'tawaran akses ke akun atau HP orang lain' },
     asksLabel: 'Meminta Anda',
     claimsLabel: 'Mengaku sebagai (belum terverifikasi)',
     indicatorsLabel: 'Indikator teramati',
@@ -690,10 +696,10 @@ const ID: Messages = {
       medium: 'Risiko tindakan: sedang. Menghubungi layanan palsu dapat berujung pada permintaan uang, kode, atau akses.',
     },
     signal: {
-      'SC.CONTACT': 'Arahan menghubungi', 'SC.RESPOND': 'Permintaan balasan, tautan, atau formulir', 'SA.REMOTE': 'Permintaan akses jarak jauh', 'SA.INSTALL': 'Permintaan instalasi', 'SX.PHONE': 'Nomor telepon',
+      'SC.CONTACT': 'Arahan menghubungi', 'SC.RESPOND': 'Permintaan balasan, tautan, atau formulir', 'SC.SURVEY': 'Kuis atau kuesioner', 'SA.REMOTE': 'Permintaan akses jarak jauh', 'SA.INSTALL': 'Permintaan instalasi', 'SX.PHONE': 'Nomor telepon',
       'SX.MOBILE': 'Nomor ponsel', 'SX.MESSENGER': 'Aplikasi pesan', 'SX.LINK': 'Tautan', 'SI.SUPPORT': 'Mengaku petugas', 'SI.BANK': 'Mengaku pihak bank',
       'SI.ADMIN': 'Mengaku admin', 'SI.SECURITY': 'Mengaku tim keamanan', 'SI.OFFICIAL': 'Mengaku pejabat atau berpangkat', 'SW.ALERT': 'Alarm perangkat', 'ST.THREAT': 'Ancaman',
-      'SU.URGENCY': 'Desakan', 'SW.ACCOUNT': 'Alarm akun', 'SP.REWARD': 'Hadiah', 'SH.UNASSERTED': 'Pengandaian atau kutipan', 'C.NEGATION': 'Negasi', 'C.REPORTED': 'Kalimat dilaporkan', 'C.EDUCATIONAL': 'Konteks edukasi',
+      'SU.URGENCY': 'Desakan', 'SW.ACCOUNT': 'Alarm akun', 'SP.REWARD': 'Hadiah', 'SP.WON': 'Hadiah tanpa ikut', 'SO.ILLICIT': 'Tawaran akses ilegal', 'SI.ORG': 'Mengaku perusahaan atau instansi', 'SH.UNASSERTED': 'Pengandaian atau kutipan', 'C.NEGATION': 'Negasi', 'C.REPORTED': 'Kalimat dilaporkan', 'C.EDUCATIONAL': 'Konteks edukasi',
     },
     contactHidden: '(nomor kontak di halaman; tidak ditampilkan)',
     limitation: {
@@ -715,6 +721,7 @@ const ID: Messages = {
     privacy: 'Diperiksa hanya di perangkat ini. Pesan tidak dikirim, disimpan, atau dibagikan.',
     empty: 'Tempel atau bagikan pesan terlebih dahulu.',
     tooLong: 'Hanya 20.000 karakter pertama yang diperiksa.',
+    linkOnly: 'Yang ditempel hanya tautan. VeilTrace memeriksa isi pesan dan tidak menilai alamat situs. Tempel seluruh pesannya, termasuk teks di sekitar tautan. Jangan membuka tautan hanya untuk mengeceknya.',
     yourMessage: 'Pesan Anda',
     offlineReady: 'Siap dipakai tanpa internet.',
   },

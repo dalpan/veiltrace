@@ -1,0 +1,22 @@
+{
+  "id": "SD17-id-kuesioner-hadiah-ulang-tahun",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-SUP",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://hadiah-81.example/?id=x",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#main",
+  "description": "Halaman kuesioner hadiah palsu atas nama ulang tahun perusahaan fiktif",
+  "rationale": "Ucapan selamat atas hadiah yang tidak diikuti + hadiah uang + kuis (SR7). Merek fiktif tidak ada di daftar klaim, jadi diharapkan mencurigakan.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; accuracy round 3 dev additions modelled on the owner's device recordings (same author as the rules), written in own words with fictional brands, labels written before the first run",
+  "created": "2026-10-22"
+}

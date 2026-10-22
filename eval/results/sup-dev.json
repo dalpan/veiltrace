@@ -1,70 +1,70 @@
 {
   "split": "sup-dev",
   "note": "DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.",
-  "detectorVersion": "sup-0.4.0-exp",
+  "detectorVersion": "sup-0.5.0-exp",
   "extractorVersion": "0.3.0",
   "metrics": {
-    "scenarios": 39,
+    "scenarios": 44,
     "confusion": {
-      "tp": 18,
+      "tp": 20,
       "fp": 0,
-      "tn": 21,
+      "tn": 24,
       "fn": 0
     },
     "precision": {
-      "k": 18,
-      "n": 18,
+      "k": 20,
+      "n": 20,
       "value": 1,
       "ci95": [
-        0.8241,
+        0.8389,
         1
       ]
     },
     "recall": {
-      "k": 18,
-      "n": 18,
+      "k": 20,
+      "n": 20,
       "value": 1,
       "ci95": [
-        0.8241,
+        0.8389,
         1
       ]
     },
     "fpr": {
       "k": 0,
-      "n": 21,
+      "n": 24,
       "value": 0,
       "ci95": [
         0,
-        0.1546
+        0.138
       ]
     },
     "hardNegativeFpr": {
       "k": 0,
-      "n": 21,
+      "n": 24,
       "value": 0,
       "ci95": [
         0,
-        0.1546
+        0.138
       ]
     },
     "localization": {
-      "k": 18,
-      "n": 18,
+      "k": 20,
+      "n": 20,
       "value": 1,
       "ci95": [
-        0.8241,
+        0.8389,
         1
       ]
     },
     "classMatrix": [
       [
-        5,
+        6,
         0,
         0,
         0
       ],
       [
-        2,
+        4,
         14,
         0,
         0
@@ -72,23 +72,23 @@
       [
         0,
         0,
-        2,
+        3,
         0
       ],
       [
         0,
         0,
         0,
-        16
+        17
       ]
     ],
     "exactClassAgreement": {
-      "k": 37,
-      "n": 39,
-      "value": 0.9487,
+      "k": 40,
+      "n": 44,
+      "value": 0.9091,
       "ci95": [
-        0.8311,
-        0.9858
+        0.7884,
+        0.9641
       ]
     },
     "observedOnNegatives": 14,
@@ -115,21 +115,21 @@
       },
       "id": {
         "recall": {
-          "k": 11,
-          "n": 11,
+          "k": 13,
+          "n": 13,
           "value": 1,
           "ci95": [
-            0.7412,
+            0.7719,
             1
           ]
         },
         "fpr": {
           "k": 0,
-          "n": 11,
+          "n": 14,
           "value": 0,
           "ci95": [
             0,
-            0.2588
+            0.2153
           ]
         }
       }
@@ -474,6 +474,44 @@
       "predicted": "manipulative_instruction",
       "findings": [
         "SR6:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SD17-id-kuesioner-hadiah-ulang-tahun",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "suspicious_correlation",
+      "hardNegative": false,
+      "predicted": "suspicious_correlation",
+      "findings": [
+        "SR7:suspicious_correlation"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SD18-id-jasa-sadap-wa",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "SR8:manipulative_instruction"
       ],
       "localized": true,
       "clickfixVerdict": "none",
@@ -864,6 +902,57 @@
       "clickfixVerdict": "none",
       "credentialVerdict": "none",
       "paymentVerdict": "observed_instruction",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SN22-id-survei-kepuasan-pelanggan",
+      "lang": "id",
+      "category": "negative",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SN23-id-berita-penangkapan-jasa-sadap",
+      "lang": "id",
+      "category": "negative",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SN24-id-aplikasi-kontrol-orang-tua",
+      "lang": "id",
+      "category": "negative",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
       "partial": [],
       "requestsDuringScan": 0,
       "fieldsFilled": 0

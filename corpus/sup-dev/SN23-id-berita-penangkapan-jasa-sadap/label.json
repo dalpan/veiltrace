@@ -1,0 +1,21 @@
+{
+  "id": "SN23-id-berita-penangkapan-jasa-sadap",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "negative",
+  "threatClass": "T-SUP",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://berita.kabarkota.example/hukum/123",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "Berita penangkapan penjual jasa sadap",
+  "rationale": "Teks melaporkan modus, bukan menawarkan jasa kepada pembaca.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; accuracy round 3 dev additions modelled on the owner's device recordings (same author as the rules), written in own words with fictional brands, labels written before the first run",
+  "created": "2026-10-22"
+}
