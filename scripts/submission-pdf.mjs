@@ -1,8 +1,9 @@
 // Renders the hackathon submission documents (submission/*.md) to PDF with the Playwright Chromium already used for tests.
 // Supports the Markdown subset those files use: headings, paragraphs, lists, tables, blockquotes, rules, bold, italics,
-// inline code and bare links. Output: submission/dist/*.pdf (git-ignored). Offline; no network access.
+// inline code, bare links, and images on their own line (`![caption](path)`, embedded as data URIs; several images on one
+// line are placed side by side). Output: submission/dist/*.pdf (git-ignored). Offline; no network access.
 import { mkdirSync, readFileSync, readdirSync } from 'node:fs';
-import { basename, join } from 'node:path';
+import { basename, dirname, extname, join, resolve } from 'node:path';
 import { chromium } from 'playwright';
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -12,7 +13,18 @@ const inline = (s) => esc(s)
   .replace(/\*([^*]+)\*/g, '<em>$1</em>')
   .replace(/(https?:\/\/[^\s<)]+)/g, '<a href="$1">$1</a>');
 
-export function markdownToHtml(md) {
+const MIME = { '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.svg': 'image/svg+xml' };
+const IMAGE = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+=(\d+))?\)/g;
+function figure(line, baseDir) {
+  const imgs = [...line.matchAll(IMAGE)].map(([, alt, src, w]) => {
+    const file = resolve(baseDir, src);
+    const data = readFileSync(file).toString('base64');
+    return `<figure${w ? ` style="width:${w}%"` : ''}><img src="data:${MIME[extname(file).toLowerCase()] ?? 'image/png'};base64,${data}" alt="${esc(alt)}"><figcaption>${inline(alt)}</figcaption></figure>`;
+  });
+  return `<div class="figs">${imgs.join('')}</div>`;
+}
+
+export function markdownToHtml(md, baseDir = '.') {
   const lines = md.split('\n');
   const out = [];
   let i = 0;
@@ -22,6 +34,7 @@ export function markdownToHtml(md) {
     const h = /^(#{1,4})\s+(.*)$/.exec(line);
     if (h) { out.push(`<h${h[1].length}>${inline(h[2])}</h${h[1].length}>`); i++; continue; }
     if (/^---\s*$/.test(line)) { out.push('<hr>'); i++; continue; }
+    if (/^\s*!\[/.test(line)) { out.push(figure(line, baseDir)); i++; continue; }
     if (line.startsWith('>')) {
       const buf = [];
       while (i < lines.length && lines[i].startsWith('>')) buf.push(lines[i++].replace(/^>\s?/, ''));
@@ -71,7 +84,10 @@ h3 { font-size: 11.5pt; margin: 12pt 0 4pt; } p { margin: 5pt 0; } ul, ol { marg
 table { border-collapse: collapse; width: 100%; margin: 6pt 0; font-size: 9.5pt; page-break-inside: avoid; } th, td { border: 1px solid #c9d0bd; padding: 4pt 6pt; vertical-align: top; text-align: left; }
 th { background: #eef1e8; } code { font: 9pt Menlo, Consolas, monospace; background: #f1f3ee; padding: 0 2pt; }
 blockquote { margin: 8pt 0; padding: 6pt 10pt; border-left: 3px solid #8f9f5e; background: #f6f8f2; } hr { border: 0; border-top: 1px solid #c9d0bd; margin: 10pt 0; }
-a { color: #3d5a1f; word-break: break-all; }`;
+a { color: #3d5a1f; word-break: break-all; }
+.figs { display: flex; gap: 8pt; align-items: flex-start; justify-content: center; margin: 8pt 0; page-break-inside: avoid; }
+figure { margin: 0; flex: 1; text-align: center; } figure img { max-width: 100%; max-height: 120mm; border: 1px solid #c9d0bd; }
+figcaption { font-size: 8.5pt; color: #555; margin-top: 2pt; }`;
 
 if (process.argv[1]?.endsWith('submission-pdf.mjs')) {
   const dir = 'submission';
@@ -82,7 +98,7 @@ if (process.argv[1]?.endsWith('submission-pdf.mjs')) {
     for (const f of readdirSync(dir).filter((x) => x.endsWith('.md'))) {
       const page = await browser.newPage();
       await page.route('**/*', (r) => r.abort());
-      await page.setContent(`<!doctype html><html lang="id"><head><meta charset="utf-8"><style>${CSS}</style></head><body>${markdownToHtml(readFileSync(join(dir, f), 'utf8'))}</body></html>`);
+      await page.setContent(`<!doctype html><html lang="id"><head><meta charset="utf-8"><style>${CSS}</style></head><body>${markdownToHtml(readFileSync(join(dir, f), 'utf8'), dirname(join(dir, f)))}</body></html>`);
       const out = join(outDir, `${basename(f, '.md')}.pdf`);
       await page.pdf({ path: out, format: 'A4', printBackground: true, displayHeaderFooter: true, headerTemplate: '<span></span>',
         footerTemplate: '<div style="font-size:8px;width:100%;text-align:center;color:#666">VeilTrace · <span class="pageNumber"></span>/<span class="totalPages"></span></div>',
