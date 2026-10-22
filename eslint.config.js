@@ -14,7 +14,7 @@ const CORE_FORBIDDEN_GLOBALS = [
 ].map((name) => ({ name, message: 'src/core must not depend on browser, Node or runtime globals.' }));
 
 export default defineConfig(
-  { ignores: ['dist/', 'coverage/', 'node_modules/'] },
+  { ignores: ['dist/', 'coverage/', 'node_modules/', 'submission/', 'release/'] },
   js.configs.recommended,
   tseslint.configs.strict,
   {
