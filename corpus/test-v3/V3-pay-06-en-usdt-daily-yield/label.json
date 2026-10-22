@@ -1,0 +1,23 @@
+{
+  "id": "V3-pay-06-en-usdt-daily-yield",
+  "split": "test-v3",
+  "lang": "en",
+  "category": "positive",
+  "threatCategory": "pay",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "page",
+  "pages": [
+    {
+      "url": "https://quantix-yield.test/invest",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#plans",
+  "description": "Investment landing page promising fixed daily returns on USDT deposits sent to a listed wallet address with referral bonuses.",
+  "rationale": "Guaranteed high daily returns and deposits to a raw crypto address are hallmarks of Ponzi-style investment fraud.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "V3-sup-02-id-undangan-nikah-apk",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "sup",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/c/0896-0000-4410",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m1",
+  "description": "Unknown sender shares a digital wedding invitation delivered as an APK file with a friendly note to open it.",
+  "rationale": "Invitations are images or links, not installable apps; the APK lure is used to steal banking OTPs.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

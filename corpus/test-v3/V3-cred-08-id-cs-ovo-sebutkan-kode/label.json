@@ -1,0 +1,23 @@
+{
+  "id": "V3-cred-08-id-cs-ovo-sebutkan-kode",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "cred",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/c/ovo-helpdesk",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m4",
+  "description": "Chat from a fake e-wallet help desk claiming suspicious activity and asking the user to read out the code that will arrive by SMS.",
+  "rationale": "Fake support creates alarm then asks for the one-time code, which is the credential needed to hijack the account.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

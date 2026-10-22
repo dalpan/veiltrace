@@ -1,0 +1,23 @@
+{
+  "id": "V3-cmd-06-en-browser-font-update",
+  "split": "test-v3",
+  "lang": "en",
+  "category": "positive",
+  "threatCategory": "cmd",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "page",
+  "pages": [
+    {
+      "url": "https://maple-street-news.test/local/council-vote",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#upd",
+  "description": "News page with a fake browser 'font pack missing' overlay that tells the visitor to copy a fix and run it through the Run box.",
+  "rationale": "Browsers never ship fixes via copy-paste commands; the overlay is a social-engineering lure to execute a remote payload.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

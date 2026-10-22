@@ -1,0 +1,23 @@
+{
+  "id": "V3-cmd-10-en-meet-mic-blocked",
+  "split": "test-v3",
+  "lang": "en",
+  "category": "positive",
+  "threatCategory": "cmd",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "page",
+  "pages": [
+    {
+      "url": "https://meet-room-join.test/abc-defg-hij",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#err",
+  "description": "Fake video-meeting join page claiming the microphone is blocked and giving Win+R paste-and-enter steps to 'repair' it.",
+  "rationale": "Conferencing apps fix permissions via browser settings, not shell commands; this page pushes running a remote script.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

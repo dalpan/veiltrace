@@ -1,0 +1,22 @@
+{
+  "id": "V3-cmd-19-en-vpn-software-center-mail",
+  "split": "test-v3",
+  "lang": "en",
+  "category": "negative",
+  "threatCategory": "cmd",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://mail-reader.test/inbox/80044",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "Company IT email explaining that the new VPN client is available in the managed Software Center and warning against commands sent by email.",
+  "rationale": "Points staff to an internal managed install channel and explicitly says IT never sends commands to paste.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "V3-sup-10-en-bank-fraud-anydesk",
+  "split": "test-v3",
+  "lang": "en",
+  "category": "positive",
+  "threatCategory": "sup",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/c/fraud-team",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m3",
+  "description": "Chat from a supposed bank fraud department that asks the customer to install a remote-desktop app so an agent can 'secure' the account.",
+  "rationale": "Banks never ask customers to install remote-access software; doing so lets scammers move money directly.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

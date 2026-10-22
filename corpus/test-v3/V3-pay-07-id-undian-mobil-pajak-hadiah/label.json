@@ -1,0 +1,23 @@
+{
+  "id": "V3-pay-07-id-undian-mobil-pajak-hadiah",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "pay",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://sms-inbox.test/thread/+62-821-0000-5541",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m1",
+  "description": "SMS announcing the recipient won a car in a retailer lottery and must first pay 'prize tax' to an account.",
+  "rationale": "Legitimate prizes do not require winners to pay tax or fees upfront to a personal account.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

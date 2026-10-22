@@ -1,0 +1,23 @@
+{
+  "id": "V3-cmd-03-id-it-kantor-wa-powershell",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "cmd",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/c/3381",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m3",
+  "description": "WhatsApp chat from an unknown number posing as the office IT team, urging the employee to paste a command into an admin PowerShell window to fix email sync.",
+  "rationale": "Unverified 'IT support' pressures the user to run an encoded command from a remote host, which is how attackers get initial access.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

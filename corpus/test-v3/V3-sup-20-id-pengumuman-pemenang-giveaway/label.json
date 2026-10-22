@@ -1,0 +1,22 @@
+{
+  "id": "V3-sup-20-id-pengumuman-pemenang-giveaway",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "negative",
+  "threatCategory": "sup",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "context": "page",
+  "pages": [
+    {
+      "url": "https://kopi-senja-roastery.test/blog/pemenang-giveaway-oktober",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "Coffee shop blog post announcing giveaway winners and stating that winners are contacted only by the official account and never charged fees.",
+  "rationale": "A transparent results post with anti-impersonation guidance and no request for money or data.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

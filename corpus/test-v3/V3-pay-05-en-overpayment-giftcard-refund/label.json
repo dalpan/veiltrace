@@ -1,0 +1,23 @@
+{
+  "id": "V3-pay-05-en-overpayment-giftcard-refund",
+  "split": "test-v3",
+  "lang": "en",
+  "category": "positive",
+  "threatCategory": "pay",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://mail-reader.test/inbox/90801",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#mailbody",
+  "description": "Email from a would-be buyer of a listed item who 'accidentally' overpaid and asks the seller to refund the difference with gift cards.",
+  "rationale": "Overpayment scams rely on a fake or reversible payment and push an irreversible refund via gift cards.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

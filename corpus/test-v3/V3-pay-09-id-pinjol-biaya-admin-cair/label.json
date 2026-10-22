@@ -1,0 +1,23 @@
+{
+  "id": "V3-pay-09-id-pinjol-biaya-admin-cair",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "pay",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "page",
+  "pages": [
+    {
+      "url": "https://danacepat-tanpa-bi.test/ajukan",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#syarat",
+  "description": "Loan landing page promising instant disbursement without credit checks but requiring an upfront administration fee before funds are released.",
+  "rationale": "Upfront fees before disbursement are a hallmark of fake lenders; no fee is deducted from a real loan this way.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

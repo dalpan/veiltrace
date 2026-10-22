@@ -1,0 +1,23 @@
+{
+  "id": "V3-cred-01-id-tarif-transfer-form-pin",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "cred",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/c/bri-care-palsu",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m2",
+  "description": "WhatsApp message from an account using a bank's name announcing a new monthly transfer fee and asking the customer to opt out via a form requesting card number, PIN and OTP.",
+  "rationale": "Fake fee-change notice with a deemed-consent deadline pushes the victim to disclose PIN and OTP on a lookalike form.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

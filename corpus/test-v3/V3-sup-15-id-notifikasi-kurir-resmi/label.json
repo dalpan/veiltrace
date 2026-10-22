@@ -1,0 +1,22 @@
+{
+  "id": "V3-sup-15-id-notifikasi-kurir-resmi",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "negative",
+  "threatCategory": "sup",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://sms-inbox.test/thread/KIRIMAJA",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "Courier status SMS telling the recipient their parcel is out for delivery and can be tracked in the official app, with no attachments.",
+  "rationale": "A routine status notification for an expected order with no request to install files or share data.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "V3-cred-11-en-romance-instagram-codes",
+  "split": "test-v3",
+  "lang": "en",
+  "category": "positive",
+  "threatCategory": "cred",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/c/emily-r",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m5",
+  "description": "Dating-app conversation that moves to messaging, then the match asks the user to send the codes they receive to 'prove they are not a catfish'.",
+  "rationale": "Asking for codes sent to your phone is an account-takeover attempt disguised as identity verification.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

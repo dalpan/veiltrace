@@ -1,0 +1,23 @@
+{
+  "id": "V3-cred-09-en-postal-redelivery-card",
+  "split": "test-v3",
+  "lang": "en",
+  "category": "positive",
+  "threatCategory": "cred",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://sms-inbox.test/thread/+1-555-0100",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m1",
+  "description": "SMS claiming a parcel is held for an incomplete address and directing the recipient to a link to pay a small redelivery fee by card.",
+  "rationale": "Small-fee redelivery texts are used to harvest card numbers and verification codes on lookalike pages.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

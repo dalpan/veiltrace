@@ -1,0 +1,23 @@
+{
+  "id": "V3-sup-04-id-pln-tagihan-apk",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "sup",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/c/pln-cs",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m2",
+  "description": "Message impersonating the electricity company warning of disconnection over an unpaid bill and pushing installation of an APK 'billing app'.",
+  "rationale": "Disconnection threats plus an APK outside the official store are used to install banking malware.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

@@ -1,0 +1,27 @@
+{
+  "id": "V3-cmd-02-id-nonton-film-verifikasi",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "cmd",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "page",
+  "pages": [
+    {
+      "url": "https://nobar-cinema21x.test/film/pengabdi-malam-2",
+      "file": "index.html"
+    }
+  ],
+  "steps": [
+    {
+      "click": "#cek"
+    }
+  ],
+  "evidenceWithin": "#langkah",
+  "description": "Indonesian movie-streaming page that gates the player behind a fake 'prove you are human' box revealing Win+R and paste instructions.",
+  "rationale": "The pseudo-verification asks the visitor to execute a clipboard command that downloads a remote script, a ClickFix lure.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

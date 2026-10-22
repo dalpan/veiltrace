@@ -1,0 +1,22 @@
+{
+  "id": "V3-sup-14-id-grup-warning-apk-undangan",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "negative",
+  "threatCategory": "sup",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/g/alumni-sma-3",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "Alumni group chat where a member warns about a wedding-invitation APK going around and tells others not to open it.",
+  "rationale": "The APK name is mentioned only as a warning with explicit 'don't open' advice.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

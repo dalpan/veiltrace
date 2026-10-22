@@ -1,0 +1,23 @@
+{
+  "id": "V3-sup-01-id-kurir-foto-paket-apk",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "sup",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/c/0857-0000-1903",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m2",
+  "description": "Chat from a supposed courier sending an .apk file labelled as a parcel photo and asking the recipient to install it to confirm delivery.",
+  "rationale": "A photo is never an APK; installing it grants malware access to SMS/OTP and banking apps.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "V3-cmd-08-en-game-beta-launcher",
+  "split": "test-v3",
+  "lang": "en",
+  "category": "positive",
+  "threatCategory": "cmd",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/c/1190",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m4",
+  "description": "Direct-message chat in which a 'game studio' contact invites the user to a paid beta and asks them to install the launcher by pasting a PowerShell line.",
+  "rationale": "An unsolicited stranger offers payment and pushes running a remote script outside any official store, a common malware lure.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

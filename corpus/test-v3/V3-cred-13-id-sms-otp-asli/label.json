@@ -1,0 +1,22 @@
+{
+  "id": "V3-cred-13-id-sms-otp-asli",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "negative",
+  "threatCategory": "cred",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://sms-inbox.test/thread/BANKNUSA",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "Genuine-style OTP SMS from a fictional bank that tells the user never to share the code with anyone.",
+  "rationale": "A standard one-time code delivery triggered by the user, containing a warning not to disclose it; no request to share.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

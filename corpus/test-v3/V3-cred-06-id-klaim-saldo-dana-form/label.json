@@ -1,0 +1,23 @@
+{
+  "id": "V3-cred-06-id-klaim-saldo-dana-form",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "cred",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "page",
+  "pages": [
+    {
+      "url": "https://dana-kaget-promo.test/klaim/7f21",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#formklaim",
+  "description": "Prize-claim landing page imitating an e-wallet promotion that asks for phone number, 6-digit PIN and the OTP to 'receive' a balance gift.",
+  "rationale": "Receiving money never requires a PIN or OTP; the form harvests credentials needed to take over the wallet.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "V3-cred-18-id-berita-sms-phishing-kutip",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "negative",
+  "threatCategory": "cred",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "context": "page",
+  "pages": [
+    {
+      "url": "https://kabar-digital-id.test/2026/10/waspada-sms-blokir-rekening",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "Indonesian news article quoting an SMS phishing text about a blocked account and explaining how to recognize it.",
+  "rationale": "Journalistic reporting; the scam text is quoted for awareness with explicit advice not to click or share data.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

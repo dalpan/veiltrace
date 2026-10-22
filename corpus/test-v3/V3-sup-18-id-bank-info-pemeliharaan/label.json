@@ -1,0 +1,22 @@
+{
+  "id": "V3-sup-18-id-bank-info-pemeliharaan",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "negative",
+  "threatCategory": "sup",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/c/banknusa-official",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "Broadcast from a fictional bank's verified business account announcing a short scheduled system maintenance and pointing to the official call center.",
+  "rationale": "Informational notice without links, attachments, or requests; it reminds customers the bank never asks for PIN/OTP.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

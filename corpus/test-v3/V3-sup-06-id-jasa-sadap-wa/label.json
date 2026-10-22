@@ -1,0 +1,23 @@
+{
+  "id": "V3-sup-06-id-jasa-sadap-wa",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "sup",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "context": "page",
+  "pages": [
+    {
+      "url": "https://jasa-sadap-pro.test/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#paket",
+  "description": "Landing page advertising illegal services to tap WhatsApp, hack social media accounts and recover deleted chats, payable upfront.",
+  "rationale": "Illegal intrusion services typically take upfront payment and deliver nothing, and they encourage unlawful access.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "V3-sup-11-id-ancaman-sebar-video",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "sup",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/c/0838-0000-7712",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m1",
+  "description": "Sextortion-style threat claiming to have a compromising video and demanding payment within hours or it will be sent to the victim's contacts.",
+  "rationale": "Threats and deadlines coerce payment; such claims are usually bluffs and paying invites further demands.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

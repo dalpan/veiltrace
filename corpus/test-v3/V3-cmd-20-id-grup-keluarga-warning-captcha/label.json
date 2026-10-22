@@ -1,0 +1,22 @@
+{
+  "id": "V3-cmd-20-id-grup-keluarga-warning-captcha",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "negative",
+  "threatCategory": "cmd",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/g/keluarga-besar",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "Family group chat where a member forwards a screenshot transcript of a fake CAPTCHA lure and tells everyone not to follow it.",
+  "rationale": "The command instructions are quoted as a warning example with explicit advice not to run them.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

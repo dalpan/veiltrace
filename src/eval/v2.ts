@@ -47,9 +47,9 @@ function detectAll(s: PageSnapshot, cmdRuleset: 'm5' | 'm4.1'): Record<ThreatCat
   return { cmd: analyze(s, { ruleset: cmdRuleset }).verdict, cred: analyzeCredentials(s).verdict, pay: analyzePayments(s).verdict, sup: analyzeSupport(s).verdict };
 }
 
-interface Row { id: string; category: ThreatCategory; truth: 'malicious' | 'benign'; lang: string; hardNegative: boolean; verdicts: Record<ThreatCategory, Verdict>; baselineCmd: Verdict; localized: boolean | null; requests: number }
+export interface Row { id: string; category: ThreatCategory; truth: 'malicious' | 'benign'; lang: string; hardNegative: boolean; verdicts: Record<ThreatCategory, Verdict>; baselineCmd: Verdict; localized: boolean | null; requests: number }
 
-async function runOne(browser: Browser, dir: string, label: V2Label): Promise<Row> {
+export async function runOne(browser: Browser, dir: string, label: V2Label): Promise<Row> {
   const context = await browser.newContext({ viewport: VIEWPORT });
   const log: RequestLog = { served: [], blocked: [] };
   await routeScenario(context, { dir, label } as unknown as Scenario, log);

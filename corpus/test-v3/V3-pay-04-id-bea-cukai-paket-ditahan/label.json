@@ -1,0 +1,23 @@
+{
+  "id": "V3-pay-04-id-bea-cukai-paket-ditahan",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "pay",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/c/petugas-bc",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m2",
+  "description": "Chat from someone claiming to be a customs officer saying an overseas parcel is detained and a fine must be paid to a personal account or the recipient faces prosecution.",
+  "rationale": "Customs payments use official billing codes, not personal transfers; legal threats and deadlines are coercion.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

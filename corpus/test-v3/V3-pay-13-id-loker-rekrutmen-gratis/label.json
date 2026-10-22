@@ -1,0 +1,22 @@
+{
+  "id": "V3-pay-13-id-loker-rekrutmen-gratis",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "negative",
+  "threatCategory": "pay",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "context": "page",
+  "pages": [
+    {
+      "url": "https://karier.tokotani-nusantara.test/lowongan/admin-gudang",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "Job vacancy page of a fictional company stating that recruitment is free and the company never asks candidates for money.",
+  "rationale": "An ordinary job ad that explicitly disclaims fees and travel-agent requirements.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "V3-sup-03-en-defender-alert-call",
+  "split": "test-v3",
+  "lang": "en",
+  "category": "positive",
+  "threatCategory": "sup",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "page",
+  "pages": [
+    {
+      "url": "https://secure-alert-center.test/win/err0x268d3",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#alert",
+  "description": "Full-screen fake security alert claiming the PC is infected and locked, urging the user to call a 'certified technician' phone number.",
+  "rationale": "Browsers cannot detect viruses this way; the alert uses fear and a countdown to drive a call to scammers who request remote access and payment.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

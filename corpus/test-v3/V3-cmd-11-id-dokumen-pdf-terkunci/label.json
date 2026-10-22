@@ -1,0 +1,27 @@
+{
+  "id": "V3-cmd-11-id-dokumen-pdf-terkunci",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "cmd",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "page",
+  "pages": [
+    {
+      "url": "https://unduh-dokumen-desa.test/surat/SPT-2026-0412",
+      "file": "index.html"
+    }
+  ],
+  "steps": [
+    {
+      "click": "#unduh"
+    }
+  ],
+  "evidenceWithin": "#buka",
+  "description": "Fake government document download page that, after clicking download, says the PDF is locked and must be opened via Win+R and paste.",
+  "rationale": "Opening a document never requires executing commands; the page fabricates an error to get the visitor to run a remote installer.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

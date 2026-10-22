@@ -1,0 +1,23 @@
+{
+  "id": "V3-pay-02-id-lolos-kerja-bayar-hotel",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "pay",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/c/hrd-pt-0000",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m3",
+  "description": "Job-offer chat congratulating the applicant on passing selection and requiring payment for training accommodation through a named travel agent.",
+  "rationale": "Genuine employers do not charge candidates; mandatory fees to a 'partner travel agent' are a known job-scam pattern.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

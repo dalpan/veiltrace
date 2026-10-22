@@ -1,0 +1,23 @@
+{
+  "id": "V3-cmd-09-id-airdrop-terminal-klaim",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "cmd",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/g/airdrop-nusantara",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m2",
+  "description": "Group chat where an 'admin' announces a crypto airdrop that can only be claimed by running a wallet-check command in the terminal.",
+  "rationale": "Running an unknown script under the pretext of claiming tokens can steal wallets and credentials; urgency and authority are used to push it.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

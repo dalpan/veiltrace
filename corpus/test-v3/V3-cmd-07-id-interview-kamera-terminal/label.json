@@ -1,0 +1,23 @@
+{
+  "id": "V3-cmd-07-id-interview-kamera-terminal",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "cmd",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://mail-reader.test/inbox/90122",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#mailbody",
+  "description": "Recruiter email for a remote crypto job interview that tells the candidate to fix a 'camera driver error' by pasting a curl-pipe-bash command into the macOS Terminal.",
+  "rationale": "A fake recruiter uses a fabricated technical error to get the candidate to execute a remote script, a known fake-interview malware pattern.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

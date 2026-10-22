@@ -1,0 +1,23 @@
+{
+  "id": "V3-cred-12-id-refund-marketplace-login",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "cred",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://mail-reader.test/inbox/90577",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#mailbody",
+  "description": "Email posing as a marketplace saying an order was cancelled and the refund requires logging in via a link and entering the OTP.",
+  "rationale": "Refunds are processed automatically in-app; the external login link and OTP request are a credential-phishing pattern.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

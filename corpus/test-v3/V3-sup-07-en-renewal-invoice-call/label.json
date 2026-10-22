@@ -1,0 +1,23 @@
+{
+  "id": "V3-sup-07-en-renewal-invoice-call",
+  "split": "test-v3",
+  "lang": "en",
+  "category": "positive",
+  "threatCategory": "sup",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://mail-reader.test/inbox/90912",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#mailbody",
+  "description": "Email invoice for an antivirus 'auto-renewal' the recipient never ordered, telling them to call a number within 24 hours to cancel.",
+  "rationale": "Fake renewal invoices push victims to phone scammers who then request remote access and 'refund' payments.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

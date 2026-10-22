@@ -1,0 +1,23 @@
+{
+  "id": "V3-sup-09-id-polisi-video-call-tppu",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "sup",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/c/penyidik-bareskrim",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m3",
+  "description": "Chat from someone claiming to be a police investigator alleging the user's ID was used for money laundering and demanding secrecy and a video interrogation.",
+  "rationale": "Fake authority uses legal threats, isolation ('don't tell family') and urgency, which real police do not do via chat.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

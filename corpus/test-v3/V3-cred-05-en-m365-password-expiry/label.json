@@ -1,0 +1,23 @@
+{
+  "id": "V3-cred-05-en-m365-password-expiry",
+  "split": "test-v3",
+  "lang": "en",
+  "category": "positive",
+  "threatCategory": "cred",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://mail-reader.test/inbox/90310",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#mailbody",
+  "description": "Email impersonating a Microsoft 365 admin notice that the password expires today and offering a 'keep current password' button to an external page.",
+  "rationale": "Credential-harvesting email using an expiry deadline and an external login link not on the organization's domain.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "V3-cmd-16-id-pengumuman-it-maintenance",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "negative",
+  "threatCategory": "cmd",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://mail-reader.test/inbox/77310",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "Internal IT announcement email about a weekend server maintenance window, stating IT will never ask staff to run commands from messages.",
+  "rationale": "Informational notice with no action required beyond saving work; it explicitly warns against command-paste requests.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

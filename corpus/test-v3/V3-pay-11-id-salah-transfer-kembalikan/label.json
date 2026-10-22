@@ -1,0 +1,23 @@
+{
+  "id": "V3-pay-11-id-salah-transfer-kembalikan",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "pay",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/c/0815-0000-3374",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m2",
+  "description": "Stranger messages claiming they mistakenly transferred money and asks for it to be returned to a different account than the one it came from.",
+  "rationale": "Returning 'mistaken' funds to a third-party account can be a loan-fraud or money-mule setup; the correct route is through the bank.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

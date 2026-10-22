@@ -1,0 +1,23 @@
+{
+  "id": "V3-cmd-04-en-word-preview-error-mail",
+  "split": "test-v3",
+  "lang": "en",
+  "category": "positive",
+  "threatCategory": "cmd",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://mail-reader.test/inbox/88213",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#mailbody",
+  "description": "Email posing as a document-sharing notice whose 'preview failed' section instructs the reader to paste a command into Windows Terminal to install a missing font.",
+  "rationale": "Legitimate document viewers do not ask users to run shell commands; the email combines an invoice lure with a copy-and-run instruction.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

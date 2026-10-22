@@ -1,0 +1,23 @@
+{
+  "id": "V3-pay-10-en-unpaid-toll-sms",
+  "split": "test-v3",
+  "lang": "en",
+  "category": "positive",
+  "threatCategory": "pay",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://sms-inbox.test/thread/+1-555-0144",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m1",
+  "description": "Text message claiming an unpaid road toll balance with a late fee and a link to pay immediately.",
+  "rationale": "Unsolicited toll texts with a short deadline and a non-agency link are a widespread payment-phishing campaign.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

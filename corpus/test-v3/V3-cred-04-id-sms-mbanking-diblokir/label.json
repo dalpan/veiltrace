@@ -1,0 +1,23 @@
+{
+  "id": "V3-cred-04-id-sms-mbanking-diblokir",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "cred",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://sms-inbox.test/thread/BCA-INFO",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m1",
+  "description": "SMS spoofing a bank sender ID saying the mobile banking account is blocked and must be reactivated through a lookalike link.",
+  "rationale": "Threat of blocking plus a non-official link to 're-verify' is credential phishing.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

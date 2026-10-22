@@ -1,0 +1,22 @@
+{
+  "id": "V3-cmd-15-en-news-clickfix-explainer",
+  "split": "test-v3",
+  "lang": "en",
+  "category": "negative",
+  "threatCategory": "cmd",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "context": "page",
+  "pages": [
+    {
+      "url": "https://securewire-news.test/2026/10/fake-captcha-run-box",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "Security news article explaining fake-CAPTCHA attacks and quoting the 'press Win+R and paste' lure as an example to avoid.",
+  "rationale": "The quoted instructions are reported as a warning; the article tells readers never to follow them.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

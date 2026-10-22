@@ -1,0 +1,23 @@
+{
+  "id": "V3-cred-07-en-wallet-sync-seed",
+  "split": "test-v3",
+  "lang": "en",
+  "category": "positive",
+  "threatCategory": "cred",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "page",
+  "pages": [
+    {
+      "url": "https://wallet-dapp-sync.test/validate",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#seedbox",
+  "description": "Crypto 'wallet synchronization' page that asks the visitor to type their 12- or 24-word recovery phrase to fix a sync error.",
+  "rationale": "A recovery phrase gives full control of a wallet; no legitimate service asks for it on a web form.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

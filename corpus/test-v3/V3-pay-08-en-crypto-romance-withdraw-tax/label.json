@@ -1,0 +1,23 @@
+{
+  "id": "V3-pay-08-en-crypto-romance-withdraw-tax",
+  "split": "test-v3",
+  "lang": "en",
+  "category": "positive",
+  "threatCategory": "pay",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/c/daniel-w",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m4",
+  "description": "Long-running friendly chat where the contact's 'trading platform' shows big profits but withdrawal requires paying a tax first.",
+  "rationale": "Pig-butchering scams show fake gains then demand fees to withdraw, extracting more money each time.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

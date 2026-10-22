@@ -1,0 +1,22 @@
+{
+  "id": "V3-cred-16-id-ibu-ingatkan-kode-verif",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "negative",
+  "threatCategory": "cred",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/c/ibu",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "Chat in which a mother forwards a 'send me the code' scam example and warns her child never to share verification codes.",
+  "rationale": "The scam request is quoted only as a warning; the conversation discourages sharing codes.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

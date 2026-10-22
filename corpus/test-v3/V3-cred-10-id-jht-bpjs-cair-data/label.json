@@ -1,0 +1,23 @@
+{
+  "id": "V3-cred-10-id-jht-bpjs-cair-data",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "cred",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "page",
+  "pages": [
+    {
+      "url": "https://klaim-jht-online.test/pencairan",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#data",
+  "description": "Fake pension-fund claim page promising fast payout and asking for national ID photo, bank account, ATM PIN and internet banking password.",
+  "rationale": "Official claims never require an ATM PIN or banking password; the page harvests full account access under an authority pretext.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "V3-pay-03-id-seller-tf-luar-aplikasi",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "pay",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/c/seller-gadget",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m3",
+  "description": "Marketplace seller chat that offers a discount if the buyer transfers payment directly to a personal account outside the app.",
+  "rationale": "Moving payment off-platform removes buyer protection; discount bait plus personal account is an early-stage fraud signal.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "V3-sup-12-en-remote-support-product",
+  "split": "test-v3",
+  "lang": "en",
+  "category": "negative",
+  "threatCategory": "sup",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "context": "page",
+  "pages": [
+    {
+      "url": "https://helpbridge-remote.test/",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "Product page for a fictional remote-support tool used by IT teams, explaining that sessions are started only by the user and can be ended anytime.",
+  "rationale": "A legitimate product description with anti-scam guidance; it does not pressure anyone to install it.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

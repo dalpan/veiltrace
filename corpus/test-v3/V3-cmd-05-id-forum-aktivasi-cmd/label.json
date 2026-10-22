@@ -1,0 +1,23 @@
+{
+  "id": "V3-cmd-05-id-forum-aktivasi-cmd",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "cmd",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "page",
+  "pages": [
+    {
+      "url": "https://kaskus-lounge-tekno.test/thread/aktivasi-office-gratis",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#c2",
+  "description": "Indonesian tech forum thread where a commenter tells readers to paste a one-line remote script into CMD to 'activate Office for free'.",
+  "rationale": "The comment urges running an obfuscated script from an unknown host with admin rights under a free-software pretext.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

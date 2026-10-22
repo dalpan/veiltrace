@@ -1,0 +1,22 @@
+{
+  "id": "V3-sup-19-en-police-community-scam-post",
+  "split": "test-v3",
+  "lang": "en",
+  "category": "negative",
+  "threatCategory": "sup",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "context": "page",
+  "pages": [
+    {
+      "url": "https://fairview-police-community.test/news/impersonation-calls",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "Community safety post from a fictional local police department warning residents about callers impersonating officers and demanding payment.",
+  "rationale": "An awareness notice that describes scam tactics and tells residents to hang up; it makes no demands.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

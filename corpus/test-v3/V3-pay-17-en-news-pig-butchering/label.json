@@ -1,0 +1,22 @@
+{
+  "id": "V3-pay-17-en-news-pig-butchering",
+  "split": "test-v3",
+  "lang": "en",
+  "category": "negative",
+  "threatCategory": "pay",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "context": "page",
+  "pages": [
+    {
+      "url": "https://citywatch-daily.test/money/2026/10/crypto-romance-losses",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "News article about crypto romance scams quoting messages victims received, including a 'withdrawal tax' demand.",
+  "rationale": "Reporting that quotes scam lines for awareness and advises readers not to pay.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

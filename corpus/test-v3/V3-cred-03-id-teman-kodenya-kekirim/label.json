@@ -1,0 +1,23 @@
+{
+  "id": "V3-cred-03-id-teman-kodenya-kekirim",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "cred",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/c/sinta-kampus",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m1",
+  "description": "Message from a known contact's (likely hijacked) account claiming they accidentally sent a 6-digit code to the user and asking for it back.",
+  "rationale": "The 'wrong code' pretext is a classic account-takeover trick; the requested code is the user's own login code.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

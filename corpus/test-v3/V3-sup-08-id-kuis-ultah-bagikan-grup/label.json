@@ -1,0 +1,27 @@
+{
+  "id": "V3-sup-08-id-kuis-ultah-bagikan-grup",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "sup",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "context": "page",
+  "pages": [
+    {
+      "url": "https://hadiah-ultah-minimarket.test/kuis",
+      "file": "index.html"
+    }
+  ],
+  "steps": [
+    {
+      "click": "#jawab"
+    }
+  ],
+  "evidenceWithin": "#hasil",
+  "description": "Fake anniversary quiz page in the name of a convenience-store chain promising a big prize after sharing the link to several chat groups.",
+  "rationale": "Engagement-bait giveaway with fake urgency that spreads phishing links and later leads to data or fee requests.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

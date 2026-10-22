@@ -1,0 +1,27 @@
+{
+  "id": "V3-cmd-01-en-turnstile-runbox",
+  "split": "test-v3",
+  "lang": "en",
+  "category": "positive",
+  "threatCategory": "cmd",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "page",
+  "pages": [
+    {
+      "url": "https://recipes-daily-hub.test/slow-cooker/beef-stew",
+      "file": "index.html"
+    }
+  ],
+  "steps": [
+    {
+      "click": "#verify"
+    }
+  ],
+  "evidenceWithin": "#fix",
+  "description": "Recipe site overlay imitating a human-verification checkbox that, once clicked, tells the visitor to open the Run dialog and paste a PowerShell command.",
+  "rationale": "A CAPTCHA never requires running OS commands; the page pre-loads a remote-fetch command and walks the user through executing it.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "V3-cred-02-id-kurir-minta-kode-wa",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "cred",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/c/kurir-0000-2291",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m3",
+  "description": "Chat from a supposed courier who claims a delivery confirmation code was sent by SMS and asks the recipient to read it back; the code is actually a WhatsApp login code.",
+  "rationale": "Asking for a verification code sent to your phone enables account takeover; the delivery story is a pretext.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

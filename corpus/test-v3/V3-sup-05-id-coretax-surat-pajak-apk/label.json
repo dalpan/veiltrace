@@ -1,0 +1,23 @@
+{
+  "id": "V3-sup-05-id-coretax-surat-pajak-apk",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "sup",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/c/kpp-pratama",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m3",
+  "description": "Chat posing as a tax office officer claiming the user has a tax arrears notice that can only be viewed in an APK 'e-letter' app.",
+  "rationale": "Tax authorities do not distribute APKs over chat; authority, fines and an install request indicate malware delivery.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

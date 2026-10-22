@@ -1,0 +1,23 @@
+{
+  "id": "V3-pay-01-id-tugas-like-deposit-vip",
+  "split": "test-v3",
+  "lang": "id",
+  "category": "positive",
+  "threatCategory": "pay",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "context": "message",
+  "pages": [
+    {
+      "url": "https://web-chat-viewer.test/c/mentor-tugas",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#m5",
+  "description": "Part-time 'like and follow' task chat that pays a small first commission and then requires a deposit for a 'VIP task' before withdrawal.",
+  "rationale": "Task scams build trust with tiny payouts, then demand escalating deposits that are never returned.",
+  "author": "Independent test author agent (Claude), blind to VEILTRACE rules, 2026-10-22",
+  "created": "2026-10-22"
+}

@@ -4,6 +4,11 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-22 · Real-data tooling and held-out v3 locked (D-096)
+Screenshot import with local OCR, label sheet and label import for the field sample. Held-out v3: 80 scenarios by a separate blind agent (research into current public scam reports; 47 message contexts), hash-locked without being read; preregistered with "any detector alerts" as the primary metric (docs/EVAL_PREREGISTRATION_V3.md). **Next:** owner labels and consent, new field records (unseen), then the single v3 and field-sample test runs on owner request, then the proposal.
+
+---
+
 ## 2026-10-22 · AI evaluation → experiment only (D-095)
 Owner ran the AI eval page: AI alone TP 81 · FP 73 · TN 30 · FN 1 on 185 dev scenarios (benign false-alarm rate 71%); VeilTrace TP 80 · FP 0 · TN 103 · FN 2 (docs/AI_EVAL.md). Owner chose to hide it: compiled out of released builds, kept in `build:ext:ai` and `build:ai-eval`. **Next:** back to rule accuracy on real data, labels/consent, v3, then submission.
 
