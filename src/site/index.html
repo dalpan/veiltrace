@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+  <title>VeilTrace · Ungkap manipulasi di balik halaman dan pesan</title>
+  <meta name="description" content="VeilTrace mendeteksi social engineering di halaman web dan pesan WhatsApp/SMS: CAPTCHA palsu (ClickFix), permintaan OTP, pembayaran di muka, dan CS palsu. Berjalan on-device, tanpa server.">
+  <meta property="og:title" content="VeilTrace · Uncover the manipulation behind the page">
+  <meta property="og:description" content="Deteksi social engineering di halaman web dan pesan WhatsApp, langsung on-device. Open source.">
+  <meta property="og:image" content="https://veiltrace.click/social-card.jpg">
+  <meta property="og:url" content="https://veiltrace.click/">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="site.css">
+  <script src="site.js" defer></script>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="./"><img src="img/logo.svg" alt="" width="36" height="36"><span>Veil<b>Trace</b></span></a>
+    <nav>
+      <a href="#cara-kerja">Cara kerja</a>
+      <a href="#install">Install</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://github.com/dalpan/veiltrace">GitHub</a>
+    </nav>
+    <a class="btn small" href="app/">Cek Pesan</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-text">
+        <p class="eyebrow">OPEN SOURCE · ON-DEVICE · TANPA SERVER</p>
+        <h1>Ungkap manipulasi di balik halaman dan pesan.</h1>
+        <p class="lead">VeilTrace membaca isi halaman web dan pesan WhatsApp/SMS langsung di perangkat Anda, lalu menunjukkan dengan bukti kapan teks itu mencoba membuat Anda menjalankan command, menyerahkan OTP, membayar di muka, atau mengikuti "CS bank" palsu.</p>
+        <div class="cta">
+          <a class="btn" href="#install">Install extension</a>
+          <a class="btn ghost" href="app/">Coba Cek Pesan di HP</a>
+        </div>
+      </div>
+      <div class="hero-shots">
+        <img class="shot page" src="img/cmd-lure-page.png" alt="Halaman blog fiktif dengan CAPTCHA palsu yang menyuruh menekan Win+R, Ctrl+V, Enter" width="1280" height="760">
+        <img class="shot popup" src="img/cmd-lure-popup-top.png" alt="Popup VeilTrace: konten manipulatif terdeteksi, kategori Command Execution" width="560" height="640">
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>Kenapa dibutuhkan</h2>
+      <p class="sub">Serangan hari ini jarang membobol sistem. Yang dibobol adalah manusia.</p>
+      <div class="grid three">
+        <div class="stat"><b>517%</b><span>kenaikan serangan ClickFix (CAPTCHA palsu) di paruh pertama 2025, menurut ESET</span></div>
+        <div class="stat"><b>Rp 7 T</b><span>kerugian penipuan yang dilaporkan ke Indonesia Anti-Scam Centre OJK dalam sekitar satu tahun</span></div>
+        <div class="stat"><b>Ribuan</b><span>perangkat disasar kampanye ClickFix setiap hari, menurut Microsoft Threat Intelligence</span></div>
+      </div>
+      <p class="note">Lure sering muncul di situs resmi (kolom komentar, chat widget, forum) atau lewat WhatsApp. Blocklist menilai alamat situs, padahal yang berbahaya adalah isi instruksinya.</p>
+    </section>
+
+    <section id="cara-kerja">
+      <h2>Cara kerja</h2>
+      <div class="grid three">
+        <div class="card step"><i>01</i><h3>Read-only extraction</h3><p>Membaca teks yang terlihat dan asal kontennya: komentar, widget, dialog, atau chat. Isi form tidak pernah dibaca.</p></div>
+        <div class="card step"><i>02</i><h3>Contextual correlation</h3><p>Menggabungkan action yang diminta (jalankan, kirim kode, bayar, hubungi) dengan pretext manipulatif (klaim otoritas, desakan waktu, iming-iming hadiah).</p></div>
+        <div class="card step"><i>03</i><h3>Explainable evidence</h3><p>Setiap temuan punya alasan dan bukti yang bisa di-highlight langsung di halaman. Satu keyword saja tidak pernah memicu peringatan.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Empat detector</h2>
+      <div class="grid two">
+        <div class="card"><code>CMD</code><h3>Command Execution</h3><p>CAPTCHA palsu "tekan Win+R, Ctrl+V, Enter" (ClickFix), "perbaiki error" lewat terminal.</p></div>
+        <div class="card"><code>CRED</code><h3>Credential Disclosure</h3><p>Permintaan kode OTP, password, atau recovery phrase, termasuk dalam bahasa gaul.</p></div>
+        <div class="card"><code>PAY</code><h3>Payment Manipulation</h3><p>Bayar dulu agar refund atau hadiah cair, transfer ke rekening pribadi, biaya seragam lowongan, gift card.</p></div>
+        <div class="card"><code>SUP</code><h3>Support &amp; Authority Impersonation</h3><p>Fake virus alert, "CS bank" meminta AnyDesk/APK, notifikasi tarif palsu, kuis berhadiah, jasa sadap.</p></div>
+      </div>
+    </section>
+
+    <section class="band split">
+      <div>
+        <h2>Juga untuk pesan di HP</h2>
+        <p>Sebagian besar penipuan datang lewat WhatsApp dan SMS. <b>Cek Pesan</b> memeriksa pesan langsung di HP: paste pesannya, atau di Android cukup <b>Share</b> dari WhatsApp ke VeilTrace. Pesan tidak dikirim ke mana pun dan tidak muncul di URL.</p>
+        <a class="btn" href="app/">Buka Cek Pesan</a>
+      </div>
+      <img class="shot phone" src="img/pwa-result-crop.png" alt="Cek Pesan di HP: pesan penipuan 'biaya admin' ditandai manipulatif" width="390" height="700">
+    </section>
+
+    <section>
+      <h2>Privasi sejak desain</h2>
+      <ul class="checks">
+        <li><b>Tanpa server, tanpa telemetry.</b> Tidak ada network code di extension maupun app.</li>
+        <li><b>Hanya dua permission:</b> <code>activeTab</code> dan <code>scripting</code>. Auto-scan meminta izin tambahan hanya saat Anda menyalakannya.</li>
+        <li><b>Tidak membaca yang Anda ketik.</b> Isi form, nominal uang, dan nomor telepon tidak pernah disalin ke report.</li>
+        <li><b>URL tidak pernah jadi dasar keputusan,</b> sehingga situs tepercaya tetap diperiksa.</li>
+        <li><b>Open source</b> (Apache-2.0): rule deteksi bisa dibaca dan build bisa direproduksi.</li>
+      </ul>
+    </section>
+
+    <section id="install" class="band">
+      <h2>Install dan download</h2>
+      <div class="grid two">
+        <div class="card">
+          <h3>Chrome / Edge</h3>
+          <ol>
+            <li>Unduh <a href="download/veiltrace-chromium.zip" download>veiltrace-chromium.zip</a> lalu ekstrak.</li>
+            <li>Buka <code>chrome://extensions</code> (Edge: <code>edge://extensions</code>).</li>
+            <li>Aktifkan <b>Developer mode</b>.</li>
+            <li>Klik <b>Load unpacked</b> dan pilih folder hasil ekstrak.</li>
+            <li>Sematkan (pin) ikon VeilTrace, buka halaman, lalu klik <b>Scan</b>.</li>
+          </ol>
+          <p class="small">Checksum SHA-256: <a href="download/SHA256SUMS">SHA256SUMS</a></p>
+        </div>
+        <div class="card">
+          <h3>HP (Android &amp; iPhone)</h3>
+          <ol>
+            <li>Buka <a href="app/">veiltrace.click/app</a>.</li>
+            <li>Android (Chrome): menu ⋮ → <b>Install app</b>. iPhone (Safari): <b>Share</b> → <b>Add to Home Screen</b>.</li>
+            <li>Android: dari WhatsApp, tekan lama pesan → <b>Share</b> → <b>VeilTrace</b>. iPhone: copy pesan lalu paste.</li>
+          </ol>
+        </div>
+        <div class="card">
+          <h3>Firefox (desktop &amp; Android)</h3>
+          <ol>
+            <li>Unduh <a href="download/veiltrace-firefox.zip" download>veiltrace-firefox.zip</a> (belum ditandatangani Mozilla).</li>
+            <li>Desktop: buka <code>about:debugging</code> → <b>This Firefox</b> → <b>Load Temporary Add-on</b> → pilih <code>manifest.json</code>.</li>
+            <li>Android: pasang lewat <code>web-ext run -t firefox-android</code> dari komputer.</li>
+          </ol>
+        </div>
+        <div class="card">
+          <h3>Organisasi</h3>
+          <p>Managed build bisa di-install serentak lewat Chrome/Edge enterprise policy dan internal update server, dengan auto-scan aktif sejak terpasang. Tanpa server pusat dan tanpa reporting.</p>
+          <p><a href="https://github.com/dalpan/veiltrace/blob/main/docs/DEPLOYMENT.md">Panduan deployment →</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <h2>FAQ</h2>
+      <details><summary>Apakah VeilTrace mengirim data saya ke internet?</summary><p>Tidak. Semua pemeriksaan berjalan di perangkat Anda. Extension dan app tidak punya network code; ini diuji otomatis.</p></details>
+      <details><summary>Apakah VeilTrace menjamin sebuah halaman aman?</summary><p>Tidak. VeilTrace melaporkan apa yang ditemukan beserta buktinya. Bila tidak ada temuan, artinya tidak ada pola manipulasi yang dikenali, bukan jaminan.</p></details>
+      <details><summary>Harus klik Scan setiap kali?</summary><p>Bawaannya manual demi privasi. Anda bisa menyalakan auto-scan dari popup: halaman diperiksa saat dimuat dan ikon diberi tanda bila ada konten manipulatif.</p></details>
+      <details><summary>Kenapa tidak memakai AI?</summary><p>Kami sudah menguji AI on-device. AI terlalu sering menandai halaman wajar, alasannya tidak bisa diperiksa, dan bisa dibujuk oleh teks di halaman. VeilTrace memakai rule yang bisa dijelaskan: setiap peringatan punya bukti.</p></details>
+      <details><summary>Berapa harganya?</summary><p>Gratis dan open source (Apache-2.0).</p></details>
+    </section>
+  </main>
+
+  <footer>
+    <p><img src="img/logo.svg" alt="" width="24" height="24"> VeilTrace · Apache-2.0 · <a href="https://github.com/dalpan/veiltrace">github.com/dalpan/veiltrace</a></p>
+    <p class="small">Dibuat oleh Danang Avan Maulana, penulis buku <a href="https://www.gramedia.com/products/hack-the-human">Hack the Human</a>. Semua contoh di halaman ini fiktif.</p>
+  </footer>
+</body>
+</html>

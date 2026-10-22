@@ -4,6 +4,11 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-22 · Brand, website and repository scope (D-098)
+Logo and matching icons; README without competition context (submission/ kept local); website at https://veiltrace.click with landing page, the PWA at /app/ and downloads (D-098). Verified in Chromium: landing renders without horizontal scroll at phone width, app at /app/ with service-worker scope /app/, download link works, zero external requests; the root service-worker retirement unregisters the old worker once an update check runs. **Next:** owner labels the field sample; v3 and field-sample test runs on request.
+
+---
+
 ## 2026-10-22 · Submission package rebuilt for the judging criteria
 README rewritten for reviewers (surfaces, privacy, every result as it is, repo map) with screenshots from the fictional demo scenes (`tests/e2e/screenshots.test.ts`); `docs/README.md` index (technical documentation is a judged deliverable); proposal rewritten around the official weights (9 pages, images); video script and jury Q&A updated; `submission/README.md` with the registration form text; a 15-slide deck with speaker notes (Indonesian). PWA headline now speaks of a message. **Next:** owner registers the idea, records the video, labels the field sample; the single v3 and field-sample runs on owner request; numbers into proposal §8 and the deck.
 

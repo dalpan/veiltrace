@@ -54,7 +54,7 @@ function pwaShot() {
   <img src="${svg('assets/brand/logo.svg')}" style="width:80px;height:80px">
   <div style="font-size:52px;font-weight:700;line-height:1.15;margin-top:28px">Cek Pesan: pesan WhatsApp diperiksa langsung di HP</div>
   <div style="font-size:26px;line-height:1.45;color:#C9CFBF;margin-top:24px">Tempel pesan, atau di Android cukup <b>Share</b> dari WhatsApp. Teksnya tidak dikirim ke mana pun dan tidak muncul di URL.</div>
-  <div style="font-size:24px;color:#B9C98A;margin-top:28px">dalpan.github.io/veiltrace</div>
+  <div style="font-size:24px;color:#B9C98A;margin-top:28px">veiltrace.click/app</div>
 </div>
 <img class="shot" src="${img('docs/images/pwa-result-crop.png')}" style="position:absolute;left:980px;top:60px;width:460px">`);
 }

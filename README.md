@@ -4,6 +4,8 @@
 
 **Uncover the manipulation behind the page.** An offline, explainable detector for social-engineering instructions in web pages and messages: fake CAPTCHAs that make you run commands, requests for OTP codes, pay-first refunds, fake bank or support notices, and more. Everything runs on your device.
 
+**Website and downloads:** https://veiltrace.click
+
 | A fake CAPTCHA on a legitimate-looking site… | …and what VeilTrace shows |
 |---|---|
 | ![Fake human-verification box asking to press Win+R, Ctrl+V, Enter](docs/images/cmd-lure-page.png) | ![VeilTrace popup: manipulative content detected, command execution category](docs/images/cmd-lure-popup.png) |
@@ -31,7 +33,7 @@ Each finding keeps **classification** (manipulative / suspicious / observed), **
 |---|---|---|
 | **Chrome / Edge extension** (desktop) | Working | [Install](#install) · scan on click, or opt-in automatic scanning with a toolbar badge |
 | **Firefox extension** (desktop and Android ≥ 128) | Working, tested by the owner on Android | `npm run build:firefox` → `dist/extension-firefox` |
-| **"Cek Pesan" web app** (any phone) | Live | **https://dalpan.github.io/veiltrace/**: paste a message, or on Android share it from WhatsApp; works offline once opened |
+| **"Cek Pesan" web app** (any phone) | Live | **https://veiltrace.click/app/**: paste a message, or on Android share it from WhatsApp; works offline once opened |
 | **WhatsApp Web** | Prototype | conversations are read as one user-content region; markup match with the real service not yet verified |
 | **Managed build** for organizations | Ready to pilot | install-time permissions, automatic scanning on, no reporting: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) |
 
@@ -60,7 +62,7 @@ Detection quality is tracked with hash-locked, preregistered held-out sets and a
 
 ## Install
 
-**Chrome / Edge (unpacked):**
+**Chrome / Edge:** download `veiltrace-chromium.zip` from https://veiltrace.click/#install, unzip, then load it as below. Or build it yourself:
 ```bash
 npm ci
 npm run build:ext            # → dist/extension
@@ -69,7 +71,7 @@ npm run build:ext            # → dist/extension
 
 **Firefox (desktop or Android):** `npm run build:firefox`, then load `dist/extension-firefox` temporarily (`about:debugging`, or `npx web-ext run -t firefox-android` over USB). Permanent installation needs a Mozilla-signed XPI.
 
-**Phone:** open https://dalpan.github.io/veiltrace/ → *Install app* / *Add to Home Screen*.
+**Phone:** open https://veiltrace.click/app/ → *Install app* / *Add to Home Screen*.
 
 ## Repository map
 
