@@ -90,7 +90,7 @@ export default defineConfig(
   {
     // Landing page (veiltrace.click): plain browser scripts with no network APIs.
     files: ['src/site/**/*.js'],
-    languageOptions: { globals: { window: 'readonly', self: 'readonly', caches: 'readonly', URL: 'readonly' } },
+    languageOptions: { globals: { window: 'readonly', self: 'readonly', caches: 'readonly', URL: 'readonly', document: 'readonly', localStorage: 'readonly' } },
     rules: { 'no-restricted-globals': ['error', 'fetch', 'XMLHttpRequest', 'WebSocket', 'EventSource', 'importScripts', 'eval'] },
   },
 );

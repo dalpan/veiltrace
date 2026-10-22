@@ -46,6 +46,7 @@ const OTP_SLANG = 'bro buat verif akun, kasih liat dong angka yg barusan masuk k
 describe('Cek Pesan PWA', () => {
   it('checks a pasted message on the device: manipulative, category, advice, evidence marked in the message, never "aman"', async () => {
     const { context, page } = await open();
+    await page.click('#lang-id');
     await page.fill('#message', OTP_SLANG);
     await page.click('#check');
     expect(await page.getAttribute('.threat', 'data-verdict')).toBe('manipulative_instruction');
@@ -61,6 +62,7 @@ describe('Cek Pesan PWA', () => {
 
   it('an ordinary message: nothing to report, general advice, English switch without re-checking', async () => {
     const { context, page } = await open();
+    await page.click('#lang-id');
     await page.fill('#message', 'Paket kakak sudah dikirim ya, nomor resinya bisa dicek di aplikasi. Terima kasih sudah belanja!');
     await page.click('#check');
     expect(['none', 'observed_instruction']).toContain(await page.getAttribute('.threat', 'data-verdict'));
@@ -68,6 +70,17 @@ describe('Cek Pesan PWA', () => {
     await page.click('#lang-en');
     expect(await page.textContent('#check')).toBe('Check message');
     expect(await page.textContent('.advice p')).toContain('does not make a page trustworthy');
+    await context.close();
+  });
+
+  it('opens in English even on an Indonesian phone, and remembers the EN/ID choice', async () => {
+    const { context, page } = await open('id-ID');
+    expect(await page.textContent('#check')).toBe('Check message');
+    expect(await page.getAttribute('html', 'lang')).toBe('en');
+    await page.click('#lang-id');
+    await page.reload();
+    expect(await page.getAttribute('html', 'lang')).toBe('id');
+    expect(await page.getAttribute('#lang-id', 'aria-pressed')).toBe('true');
     await context.close();
   });
 

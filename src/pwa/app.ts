@@ -3,13 +3,31 @@
 // caches the app and hands over shared text without putting it in the URL.
 import type { ScanReport } from '../extension/content/report.js';
 import { aggregate, type Category } from '../extension/popup/aggregate.js';
-import { detectLang, formatCount, MESSAGES, type Lang, type Messages } from '../extension/popup/i18n.js';
+import { formatCount, MESSAGES, type Lang, type Messages } from '../extension/popup/i18n.js';
 import { checkMessage, isLinkOnly, MAX_MESSAGE_CHARS, type MessageSource } from './message.js';
 
 declare const __VT_VERSION__: string;
 
 const SHARED_CACHE = 'veiltrace-share';
 const SHARED_KEY = './__shared__';
+/** The visitor's EN/ID choice, shared with the landing page on the same origin. English until the visitor chooses. */
+const LANG_KEY = 'veiltrace-lang';
+
+function storedLang(): Lang {
+  try {
+    return localStorage.getItem(LANG_KEY) === 'id' ? 'id' : 'en';
+  } catch {
+    return 'en';
+  }
+}
+
+function storeLang(lang: Lang): void {
+  try {
+    localStorage.setItem(LANG_KEY, lang);
+  } catch {
+    // Storage blocked (private mode, site data off): the choice lasts for this page only.
+  }
+}
 
 type Child = Node | string | null | undefined | false;
 const $ = <T extends HTMLElement = HTMLElement>(id: string): T => document.getElementById(id) as T;
@@ -21,7 +39,7 @@ function h(tag: string, attrs: Record<string, string> = {}, ...children: Child[]
 }
 
 const state: { lang: Lang; report: ScanReport | null; text: string; note: string | null } = {
-  lang: detectLang(navigator.language), report: null, text: '', note: null,
+  lang: storedLang(), report: null, text: '', note: null,
 };
 const t = (): Messages => MESSAGES[state.lang];
 const SOURCES: MessageSource[] = ['chat', 'sms', 'email', 'web'];
@@ -107,6 +125,7 @@ function renderResult(r: ScanReport): Child[] {
 function render(): void {
   const m = t();
   document.documentElement.lang = state.lang;
+  document.title = `VeilTrace · ${m.pwa.title}`;
   document.body.dataset.lang = state.lang;
   for (const l of ['en', 'id'] as const) $(`lang-${l}`).setAttribute('aria-pressed', String(state.lang === l));
   $('tagline').textContent = m.tagline;
@@ -161,7 +180,7 @@ async function takeShared(): Promise<string | null> {
 }
 
 async function main(): Promise<void> {
-  for (const l of ['en', 'id'] as const) $(`lang-${l}`).addEventListener('click', () => { state.lang = l; render(); });
+  for (const l of ['en', 'id'] as const) $(`lang-${l}`).addEventListener('click', () => { state.lang = l; storeLang(l); render(); });
   $('check').addEventListener('click', check);
   $('clear').addEventListener('click', () => {
     $<HTMLTextAreaElement>('message').value = '';

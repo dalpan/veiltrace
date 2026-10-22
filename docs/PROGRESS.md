@@ -4,6 +4,11 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-23 · English-first website and app, bilingual landing page (D-101)
+Landing page in English and Indonesian with an EN/ID switch; landing page and app open in English on the first visit, and the visitor's choice carries between them (localStorage, language code only). New product description on the landing page and README. Verified in Chromium against the built site: English on an `id-ID` phone, switch and reload keep Indonesian, the app follows, no horizontal scroll at 390 px, zero external requests; PWA e2e and i18n tests pass. **Next:** owner decides on the single locked runs (v3, SMS test half, synthetic test split).
+
+---
+
 ## 2026-10-23 · Synthetic Indonesian scam corpus and message-scam phrasing (D-100)
 The owner's 12,150-message synthetic corpus became a second external set (`corpus/external/synthetic-id/`, git-ignored; test split hash-locked, template leakage noted). Dev baseline: 397 of 6,480 scam alerted, 10 of 4,455 benign. After cred 0.3.0, pay 0.6.0 and sup 0.7.0: 2,908 of 6,480 scam alerted, 0 of 4,455 benign (development numbers, synthetic). SMS dataset dev half and field sample unchanged; 10 new dev fixtures; cred-dev, pay-dev and sup-dev FP 0; typecheck and lint clean; `npm test` 774 passed. **Next:** owner decides on the single locked runs (v3, SMS test half, synthetic test split); rebuild the release and site so the live app carries the new detector versions.
 
