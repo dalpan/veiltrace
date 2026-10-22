@@ -25,7 +25,9 @@ beforeAll(async () => {
 });
 afterAll(async () => { await Promise.all([plain.context.close(), fake.context.close()]); });
 
-const PAGE = html('<h1>PLN - 81 anniversary Hadiah</h1><p>Selamat! Anda berkesempatan mendapatkan Rp 1.500.000.</p><p>Hubungi admin di 0812 0000 4444.</p>');
+// An ordinary order page: VeilTrace reports nothing actionable, so the stand-in AI's "manipulative" answer exercises the
+// disagreement note.
+const PAGE = html('<h1>Pesanan Anda</h1><p>Total pembayaran Rp 150.000 dengan virtual account.</p><p>Hubungi toko di 0812 0000 4444.</p>');
 
 describe('AI second opinion panel', () => {
   it('is offered after a scan and says when no built-in model is available', async () => {
@@ -44,7 +46,7 @@ describe('AI second opinion panel', () => {
     await popup.click('#ai-prepare');
     await popup.waitForSelector('#ai-preview:not([hidden])');
     const lines = await popup.$$eval('#ai-lines li', (els) => els.map((e) => e.textContent));
-    expect(lines).toContain('Hubungi admin di [NUMBER].');
+    expect(lines).toContain('Hubungi toko di [NUMBER].');
     expect(lines.join(' ')).not.toContain('0812');
     expect(await popup.evaluate(() => ((window as unknown as { __aiCalls: unknown[] }).__aiCalls).length)).toBe(0);
     await popup.click('#ai-run');

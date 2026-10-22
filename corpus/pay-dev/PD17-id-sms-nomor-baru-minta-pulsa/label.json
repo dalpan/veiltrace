@@ -1,0 +1,22 @@
+{
+  "id": "PD17-id-sms-nomor-baru-minta-pulsa",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-PAY",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://sms.pesan.test/pd17-id-sms-nomor-baru-minta-pulsa",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#log",
+  "description": "SMS mengaku ayah dengan nomor baru meminta pulsa ke nomor itu, jangan telepon",
+  "rationale": "Klaim keluarga dengan nomor baru + permintaan pulsa ke nomor pribadi + desakan (PR2).",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; SMS-era scam classes seen in the external dataset's dev half (D-099), written in own words, labels written before the first run",
+  "created": "2026-10-23"
+}

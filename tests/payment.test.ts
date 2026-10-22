@@ -195,3 +195,21 @@ describe('payment detector pay-0.4.0-exp: job-offer fees (D-091)', () => {
     expect(pay(['Resi pengiriman atas nama masnya, baru selesaikan pembayaran Rp 2.000.000 setelah barang dikirim.']).verdict).not.toMatch(/suspicious|manipulative/);
   });
 });
+
+describe('payment detector pay-0.5.0-exp: SMS-era requests (D-099)', () => {
+  it('a "new number" family member asking for phone credit to that number → manipulative (PR2)', () => {
+    const r = pay(inContainer('ugc:#sms', ['Ma, ini nomor baru papa. Tolong isikan pulsa 50rb ke nomor ini 0812 0000 7777 sekarang, penting.']));
+    expect(short(r)).toEqual(['PR2:manipulative_instruction']);
+    expect(r.findings[0]!.pressures).toContain('claimed-family');
+  });
+
+  it('payment routed to a person who "has been authorized" → suspicious; a bill to a company account stays observed', () => {
+    expect(short(pay(inContainer('ugc:#sms', ['Soal kontrakan, pembayaran harus melalui Bpk Hendra. Sudah saya kuasakan sepenuhnya.'])))).toEqual(['PR2:suspicious_correlation']);
+    expect(pay(inContainer('ugc:#sms', ['Tagihan sewa Rp 1.500.000, silakan transfer ke rekening BCA a.n. PT Griya Sejahtera.'])).verdict).toBe('observed_instruction');
+  });
+
+  it('a new number without any request, and a warning that mentions payments, stay quiet', () => {
+    expect(pay(inContainer('ugc:#sms', ['Halo, ini nomor baru saya ya, tolong disimpan.'])).verdict).toBe('none');
+    expect(pay(['Petugas tidak pernah meminta pembayaran lewat pesan pribadi.']).verdict).not.toMatch(/suspicious|manipulative/);
+  });
+});

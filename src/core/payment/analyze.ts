@@ -13,7 +13,7 @@ import type {
   PaymentResult, PayTrustContext,
 } from './types.js';
 
-export const PAY_DETECTOR_VERSION = 'pay-0.4.0-exp';
+export const PAY_DETECTOR_VERSION = 'pay-0.5.0-exp';
 
 /** Same clause and sentence breaks as the ClickFix binding, except that a period inside a number ("Rp 150.000") is not a break. */
 const CLAUSE_BREAK = /[,;:!?]|\.(?=\s|$)|(?<![\p{L}\p{N}_])(?:and|then|or|but|dan|lalu|kemudian|atau|tapi|tetapi)(?![\p{L}\p{N}_])/u;
@@ -29,9 +29,9 @@ const DESTINATION_OF: Partial<Record<PaySignalId, PayDestination>> = {
 const PROMISE_OF: Partial<Record<PaySignalId, PayPromise>> = {
   'PR.REFUND': 'refund', 'PR.PRIZE': 'prize', 'PR.UNLOCK': 'account-unlock', 'PF.RELEASE_FEE': 'release', 'PR.RECRUIT': 'recruitment', 'PR.JOB': 'job',
 };
-const PRESSURE_OF: Partial<Record<PaySignalId, PayPressure>> = { 'PP.THREAT': 'threat', 'PP.URGENCY': 'urgency', 'PP.AUTHORITY': 'claimed-authority' };
+const PRESSURE_OF: Partial<Record<PaySignalId, PayPressure>> = { 'PP.THREAT': 'threat', 'PP.URGENCY': 'urgency', 'PP.AUTHORITY': 'claimed-authority', 'PP.FAMILY': 'claimed-family' };
 /** Reporting order of the finding's lists (deterministic, independent of where the evidence sits on the page). */
-const ORDER: readonly string[] = ['refund', 'prize', 'account-unlock', 'release', 'recruitment', 'job', 'personal-account', 'off-platform', 'gift-card', 'crypto', 'claimed-authority', 'threat', 'urgency'];
+const ORDER: readonly string[] = ['refund', 'prize', 'account-unlock', 'release', 'recruitment', 'job', 'personal-account', 'off-platform', 'gift-card', 'crypto', 'claimed-authority', 'claimed-family', 'threat', 'urgency'];
 const ordered = <T extends string>(xs: Iterable<T>): T[] => [...new Set(xs)].sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b));
 
 /** Highest classification each rule can produce; the actual one depends on the pressure found (DETECTION_MODEL.md §13). */
@@ -225,7 +225,8 @@ function scoreOne(u: Unit, region: RegionInfo, signals: readonly Ob[], cues: rea
   const has = (sig: PaySignalId): boolean => nearby.some((p) => p.o.signal === sig);
   const threat = has('PP.THREAT');
   const urgency = has('PP.URGENCY');
-  const authority = has('PP.AUTHORITY');
+  // A claimed family member on a new number weighs like a claimed authority: both borrow trust the sender cannot prove.
+  const authority = has('PP.AUTHORITY') || has('PP.FAMILY');
   // Urgency plus a claimed authority without a threat counts only when the claim is made by the request itself (its own block);
   // a "contact customer service" footer near an ordinary "pay within 24 hours" checkout does not.
   const authorityHere = nearby.some((p) => p.o.signal === 'PP.AUTHORITY' && p.src === u.src);

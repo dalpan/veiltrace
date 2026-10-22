@@ -1,0 +1,21 @@
+{
+  "id": "PN24-id-sms-nomor-baru-tanpa-permintaan",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "negative",
+  "threatClass": "T-PAY",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://sms.pesan.test/pn24-id-sms-nomor-baru-tanpa-permintaan",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "SMS pemberitahuan nomor baru tanpa permintaan apa pun",
+  "rationale": "Klaim nomor baru saja bukan penipuan bila tidak ada permintaan uang.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; SMS-era scam classes seen in the external dataset's dev half (D-099), written in own words, labels written before the first run",
+  "created": "2026-10-23"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "PD18-id-sms-pembayaran-dikuasakan",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-PAY",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://sms.pesan.test/pd18-id-sms-pembayaran-dikuasakan",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#log",
+  "description": "SMS yang mengalihkan pembayaran sewa ke orang lain yang \"sudah dikuasakan\"",
+  "rationale": "Permintaan bayar dialihkan ke pihak ketiga dalam pesan (PR2).",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; SMS-era scam classes seen in the external dataset's dev half (D-099), written in own words, labels written before the first run",
+  "created": "2026-10-23"
+}

@@ -1,24 +1,24 @@
 # Support-impersonation detector: development results (sup-dev)
 
-Detector sup-0.5.0-exp (EXPERIMENTAL), extractor 0.3.0. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
+Detector sup-0.6.0-exp (EXPERIMENTAL), extractor 0.3.0. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
 
-TP 20 · FP 0 · TN 24 · FN 0
+TP 22 · FP 0 · TN 26 · FN 0
 
-- Precision: 100.0% (20/20; 95% CI 83.9%–100.0%)
-- Recall: 100.0% (20/20; 95% CI 83.9%–100.0%)
-- Hard-negative FPR: 0.0% (0/24; 95% CI 0.0%–13.8%)
-- Localization: 100.0% (20/20; 95% CI 83.9%–100.0%)
-- Exact class agreement: 90.9% (40/44; 95% CI 78.8%–96.4%)
+- Precision: 100.0% (22/22; 95% CI 85.1%–100.0%)
+- Recall: 100.0% (22/22; 95% CI 85.1%–100.0%)
+- Hard-negative FPR: 0.0% (0/26; 95% CI 0.0%–12.9%)
+- Localization: 100.0% (22/22; 95% CI 85.1%–100.0%)
+- Exact class agreement: 91.7% (44/48; 95% CI 80.4%–96.7%)
 - Requests during scanning: 0; privacy sentinel leaks: 0 (0 fields filled); phone numbers or digit runs in results: 0
 
 ## Class matrix
 
 | expected \ predicted | none | observed | suspicious | manipulative |
 |---|---|---|---|---|
-| none | 6 | 0 | 0 | 0 |
+| none | 8 | 0 | 0 | 0 |
 | observed | 4 | 14 | 0 | 0 |
 | suspicious | 0 | 0 | 3 | 0 |
-| manipulative | 0 | 0 | 0 | 17 |
+| manipulative | 0 | 0 | 0 | 19 |
 
 ## Per scenario
 
@@ -44,6 +44,8 @@ TP 20 · FP 0 · TN 24 · FN 0
 | SD16-id-sms-transaksi-kartu-tautan-batal | malicious | manipulative | manipulative | SR6:manipulative_instruction | ✓ | none | none | none |
 | SD17-id-kuesioner-hadiah-ulang-tahun | malicious | suspicious | suspicious | SR7:suspicious_correlation | ✓ | none | none | none |
 | SD18-id-jasa-sadap-wa | malicious | manipulative | manipulative | SR8:manipulative_instruction | ✓ | none | none | none |
+| SD19-id-sms-undian-pin-pemenang | malicious | manipulative | manipulative | SR7:manipulative_instruction | ✓ | none | none | none |
+| SD20-id-sms-pembeli-palsu-hubungi-suami | malicious | manipulative | manipulative | SR9:manipulative_instruction | ✓ | none | none | none |
 | SN01-en-help-center-contact | benign | observed | observed | SR5:observed_instruction |  | none | none | none |
 | SN02-id-pusat-bantuan-kontak | benign | observed | observed | SR5:observed_instruction |  | none | none | none |
 | SN03-en-it-helpdesk-remote-procedure | benign | observed | observed | SR5:observed_instruction |  | none | none | none |
@@ -68,3 +70,5 @@ TP 20 · FP 0 · TN 24 · FN 0
 | SN22-id-survei-kepuasan-pelanggan | benign | none | none |  |  | none | none | none |
 | SN23-id-berita-penangkapan-jasa-sadap | benign | observed | none |  |  | none | none | none |
 | SN24-id-aplikasi-kontrol-orang-tua | benign | observed | none |  |  | none | none | none |
+| SN25-id-sms-bonus-kuota-operator | benign | none | none |  |  | none | none | none |
+| SN26-id-sms-pengumuman-undian-resmi | benign | none | none |  |  | none | none | none |

@@ -1,0 +1,21 @@
+{
+  "id": "SN25-id-sms-bonus-kuota-operator",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "negative",
+  "threatClass": "T-SUP",
+  "truth": "benign",
+  "expectedClass": "none",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://sms.pesan.test/sn25-id-sms-bonus-kuota-operator",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "SMS bonus kuota operator yang wajar",
+  "rationale": "Ucapan selamat atas bonus tanpa tautan, PIN pemenang, atau permintaan.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; SMS-era scam classes seen in the external dataset's dev half (D-099), written in own words, labels written before the first run",
+  "created": "2026-10-23"
+}

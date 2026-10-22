@@ -16,6 +16,9 @@ const APP = '(?:apps?|application|software|program|tool|apk|\\.apk|aplikasi|apl|
 // Indonesian banks, e-wallets and marketplaces most often named in impersonated notices (sup-0.4.0, D-091). A name is a claim only.
 const BRAND_ID = '(?:bri|bni|bca|mandiri|bsi|btn|cimb(?:\\s+niaga)?|danamon|permata|dana|ovo|gopay|shopee(?:pay)?|tokopedia|lazada|bukalapak|blibli|akulaku|kredivo|jne|j&t|sicepat|pln|pertamina|telkomsel|indosat|bpjs(?:\\s+kesehatan)?|pos\\s+indonesia|indomaret|alfamart)';
 
+// Winning verbs as written in SMS prize scams, abbreviations included ("tpilih", "mndpt", "m-dptkan", "mendptkn").
+const WIN_VERB = "(?:t(?:er)?pil(?:i)?h|terpilh|mendapat(?:kan)?|m['’-]?\\s?dpt(?:kan|kn)?|mndpt(?:kan|kn)?|mendpt(?:kan|kn)?|men-?dpt(?:kan|kn)?|meraih|memenangkan|menang)";
+
 const ACTIONS: SupportLexiconEntry[] = [
   entry('sup.en.contact', 'SC.CONTACT', 'en', 'strong',
     `${B}(?:call|phone|ring|dial|contact|reach|text|message|chat\\s+with|speak\\s+(?:to|with)|talk\\s+to|get\\s+in\\s+touch\\s+with)${E}`,
@@ -144,6 +147,13 @@ const PRESSURE: SupportLexiconEntry[] = [
   entry('sup.id.won', 'SP.WON', 'id', 'weak',
     `${B}(?:selamat\\s*!|selamat\\s*[,!]?\\s*(?:anda|kamu|kak(?:ak)?)\\s+(?:terpilih|mendapatkan|memenangkan|berhak)|anda\\s+(?:terpilih|beruntung|berhak\\s+mendapatkan))`,
     ['Selamat!', 'Selamat, Anda terpilih', 'Anda berhak mendapatkan']),
+  // SMS-style prize notices with abbreviations: a number "chosen" as winner, a winner's PIN (sup-0.6.0).
+  entry('sup.id.won_sms', 'SP.WON', 'id', 'weak',
+    `${B}(?:(?:no(?:mor)?\\.?|norek|nmr|sim\\s*card|rekening|no\\.?\\s*id)\\s*(?:hp|tri|3care|anda|kamu|bpk|ibu|\\s)*(?:resmi\\s+|telah\\s+|t\\s*,\\s*)?${WIN_VERB}|selamat\\s*[,!]?\\s*(?:\\p{L}+\\s+){0,3}?(?:anda|kamu)\\s+(?:telah\\s+)?${WIN_VERB}|(?:sbg|sebagai)\\s+p(?:e)?menang|p(?:e)?menang\\s+ke\\s?-?\\s?\\(?\\d|hadiah\\s+ke\\s?-?\\s?\\(?(?:\\d|i+)|pin\\s*(?:p(?:e)?menang|anda|undian)|selamat\\s+no(?:mor)?\\.?)`,
+    ['No anda Terpilih', "No.anda Terpilih M'dpt", 'No anda tpilih mndpt', 'Selamat anda m-dptkan', 'sbg Pemenang', 'Hadiah ke-I', 'Pin Pmenang', 'Norek anda terpilih', 'SELAMAT No.HP']),
+  entry('sup.id.reward_sms', 'SP.REWARD', 'id', 'weak',
+    `${B}(?:cek\\s+(?:tunai|rp|\\d)|(?:\\d+\\s*)?unit\\s+mobil|tabungan\\s+rp|hadiah|undian|${WIN_VERB}\\s+(?:hadiah|mobil|cek|uang|tabungan))`,
+    ['Cek tunai', 'Cek 35jt', '1 Unit MOBIL', 'Tabungan Rp', 'M-dpt Hadiah', 'undian']),
   entry('sup.en.won', 'SP.WON', 'en', 'weak', `${B}(?:congratulations|you(?:${"['’]"}ve|\\s+have)\\s+been\\s+selected|you\\s+are\\s+(?:our\\s+)?(?:lucky|selected))${E}`, ['Congratulations', "you've been selected"]),
   // An offer to get into someone else's messages, account or phone (sup-0.5.0): such services are illegal, and paying for
   // them is a common scam.
@@ -153,6 +163,10 @@ const PRESSURE: SupportLexiconEntry[] = [
   entry('sup.en.illicit', 'SO.ILLICIT', 'en', 'strong',
     `${B}(?:(?:hack|spy\\s+on|monitor)\\s+(?:someone(?:${"['’]"}s)?|any(?:one(?:${"['’]"}s)?)?|your\\s+(?:partner|spouse)(?:${"['’]"}s)?)\\s+(?:whats\\s?app|phone|account|messages)|hacker\\s+for\\s+hire|without\\s+(?:them|the\\s+target)\\s+knowing|target(?:${"['’]"}s)?\\s+phone)${E}`,
     ["hack someone's WhatsApp", 'hacker for hire', 'without them knowing', "target's phone"]),
+  // A buyer or tenant who sends the reader to a relative or "proxy" to settle the price or payment (fake-buyer scams).
+  entry('sup.id.proxy', 'SO.PROXY', 'id', 'strong',
+    `${B}(?:hub(?:ungi)?|tlp|telp|telepon|kontak|nego(?:siasi)?|bicarakan)\\.?\\s+(?:\\p{L}+\\s+){0,3}?(?:suami|istri|saudara|sodara|bapa|bapak|ayah|kakak|adik|om|paman)\\s+(?:sy|saya|aku)${E}`,
+    ['hubungi suami saya', 'hub saudara sy', 'Mohon hub Bapa sy', 'nego hrg silahkan Hub saudara sy']),
   entry('sup.en.reward', 'SP.REWARD', 'en', 'weak', `${B}(?:redeem\\s+(?:your\\s+)?points|reward\\s+points|cash\\s+prize|shopping\\s+voucher)${E}`, ['redeem your points', 'cash prize']),
   entry('sup.en.urgency', 'SU.URGENCY', 'en', 'weak',
     `${B}(?:(?<!(?:expires?|valid\\s+for|valid)\\s)within\\s+\\d+\\s+(?:minutes?|mins?|hours?|hrs?)|immediately|right\\s+now|act\\s+now|urgent(?:ly)?|as\\s+soon\\s+as\\s+possible|asap|final\\s+warning)${E}`,

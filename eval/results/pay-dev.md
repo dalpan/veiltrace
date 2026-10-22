@@ -1,24 +1,24 @@
 # Payment detector: development results (pay-dev)
 
-Detector pay-0.4.0-exp (EXPERIMENTAL), extractor 0.3.0. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
+Detector pay-0.5.0-exp (EXPERIMENTAL), extractor 0.3.0. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
 
-TP 17 · FP 0 · TN 23 · FN 0
+TP 19 · FP 0 · TN 25 · FN 0
 
-- Precision: 100.0% (17/17; 95% CI 81.6%–100.0%)
-- Recall: 100.0% (17/17; 95% CI 81.6%–100.0%)
-- Hard-negative FPR: 0.0% (0/23; 95% CI 0.0%–14.3%)
-- Localization: 100.0% (17/17; 95% CI 81.6%–100.0%)
-- Exact class agreement: 92.5% (37/40; 95% CI 80.1%–97.4%)
+- Precision: 100.0% (19/19; 95% CI 83.2%–100.0%)
+- Recall: 100.0% (19/19; 95% CI 83.2%–100.0%)
+- Hard-negative FPR: 0.0% (0/25; 95% CI 0.0%–13.3%)
+- Localization: 100.0% (19/19; 95% CI 83.2%–100.0%)
+- Exact class agreement: 93.2% (41/44; 95% CI 81.8%–97.7%)
 - Requests during scanning: 0; privacy sentinel leaks: 0 (3 fields filled)
 
 ## Class matrix
 
 | expected \ predicted | none | observed | suspicious | manipulative |
 |---|---|---|---|---|
-| none | 5 | 0 | 0 | 0 |
-| observed | 3 | 15 | 0 | 0 |
-| suspicious | 0 | 0 | 1 | 0 |
-| manipulative | 0 | 0 | 0 | 16 |
+| none | 6 | 0 | 0 | 0 |
+| observed | 3 | 16 | 0 | 0 |
+| suspicious | 0 | 0 | 2 | 0 |
+| manipulative | 0 | 0 | 0 | 17 |
 
 ## Per scenario
 
@@ -41,6 +41,8 @@ TP 17 · FP 0 · TN 23 · FN 0
 | PD14-id-catut-dandim-dana-kegiatan | malicious | manipulative | manipulative | PR2:manipulative_instruction | ✓ | none | none |
 | PD15-id-wa-lowongan-seragam-ewallet | malicious | manipulative | manipulative | PR1:manipulative_instruction | ✓ | none | none |
 | PD16-id-email-kerja-tanpa-interview-biaya-admin | malicious | manipulative | manipulative | PR1:manipulative_instruction | ✓ | none | none |
+| PD17-id-sms-nomor-baru-minta-pulsa | malicious | manipulative | manipulative | PR2:manipulative_instruction | ✓ | none | none |
+| PD18-id-sms-pembayaran-dikuasakan | malicious | suspicious | suspicious | PR2:suspicious_correlation | ✓ | none | none |
 | PN01-en-checkout | benign | observed | observed | PR4:observed_instruction, PR4:observed_instruction |  | none | none |
 | PN02-id-checkout-virtual-account | benign | observed | observed | PR4:observed_instruction |  | none | none |
 | PN03-en-invoice | benign | observed | observed | PR4:observed_instruction |  | none | none |
@@ -64,3 +66,5 @@ TP 17 · FP 0 · TN 23 · FN 0
 | PN21-id-lowongan-resmi-tanpa-biaya | benign | none | none |  |  | none | none |
 | PN22-id-pelatihan-biaya-pendaftaran | benign | observed | observed | PR4:observed_instruction |  | none | none |
 | PN23-id-wa-undangan-interview-hrd | benign | none | none |  |  | none | none |
+| PN24-id-sms-nomor-baru-tanpa-permintaan | benign | none | none |  |  | none | none |
+| PN25-id-sms-tagihan-sewa-rekening-perusahaan | benign | observed | observed | PR4:observed_instruction |  | none | none |

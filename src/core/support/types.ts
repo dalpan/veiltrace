@@ -10,7 +10,7 @@ export type SupportChannelSignalId = 'SX.PHONE' | 'SX.MOBILE' | 'SX.MESSENGER' |
 /** Claimed identity: a claim only, never evidence of who wrote the text. */
 export type SupportClaimSignalId = 'SI.SUPPORT' | 'SI.BANK' | 'SI.ADMIN' | 'SI.SECURITY' | 'SI.OFFICIAL' | 'SI.ORG';
 /** Pressure: a page-rendered system or browser alarm, an account alarm, a threat to the account or data, urgency, a reward. */
-export type SupportPressureSignalId = 'SW.ALERT' | 'SW.ACCOUNT' | 'ST.THREAT' | 'SU.URGENCY' | 'SP.REWARD' | 'SP.WON' | 'SO.ILLICIT';
+export type SupportPressureSignalId = 'SW.ALERT' | 'SW.ACCOUNT' | 'ST.THREAT' | 'SU.URGENCY' | 'SP.REWARD' | 'SP.WON' | 'SO.ILLICIT' | 'SO.PROXY';
 export type SupportSignalId = SupportActionSignalId | SupportChannelSignalId | SupportClaimSignalId | SupportPressureSignalId
   | 'SH.UNASSERTED' | 'C.NEGATION' | 'C.REPORTED' | 'C.EDUCATIONAL';
 export type SupportSignalKind = 'action' | 'channel' | 'claim' | 'pressure' | 'context';
@@ -41,12 +41,12 @@ export interface SupportObservation {
   reported: boolean;
 }
 
-export type SupportRuleId = 'SR1' | 'SR2' | 'SR3' | 'SR4' | 'SR5' | 'SR6' | 'SR7' | 'SR8';
+export type SupportRuleId = 'SR1' | 'SR2' | 'SR3' | 'SR4' | 'SR5' | 'SR6' | 'SR7' | 'SR8' | 'SR9';
 export type SupportModifierId = 'C.QUOTED' | 'C.REPORTED' | 'C.EDUCATIONAL' | 'C.CODE_EXAMPLE';
 export type SupportAction = 'contact' | 'respond' | 'survey' | 'remote-access' | 'install';
 export type SupportChannel = 'phone' | 'mobile' | 'messenger' | 'link';
 export type SupportClaim = 'support' | 'bank' | 'administrator' | 'security-team' | 'official' | 'organization';
-export type SupportPressure = 'system-alert' | 'account-alarm' | 'threat' | 'urgency' | 'reward' | 'pre-won' | 'illicit-access';
+export type SupportPressure = 'system-alert' | 'account-alarm' | 'threat' | 'urgency' | 'reward' | 'pre-won' | 'illicit-access' | 'third-party-redirect';
 /**
  * Observable impersonation indicators: facts about the page, as opposed to what it claims. None of them proves who wrote it.
  * - page-rendered-system-alert: a virus/lock alarm drawn by the web page (browsers and operating systems do not alert inside pages)

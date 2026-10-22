@@ -1,97 +1,97 @@
 {
   "split": "pay-dev",
   "note": "DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.",
-  "detectorVersion": "pay-0.4.0-exp",
+  "detectorVersion": "pay-0.5.0-exp",
   "extractorVersion": "0.3.0",
   "metrics": {
-    "scenarios": 40,
+    "scenarios": 44,
     "confusion": {
-      "tp": 17,
+      "tp": 19,
       "fp": 0,
-      "tn": 23,
+      "tn": 25,
       "fn": 0
     },
     "precision": {
-      "k": 17,
-      "n": 17,
+      "k": 19,
+      "n": 19,
       "value": 1,
       "ci95": [
-        0.8157,
+        0.8318,
         1
       ]
     },
     "recall": {
-      "k": 17,
-      "n": 17,
+      "k": 19,
+      "n": 19,
       "value": 1,
       "ci95": [
-        0.8157,
+        0.8318,
         1
       ]
     },
     "fpr": {
       "k": 0,
-      "n": 23,
+      "n": 25,
       "value": 0,
       "ci95": [
         0,
-        0.1431
+        0.1332
       ]
     },
     "hardNegativeFpr": {
       "k": 0,
-      "n": 23,
+      "n": 25,
       "value": 0,
       "ci95": [
         0,
-        0.1431
+        0.1332
       ]
     },
     "localization": {
-      "k": 17,
-      "n": 17,
+      "k": 19,
+      "n": 19,
       "value": 1,
       "ci95": [
-        0.8157,
+        0.8318,
         1
       ]
     },
     "classMatrix": [
       [
-        5,
+        6,
         0,
         0,
         0
       ],
       [
         3,
-        15,
+        16,
         0,
         0
       ],
       [
         0,
         0,
-        1,
+        2,
         0
       ],
       [
         0,
         0,
         0,
-        16
+        17
       ]
     ],
     "exactClassAgreement": {
-      "k": 37,
-      "n": 40,
-      "value": 0.925,
+      "k": 41,
+      "n": 44,
+      "value": 0.9318,
       "ci95": [
-        0.8014,
-        0.9742
+        0.8177,
+        0.9765
       ]
     },
-    "observedOnNegatives": 15,
+    "observedOnNegatives": 16,
     "byLanguage": {
       "en": {
         "recall": {
@@ -115,21 +115,21 @@
       },
       "id": {
         "recall": {
-          "k": 11,
-          "n": 11,
+          "k": 13,
+          "n": 13,
           "value": 1,
           "ci95": [
-            0.7412,
+            0.7719,
             1
           ]
         },
         "fpr": {
           "k": 0,
-          "n": 13,
+          "n": 15,
           "value": 0,
           "ci95": [
             0,
-            0.2281
+            0.2039
           ]
         }
       }
@@ -439,6 +439,42 @@
       "predicted": "manipulative_instruction",
       "findings": [
         "PR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PD17-id-sms-nomor-baru-minta-pulsa",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "PR2:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PD18-id-sms-pembayaran-dikuasakan",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "suspicious_correlation",
+      "hardNegative": false,
+      "predicted": "suspicious_correlation",
+      "findings": [
+        "PR2:suspicious_correlation"
       ],
       "localized": true,
       "clickfixVerdict": "none",
@@ -839,6 +875,40 @@
       "hardNegative": true,
       "predicted": "none",
       "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN24-id-sms-nomor-baru-tanpa-permintaan",
+      "lang": "id",
+      "category": "negative",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN25-id-sms-tagihan-sewa-rekening-perusahaan",
+      "lang": "id",
+      "category": "negative",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "PR4:observed_instruction"
+      ],
       "localized": null,
       "clickfixVerdict": "none",
       "credentialVerdict": "none",

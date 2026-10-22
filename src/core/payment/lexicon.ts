@@ -19,6 +19,10 @@ const REQUESTS: PayLexiconEntry[] = [
   entry('pay.id.pay', 'PY.PAY', 'id', 'strong',
     `${B}(?:bayar(?:kan|lah)?|transfer(?:kan|lah)?|tf|lakukan\\s+(?:pembayaran|transfer)|setor(?:kan)?|top\\s*-?up|lunasi|kirim(?:kan)?\\s+(?:uang|dana|biaya|pembayaran)|(?:harus|wajib|perlu|diharuskan|segera|mohon|silakan|cukup)\\s+(?:membayar|mentransfer|menyetor|melunasi|mengirim(?:kan)?\\s+(?:uang|dana|biaya))|beli(?:kan)?\\s+(?:voucher|kartu\\s+hadiah)|(?:di)?wajib(?:kan)?\\s+(?:membeli|dibayar(?:kan)?)|(?:harus|wajib)\\s+(?:sudah\\s+)?di\\s?bayar(?:kan)?)${E}`,
     ['bayar', 'transfer', 'lakukan pembayaran', 'kirimkan uang', 'wajib membayar', 'belikan voucher', 'wajib membeli', 'diwajibkan dibayarkan']),
+  // Phone-credit (pulsa) requests, a bare account handed over to pay into, and a payment routed through someone (pay-0.5.0).
+  entry('pay.id.pulsa', 'PY.PAY', 'id', 'strong',
+    `${B}(?:(?:kirim(?:i|in|kan)?|isi(?:kan|in)?|beli(?:kan|in|kn)?|tf(?:in)?)\\s+(?:\\p{L}+\\s+){0,2}?pulsa|ini\\s+(?:no\\.?\\s*)?rek(?:ening)?(?:nya|ku)?|(?:kirim|transfer|tf)(?:kan)?\\s+ke\\s+(?:bank|rek(?:ening)?)|di\\s?transfer\\s+ke\\s+rek(?:ening)?|pembayaran(?:nya)?\\s+(?:harus|agar|supaya|mohon|wajib)\\s+(?:\\p{L}+\\s+)?(?:melalui|lewat|via|ke|di))${E}`,
+    ['kirimin pulsa', 'isi dl pulsa', 'Ini rekeningnya', 'Kirim ke Bank', 'ditransfer ke rek', 'Pembayaran harus melalui']),
 ];
 
 const OBJECTS: PayLexiconEntry[] = [
@@ -27,7 +31,7 @@ const OBJECTS: PayLexiconEntry[] = [
     `${B}(?:(?:rp\\.?|idr|usd|us\\$|\\$|€|£|eur)\\s?${NUM}(?:\\s?(?:juta|jt|ribu|rb|k|million|thousand))?|${NUM}\\s?(?:juta|jt|ribu|rb)?\\s?(?:rupiah|dollars?|usd|idr|euros?))${E}`,
     ['Rp 150.000', 'Rp2 juta', '$49.99', 'USD 200', '300 dollars', '500 ribu rupiah']),
   // Informal amounts without a currency sign ("50rb", "2jt", "100k"): only an object when a pay verb is in the same block.
-  entry('pay.amount.informal', 'PA.AMOUNT', 'id', 'strong', `${B}\\d[\\d.,]*\\s?(?:rb|ribu|jt|juta|k)${E}`, ['50rb', '2jt', '100k', '150 ribu']),
+  entry('pay.amount.informal', 'PA.AMOUNT', 'id', 'strong', `${B}\\d[\\d.,]*\\s?(?:rb|rbu|ribu|ewu|jt|juta|k)${E}`, ['50rb', '2jt', '100k', '150 ribu', '20ewu', '20 rbu']),
   entry('pay.en.fee', 'PF.FEE', 'en', 'weak', `${B}(?:fees?|surcharges?|charges?)${E}`, ['fee', 'charges']),
   entry('pay.id.fee', 'PF.FEE', 'id', 'weak', `${B}(?:biaya|ongkos(?:\\s+kirim)?|ongkir|pajak)${E}`, ['biaya', 'ongkir', 'pajak']),
   // A fee whose stated purpose is to release, unlock or hand over something: the core of advance-fee fraud.
@@ -51,8 +55,15 @@ const DESTINATIONS: PayLexiconEntry[] = [
     `${B}(?:rek\\.?|norek|rekening)\\s+(?:admin|sy|aku|gw|gue|petugas|agen|kurir)${E}|${B}(?:dana|ovo|gopay|shopeepay|e-?wallet)\\s+(?:saya|sy|aku|gw|gue|admin|petugas)${E}`,
     ['rek admin', 'norek sy', 'dana sy', 'ovo admin']),
   entry('pay.id.personal_wallet', 'PD.PERSONAL', 'id', 'strong',
-    `${B}(?:e-?wallet\\s+)?(?:dana|ovo|gopay|shopeepay|linkaja)\\s+\\+?\\d[\\d\\s-]{8,}\\d${E}|${B}(?:a\\s?/\\s?n|a\\.n\\.?|atas\\s+nama)\\s+(?!pt${E}|cv${E}|yayasan|koperasi|bank|perusahaan|anda|kamu|mas|mbak|kak|bapak|ibu|penerima|pengirim)\\p{L}`,
-    ['E-WALLET DANA 081200000000', 'A/N Budi']),
+    `${B}(?:e-?wallet\\s+)?(?:dana|ovo|gopay|shopeepay|linkaja)\\s+\\+?\\d[\\d\\s-]{8,}\\d${E}|${B}(?:a\\s?/\\s?n|a\\.n|atas\\s+nama)[\\s.:;]+(?!(?:pt|cv|yayasan|koperasi|bank|perusahaan|anda|kamu|mas|mbak|kak|bapak|ibu|penerima|pengirim)${E})\\p{L}`,
+    ['E-WALLET DANA 081200000000', 'A/N Budi', 'A/n.RASTO']),
+  // A phone number given as where to send phone credit or money ("pulsa ke nomor baru ini 0812…").
+  entry('pay.id.personal_phone', 'PD.PERSONAL', 'id', 'strong',
+    `${B}(?:ke|di|kana)\\s+(?:no(?:mor|mer)?\\.?|nmr|hp)\\s*(?:\\p{L}+[\\s,:]+){0,2}?\\+?\\d[\\d\\s-]{8,}\\d${E}`,
+    ['ke no 081200000000', 'di nomor baru ini 0812 0000 0000']),
+  // Payment redirected to another person who "has been authorized" (rent, instalments).
+  entry('pay.id.proxy_payee', 'PD.PERSONAL', 'id', 'strong',
+    `${B}(?:(?:sudah|sdh|dh|telah)\\s+(?:(?:saya|sy|aku)\\s+)?(?:di\\s?)?kuasakan|di\\s?kuasakan(?:\\s+sepenuhnya)?|(?:perubahan|ganti|pergantian)\\s+(?:no(?:mor)?\\.?\\s*)?rek(?:ening)?)${E}`, ['sudah dikuasakan', 'sdh dikuasakan', 'ada perubahan no rekening']),
   entry('pay.en.off_platform', 'PD.OFF_PLATFORM', 'en', 'strong',
     `${B}(?:(?:outside|off)\\s+(?:of\\s+)?(?:the\\s+|this\\s+)?(?:app|platform|marketplace|website|site|escrow)|directly\\s+to\\s+(?:me|my\\s+(?:account|number|wallet))|(?:skip|avoid|bypass|instead\\s+of)\\s+(?:using\\s+)?(?:the\\s+)?(?:checkout|escrow|platform\\s+payment|app\\s+payment))${E}`,
     ['outside the app', 'directly to me', 'instead of using the checkout']),
@@ -142,7 +153,7 @@ const PRESSURE: PayLexiconEntry[] = [
     `${B}(?:(?<!(?:berlaku|kedaluwarsa|kadaluarsa|hangus)\\s)dalam\\s+(?:waktu\\s+)?\\d+\\s+(?:menit|jam)|segera|sekarang\\s+juga|hari\\s+ini\\s+juga|peringatan\\s+terakhir|mendesak|secepatnya|kesempatan\\s+terakhir)${E}`,
     ['dalam 30 menit', 'segera', 'sekarang juga', 'secepatnya']),
   entry('pay.id.urgency_informal', 'PP.URGENCY', 'id', 'weak',
-    `${B}(?:buruan|cepetan|cpt|sebelum\\s+jam\\s+\\d+|sampe\\s+jam\\s+\\d+|slot(?:nya)?\\s+(?:cuma|terbatas)|(?:paling\\s+lambat\\s+)?malam\\s+ini|(?:lowongan|kuota)\\s+(?:hanya|cuma)\\s+untuk\\s+\\d+)${E}`, ['buruan', 'cpt', 'sampe jam 12', 'slotnya cuma', 'malam ini', 'lowongan hanya untuk 2']),
+    `${B}(?:buruan|cepetan|cpt|penting|jangan\\s+(?:telepon|telpon|tlp|nelpon|telfon)|usahakan\\s+hari\\s+ini|sebelum\\s+jam\\s+\\d+|sampe\\s+jam\\s+\\d+|slot(?:nya)?\\s+(?:cuma|terbatas)|(?:paling\\s+lambat\\s+)?malam\\s+ini|(?:lowongan|kuota)\\s+(?:hanya|cuma)\\s+untuk\\s+\\d+)${E}`, ['buruan', 'cpt', 'sampe jam 12', 'slotnya cuma', 'malam ini', 'lowongan hanya untuk 2']),
   // Claimed identity or authority. Never verified; never escalates on its own.
   entry('pay.en.authority', 'PP.AUTHORITY', 'en', 'weak',
     `${B}(?:customer\\s+(?:support|service|care)(?:\\s+(?:team|agent|officer|representative))?|support\\s+(?:team|agent|staff|desk)|help\\s*desk|(?:security|fraud|billing|compliance|verification)\\s+(?:team|department|officer|agent)|bank\\s+(?:officer|representative|staff|manager)|police(?:\\s+(?:officer|department))?|customs\\s+(?:office|officer|department|authority)|tax\\s+(?:office|officer|authority|department)|court\\s+(?:officer|order)|(?:government|federal)\\s+agent|official\\s+(?:support|agent|representative|account))${E}`,
@@ -152,6 +163,10 @@ const PRESSURE: PayLexiconEntry[] = [
     ['customer service', 'petugas bank', 'pihak kepolisian', 'bea cukai']),
   // Ranks and positions used to impersonate officials (P2, D-087): a claim only, never verified.
   entry('pay.id.authority_rank', 'PP.AUTHORITY', 'id', 'weak', `${B}(?:dandim|danrem|pangdam|danyon|danramil|kapolres|kapolda|kapolsek|kasdam|ajudan|babinsa|perwira|komandan|kolonel|letkol|mayor|kapten|lettu|letda|jenderal|brigjen|sertu|serka|pejabat|staf\\s+ahli|penyidik|bagian\\s+penyidikan)${E}`, ['Dandim', 'ajudan', 'Kapten', 'penyidik']),
+  // A message that claims to come from a family member on a new number ("ini nomor baru papa"), or opens by addressing a parent.
+  entry('pay.id.family', 'PP.FAMILY', 'id', 'weak',
+    `${B}(?:ini\\s+(?:no(?:mor|mer)?|nmr)\\s+baru(?:\\s+(?:papa|mama|ayah|ibu|bapak|mamah|bunda|om|tante|kakak|adik|aku|saya))?|no(?:mor|mer)?\\s+baru(?:ku|\\s+(?:papa|mama|ayah|ibu|aku|saya))|^(?:ma|mah|mama|mamah|pa|pah|papa|yah|ayah|bu|ibu|bunda|bun)(?=[\\s,'"”!.:]))${E}`,
+    ['ini nomor baru papa', 'no baruku', 'ma, isi dl pulsa']),
   entry('pay.en.authority_rank', 'PP.AUTHORITY', 'en', 'weak', `${B}(?:colonel|captain|lieutenant|commanding\\s+officer|commander|investigator|detective)${E}`, ['colonel', 'investigator']),
 ];
 

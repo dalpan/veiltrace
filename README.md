@@ -55,6 +55,7 @@ Each finding keeps **classification** (manipulative / suspicious / observed), **
 | **Real scam messages** (WhatsApp, SMS, email) collected by the team | **11 of 14 detected**: fake bank tariff notices, fake e-wallet support, fake card-transaction SMS, paid job offers, fake "violation" letters. Their patterns now shape the rules |
 | **Genuine pages and messages** | a genuine bank OTP SMS, checkouts with virtual accounts, official job ads and news about scams are **not flagged** (0 of 103 benign development pages) |
 | **Rule-based vs on-device AI** | on the same pages Chrome's built-in model (Gemini Nano) flagged 71% of benign pages; VeilTrace 0%. The AI is therefore not used ([details](docs/AI_EVAL.md)) |
+| **Public Indonesian SMS dataset** (labelled by others) | on its development half, fraud SMS flagged rose from 11 to **94 of 178** after adding SMS-era patterns, with **1 of 318** normal SMS flagged; the test half is locked ([details](docs/EVALUATION_PLAN.md)) |
 | **Devices** | Chrome desktop, Firefox for Android and the PWA on iPhone, tested by the team |
 | **Automated tests** | 737 passing: unit, real-browser extraction, end-to-end with the real extension, security and zero-network checks |
 

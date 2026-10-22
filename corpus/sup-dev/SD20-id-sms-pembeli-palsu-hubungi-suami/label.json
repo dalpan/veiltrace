@@ -1,0 +1,22 @@
+{
+  "id": "SD20-id-sms-pembeli-palsu-hubungi-suami",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-SUP",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://sms.pesan.test/sd20-id-sms-pembeli-palsu-hubungi-suami",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#log",
+  "description": "SMS pembeli palsu yang mengarahkan ke \"suami\" lewat nomor pribadi",
+  "rationale": "Pengalihan ke kerabat lewat nomor pribadi + desakan (SR9).",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; SMS-era scam classes seen in the external dataset's dev half (D-099), written in own words, labels written before the first run",
+  "created": "2026-10-23"
+}

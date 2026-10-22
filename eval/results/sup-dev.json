@@ -1,64 +1,64 @@
 {
   "split": "sup-dev",
   "note": "DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.",
-  "detectorVersion": "sup-0.5.0-exp",
+  "detectorVersion": "sup-0.6.0-exp",
   "extractorVersion": "0.3.0",
   "metrics": {
-    "scenarios": 44,
+    "scenarios": 48,
     "confusion": {
-      "tp": 20,
+      "tp": 22,
       "fp": 0,
-      "tn": 24,
+      "tn": 26,
       "fn": 0
     },
     "precision": {
-      "k": 20,
-      "n": 20,
+      "k": 22,
+      "n": 22,
       "value": 1,
       "ci95": [
-        0.8389,
+        0.8513,
         1
       ]
     },
     "recall": {
-      "k": 20,
-      "n": 20,
+      "k": 22,
+      "n": 22,
       "value": 1,
       "ci95": [
-        0.8389,
+        0.8513,
         1
       ]
     },
     "fpr": {
       "k": 0,
-      "n": 24,
+      "n": 26,
       "value": 0,
       "ci95": [
         0,
-        0.138
+        0.1287
       ]
     },
     "hardNegativeFpr": {
       "k": 0,
-      "n": 24,
+      "n": 26,
       "value": 0,
       "ci95": [
         0,
-        0.138
+        0.1287
       ]
     },
     "localization": {
-      "k": 20,
-      "n": 20,
+      "k": 22,
+      "n": 22,
       "value": 1,
       "ci95": [
-        0.8389,
+        0.8513,
         1
       ]
     },
     "classMatrix": [
       [
-        6,
+        8,
         0,
         0,
         0
@@ -79,16 +79,16 @@
         0,
         0,
         0,
-        17
+        19
       ]
     ],
     "exactClassAgreement": {
-      "k": 40,
-      "n": 44,
-      "value": 0.9091,
+      "k": 44,
+      "n": 48,
+      "value": 0.9167,
       "ci95": [
-        0.7884,
-        0.9641
+        0.8045,
+        0.9671
       ]
     },
     "observedOnNegatives": 14,
@@ -115,21 +115,21 @@
       },
       "id": {
         "recall": {
-          "k": 13,
-          "n": 13,
+          "k": 15,
+          "n": 15,
           "value": 1,
           "ci95": [
-            0.7719,
+            0.7961,
             1
           ]
         },
         "fpr": {
           "k": 0,
-          "n": 14,
+          "n": 16,
           "value": 0,
           "ci95": [
             0,
-            0.2153
+            0.1936
           ]
         }
       }
@@ -512,6 +512,44 @@
       "predicted": "manipulative_instruction",
       "findings": [
         "SR8:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SD19-id-sms-undian-pin-pemenang",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "SR7:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SD20-id-sms-pembeli-palsu-hubungi-suami",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "SR9:manipulative_instruction"
       ],
       "localized": true,
       "clickfixVerdict": "none",
@@ -946,6 +984,40 @@
       "category": "negative",
       "truth": "benign",
       "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SN25-id-sms-bonus-kuota-operator",
+      "lang": "id",
+      "category": "negative",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SN26-id-sms-pengumuman-undian-resmi",
+      "lang": "id",
+      "category": "negative",
+      "truth": "benign",
+      "expectedClass": "none",
       "hardNegative": true,
       "predicted": "none",
       "findings": [],

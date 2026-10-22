@@ -43,7 +43,8 @@
     "eval:v3": "node scripts/eval-v3.mjs",
     "brand": "node scripts/render-brand.mjs",
     "build:site": "node scripts/build-site.mjs",
-    "deploy:site": "node scripts/deploy-site.mjs"
+    "deploy:site": "node scripts/deploy-site.mjs",
+    "external": "node scripts/external.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

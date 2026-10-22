@@ -14,7 +14,7 @@ import type {
   SupportPressure, SupportResult, SupportRuleId, SupportSignalId, SupportSignalKind, SupportTrustContext,
 } from './types.js';
 
-export const SUPPORT_DETECTOR_VERSION = 'sup-0.5.0-exp';
+export const SUPPORT_DETECTOR_VERSION = 'sup-0.6.0-exp';
 
 const CLAUSE_BREAK = /[,;:!?]|\.(?=\s|$)|(?<![\p{L}\p{N}_])(?:and|then|or|but|dan|lalu|kemudian|atau|tapi|tetapi)(?![\p{L}\p{N}_])/u;
 /** Negation distributes over a disjunction ("never install AnyDesk or share your screen"), so "or"/"atau" does not end its scope. */
@@ -32,9 +32,9 @@ const EDUCATIONAL = LEXICON.filter((e) => e.signal === 'C.EDUCATIONAL');
 const ACTION_OF: Partial<Record<SupportSignalId, SupportAction>> = { 'SC.CONTACT': 'contact', 'SC.RESPOND': 'respond', 'SC.SURVEY': 'survey', 'SA.REMOTE': 'remote-access', 'SA.INSTALL': 'install' };
 const CHANNEL_OF: Partial<Record<SupportSignalId, SupportChannel>> = { 'SX.PHONE': 'phone', 'SX.MOBILE': 'mobile', 'SX.MESSENGER': 'messenger', 'SX.LINK': 'link' };
 const CLAIM_OF: Partial<Record<SupportSignalId, SupportClaim>> = { 'SI.SUPPORT': 'support', 'SI.BANK': 'bank', 'SI.ADMIN': 'administrator', 'SI.SECURITY': 'security-team', 'SI.OFFICIAL': 'official', 'SI.ORG': 'organization' };
-const PRESSURE_OF: Partial<Record<SupportSignalId, SupportPressure>> = { 'SW.ALERT': 'system-alert', 'SW.ACCOUNT': 'account-alarm', 'ST.THREAT': 'threat', 'SU.URGENCY': 'urgency', 'SP.REWARD': 'reward', 'SP.WON': 'pre-won', 'SO.ILLICIT': 'illicit-access' };
+const PRESSURE_OF: Partial<Record<SupportSignalId, SupportPressure>> = { 'SW.ALERT': 'system-alert', 'SW.ACCOUNT': 'account-alarm', 'ST.THREAT': 'threat', 'SU.URGENCY': 'urgency', 'SP.REWARD': 'reward', 'SP.WON': 'pre-won', 'SO.ILLICIT': 'illicit-access', 'SO.PROXY': 'third-party-redirect' };
 const ORDER: readonly string[] = ['contact', 'respond', 'survey', 'remote-access', 'install', 'phone', 'mobile', 'messenger', 'link', 'support', 'bank', 'administrator', 'security-team', 'official', 'organization',
-  'system-alert', 'account-alarm', 'threat', 'urgency', 'reward', 'pre-won', 'illicit-access', 'page-rendered-system-alert', 'alert-in-overlay', 'remote-access-request', 'software-install-request',
+  'system-alert', 'account-alarm', 'threat', 'urgency', 'reward', 'pre-won', 'illicit-access', 'third-party-redirect', 'page-rendered-system-alert', 'alert-in-overlay', 'remote-access-request', 'software-install-request',
   'personal-channel-contact', 'claim-in-user-content'];
 const ordered = <T extends string>(xs: Iterable<T>): T[] => [...new Set(xs)].sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b));
 
@@ -48,6 +48,7 @@ export const SUPPORT_RULES: Readonly<Record<SupportRuleId, { name: string; class
   SR6: { name: 'IMPERSONATED_NOTICE_LURE', classification: 'manipulative_instruction' },
   SR7: { name: 'PRIZE_SURVEY_LURE', classification: 'manipulative_instruction' },
   SR8: { name: 'ILLICIT_ACCESS_SERVICE', classification: 'manipulative_instruction' },
+  SR9: { name: 'THIRD_PARTY_REDIRECT', classification: 'manipulative_instruction' },
 };
 
 const SUMMARY: Record<SupportRuleId, string> = {
@@ -59,6 +60,7 @@ const SUMMARY: Record<SupportRuleId, string> = {
   SR6: 'A message presented as a notice from a bank, e-wallet, marketplace or its support raises an account alarm, a threat or a reward and asks the reader to reply, choose an option, open a link or fill in a form. Banks and platforms do not settle such matters through a reply or a link in a chat or text message.',
   SR7: 'The page congratulates the reader on a cash prize they did not enter for and asks them to answer a quiz or questionnaire, often in the name of a company\'s anniversary. Such quizzes are used to lead people to share the link or hand over data or money.',
   SR8: 'The page offers to get into someone else\'s messages, account or phone and directs the reader to a contact. Such services are illegal, and buyers are commonly cheated or blackmailed.',
+  SR9: 'A stranger presenting as a buyer, tenant or landlord sends the reader to a relative or another person on a personal number to settle a price or payment. Fake-buyer and payment-redirect scams start this way.',
 };
 
 interface Src {
@@ -239,7 +241,7 @@ interface Scored {
   modifiers: Array<Omit<SupportModifier, 'evidence'> & { evidence: Array<Ob | string> }>;
 }
 
-const RULE_RANK: Readonly<Record<SupportRuleId, number>> = { SR1: 0, SR2: 1, SR3: 2, SR4: 3, SR6: 4, SR7: 5, SR8: 6, SR5: 7 };
+const RULE_RANK: Readonly<Record<SupportRuleId, number>> = { SR1: 0, SR2: 1, SR3: 2, SR4: 3, SR6: 4, SR7: 5, SR8: 6, SR9: 7, SR5: 8 };
 
 function scoreOne(u: Unit, region: RegionInfo, signals: readonly Ob[], cues: readonly Ob[]): Scored {
   // Claims and pressure count when near the direction and addressed to the reader: inside a quotation or code sample, only in the same block.
@@ -258,6 +260,7 @@ function scoreOne(u: Unit, region: RegionInfo, signals: readonly Ob[], cues: rea
   const rewards = nearby.filter((p) => p.o.signal === 'SP.REWARD');
   const won = nearby.filter((p) => p.o.signal === 'SP.WON');
   const illicit = nearby.filter((p) => p.o.signal === 'SO.ILLICIT');
+  const proxy = nearby.filter((p) => p.o.signal === 'SO.PROXY');
   const remote = actions.includes('remote-access');
   const install = actions.includes('install');
   const personal = channels.includes('mobile') || channels.includes('messenger');
@@ -289,13 +292,19 @@ function scoreOne(u: Unit, region: RegionInfo, signals: readonly Ob[], cues: rea
     const strong = danger && (urgency.length > 0 || personal || ugc || (accountAlarms.length > 0 && threats.length > 0));
     candidates.push(['SR6', strong ? 'manipulative_instruction' : 'suspicious_correlation', [...pressure, ...accountAlarms, ...rewards]]);
   }
-  // SR7: a prize the reader did not enter for, won by answering a quiz. Manipulative in a company's name or in a message.
-  if (actions.includes('survey') && won.length > 0 && rewards.length > 0) {
+  // SR7: a prize the reader did not enter for, claimed through a quiz, a link, a reply or a contact. Manipulative in a
+  // company's name or in a message.
+  if ((actions.includes('survey') || lure || contact) && won.length > 0 && rewards.length > 0) {
     candidates.push(['SR7', hasClaim || untrusted ? 'manipulative_instruction' : 'suspicious_correlation', [...claims, ...won, ...rewards, ...urgency]]);
   }
   // SR8: an offer to get into someone else's account or phone, with a contact or reply direction.
   if (illicit.length > 0 && (contact || actions.includes('respond'))) {
     candidates.push(['SR8', urgency.length > 0 || personal ? 'manipulative_instruction' : 'suspicious_correlation', [...illicit, ...urgency]]);
+  }
+  // SR9: a stranger (a "buyer", a "tenant", a landlord's "proxy") sends the reader to a relative or another person on a
+  // personal number to settle a price or a payment.
+  if (proxy.length > 0 && personal) {
+    candidates.push(['SR9', urgency.length > 0 || threats.length > 0 ? 'manipulative_instruction' : 'suspicious_correlation', [...proxy, ...urgency, ...threats]]);
   }
   const [ruleId, cls, used] = candidates.sort((x, y) => TIERS.indexOf(y[1]) - TIERS.indexOf(x[1]) || RULE_RANK[x[0]] - RULE_RANK[y[0]])[0]
     ?? ['SR5', 'observed_instruction', []];

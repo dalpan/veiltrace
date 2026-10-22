@@ -226,3 +226,14 @@ describe('support detector sup-0.5.0-exp: prize quizzes (SR7) and illegal access
       .not.toMatch(/suspicious|manipulative/);
   });
 });
+
+describe('support detector sup-0.6.0-exp: SMS prize notices and proxy redirects (D-099)', () => {
+  it('an abbreviated SMS prize notice with a winner PIN and a link → manipulative (SR7)', () => {
+    expect(short(sup(inContainer('ugc:#sms', ['PESAN RESMI dr PT.Contoh: No anda tpilih mndpt HADIAH cek tunai Rp 50jt. Pin Pmenang 7XK29. Info klik www.undian.example.invalid'])))).toEqual(['SR7:manipulative_instruction']);
+  });
+
+  it('a "buyer" sending the reader to a relative on a mobile number → SR9; an operator bonus SMS stays quiet', () => {
+    expect(short(sup(inContainer('ugc:#sms', ['Rumah bapak sudah saya lihat dan cocok. Untuk harga hubungi suami saya di 0812 0000 5555 hari ini juga.'])))).toEqual(['SR9:manipulative_instruction']);
+    expect(sup(inContainer('ugc:#sms', ['Selamat! Anda mendapat bonus kuota 1GB. Cek di *888#.'])).verdict).toBe('none');
+  });
+});

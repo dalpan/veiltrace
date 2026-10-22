@@ -268,7 +268,7 @@ describe('experimental support section in the scan report (M5.3)', () => {
     const bad = (mut: (r: typeof good) => void) => { const c = structuredClone(good); mut(c); return parseScanReport(c); };
     const phone = (r: typeof good) => r.support.findings[0].evidence.find((e: { signal: string }) => e.signal === 'SX.PHONE');
     expect(bad((r) => { delete r.support; })).toBeNull();
-    expect(bad((r) => { r.support.findings[0].ruleId = 'SR9'; })).toBeNull();
+    expect(bad((r) => { r.support.findings[0].ruleId = 'SR10'; })).toBeNull();
     expect(bad((r) => { r.support.findings[0].claims.push('verified-official'); })).toBeNull();
     expect(bad((r) => { phone(r).text = '+1 888 555 0199'; })).toBeNull();
     expect(bad((r) => { r.support.findings[0].evidence[0].text = 'call 18885550199'; })).toBeNull();

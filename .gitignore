@@ -23,3 +23,6 @@ kasus-baru/
 
 # Competition materials (kept local, not part of the project repository)
 submission/
+
+# Third-party datasets (license terms vary; downloaded by npm run external, never committed)
+corpus/external/

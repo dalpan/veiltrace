@@ -1,0 +1,22 @@
+{
+  "id": "SD19-id-sms-undian-pin-pemenang",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-SUP",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://sms.pesan.test/sd19-id-sms-undian-pin-pemenang",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#log",
+  "description": "SMS undian palsu: nomor terpilih, cek tunai, PIN pemenang, tautan",
+  "rationale": "Hadiah yang tidak diikuti + PIN pemenang + tautan dalam pesan (SR7).",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; SMS-era scam classes seen in the external dataset's dev half (D-099), written in own words, labels written before the first run",
+  "created": "2026-10-23"
+}

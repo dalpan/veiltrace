@@ -4,6 +4,11 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-23 · External SMS dataset and SMS-era patterns (D-099)
+Indonesian SMS spam dataset as an external set (hash split, locked test half). Dev half: *penipuan* alerted 11 → 94 of 178, *normal* 1 of 318, *promo* 1 of 120. pay 0.5.0 (phone credit, bare accounts, redirected payments, claimed family on a new number), sup 0.6.0 (SMS prize notices, SR9 third-party redirect). 8 new dev fixtures; pay-dev and sup-dev FP 0; `npm test` green apart from known load-sensitive tests that pass alone. **Next:** owner decides when to run the external test half and held-out v3 (once each).
+
+---
+
 ## 2026-10-22 · Brand, website and repository scope (D-098)
 Logo and matching icons; README without competition context (submission/ kept local); website at https://veiltrace.click with landing page, the PWA at /app/ and downloads (D-098). Verified in Chromium: landing renders without horizontal scroll at phone width, app at /app/ with service-worker scope /app/, download link works, zero external requests; the root service-worker retirement unregisters the old worker once an update check runs. **Next:** owner labels the field sample; v3 and field-sample test runs on request.
 

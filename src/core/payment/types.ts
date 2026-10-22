@@ -12,7 +12,7 @@ export type PayDestinationSignalId = 'PD.PERSONAL' | 'PD.OFF_PLATFORM' | 'PD.GIF
 /** Something the reader is promised in return (pay-to-receive), and the clause that ties the payment to it. */
 export type PayReceiveSignalId = 'PR.REFUND' | 'PR.PRIZE' | 'PR.UNLOCK' | 'PR.RECRUIT' | 'PR.JOB' | 'PC.CONDITION';
 /** Pressure. PP.AUTHORITY is a claim only and is never verified. */
-export type PayPressureSignalId = 'PP.THREAT' | 'PP.URGENCY' | 'PP.AUTHORITY';
+export type PayPressureSignalId = 'PP.THREAT' | 'PP.URGENCY' | 'PP.AUTHORITY' | 'PP.FAMILY';
 export type PaySignalId = PayRequestSignalId | PayObjectSignalId | PayDestinationSignalId | PayReceiveSignalId | PayPressureSignalId
   | 'C.NEGATION' | 'C.REPORTED' | 'C.EDUCATIONAL';
 export type PaySignalKind = 'request' | 'object' | 'destination' | 'receive' | 'pressure' | 'context';
@@ -47,7 +47,7 @@ export type PayModifierId = 'C.QUOTED' | 'C.REPORTED' | 'C.EDUCATIONAL' | 'C.COD
 /** What the reader is promised for paying (pay-to-receive schemes). */
 export type PayPromise = 'refund' | 'prize' | 'account-unlock' | 'release' | 'recruitment' | 'job';
 export type PayDestination = 'personal-account' | 'off-platform' | 'gift-card' | 'crypto';
-export type PayPressure = 'threat' | 'urgency' | 'claimed-authority';
+export type PayPressure = 'threat' | 'urgency' | 'claimed-authority' | 'claimed-family';
 /** Observable placement of the request (same heuristic as the credential detector). */
 export type PayTrustContext = 'user-content' | 'third-party-widget' | 'embedded-frame' | 'dialog' | 'overlay' | 'form';
 export type PayLimitation = 'claimed-identity-unverifiable' | 'trust-boundary-heuristic' | 'amount-not-reported';
