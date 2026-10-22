@@ -88,6 +88,16 @@ export async function runScan(tabId: number): Promise<ScanCall> {
   return { raw: res?.result, injectMs: t1 - t0, callMs: t2 - t1 };
 }
 
+/** The masked page text for the optional on-device AI opinion (D-093), validated by the caller. */
+export async function runAiText(tabId: number): Promise<unknown> {
+  await ensureContent(tabId);
+  const [res] = await chrome.scripting.executeScript({
+    target: { tabId }, world: 'ISOLATED',
+    func: () => (globalThis as unknown as { VeiltraceContent: { aiText: () => unknown } }).VeiltraceContent.aiText(),
+  });
+  return res?.result;
+}
+
 export async function runHighlight(tabId: number, locator: string, durationMs: number): Promise<unknown> {
   await ensureContent(tabId);
   const [res] = await chrome.scripting.executeScript({

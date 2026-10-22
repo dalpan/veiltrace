@@ -3,7 +3,8 @@
 import type {
   CredEvidenceItem, CredFindingSummary, EvidenceItem, FindingSummary, PayEvidenceItem, PayFindingSummary, ScanReport, SupportEvidenceItem, SupportFindingSummary,
 } from '../content/report.js';
-import { classifyUrl, extensionVersion, getTargetTab, isTabView, runHighlight, runScan, type TargetTab, type UrlClass } from './adapter.js';
+import { classifyUrl, extensionVersion, getTargetTab, isTabView, runAiText, runHighlight, runScan, type TargetTab, type UrlClass } from './adapter.js';
+import { renderAi, resetAi, setupAi } from './ai-panel.js';
 import { autoEnabled, disableAuto, enableAuto, MANAGED } from '../auto/auto.js';
 import { aggregate, CATEGORIES, type Category, type Dashboard, type FindingGroup, type FindingRef } from './aggregate.js';
 import { detectLang, formatCount, MESSAGES, type HighlightKey, type Lang, type Messages } from './i18n.js';
@@ -349,6 +350,8 @@ function render(): void {
   const scanState = state.phase === 'scanning' ? 'scanning' : state.phase === 'error' ? 'error'
     : state.phase === 'done' && state.report ? (state.report.status.complete ? 'complete' : 'partial') : 'standby';
   $('scan-state').textContent = m.dash.stateLabel[scanState];
+  // Optional on-device AI second opinion (D-093): offered only after a finished scan, below the VeilTrace result.
+  renderAi(state.phase === 'done' && state.report !== null);
   $('scan-state').dataset.state = scanState;
   const version = extensionVersion();
   $('version').textContent = version ? `v${version}` : '';
@@ -384,6 +387,7 @@ async function scan(): Promise<void> {
   const tab = state.tab;
   if (!tab) return;
   Object.assign(state, { phase: 'scanning', error: null, report: null, highlights: new Map() });
+  resetAi();
   render();
   document.body.dataset.injections = String(Number(document.body.dataset.injections ?? '0') + 1);
   const t0 = performance.now();
@@ -441,6 +445,7 @@ async function main(): Promise<void> {
     });
   }
   $('scan').addEventListener('click', () => void scan());
+  setupAi({ t, tabId: () => state.tab?.id ?? null, readText: runAiText });
   $('mode-toggle').addEventListener('click', () => void toggleMode());
   if (await isTabView()) document.documentElement.classList.add('fluid');
   state.auto = await autoEnabled();

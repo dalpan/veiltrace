@@ -132,6 +132,27 @@ export interface Messages {
     yourMessage: string;
     offlineReady: string;
   };
+  /** Optional on-device AI second opinion (D-093). */
+  ai: {
+    title: string;
+    intro: string;
+    prepare: string;
+    previewSummary: (lines: number, truncated: boolean) => string;
+    run: string;
+    running: string;
+    downloading: (percent: number) => string;
+    unsupported: string;
+    unavailable: string;
+    failed: string;
+    noText: string;
+    resultTitle: string;
+    assessment: Record<'manipulative' | 'suspicious' | 'no-clear-signs', string>;
+    tactic: Record<'impersonation' | 'threat-or-urgency' | 'too-good-to-be-true' | 'payment-request' | 'credential-request' | 'link-or-reply-lure' | 'run-command' | 'remote-access-or-install' | 'illegal-service' | 'personal-contact-channel', string>;
+    confidence: Record<'low' | 'medium' | 'high', string>;
+    tacticsLabel: string;
+    citedLines: string;
+    caveat: string;
+  };
   /** Opt-in automatic scanning (D-081). */
   auto: {
     actionTitle: string;
@@ -419,6 +440,31 @@ const EN: Messages = {
     linkOnly: 'Only a link was pasted. VeilTrace checks what a message says and does not judge web addresses. Paste the whole message, including the text around the link. Do not open the link just to check it.',
     yourMessage: 'Your message',
     offlineReady: 'Ready to work offline.',
+  },
+  ai: {
+    title: 'AI second opinion · optional, on this device',
+    intro: 'The AI model built into Chrome can read this page\'s text and give a second opinion. It runs on this device and nothing is sent. The VeilTrace result above does not change.',
+    prepare: 'Show the text the AI will read',
+    previewSummary: (n, cut) => `${n} lines of page text; numbers, links and email addresses are masked${cut ? '; cut to fit' : ''}`,
+    run: 'Ask the on-device AI',
+    running: 'The AI is reading the text…',
+    downloading: (p) => `Chrome is downloading its AI model… ${p}%`,
+    unsupported: 'Not available in this browser. The on-device AI needs Chrome on Windows, macOS, Linux or a Chromebook Plus with its built-in model.',
+    unavailable: 'Chrome\'s built-in AI model is not available on this device (hardware, free storage or settings).',
+    failed: 'The AI did not give a usable answer. Try again.',
+    noText: 'There is no page text to read.',
+    resultTitle: 'AI opinion · may be wrong',
+    assessment: { manipulative: 'The AI sees signs of manipulation.', suspicious: 'The AI sees some suspicious signs.', 'no-clear-signs': 'The AI sees no clear signs of manipulation. This is not a guarantee.' },
+    tactic: {
+      impersonation: 'claims to be a bank, company, support or official', 'threat-or-urgency': 'threat, alarm or deadline', 'too-good-to-be-true': 'prize, refund or job that is too good to be true',
+      'payment-request': 'asks for a payment', 'credential-request': 'asks for a password, code or PIN', 'link-or-reply-lure': 'link, reply, quiz or form as a lure',
+      'run-command': 'asks you to run a command', 'remote-access-or-install': 'asks you to install an app or allow remote access', 'illegal-service': 'offers an illegal service',
+      'personal-contact-channel': 'personal phone number or messenger',
+    },
+    confidence: { low: 'AI confidence: low', medium: 'AI confidence: medium', high: 'AI confidence: high' },
+    tacticsLabel: 'Tactics the AI names',
+    citedLines: 'Lines the AI points to',
+    caveat: 'An opinion from a language model: it can be wrong or misled by the page itself, and Indonesian is not one of its supported languages. It does not change the VeilTrace result.',
   },
   auto: {
     actionTitle: 'VeilTrace: scan this page',
@@ -724,6 +770,31 @@ const ID: Messages = {
     linkOnly: 'Yang ditempel hanya tautan. VeilTrace memeriksa isi pesan dan tidak menilai alamat situs. Tempel seluruh pesannya, termasuk teks di sekitar tautan. Jangan membuka tautan hanya untuk mengeceknya.',
     yourMessage: 'Pesan Anda',
     offlineReady: 'Siap dipakai tanpa internet.',
+  },
+  ai: {
+    title: 'Pendapat kedua AI · opsional, di perangkat ini',
+    intro: 'Model AI bawaan Chrome dapat membaca teks halaman ini dan memberi pendapat kedua. Berjalan di perangkat ini dan tidak ada yang dikirim. Hasil VeilTrace di atas tidak berubah.',
+    prepare: 'Tampilkan teks yang akan dibaca AI',
+    previewSummary: (n, cut) => `${n} baris teks halaman; nomor, tautan, dan alamat email disamarkan${cut ? '; dipotong agar muat' : ''}`,
+    run: 'Tanya AI di perangkat',
+    running: 'AI sedang membaca teks…',
+    downloading: (p) => `Chrome sedang mengunduh model AI… ${p}%`,
+    unsupported: 'Tidak tersedia di browser ini. AI di perangkat butuh Chrome di Windows, macOS, Linux, atau Chromebook Plus dengan model bawaannya.',
+    unavailable: 'Model AI bawaan Chrome tidak tersedia di perangkat ini (perangkat keras, ruang penyimpanan, atau pengaturan).',
+    failed: 'AI tidak memberi jawaban yang dapat dipakai. Coba lagi.',
+    noText: 'Tidak ada teks halaman untuk dibaca.',
+    resultTitle: 'Pendapat AI · bisa keliru',
+    assessment: { manipulative: 'AI melihat tanda manipulasi.', suspicious: 'AI melihat beberapa tanda mencurigakan.', 'no-clear-signs': 'AI tidak melihat tanda manipulasi yang jelas. Ini bukan jaminan.' },
+    tactic: {
+      impersonation: 'mengaku bank, perusahaan, layanan pelanggan, atau pejabat', 'threat-or-urgency': 'ancaman, alarm, atau tenggat', 'too-good-to-be-true': 'hadiah, refund, atau pekerjaan yang terlalu bagus',
+      'payment-request': 'meminta pembayaran', 'credential-request': 'meminta password, kode, atau PIN', 'link-or-reply-lure': 'tautan, balasan, kuis, atau formulir sebagai umpan',
+      'run-command': 'menyuruh menjalankan perintah', 'remote-access-or-install': 'menyuruh memasang aplikasi atau memberi akses jarak jauh', 'illegal-service': 'menawarkan jasa ilegal',
+      'personal-contact-channel': 'nomor ponsel atau aplikasi pesan pribadi',
+    },
+    confidence: { low: 'Keyakinan AI: rendah', medium: 'Keyakinan AI: sedang', high: 'Keyakinan AI: tinggi' },
+    tacticsLabel: 'Taktik yang disebut AI',
+    citedLines: 'Baris yang ditunjuk AI',
+    caveat: 'Pendapat dari model bahasa: bisa keliru atau terkecoh oleh halaman itu sendiri, dan bahasa Indonesia belum termasuk bahasa yang didukungnya. Tidak mengubah hasil VeilTrace.',
   },
   auto: {
     actionTitle: 'VeilTrace: pindai halaman ini',

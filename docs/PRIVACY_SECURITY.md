@@ -24,7 +24,10 @@ Status: M0 commitments; verified for the core (M1), the extractor/harness (M2), 
 
 For comparison (verified manifests, see COMPETITIVE_ANALYSIS.md): Nehboro, ClipShield and ClickFixMitigator all request `<all_urls>`.
 
-## 3. Optional AI (future, not in MVP)
+## 3. Optional AI
+
+**Implemented (D-093): on-device only.** The popup offers an AI second opinion through the browser's built-in model (Chrome's Prompt API, Gemini Nano) after a scan. It makes no network request (Chrome downloads its model itself), so the default build stays free of network code. Two clicks: the first shows the exact masked text (visible block text only, never form-field values; emails, links and numbers of six or more digits masked; at most 150 lines / 6,000 characters), the second runs the model. The model may only answer with fixed values (assessment, tactics, line numbers, confidence) checked by `parseAiOpinion`; its free text is never shown, and cited lines are taken from the payload. The VeilTrace result is shown first and never changed; the badge and automatic scanning never use AI. Where the API or model is missing (Firefox, Android, iPhone, older or smaller machines) the panel says so. A cloud model is not implemented; it would still need all of the rules below and a separate build.
+
 
 Allowed only if all of the following hold. It requires a DECISIONS.md entry and user approval first.
 1. Off by default. Enabled per request, not globally ("Ask AI about this finding").

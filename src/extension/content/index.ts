@@ -6,6 +6,7 @@ import { analyzeCredentials } from '../../core/credential/analyze.js';
 import { analyzePayments } from '../../core/payment/analyze.js';
 import { analyzeSupport } from '../../core/support/analyze.js';
 import { EXTRACTOR_VERSION, extractSnapshot } from '../../extract/extract.js';
+import { buildAiPayload, type AiPayload } from '../ai/payload.js';
 import { clearHighlight, highlight, type HighlightResult } from './highlight.js';
 import { buildReport, type ScanReport } from './report.js';
 
@@ -45,6 +46,16 @@ export function scan(options: { timeBudgetMs?: number; keepHighlight?: boolean }
   const t5 = performance.now();
   return buildReport(snapshot, result, { engine: result.engineVersion, extractor: EXTRACTOR_VERSION },
     { extractMs: t1 - t0, analyzeMs: t2 - t1, credentialMs: t3 - t2, paymentMs: t4 - t3, supportMs: t5 - t4 }, cred, pay, sup);
+}
+
+/**
+ * Optional AI second opinion (D-093): the visible block text the detectors read, masked and capped. Called only when the user
+ * asks for it in the popup; the popup shows it before the on-device model reads it.
+ */
+export function aiText(): AiPayload {
+  const getShadowRoot = shadowRootAdapter();
+  const { snapshot } = extractSnapshot(document, getShadowRoot ? { getShadowRoot } : {});
+  return buildAiPayload(snapshot.blocks.map((b) => b.text));
 }
 
 export function show(locator: unknown, durationMs: number): HighlightResult {

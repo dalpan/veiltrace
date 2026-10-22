@@ -39,6 +39,16 @@
     <p id="status" class="status" role="status" aria-live="polite"></p>
 
     <section id="result" aria-live="polite" hidden></section>
+
+    <section id="ai" class="ai" aria-labelledby="ai-title" hidden>
+      <h2 id="ai-title" class="ai-title"></h2>
+      <p id="ai-intro" class="ai-intro"></p>
+      <button id="ai-prepare" class="show" type="button" hidden></button>
+      <details id="ai-preview" class="ai-preview" hidden><summary id="ai-preview-summary"></summary><ol id="ai-lines" class="ai-payload"></ol></details>
+      <button id="ai-run" class="show" type="button" hidden></button>
+      <p id="ai-status" class="status" role="status" aria-live="polite"></p>
+      <div id="ai-result" hidden></div>
+    </section>
   </main>
 
   <footer>

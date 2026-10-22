@@ -4,6 +4,11 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-22 · Optional on-device AI second opinion (D-093)
+Popup panel "AI second opinion · optional, on this device": payload preview first, then Chrome's built-in model; fixed-value JSON answer validated strictly; VeilTrace result unchanged. Unit tests (masking, validation, injection-shaped answers rejected) and e2e (unavailable state; full flow with a stand-in model: masked text, second-click only, labels, unchanged verdict, 0 requests). `npm test` 734 passed. **Not yet:** a run on a machine with Gemini Nano, and any accuracy measurement of the AI opinion. **Next:** owner tries it on Chrome desktop (chrome://on-device-internals shows model status).
+
+---
+
 ## 2026-10-22 · Device findings: prize quizzes, illegal access services (D-092)
 Owner tested Firefox for Android (works) and the PWA on a phone. Missed: a fake "PLN anniversary" prize quiz reached from WhatsApp, and a "jasa sadap WA" page; the PWA gave no explanation when only a link was pasted. `sup-0.5.0-exp` adds SR7/SR8; the PWA explains link-only input; the popup footer shows all detector versions. sup-dev TP 20 · FP 0 · TN 24 · FN 0; others unchanged; `npm test` 726 passed. **Next:** optional AI check (design decision pending owner), labels and consent for field records.
 
