@@ -94,7 +94,7 @@ function renderResult(r: ScanReport): Child[] {
   if (remote) advice.push(['remoteAccess', m.dash.advice.remoteAccess]);
   return [
     h('div', { class: `card threat tone-${head.tone}`, 'data-verdict': d.highest },
-      h('div', { class: 'panel-label' }, m.dash.assessment), h('h3', {}, head.title), h('p', {}, head.detail),
+      h('div', { class: 'panel-label' }, m.pwa.assessment), h('h3', {}, head.title), h('p', {}, m.pwa.headlineDetail[d.highest]),
       h('div', { class: 'cats' }, `${m.dash.statActionable}: ${formatCount(d.actionable, state.lang)} · ${m.dash.statCategories}: ${d.affected.length > 0 ? d.affected.map((c) => m.dash.categoryCode[c]).join(' · ') : m.dash.noCategories}`)),
     h('div', { class: 'card advice', 'data-advice': advice.map(([k]) => k).join(' ') || 'none' }, h('div', { class: 'panel-label' }, m.dash.adviceTitle),
       advice.length > 0 ? h('ul', {}, ...advice.map(([k, x]) => h('li', { 'data-advice': k }, x))) : h('p', {}, m.dash.adviceNone)),

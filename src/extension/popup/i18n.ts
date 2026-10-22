@@ -129,6 +129,9 @@ export interface Messages {
     empty: string;
     tooLong: string;
     linkOnly: string;
+    /** Message wording of the dashboard headline (the PWA checks a message, not a page). */
+    assessment: string;
+    headlineDetail: Record<'manipulative_instruction' | 'suspicious_correlation' | 'observed_instruction' | 'none', string>;
     yourMessage: string;
     offlineReady: string;
   };
@@ -439,6 +442,13 @@ const EN: Messages = {
     privacy: 'Checked on this device only. The message is not sent, saved or shared.',
     empty: 'Paste or share a message first.',
     tooLong: 'Only the first 20,000 characters were checked.',
+    assessment: 'MESSAGE THREAT ASSESSMENT',
+    headlineDetail: {
+      manipulative_instruction: 'This message tries to make you do something harmful. Do not follow the instructions listed below.',
+      suspicious_correlation: 'This message combines requests with signs often seen in scams. Check the findings below before you act.',
+      observed_instruction: 'Ordinary instructions or requests were found and are listed as observed. This is not a guarantee about the message.',
+      none: 'VeilTrace found nothing to report in this text. This is not a guarantee about the message or its sender.',
+    },
     linkOnly: 'Only a link was pasted. VeilTrace checks what a message says and does not judge web addresses. Paste the whole message, including the text around the link. Do not open the link just to check it.',
     yourMessage: 'Your message',
     offlineReady: 'Ready to work offline.',
@@ -771,6 +781,13 @@ const ID: Messages = {
     privacy: 'Diperiksa hanya di perangkat ini. Pesan tidak dikirim, disimpan, atau dibagikan.',
     empty: 'Tempel atau bagikan pesan terlebih dahulu.',
     tooLong: 'Hanya 20.000 karakter pertama yang diperiksa.',
+    assessment: 'PENILAIAN ANCAMAN PESAN',
+    headlineDetail: {
+      manipulative_instruction: 'Pesan ini mencoba membuat Anda melakukan sesuatu yang merugikan. Jangan ikuti instruksi yang tercantum di bawah.',
+      suspicious_correlation: 'Pesan ini menggabungkan permintaan dengan tanda yang sering muncul dalam penipuan. Periksa temuan di bawah sebelum bertindak.',
+      observed_instruction: 'Instruksi atau permintaan biasa ditemukan dan dicantumkan sebagai teramati. Ini bukan jaminan tentang pesan ini.',
+      none: 'VeilTrace tidak menemukan apa pun untuk dilaporkan di teks ini. Ini bukan jaminan tentang pesan atau pengirimnya.',
+    },
     linkOnly: 'Yang ditempel hanya tautan. VeilTrace memeriksa isi pesan dan tidak menilai alamat situs. Tempel seluruh pesannya, termasuk teks di sekitar tautan. Jangan membuka tautan hanya untuk mengeceknya.',
     yourMessage: 'Pesan Anda',
     offlineReady: 'Siap dipakai tanpa internet.',

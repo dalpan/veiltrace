@@ -1,112 +1,114 @@
-# VEILTRACE
+# VeilTrace
 
-**Uncover the Manipulation Behind the Page.**
+**Uncover the manipulation behind the page.** An offline, explainable detector for social-engineering instructions in web pages and messages: fake CAPTCHAs that make you run commands, requests for OTP codes, pay-first refunds, fake bank or support notices, and more. Everything runs on your device.
 
-An offline-first browser security engine that detects contextual social engineering and deceptive instructions in web pages, including pages on legitimate HTTPS domains.
+> **Ringkasan (Bahasa Indonesia).** VeilTrace adalah ekstensi browser dan aplikasi web "Cek Pesan" yang membaca halaman atau pesan **di perangkat Anda** dan menunjukkan, dengan bukti yang bisa disorot, kapan teks itu mencoba membuat Anda melakukan sesuatu yang merugikan: menjalankan perintah, menyerahkan OTP atau password, membayar di muka, atau mengikuti "CS bank" palsu. Tanpa server, tanpa telemetri, tanpa AI kotak hitam. Dibuat untuk Kartika Cyber Hackathon 2026, kategori **Penangkalan (Defensive Shield)**. Proposal dan slide: [submission/](submission/). Coba di HP: **https://dalpan.github.io/veiltrace/**.
+>
+> VeilTrace adalah proyek independen; tidak berafiliasi dengan, tidak disetujui oleh, dan tidak mewakili TNI AD atau instansi mana pun.
 
-VeilTrace reads the page **on your device** and explains, with evidence highlighted on the page, when it is trying to make you do something harmful. It runs four independent checks:
+| A fake CAPTCHA on a legitimate-looking site… | …and what VeilTrace shows |
+|---|---|
+| ![Fake human-verification box asking to press Win+R, Ctrl+V, Enter](docs/images/cmd-lure-page.png) | ![VeilTrace popup: manipulative content detected, command execution category](docs/images/cmd-lure-popup.png) |
 
-| Check | Looks for | Status |
+## Why
+
+The most effective attacks no longer break into systems; they persuade people to do it for them. The lure often sits on a **legitimate site** (a comment, a chat widget, a forum post) or arrives as a **WhatsApp or SMS message**, so domain blocklists and URL reputation do not see it. What is dangerous is the **instruction**, not the address. VeilTrace reads the instruction and its context.
+
+## What it checks
+
+Four independent detectors. None of them alerts on a single keyword: each needs a requested **action** together with a manipulative **pretext**, and reads context that lowers the result (quotations, news, education, negation such as "never share your code").
+
+| Code | Detector | Examples |
 |---|---|---|
-| **Command Execution Manipulation** (CMD) | ClickFix / fake CAPTCHA: "press Win+R, paste, Enter", fake error fixes | Engine 0.2.0; one frozen held-out evaluation |
-| **Credential Disclosure Manipulation** (CRED) | Requests to *send* passwords, OTP codes or recovery phrases, threats to the account | Experimental (`cred-0.1.1-exp`) |
-| **Payment Manipulation** (PAY) | Pay-to-receive refunds or prizes, transfers to personal accounts or gift cards, payment under threat | Experimental (`pay-0.1.0-exp`) |
-| **Support & Authority Impersonation** (SUP) | Fake virus alerts with a number to call, fake bank/CS asking for AnyDesk or app installs | Experimental (`sup-0.1.0-exp`) |
+| **CMD** | Command Execution Manipulation | ClickFix: "press Win+R, paste, Enter"; fake "fix this error" terminal steps |
+| **CRED** | Credential Disclosure Manipulation | "send us the OTP", "kasih liat kode yg masuk ke hp", recovery phrases |
+| **PAY** | Payment Manipulation | pay a fee to release a refund or prize, transfer to a personal account, job-offer uniform fees, gift cards |
+| **SUP** | Support & Authority Impersonation | fake virus alerts with a phone number, "bank CS" asking for AnyDesk or an APK, fake tariff-change notices asking you to reply, prize quizzes in a company's name, "WhatsApp tapping" services |
 
-The popup is one dashboard: page threat summary, the four categories, advice, and one ranked list of findings. Each finding keeps classification, confidence and action risk separate and lists its evidence with **Show on page**. English and Indonesian, including common informal Indonesian.
+Each finding keeps **classification** (manipulative / suspicious / observed), **confidence** and **action risk** separate, names the rule, explains it in plain language, lists the evidence with **Show on page**, and states its limits ("a claimed identity cannot be verified"). VeilTrace never calls a page "safe".
 
-**Honest status.**
-- The only held-out result is for CMD: 26 synthetic scenarios, run once, with recall 75.0%, precision 81.8% and hard-negative FPR 14.3%. All three are **below the research targets** ([docs/EVALUATION_RESULTS.md](docs/EVALUATION_RESULTS.md)).
-- A second held-out set (v2, 60 scenarios across all four checks, written blind to the rules) gave **recall 34.4%, precision 68.8%, hard-negative FPR 17.9%** ([docs/EVALUATION_RESULTS_V2.md](docs/EVALUATION_RESULTS_V2.md)): the rules generalize poorly beyond the wording they were written for.
-- None of these numbers are real-world rates. Scanning is on demand by default; automatic scanning on page load is opt-in (badge only for manipulative pages).
-- Progress log: [docs/PROGRESS.md](docs/PROGRESS.md). Hackathon materials (Indonesian): [submission/](submission/).
+## Where it runs
 
-## On a phone
-- **On-device AI second opinion: evaluated and not used (D-093 … D-095).** An experimental popup panel asks the AI model built into Chrome desktop (Gemini Nano) about the page text. On 185 development scenarios it flagged 71% of benign pages, so it is compiled out of released builds; `npm run build:ext:ai` builds it for experiments ([docs/AI_EVAL.md](docs/AI_EVAL.md)).
-- **Cek Pesan (PWA):** `npm run build:pwa` → `dist/pwa` (static files; published at https://dalpan.github.io/veiltrace/ with `npm run deploy:pwa`). Served over HTTPS and installed, it checks a pasted message, or on Android a message shared from WhatsApp or Messages, on the device and offline.
-- **Firefox for Android (≥ 128):** `npm run build:firefox` → `dist/extension-firefox`. Not yet tested on a device.
+| Surface | Status | How |
+|---|---|---|
+| **Chrome / Edge extension** (desktop) | Working | [Install](#install) · scan on click, or opt-in automatic scanning with a toolbar badge |
+| **Firefox extension** (desktop and Android ≥ 128) | Working, tested by the owner on Android | `npm run build:firefox` → `dist/extension-firefox` |
+| **"Cek Pesan" web app** (any phone) | Live | **https://dalpan.github.io/veiltrace/**: paste a message, or on Android share it from WhatsApp; works offline once opened |
+| **WhatsApp Web** | Prototype | conversations are read as one user-content region; markup match with the real service not yet verified |
+| **Managed build** for organizations | Ready to pilot | install-time permissions, automatic scanning on, no reporting: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) |
 
-## Install (unpacked, Chrome/Chromium ≥ 110)
+<p align="center"><img src="docs/images/pwa-result.png" alt="Cek Pesan on a phone: a WhatsApp scam message flagged as manipulative payment request" width="300"></p>
 
+## Privacy and security by design
+
+- **No network code** in the extension or the app: no server, no telemetry, no remote rules. The app's CSP is `connect-src 'none'`; tests assert zero requests.
+- **Minimal permissions:** `activeTab` + `scripting`. Automatic scanning asks for site access only when the user turns it on, and gives it back when turned off.
+- **Never reads what you type**: form-field values, amounts and phone numbers are never copied into a report (tested with sentinel values).
+- **The page address is never a decision input.** Detection reads content, so it works on trusted domains and cannot be gamed by a fresh domain.
+- Page text is rendered only as text (no HTML sinks); reports crossing from the page to the popup are validated field by field.
+- Reproducible release ZIPs with checksums and SBOMs ([docs/RELEASE.md](docs/RELEASE.md)).
+
+## Results, reported as they are
+
+| Evaluation | What | Result |
+|---|---|---|
+| Held-out v1 (ClickFix only, 26 synthetic) | frozen before testing, run once | recall 75.0%, precision 81.8%, hard-negative false-alarm 14.3%: **targets missed** ([details](docs/EVALUATION_RESULTS.md)) |
+| Held-out v2 (60 synthetic, all four detectors, blind author) | run once on 22 Oct 2026 | recall 34.4%, precision 68.8%, false-alarm 17.9%: **the rules overfit their author's wording** ([details](docs/EVALUATION_RESULTS_V2.md)) |
+| Owner's real scam messages (14 scams + 1 genuine SMS) | development data: rules were improved on them | 2 → **11 of 14** flagged, genuine bank SMS not flagged ([details](docs/DETECTION_MODEL.md)) |
+| On-device AI (Gemini Nano) as a second opinion | 185 development scenarios, owner's Chrome | flagged **71% of benign pages**, so it is **not used** in released builds ([details](docs/AI_EVAL.md)) |
+| Held-out v3 (80 synthetic, blind author, 47 message contexts) | locked and preregistered | **not run yet** (runs once, on owner request) |
+| Real-world test half | collected with local OCR, never seen by the rule author | collection in progress |
+
+Development numbers are not accuracy claims. Every held-out run is preregistered, hash-locked and published whether or not it meets the targets ([docs/EVALUATION_PLAN.md](docs/EVALUATION_PLAN.md)).
+
+## Install
+
+**Chrome / Edge (unpacked):**
 ```bash
 npm ci
-npm run build:ext            # → dist/extension (production: activeTab + scripting only)
+npm run build:ext            # → dist/extension
 ```
-Then `chrome://extensions` → Developer mode → **Load unpacked** → select `dist/extension`. See [docs/DEMO.md](docs/DEMO.md) for a manual walkthrough.
+`chrome://extensions` → Developer mode → **Load unpacked** → `dist/extension`. Open a page, click the VeilTrace icon, press **Scan page**. A fictional demo gallery runs offline: `npm run manual:fixtures && python3 -m http.server 8080 -d dist/manual` → `http://localhost:8080/demo/scenes/` ([demo/README.md](demo/README.md)).
+
+**Firefox (desktop or Android):** `npm run build:firefox`, then load `dist/extension-firefox` temporarily (`about:debugging`, or `npx web-ext run -t firefox-android` over USB). Permanent installation needs a Mozilla-signed XPI.
+
+**Phone:** open https://dalpan.github.io/veiltrace/ → *Install app* / *Add to Home Screen*.
+
+## Repository map
+
+```
+src/core/          pure TypeScript detection engine: PageSnapshot → findings (no browser APIs, deterministic)
+src/extract/       read-only DOM → PageSnapshot extractor (shadow DOM, frames, user-content regions)
+src/extension/     MV3 extension: popup dashboard, content script, opt-in automatic scanning, experimental AI panel
+src/pwa/           "Cek Pesan" installable web app (share target, offline)
+src/eval/          evaluation harnesses (dev, held-out v1/v2/v3, real-world field sample, AI)
+corpus/            labelled scenarios: dev splits, locked held-out sets, redacted real-world records
+tests/             unit, real-browser extraction and end-to-end tests (737 passing)
+demo/              fictional, offline demo pages (never shipped)
+deploy/            policy templates for managed deployment
+docs/              technical documentation and decision records: start at docs/README.md
+submission/        hackathon proposal, slides outline, video script, jury Q&A (Indonesian)
+```
 
 ## Development
 
 ```bash
-npm ci
-npx playwright install chromium     # one-time browser download (tooling only)
-npm run typecheck && npm run lint
-npm run test:unit                   # core, extractor contracts, harness, extension units (Node)
-npm run test:browser                # extractor in real Chromium
-npm run test:e2e                    # real extension loaded in Chromium (builds dist/e2e/*)
-npm run check                       # typecheck + lint + all tests
-npm run verify:extension            # production build + manifest/permission/offline/CSP/XSS checks
-npm run build                       # dist/core.mjs, dist/extractor.js and dist/extension
-npm run build:ext:test              # dist/extension-test (E2E only; never distribute)
-npm run release && npm run release:verify   # deterministic ZIP + manifest + SHA256SUMS (docs/RELEASE.md)
-npm run release:repro               # two independent clean builds must match
-npm run supply-chain                # SBOMs, license review, lockfile check, npm audit
-npm run eval -- run --split dev     # offline evaluation on the development split → eval/results/
-npm run eval -- research --split dev
-npm run eval -- perf
+npm ci && npx playwright install chromium
+npm run check                        # typecheck + lint + all tests
+npm run eval -- run --split dev      # ClickFix dev evaluation (also eval:cred, eval:pay, eval:support)
+npm run realworld -- import <dir>    # add real screenshots via local OCR (see corpus/realworld/README.md)
+npm run release && npm run release:verify
 ```
-
-The held-out split (`corpus/test`) is frozen and must not be evaluated during development (`--final` only, on owner request).
-
-```ts
-import { analyze } from './src/core/index.js';
-const result = analyze(snapshot); // PageSnapshot → AnalysisResult (pure, deterministic; engine 0.3.0, ruleset m5)
-const m1 = analyze(snapshot, { ruleset: 'm1' }); // M1 baseline model (engine 0.1.0-m1), used for comparisons
-```
-
-## What it does not do
-- It does not look up URLs or use blocklists, and it does not trust domains.
-- It does not send anything anywhere. There is no network code.
-- It does not block pages or guarantee safety. It informs.
-- It does not use AI or machine learning: every finding comes from explainable rules.
-
-## Permissions
-`activeTab` and `scripting` only, with no host permissions and no install warning. Nothing runs until you click **Scan page**, unless you turn on **automatic scanning** in the popup: Chrome then asks for permission to read websites (an optional permission that is removed again when you turn it off). Browser-protected pages (chrome://, the Web Store, other extensions) cannot be scanned.
+Rules for contributors (including AI assistants) are in [CLAUDE.md](CLAUDE.md); every design choice is recorded in [docs/DECISIONS.md](docs/DECISIONS.md).
 
 ## Documentation
 
-| Doc | Purpose |
-|---|---|
-| [PRODUCT_SPEC](docs/PRODUCT_SPEC.md) | Problem, hypothesis, MVP scope, UX, demo |
-| [RESEARCH](docs/RESEARCH.md) | Conceptual model, evidence base, open questions |
-| [COMPETITIVE_ANALYSIS](docs/COMPETITIVE_ANALYSIS.md) | Verified comparison with Nehboro, ClipShield, ClickFix Mitigator, Browser Guard |
-| [THREAT_MODEL](docs/THREAT_MODEL.md) | Attack classes, adversary, evasion, out of scope |
-| [DETECTION_MODEL](docs/DETECTION_MODEL.md) | Signals, regions, decision table, finding schema |
-| [ARCHITECTURE](docs/ARCHITECTURE.md) | Components, snapshot contract, tech choices, manifest |
-| [PRIVACY_SECURITY](docs/PRIVACY_SECURITY.md) | Commitments and how each is verified |
-| [EVALUATION_PLAN](docs/EVALUATION_PLAN.md) | Corpus, leakage controls, metrics, baseline |
-| [EVAL_PREREGISTRATION](docs/EVAL_PREREGISTRATION.md) | Frozen held-out evaluation protocol (v1) |
-| [EVALUATION_RESULTS](docs/EVALUATION_RESULTS.md) | Held-out evaluation v1 results, failures, limitations |
-| [PRESENTER_GUIDE](docs/PRESENTER_GUIDE.md) | Demo setup, 3- and 7-minute scripts, evaluation slide, limitations |
-| [DEMO](docs/DEMO.md) | Manual validation checklists (Chrome stable) |
-| [IMPLEMENTATION_PLAN](docs/IMPLEMENTATION_PLAN.md) | Milestones M1–M7 with acceptance criteria |
-| [DECISIONS](docs/DECISIONS.md) | Decision log |
-| [OPERATOR_GUIDE](docs/OPERATOR_GUIDE.md) | For IT/security staff: results, limits, installation, troubleshooting |
-| [DEPLOYMENT](docs/DEPLOYMENT.md) | Organizational deployment feasibility |
-| [RELEASE](docs/RELEASE.md) | Release process, reproducibility, supply chain |
-| [PROGRESS](docs/PROGRESS.md) | Status log |
+Start with [docs/README.md](docs/README.md): architecture, detection model, threat model, privacy, evaluation protocol and results, deployment and operator guides.
 
-## Planned repository layout
+## Development transparency
 
-```
-src/core/        pure TypeScript detection engine (no browser APIs)
-src/extract/     DOM → PageSnapshot extractor (injected on demand)
-src/extension/   manifest, popup, browser adapter
-corpus/          dev / test (held-out) / realworld fixtures with labels
-scripts/         build and evaluation harness
-tests/           unit and e2e tests
-docs/            specification and research
-demo/            fictional offline demo site (not shipped in the extension)
-```
+Most code, documentation and test data were written with an AI coding assistant (Claude Code) under the team's direction and review. Held-out sets were written by separate, rule-blind agent instances and locked before use; real-world records are collected and labelled by people.
 
 ## License
-[Apache-2.0](LICENSE).
+
+[Apache-2.0](LICENSE). Demo pages and test scenarios are fictional; malicious samples are defanged.
