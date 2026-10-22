@@ -4,6 +4,11 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-22 · Submission package rebuilt for the judging criteria
+README rewritten for reviewers (surfaces, privacy, every result as it is, repo map) with screenshots from the fictional demo scenes (`tests/e2e/screenshots.test.ts`); `docs/README.md` index (technical documentation is a judged deliverable); proposal rewritten around the official weights (9 pages, images); video script and jury Q&A updated; `submission/README.md` with the registration form text; a 15-slide deck with speaker notes (Indonesian). PWA headline now speaks of a message. **Next:** owner registers the idea, records the video, labels the field sample; the single v3 and field-sample runs on owner request; numbers into proposal §8 and the deck.
+
+---
+
 ## 2026-10-22 · Real-data tooling and held-out v3 locked (D-096)
 Screenshot import with local OCR, label sheet and label import for the field sample. Held-out v3: 80 scenarios by a separate blind agent (research into current public scam reports; 47 message contexts), hash-locked without being read; preregistered with "any detector alerts" as the primary metric (docs/EVAL_PREREGISTRATION_V3.md). **Next:** owner labels and consent, new field records (unseen), then the single v3 and field-sample test runs on owner request, then the proposal.
 
