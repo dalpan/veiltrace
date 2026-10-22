@@ -3,7 +3,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import {
-  detect, evaluate, kappa, loadRecords, LOCK, lockProblems, privacyProblems, recordHash, redact, resolved, splitFor, validateRecord,
+  cleanOcrLines, detect, evaluate, kappa, labelSheet, loadRecords, LOCK, lockProblems, privacyProblems, recordHash, redact, resolved, splitFor, validateRecord,
   type LockFile, type RecordV1,
 } from '../src/eval/realworld.js';
 
@@ -107,5 +107,19 @@ describe('committed real-world records', () => {
   it('respect the test-half lock, if one exists', () => {
     const lock = existsSync(LOCK) ? (JSON.parse(readFileSync(LOCK, 'utf8')) as LockFile) : null;
     expect(lockProblems(records, lock)).toEqual([]);
+  });
+});
+
+describe('screenshot import and label sheet (D-096)', () => {
+  it('drops clock times and fragments and joins continuation lines from OCR', () => {
+    expect(cleanOcrLines(['10.28', '4G', 'Halo kak, kami dari layanan', 'pelanggan resmi.', '09.43 ✓✓', 'Balas YA untuk lanjut'])).toEqual(
+      ['Halo kak, kami dari layanan pelanggan resmi.', 'Balas YA untuk lanjut']);
+  });
+
+  it('builds an offline label sheet whose embedded text cannot close the script', () => {
+    const html = labelSheet([rec('RW-0001', 'hi </script><img src=x onerror=alert(1)>')], 'B');
+    expect(html).not.toContain('</script><img');
+    expect(html).toContain("default-src 'none'");
+    expect(html).toContain('labels-B.json');
   });
 });

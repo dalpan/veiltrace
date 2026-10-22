@@ -1,6 +1,7 @@
 // Real-world field sample (D-082): redacted text records of scam and benign messages collected by people other than the
 // rule author, with deterministic dev/test assignment, two-annotator labels, agreement, a hash lock for the test half, and
 // an evaluation that runs all four detectors on each record. Node-only, never shipped. CLI: `npm run realworld -- <cmd>`.
+import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -229,6 +230,48 @@ function arg(name: string): string | undefined {
   return i > 0 ? process.argv[i + 1] : undefined;
 }
 
+// ---------- screenshot import (D-096) ----------
+
+/**
+ * OCR output is one screen line per line: drops clock times, status-bar fragments and single characters, and joins a line
+ * that continues the previous sentence (the previous line has no closing punctuation and this one starts in lower case).
+ */
+export function cleanOcrLines(lines: readonly string[]): string[] {
+  const out: string[] = [];
+  for (const raw of lines) {
+    const line = raw.replace(/\s+/gu, ' ').trim();
+    if (!line || /^\d{1,2}[.:]\d{2}(?:\s*[✓√]+)?$/u.test(line) || (line.match(/\p{L}/gu) ?? []).length < 2) continue;
+    const prev = out[out.length - 1];
+    if (prev !== undefined && !/[.!?:;)\]]$/u.test(prev) && /^\p{Ll}/u.test(line)) out[out.length - 1] = `${prev} ${line}`;
+    else out.push(line);
+  }
+  return out;
+}
+
+/** Label sheet for annotators (D-096): a static page, opened offline in any browser, that saves a labels JSON file. */
+export function labelSheet(records: readonly RecordV1[], annotator: string): string {
+  const data = JSON.stringify(records.map((r) => ({ id: r.id, source: r.source, text: r.text }))).replace(/</gu, '\\u003c');
+  return `<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'">
+<title>Lembar label VeilTrace</title><style>body{font:15px system-ui,sans-serif;max-width:820px;margin:16px auto;padding:0 12px}
+article{border:1px solid #ccc;border-radius:8px;padding:12px;margin:12px 0}pre{white-space:pre-wrap;background:#f4f4f4;padding:8px}label{margin-right:12px}</style></head><body>
+<h1>Lembar label · anotator ${annotator.replace(/[^\w-]/gu, '')}</h1>
+<p>Baca setiap pesan dan pilih jawaban Anda sendiri, tanpa berdiskusi dengan anotator lain. <b>Benar</b>: penipuan/manipulasi atau bukan. <b>Kategori</b>: cmd = disuruh menjalankan perintah; cred = diminta password/OTP/PIN; pay = diminta membayar/transfer; sup = mengaku CS/bank/instansi/perusahaan, hadiah palsu, jasa ilegal; none = bukan penipuan. <b>Seharusnya</b>: manipulative (jelas menipu), suspicious (mencurigakan), observed (instruksi biasa), none (tidak ada apa-apa). Setelah selesai, klik Simpan dan kirim file JSON-nya ke pemilik proyek.</p>
+<div id="list"></div><button id="save" type="button">Simpan label (JSON)</button> <a id="dl" hidden download="labels-${annotator.replace(/[^\w-]/gu, '')}.json">Unduh</a><p id="msg"></p>
+<script>
+const RECORDS=${data};const A=${JSON.stringify(annotator)};
+const opts={truth:['malicious','benign'],category:['cmd','cred','pay','sup','none'],expected:['manipulative','suspicious','observed','none']};
+const list=document.getElementById('list');
+for(const r of RECORDS){const a=document.createElement('article');const h=document.createElement('h3');h.textContent=r.id+' · '+r.source;const pre=document.createElement('pre');pre.textContent=r.text;a.append(h,pre);
+for(const [k,vals] of Object.entries(opts)){const p=document.createElement('p');p.append(k==='truth'?'Benar: ':k==='category'?'Kategori: ':'Seharusnya: ');
+for(const v of vals){const l=document.createElement('label');const i=document.createElement('input');i.type='radio';i.name=r.id+'-'+k;i.value=v;l.append(i,' '+v);p.append(l);}a.append(p);}list.append(a);}
+document.getElementById('save').onclick=()=>{const out=[];const missing=[];for(const r of RECORDS){const l={id:r.id,annotator:A};for(const k of Object.keys(opts)){const c=document.querySelector('input[name="'+r.id+'-'+k+'"]:checked');if(!c){missing.push(r.id);break;}l[k]=c.value;}if(Object.keys(l).length===5)out.push(l);}
+document.getElementById('msg').textContent=missing.length?'Belum lengkap: '+[...new Set(missing)].join(', '):'Lengkap: '+out.length+' label.';
+const dl=document.getElementById('dl');dl.href=URL.createObjectURL(new Blob([JSON.stringify(out,null,1)],{type:'application/json'}));dl.hidden=false;dl.click();};
+</script></body></html>
+`;
+}
+
 function nextId(records: readonly RecordV1[]): string {
   const max = records.reduce((m, r) => Math.max(m, Number(r.id.slice(3))), 0);
   return `RW-${String(max + 1).padStart(4, '0')}`;
@@ -262,6 +305,58 @@ async function main(): Promise<void> {
     mkdirSync(RECORDS, { recursive: true });
     writeFileSync(join(RECORDS, `${id}.json`), JSON.stringify(rec, null, 2) + '\n');
     console.log(`added ${id} (${rec.split}); redactions: ${JSON.stringify(r.replaced)}${r.warnings.length ? `\nCHECK BY HAND: ${r.warnings.join('; ')}` : ''}`);
+  } else if (cmd === 'import') {
+    // OCR every image in a folder on this Mac (macOS Vision), clean, redact and add it. The text is never printed: the
+    // collector reviews each record with `show` and fixes names by hand before anyone labels it.
+    const dir = process.argv[3];
+    if (!dir || !existsSync(dir)) throw new Error('usage: npm run realworld -- import <folder> --collector <initials> [--source wa] [--lang id]');
+    mkdirSync('dist', { recursive: true });
+    if (!existsSync('dist/ocr')) execFileSync('swiftc', ['-O', 'scripts/ocr.swift', '-o', 'dist/ocr'], { stdio: 'inherit' });
+    const seenOrigins = new Set(records.map((r) => r.origin));
+    let all = [...records];
+    for (const f of readdirSync(dir).filter((x) => /\.(?:jpe?g|png|heic)$/iu.test(x)).sort()) {
+      const origin = `private: collector submission (${f})`;
+      if (seenOrigins.has(origin)) { console.log(`skip ${f} (already imported)`); continue; }
+      const lines = cleanOcrLines(execFileSync('dist/ocr', [join(dir, f)], { encoding: 'utf8' }).split('\n'));
+      const red = redact(lines.join('\n'));
+      const id = nextId(all);
+      const rec: RecordV1 = {
+        id, schema: 1, lang: (arg('lang') ?? 'id') as RecordV1['lang'], source: (arg('source') ?? 'wa') as Source, context: (arg('context') ?? 'chat') as Context,
+        text: red.text.slice(0, 4000), collected: new Date().toISOString().slice(0, 10), collector: arg('collector') ?? 'unknown', origin, split: splitFor(id), labels: [],
+      };
+      const errors = validateRecord(rec);
+      if (errors.length > 0) { console.log(`NOT ADDED ${f}: ${errors.join('; ')}`); continue; }
+      writeFileSync(join(RECORDS, `${id}.json`), JSON.stringify(rec, null, 2) + '\n');
+      all = [...all, rec];
+      console.log(`added ${id} (${rec.split}) from ${f}; ${lines.length} lines; redactions ${JSON.stringify(red.replaced)}${red.warnings.length ? ' · CHECK NAMES/CODES BY HAND' : ''}`);
+    }
+    console.log('Review every new record with `npm run realworld -- show RW-NNNN` and edit names, codes or OCR noise in its JSON before labelling.');
+  } else if (cmd === 'show') {
+    const rec = records.find((r) => r.id === process.argv[3]);
+    if (!rec) throw new Error('usage: npm run realworld -- show RW-NNNN');
+    console.log(`${rec.id} · ${rec.split} · ${rec.source}/${rec.context} · ${rec.origin}\n\n${rec.text}`);
+  } else if (cmd === 'sheet') {
+    const annotator = arg('annotator') ?? 'A';
+    const todo = records.filter((r) => !(lock && r.id in lock.test) && !r.labels.some((l) => l.annotator === annotator));
+    const out = arg('out') ?? join('dist', `label-sheet-${annotator}.html`);
+    mkdirSync('dist', { recursive: true });
+    writeFileSync(out, labelSheet(todo, annotator));
+    console.log(`label sheet for annotator ${annotator}: ${todo.length} records → ${out}`);
+  } else if (cmd === 'label-import') {
+    const file = process.argv[3];
+    if (!file) throw new Error('usage: npm run realworld -- label-import <labels.json>');
+    const labels = JSON.parse(readFileSync(file, 'utf8')) as Array<Label & { id: string }>;
+    let n = 0;
+    for (const { id, ...label } of labels) {
+      const rec = records.find((r) => r.id === id);
+      if (!rec || (lock && id in lock.test)) { console.log(`skip ${id}`); continue; }
+      const next = { ...rec, labels: [...rec.labels.filter((l) => l.annotator !== label.annotator), label] };
+      const errors = validateRecord(next);
+      if (errors.length > 0) { console.log(`skip ${id}: ${errors.join('; ')}`); continue; }
+      writeFileSync(join(RECORDS, `${id}.json`), JSON.stringify(next, null, 2) + '\n');
+      n++;
+    }
+    console.log(`imported ${n} labels from ${file}`);
   } else if (cmd === 'label') {
     const id = process.argv[3] as string;
     const rec = records.find((r) => r.id === id);
@@ -292,7 +387,7 @@ async function main(): Promise<void> {
     const r = evaluate(records, split);
     console.log(JSON.stringify({ split, n: r.rows.length, excluded: r.excluded, tp: r.tp, fp: r.fp, tn: r.tn, fn: r.fn, rows: r.rows }, null, 2));
   } else {
-    console.log('usage: npm run realworld -- redact|add|label|agree|lock|eval  (see corpus/realworld/README.md)');
+    console.log('usage: npm run realworld -- redact|add|import|show|sheet|label|label-import|agree|lock|eval  (see corpus/realworld/README.md)');
   }
 }
 

@@ -21,6 +21,15 @@ npm run realworld -- lock                                  # freeze the test hal
 npm run realworld -- eval --split test --final             # owner request only, once per lock
 ```
 
+## From screenshots, without the rule author seeing them (D-096)
+```bash
+npm run realworld -- import kasus-baru/ --collector RA --source wa   # OCR on this Mac (macOS Vision), clean, redact, add; never prints text
+npm run realworld -- show RW-0016                                    # the collector reviews each record; fix names/codes/OCR noise in its JSON
+npm run realworld -- sheet --annotator B                            # dist/label-sheet-B.html: offline page; the annotator saves labels-B.json
+npm run realworld -- label-import labels-B.json
+```
+The screenshot folder must stay out of git (add it to `.gitignore`). Only the collector runs `show`; the rule author never opens new records, so the deterministic split keeps about half of them as a genuinely unseen test half.
+
 ## Record format (`records/RW-NNNN.json`)
 `id`, `schema: 1`, `lang` (id|en), `source` (wa|sms|web-comment|web-page|email|social|other), `context` (chat|comment|page|dialog: how the text appears), `text` (redacted), `collected`, `collector` (initials or pseudonym), `origin` (`public: …` with a defanged reference, or `private: volunteer submission`), `split` (fixed), `labels[]`, optional `final`.
 
