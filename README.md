@@ -2,7 +2,7 @@
 
 # VeilTrace
 
-**Uncover the manipulation behind the page.** An offline, explainable detector for social-engineering instructions in web pages and messages: fake CAPTCHAs that make you run commands, requests for OTP codes, pay-first refunds, fake bank or support notices, and more. Everything runs on your device.
+**Uncover the manipulation behind the page.** VeilTrace is a context-based threat analysis platform focused on detecting social engineering, deceptive content and digital manipulation. It identifies patterns of authority abuse, psychological pressure, trust engineering and risky instructions through detection that is transparent, auditable and processes data locally.
 
 **Website and downloads:** https://veiltrace.click
 
