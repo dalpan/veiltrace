@@ -1,7 +1,8 @@
 // Renders the hackathon submission documents (submission/*.md) to PDF with the Playwright Chromium already used for tests.
 // Supports the Markdown subset those files use: headings, paragraphs, lists, tables, blockquotes, rules, bold, italics,
 // inline code, bare links, and images on their own line (`![caption](path)`, embedded as data URIs; several images on one
-// line are placed side by side). Output: submission/dist/*.pdf (git-ignored). Offline; no network access.
+// line are placed side by side). A block that starts with `<` is raw HTML (the documents are the author's own): it ends at
+// the next blank line, and its local `src` files are embedded as data URIs. Output: submission/dist/*.pdf (git-ignored). Offline; no network access.
 import { mkdirSync, readFileSync, readdirSync } from 'node:fs';
 import { basename, dirname, extname, join, resolve } from 'node:path';
 import { chromium } from 'playwright';
@@ -24,6 +25,13 @@ function figure(line, baseDir) {
   return `<div class="figs">${imgs.join('')}</div>`;
 }
 
+function rawHtml(block, baseDir) {
+  return block.replace(/src="(?!data:)([^"]+)"/g, (_, src) => {
+    const file = resolve(baseDir, src);
+    return `src="data:${MIME[extname(file).toLowerCase()] ?? 'image/png'};base64,${readFileSync(file).toString('base64')}"`;
+  });
+}
+
 export function markdownToHtml(md, baseDir = '.') {
   const lines = md.split('\n');
   const out = [];
@@ -31,6 +39,12 @@ export function markdownToHtml(md, baseDir = '.') {
   while (i < lines.length) {
     const line = lines[i];
     if (/^\s*$/.test(line)) { i++; continue; }
+    if (/^</.test(line)) {
+      const buf = [];
+      while (i < lines.length && !/^\s*$/.test(lines[i])) buf.push(lines[i++]);
+      out.push(rawHtml(buf.join('\n'), baseDir));
+      continue;
+    }
     const h = /^(#{1,4})\s+(.*)$/.exec(line);
     if (h) { out.push(`<h${h[1].length}>${inline(h[2])}</h${h[1].length}>`); i++; continue; }
     if (/^---\s*$/.test(line)) { out.push('<hr>'); i++; continue; }
@@ -87,7 +101,14 @@ blockquote { margin: 8pt 0; padding: 6pt 10pt; border-left: 3px solid #8f9f5e; b
 a { color: #3d5a1f; word-break: break-all; }
 .figs { display: flex; gap: 8pt; align-items: flex-start; justify-content: center; margin: 8pt 0; page-break-inside: avoid; }
 figure { margin: 0; flex: 1; text-align: center; } figure img { max-width: 100%; max-height: 120mm; border: 1px solid #c9d0bd; }
-figcaption { font-size: 8.5pt; color: #555; margin-top: 2pt; }`;
+figcaption { font-size: 8.5pt; color: #555; margin-top: 2pt; }
+.cover { height: 245mm; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; page-break-after: always; }
+.cover img { width: 34mm; margin-bottom: 10mm; } .cover .t { font-size: 30pt; font-weight: 700; color: #1b1f1a; margin: 0; }
+.cover .s { font-size: 13pt; font-weight: 600; color: #3d5a1f; margin: 4pt 0 10mm; } .cover .d { font-size: 10.5pt; color: #3a4233; max-width: 140mm; margin: 0 auto 12mm; }
+.cover .k { font-size: 11pt; font-weight: 600; letter-spacing: 1pt; color: #2f3a1f; margin: 0 0 3pt; } .cover .m { font-size: 10pt; color: #555; margin: 2pt 0; }
+.flow { display: flex; align-items: stretch; gap: 4pt; margin: 8pt 0; page-break-inside: avoid; } .flow > div { flex: 1; border: 1px solid #c9d0bd; border-top: 3px solid #8f9f5e; border-radius: 4pt; padding: 6pt; background: #f8f9f5; font-size: 9pt; }
+.flow > div b { display: block; font-size: 9.5pt; color: #2f3a1f; margin-bottom: 2pt; } .flow > span { align-self: center; color: #8f9f5e; font-weight: 700; }
+.flow > div.core { background: #eef1e8; border-color: #8f9f5e; } .note { font-size: 9pt; color: #555; text-align: center; margin-top: 2pt; }`;
 
 if (process.argv[1]?.endsWith('submission-pdf.mjs')) {
   const dir = 'submission';
