@@ -121,3 +121,13 @@ Residual: the extractor runs in the page's **main world** in tests (`page.evalua
 | No third-party code or model at run time | Worker, cores and models are bundled with the app and served from its own origin; no CDN; versions pinned in the lockfile |
 | The extension is unchanged | OCR exists only in the app; the extension's permissions, CSP and zero-network checks are unchanged |
 
+## Text in images in the extension (D-105)
+
+| Commitment | Verification |
+|---|---|
+| No new permission | Capture uses `activeTab`; the production manifest stays `activeTab` + `scripting` (`verify-release`) |
+| No network code | `ocr-worker.js` bundles the engine and models; network paths are stubbed and the build and `verify-release` reject `fetch(`, XHR, `new Function`, `eval(`, `importScripts`; CSP keeps `connect-src 'none'` and adds only `'wasm-unsafe-eval'` |
+| Page text stays in the tab (D-036) | Dedupe against the page text runs in the tab; the popup receives only the validated report |
+| No false highlight claim (D-037) | Evidence from images has no locator; the popup states it cannot be highlighted (e2e) |
+| Exact third-party inventory | The artifact SBOM lists the engine and two models; `verify-release` accepts that list only (negative test) |
+

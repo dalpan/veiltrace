@@ -4,6 +4,11 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-23 · Text in images in the extension (D-105)
+Popup button "Read text in images" after a scan: visible-tab capture (activeTab, no new permission), OCR in the extension's own worker (engine and models bundled, network paths stubbed, no forbidden identifiers), page text dropped in the tab, rest analyzed; evidence not highlightable. CSP adds only `'wasm-unsafe-eval'`. Release verified (SBOM lists exactly the OCR engine and two models; new negative test). E2E: image lure read and flagged manipulative, page text not re-analyzed, no highlight offered; plain page says nothing found. **Next:** owner tries it from the toolbar (the real capture path needs a toolbar click).
+
+---
+
 ## 2026-10-23 · On-device OCR for screenshots in the app (D-104)
 "Cek Pesan" can check a screenshot: a pick or an Android share is read on the device with Tesseract.js (pinned; Indonesian and English models; files served from the app's origin, loaded only on first use, cached offline). On the owner's 14 field screenshots the OCR path alerts on the same 10 images as the hand-transcribed records, in 2–6 s each on a laptop. New e2e tests for a picked and a shared screenshot; `npm test` 800 passed, with the two load-sensitive timing tests (extractor budget, 5,000-block analyze) failing under full-suite load and passing alone. **Next:** owner tries a screenshot on a phone.
 

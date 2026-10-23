@@ -38,7 +38,7 @@ The Microsoft Threat Intelligence write-up (2025-08-21) documents ClickFix at th
 | Payload analysis (deobfuscating, sandboxing, executing commands) | VEILTRACE judges the *instruction*, not the malware. Command syntax is only a signal. |
 | Credential phishing pages without behavioral instructions (pure login clones) | Visual brand impersonation is a different problem. It may become a supplementary signal later. |
 | Email, SMS, chat apps, native apps, PDFs outside the browser | Not observable from a page content script. |
-| Instructions delivered **only** in images, canvas, video or audio | Requires OCR or ASR. The "Cek Pesan" app reads screenshots with on-device OCR (D-104); the extension does not read page images. Video and audio remain a gap (§5). |
+| Instructions delivered **only** in images, canvas, video or audio | Requires OCR or ASR. The "Cek Pesan" app reads screenshots with on-device OCR (D-104); the extension reads text in images on the visible screen on request (D-105). Video and audio remain a gap (§5). |
 | OS-level prevention (blocking Win+R, intercepting shells) | Outside browser capability. It is the endpoint's job. |
 | Guaranteeing safety / blocking pages | VEILTRACE *informs*. In the MVP it does not block navigation. |
 | Attacks on users who have disabled or never invoked the extension | The MVP is on-demand (DECISIONS.md D-004). |

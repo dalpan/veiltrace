@@ -37,6 +37,16 @@ function toolVersion(pkg) {
   return JSON.parse(readFileSync(join('node_modules', pkg, 'package.json'), 'utf8')).version;
 }
 
+/**
+ * Third-party code in the artifact (D-105): only the OCR engine and its two models, inside ocr-worker.js. Listed so the SBOM
+ * says exactly what is distributed; scripts/verify-release.mjs accepts this list and nothing else.
+ */
+export const THIRD_PARTY_COMPONENTS = [
+  { type: 'library', name: 'tesseract.js-core', version: '7.0.0', licenses: [{ license: { id: 'Apache-2.0' } }], purl: 'pkg:npm/tesseract.js-core@7.0.0', properties: [{ name: 'veiltrace:file', value: 'ocr-worker.js' }, { name: 'veiltrace:modified', value: 'network paths replaced by a stub that throws' }] },
+  { type: 'data', name: 'tessdata-ind-4.0.0_best_int', version: '1.0.0', licenses: [{ license: { id: 'Apache-2.0' } }], purl: 'pkg:npm/%40tesseract.js-data/ind@1.0.0', properties: [{ name: 'veiltrace:file', value: 'ocr-worker.js' }] },
+  { type: 'data', name: 'tessdata-eng-4.0.0_best_int', version: '1.0.0', licenses: [{ license: { id: 'Apache-2.0' } }], purl: 'pkg:npm/%40tesseract.js-data/eng@1.0.0', properties: [{ name: 'veiltrace:file', value: 'ocr-worker.js' }] },
+];
+
 export async function release({ out = 'release', candidate = false } = {}) {
   // Remove artifacts from earlier versions so a release directory always holds exactly one release.
   mkdirSync(out, { recursive: true });
@@ -52,7 +62,7 @@ export async function release({ out = 'release', candidate = false } = {}) {
   const commit = process.env.RELEASE_COMMIT ?? git(['rev-parse', 'HEAD']) ?? 'unknown';
   const dirty = process.env.RELEASE_DIRTY !== undefined ? process.env.RELEASE_DIRTY === '1' : (git(['status', '--porcelain']) ?? '') !== '';
   if (candidate && (dirty || commit === 'unknown')) throw new Error('--candidate requires a clean, committed working tree');
-  // Artifact SBOM: describes what is distributed (first-party code only, no third-party components).
+  // Artifact SBOM: describes what is distributed: first-party code plus the OCR engine and models (D-105).
   const sbomName = `veiltrace-chromium-${version}.cdx.json`;
   const sbom = {
     bomFormat: 'CycloneDX', specVersion: '1.5', version: 1,
@@ -62,10 +72,10 @@ export async function release({ out = 'release', candidate = false } = {}) {
         type: 'application', name: 'veiltrace-chromium', version,
         licenses: [{ license: { id: 'Apache-2.0' } }],
         hashes: [{ alg: 'SHA-256', content: sha256(zip) }],
-        properties: [{ name: 'veiltrace:source-commit', value: commit }, { name: 'veiltrace:third-party-code', value: 'none' }],
+        properties: [{ name: 'veiltrace:source-commit', value: commit }, { name: 'veiltrace:third-party-code', value: 'ocr-worker.js only (OCR engine and models)' }],
       },
     },
-    components: [],
+    components: THIRD_PARTY_COMPONENTS,
   };
   const sbomBytes = Buffer.from(JSON.stringify(sbom, null, 2) + '\n');
   const manifest = {
@@ -85,7 +95,7 @@ export async function release({ out = 'release', candidate = false } = {}) {
     optionalHostPermissions: extManifest.optional_host_permissions ?? [],
     files: files.map((f) => ({ path: f.path, size: f.data.length, sha256: sha256(f.data) })),
     artifact: { file: zipName, size: zip.length, sha256: sha256(zip) },
-    sbom: { file: sbomName, sha256: sha256(sbomBytes), thirdPartyComponents: 0 },
+    sbom: { file: sbomName, sha256: sha256(sbomBytes), thirdPartyComponents: THIRD_PARTY_COMPONENTS.length },
     notice: 'Checksums detect modification of this artifact; they do not establish authenticity. Verify the source commit and obtain releases through a trusted, signed channel.',
   };
   const manifestBytes = Buffer.from(JSON.stringify(manifest, null, 2) + '\n');

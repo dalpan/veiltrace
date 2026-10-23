@@ -7,6 +7,9 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { readZip } from './lib/zip.mjs';
 
+/** The only third-party code a release may ship (D-105): the OCR engine and its Indonesian and English models. */
+const ALLOWED_THIRD_PARTY = ['tessdata-eng-4.0.0_best_int@1.0.0:Apache-2.0', 'tessdata-ind-4.0.0_best_int@1.0.0:Apache-2.0', 'tesseract.js-core@7.0.0:Apache-2.0'];
+
 const sha256 = (b) => createHash('sha256').update(b).digest('hex');
 
 export function verifyRelease(dir) {
@@ -62,16 +65,20 @@ export function verifyRelease(dir) {
       fail(`unexpected background: ${JSON.stringify(ext.background)}`);
     }
     if (/TEST BUILD/.test(ext.name)) fail('test build packaged as release');
-    if (!String(ext.content_security_policy?.extension_pages ?? '').includes("connect-src 'none'")) fail("CSP lacks connect-src 'none'");
+    const csp = String(ext.content_security_policy?.extension_pages ?? '');
+    if (!csp.includes("connect-src 'none'")) fail("CSP lacks connect-src 'none'");
+    // D-105: WebAssembly for the OCR worker is the only addition; never 'unsafe-eval' or a remote source.
+    if (!csp.includes("script-src 'self' 'wasm-unsafe-eval';") || /unsafe-eval'|https?:/.test(csp.replace("'wasm-unsafe-eval'", ''))) fail(`unexpected script-src: ${csp}`);
     if (ext.version !== manifest.extensionVersion) fail('extension version differs from release manifest');
   }
-  // Artifact SBOM must match the artifact and declare no third-party components.
+  // Artifact SBOM must match the artifact and declare no third-party components except the OCR engine and models (D-105).
   if (!manifest.sbom || !sums.has(manifest.sbom.file)) fail('artifact SBOM missing or not listed in SHA256SUMS');
   else {
     try {
       const sbom = JSON.parse(readFileSync(join(dir, manifest.sbom.file), 'utf8'));
       if (sbom.bomFormat !== 'CycloneDX') fail('SBOM is not CycloneDX');
-      if ((sbom.components ?? []).length !== 0) fail('artifact SBOM lists third-party components');
+      const names = (sbom.components ?? []).map((c) => `${c.name}@${c.version}:${c.licenses?.[0]?.license?.id}`).sort();
+      if (JSON.stringify(names) !== JSON.stringify(ALLOWED_THIRD_PARTY)) fail(`unexpected third-party components: ${JSON.stringify(names)}`);
       if (sbom.metadata?.component?.hashes?.[0]?.content !== manifest.artifact.sha256) fail('SBOM hash does not match the artifact');
       if (sbom.metadata?.component?.licenses?.[0]?.license?.id !== 'Apache-2.0') fail('SBOM license is not Apache-2.0');
     } catch {

@@ -67,9 +67,11 @@ describe('artifact verification', () => {
     expect(manifest.source.commit).toMatch(/^[0-9a-f]{40}$|^unknown$/);
     expect(manifest.notice).toMatch(/do not establish authenticity/);
     expect(manifest.releaseType).toBe('development');
-    expect(manifest.sbom.thirdPartyComponents).toBe(0);
+    // D-105: the only third-party code is the OCR engine and its two models, all inside ocr-worker.js.
+    expect(manifest.sbom.thirdPartyComponents).toBe(3);
     const sbom = JSON.parse(readFileSync(join(dir, manifest.sbom.file), 'utf8'));
-    expect(sbom.components).toEqual([]);
+    expect(sbom.components.map((c: { name: string }) => c.name).sort()).toEqual(['tessdata-eng-4.0.0_best_int', 'tessdata-ind-4.0.0_best_int', 'tesseract.js-core']);
+    expect(sbom.components.every((c: { properties: Array<{ value: string }> }) => c.properties.some((p) => p.value === 'ocr-worker.js'))).toBe(true);
     expect(sbom.metadata.component.hashes[0].content).toBe(manifest.artifact.sha256);
     const zip = readZip(readFileSync(join(dir, manifest.artifact.file)));
     expect([...zip.keys()].sort()).toEqual(manifest.files.map((f: { path: string }) => f.path).sort());
@@ -119,5 +121,24 @@ describe('artifact verification', () => {
     expect(errors).toMatch(/test build packaged as release/);
     expect(errors).toMatch(/unexpected optional_host_permissions/);
     expect(errors).toMatch(/unexpected background/);
+  }, 60_000);
+
+  it('rejects an unsafe script-src, an unlisted third-party component and a network call in the OCR worker (D-105)', async () => {
+    const dir = fresh();
+    await release({ out: dir });
+    const manifest = JSON.parse(readFileSync(join(dir, 'release-manifest.json'), 'utf8'));
+    const entries = readZip(readFileSync(join(dir, manifest.artifact.file)));
+    const ext = JSON.parse(entries.get('manifest.json').toString());
+    entries.set('manifest.json', Buffer.from(JSON.stringify({ ...ext, content_security_policy: { extension_pages: "script-src 'self' 'unsafe-eval'; connect-src 'none'" } })));
+    entries.set('ocr-worker.js', Buffer.concat([entries.get('ocr-worker.js'), Buffer.from('\nfetch("https://example.invalid");')]));
+    writeFileSync(join(dir, manifest.artifact.file), writeZip([...entries].map(([path, data]) => ({ path, data })), 0));
+    const sbomPath = join(dir, manifest.sbom.file);
+    const sbom = JSON.parse(readFileSync(sbomPath, 'utf8'));
+    sbom.components.push({ name: 'left-pad', version: '1.3.0', licenses: [{ license: { id: 'WTFPL' } }] });
+    writeFileSync(sbomPath, JSON.stringify(sbom));
+    const errors = verifyRelease(dir).errors.join(' ');
+    expect(errors).toMatch(/unexpected script-src/);
+    expect(errors).toMatch(/ocr-worker.js contains fetch\(/);
+    expect(errors).toMatch(/unexpected third-party components/);
   }, 60_000);
 });

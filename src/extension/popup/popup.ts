@@ -3,7 +3,8 @@
 import type {
   CredEvidenceItem, CredFindingSummary, EvidenceItem, FindingSummary, PayEvidenceItem, PayFindingSummary, ScanReport, SupportEvidenceItem, SupportFindingSummary,
 } from '../content/report.js';
-import { classifyUrl, extensionVersion, getTargetTab, isTabView, runAiText, runHighlight, runScan, type TargetTab, type UrlClass } from './adapter.js';
+import { captureTab, classifyUrl, extensionVersion, getTargetTab, isTabView, runAiText, runHighlight, runImageScan, runScan, type TargetTab, type UrlClass } from './adapter.js';
+import { cleanOcrLines } from '../../pwa/ocr-text.js';
 import { renderAi, resetAi, setupAi } from './ai-panel.js';
 import { autoEnabled, disableAuto, enableAuto, MANAGED } from '../auto/auto.js';
 import { aggregate, CATEGORIES, type Category, type Dashboard, type FindingGroup, type FindingRef } from './aggregate.js';
@@ -70,6 +71,8 @@ interface CardCtx {
   shared: FindingGroup['shared'];
   /** Shared elements already annotated on this card (the note is shown once per element). */
   noted: Set<string>;
+  /** Findings in text read from images (D-105): evidence cannot be highlighted on the page. */
+  image?: boolean;
 }
 
 /**
@@ -80,7 +83,7 @@ function evidenceRow(c: CardCtx, key: string, label: string, text: string, locat
   const m = t();
   const evId = `E-${pad(++c.num.evidence)}`;
   const outcome = state.highlights.get(key) ?? (locator ? undefined : 'invalid-locator');
-  const status = h('p', { class: 'hl-status', 'aria-live': 'polite' }, outcome ? m.highlight[outcome] : '');
+  const status = h('p', { class: 'hl-status', 'aria-live': 'polite' }, c.image ? m.imageText.notShowable : outcome ? m.highlight[outcome] : '');
   if (outcome && locator) status.dataset.result = outcome;
   const btn = h('button', { class: 'show', type: 'button', 'aria-describedby': `ev-${evId}` }, m.showOnPage) as HTMLButtonElement;
   btn.disabled = !locator;
@@ -104,7 +107,7 @@ function evidenceRow(c: CardCtx, key: string, label: string, text: string, locat
     h('div', { class: 'ev-head' },
       h('span', { class: 'ev-id', title: m.dash.evidenceId(evId), id: `ev-${evId}` }, evId),
       h('span', { class: 'ev-label' }, label),
-      btn),
+      !c.image && btn),
     h('p', { class: 'snippet', lang: '' }, text),
     others.length > 0 && h('p', { class: 'shared', 'data-shared': others.join(' ') }, m.dash.alsoCitedBy(others.map((x) => m.dash.categoryName[x]).join(', '))),
     status);
@@ -232,8 +235,8 @@ function card(r: ScanReport, c: CardCtx): HTMLElement {
 }
 
 /** A group of related findings keeps every member card (provenance); single findings render as plain cards. */
-function renderGroup(r: ScanReport, g: FindingGroup, num: Numbering): HTMLElement {
-  const cards = g.members.map((ref) => card(r, { ref, num, shared: g.shared, noted: new Set() }));
+function renderGroup(r: ScanReport, g: FindingGroup, num: Numbering, image = false): HTMLElement {
+  const cards = g.members.map((ref) => card(r, { ref, num, shared: g.shared, noted: new Set(), image }));
   if (cards.length === 1) return cards[0] as HTMLElement;
   const m = t();
   return h('section', { class: 'finding-group', 'data-group-size': String(cards.length), 'aria-label': m.dash.groupTitle(cards.length) },
@@ -354,6 +357,7 @@ function render(): void {
   $('scan-state').textContent = m.dash.stateLabel[scanState];
   // Optional on-device AI second opinion (D-093): offered only after a finished scan, below the VeilTrace result.
   if (__VT_AI__) renderAi(state.phase === 'done' && state.report !== null);
+  renderImage();
   $('scan-state').dataset.state = scanState;
   const version = extensionVersion();
   $('version').textContent = version ? `v${version}` : '';
@@ -383,12 +387,102 @@ function render(): void {
   }
 }
 
+/**
+ * Text in images (D-105): after a scan, the user can have the visible screen read on the device. The popup captures the tab
+ * (activeTab), its own worker reads the text (ocr-worker.js: engine and models bundled, no network), and the lines go to the
+ * tab, which drops what the page already has as text and analyzes the rest. Only the validated report comes back.
+ */
+const image: { phase: 'idle' | 'running' | 'done' | 'error'; note: string; report: ScanReport | null } = { phase: 'idle', note: '', report: null };
+let ocrWorker: Worker | null = null;
+let ocrSeq = 0;
+
+function ocrRead(img: Blob, onProgress: (p: number) => void): Promise<string> {
+  ocrWorker ??= new Worker('ocr-worker.js');
+  const worker = ocrWorker;
+  const id = ++ocrSeq;
+  return img.arrayBuffer().then((buf) => new Promise<string>((resolve, reject) => {
+    const onMsg = (e: MessageEvent<{ id: number; progress?: number; text?: string; error?: boolean }>): void => {
+      if (e.data.id !== id) return;
+      if (typeof e.data.progress === 'number') {
+        onProgress(e.data.progress);
+        return;
+      }
+      worker.removeEventListener('message', onMsg);
+      if (typeof e.data.text === 'string') resolve(e.data.text);
+      else reject(new Error('ocr'));
+    };
+    worker.addEventListener('message', onMsg);
+    worker.postMessage({ id, image: buf }, [buf]);
+  }));
+}
+
+async function readImages(): Promise<void> {
+  const tab = state.tab;
+  if (!tab || image.phase === 'running') return;
+  const m = (): Messages => t();
+  Object.assign(image, { phase: 'running', note: m().imageText.reading(0), report: null });
+  renderImage();
+  try {
+    const shot = await captureTab(tab.windowId);
+    const text = await ocrRead(shot, (p) => {
+      image.note = m().imageText.reading(Math.round(p * 100));
+      $('ocr-status').textContent = image.note;
+    });
+    const lines = cleanOcrLines(text.split('\n'));
+    if (lines.length === 0) {
+      Object.assign(image, { phase: 'done', note: m().imageText.noText });
+      return;
+    }
+    image.note = m().imageText.analyzing;
+    renderImage();
+    const report = parseScanReport(await runImageScan(tab.id, lines));
+    if (!report) throw new Error('report');
+    Object.assign(image, { phase: 'done', report, note: report.counts.blocks > 0 ? m().imageText.done(report.counts.blocks) : m().imageText.nothing });
+  } catch {
+    Object.assign(image, { phase: 'error', note: m().imageText.failed, report: null });
+  } finally {
+    if (image.phase === 'running') image.phase = 'error';
+    renderImage();
+  }
+}
+
+function renderImage(): void {
+  const m = t();
+  const section = $('ocr');
+  section.hidden = !(state.phase === 'done' && state.report !== null);
+  $('ocr-title').textContent = m.imageText.title;
+  $('ocr-intro').textContent = m.imageText.intro;
+  const btn = $('ocr-run') as HTMLButtonElement;
+  btn.textContent = m.imageText.run;
+  btn.disabled = image.phase === 'running';
+  $('ocr-status').textContent = image.note;
+  section.dataset.phase = image.phase;
+  const out = $('ocr-result');
+  const r = image.report;
+  if (r && r.counts.blocks > 0) {
+    const d = aggregate(r);
+    const num: Numbering = { finding: 0, evidence: 0 };
+    const observedCount = d.observed.reduce((n, g) => n + g.members.length, 0);
+    out.replaceChildren(...[
+      renderSummary(r, d),
+      renderAdvice(r, d),
+      ...d.groups.map((g) => renderGroup(r, g, num, true)),
+      observedCount > 0 && h('details', { class: 'observed' }, h('summary', {}, m.dash.observedTitle(observedCount)), ...d.observed.map((g) => renderGroup(r, g, num, true))),
+    ].filter((p): p is HTMLElement => p instanceof HTMLElement));
+    out.hidden = false;
+  } else {
+    out.replaceChildren();
+    out.hidden = true;
+  }
+}
+
 const round = (n: number): number => Math.round(n * 10) / 10;
 
 async function scan(): Promise<void> {
   const tab = state.tab;
   if (!tab) return;
   Object.assign(state, { phase: 'scanning', error: null, report: null, highlights: new Map() });
+  Object.assign(image, { phase: 'idle', note: '', report: null });
   if (__VT_AI__) resetAi();
   render();
   document.body.dataset.injections = String(Number(document.body.dataset.injections ?? '0') + 1);
@@ -447,6 +541,7 @@ async function main(): Promise<void> {
     });
   }
   $('scan').addEventListener('click', () => void scan());
+  $('ocr-run').addEventListener('click', () => void readImages());
   if (__VT_AI__) setupAi({
     t, tabId: () => state.tab?.id ?? null, readText: runAiText,
     alerted: () => state.report !== null && aggregate(state.report).actionable > 0,

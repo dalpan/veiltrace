@@ -7,6 +7,7 @@ declare const __VT_TEST__: boolean;
 export interface TargetTab {
   id: number;
   url: string | undefined;
+  windowId?: number;
 }
 
 export type UrlClass = 'scannable' | 'restricted' | 'file' | 'unknown';
@@ -53,11 +54,11 @@ export async function getTargetTab(): Promise<TargetTab | null> {
     const id = Number(new URLSearchParams(location.search).get('tab'));
     if (Number.isInteger(id) && id > 0) {
       const t = await chrome.tabs.get(id);
-      return { id, url: t.url };
+      return { id, url: t.url, windowId: t.windowId };
     }
   }
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  return tab?.id !== undefined ? { id: tab.id, url: tab.url } : null;
+  return tab?.id !== undefined ? { id: tab.id, url: tab.url, windowId: tab.windowId } : null;
 }
 
 async function ensureContent(tabId: number): Promise<void> {
@@ -96,6 +97,32 @@ export async function runAiText(tabId: number): Promise<unknown> {
     func: () => (globalThis as unknown as { VeiltraceContent: { aiText: () => unknown } }).VeiltraceContent.aiText(),
   });
   return res?.result;
+}
+
+/** OCR lines of the visible tab, filtered and analyzed in the tab (D-105); validated by the caller. */
+export async function runImageScan(tabId: number, lines: readonly string[]): Promise<unknown> {
+  await ensureContent(tabId);
+  const [res] = await chrome.scripting.executeScript({
+    target: { tabId }, world: 'ISOLATED',
+    func: (l: string[]) => (globalThis as unknown as { VeiltraceContent: { imageScan: (x: unknown) => unknown } }).VeiltraceContent.imageScan(l),
+    args: [[...lines]],
+  });
+  return res?.result;
+}
+
+/**
+ * A PNG of the visible part of the tab (D-105). `activeTab`, granted when the user opened the popup, is enough; no permission
+ * is added. In the test build the image can be supplied by the test (`window.__vtTestScreenshot`), because a popup opened as a
+ * tab would capture itself.
+ */
+export async function captureTab(windowId: number | undefined): Promise<Blob> {
+  if (__VT_TEST__) {
+    const supplied = (globalThis as { __vtTestScreenshot?: Blob }).__vtTestScreenshot;
+    if (supplied) return supplied;
+  }
+  const dataUrl = await chrome.tabs.captureVisibleTab(windowId ?? chrome.windows.WINDOW_ID_CURRENT, { format: 'png' });
+  const bin = atob(dataUrl.slice(dataUrl.indexOf(',') + 1));
+  return new Blob([Uint8Array.from(bin, (c) => c.charCodeAt(0))], { type: 'image/png' });
 }
 
 export async function runHighlight(tabId: number, locator: string, durationMs: number): Promise<unknown> {

@@ -155,12 +155,13 @@ Runtime dependencies target: **0**. Everything shipped in the extension is our o
   "icons": { … },
   "permissions": ["activeTab", "scripting"],
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none'; connect-src 'none'; form-action 'none'"
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'none'; base-uri 'none'; connect-src 'none'; form-action 'none'"
   }
 }
 ```
 
 - `activeTab` shows **no install-time warning** and grants temporary access to the active tab after the toolbar click. Chrome never grants it on `chrome://` pages, the Web Store or other extensions; the popup detects those (URL withheld or restricted scheme) and does not attempt a scan.
+- `'wasm-unsafe-eval'` (D-105) lets the OCR worker compile its bundled WebAssembly; it does not allow `eval` or remote code.
 - `connect-src 'none'` is **accepted by Chrome** (verified at M3): the extension loads, and `fetch` from the popup is blocked (E2E test).
 - No `host_permissions`, `content_scripts`, `background`, `web_accessible_resources`, `externally_connectable`, `tabs`, `storage`, `webRequest`, `clipboard*` or `notifications`. A test asserts all of these absences against the built production manifest.
 - **Test build** (`dist/extension-test`, D-013/D-038): adds `host_permissions: ["https://*.test/*", "https://*.example/*"]` for the fictional fixture hosts, the name "VeilTrace (TEST BUILD)", and `?tab=` targeting compiled in with `__VT_TEST__=true`. The production popup bundle contains no trace of the test path (asserted).

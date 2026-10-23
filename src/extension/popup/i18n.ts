@@ -141,6 +141,19 @@ export interface Messages {
     ocrEmpty: string;
     ocrFailed: string;
   };
+  /** Text in images on the visible screen, read on the device (D-105). */
+  imageText: {
+    title: string;
+    intro: string;
+    run: string;
+    reading: (percent: number) => string;
+    analyzing: string;
+    done: (lines: number) => string;
+    nothing: string;
+    noText: string;
+    failed: string;
+    notShowable: string;
+  };
   /** Optional on-device AI second opinion (D-093). */
   ai: {
     title: string;
@@ -466,6 +479,18 @@ const EN: Messages = {
     ocrDone: 'Text read from the image. Compare it with the image and correct it if needed, then check again.',
     ocrEmpty: 'No text could be read from this image. Try a sharper screenshot, or paste the text.',
     ocrFailed: 'The image could not be read on this device. Paste the text instead.',
+  },
+  imageText: {
+    title: 'Text in images · on this device',
+    intro: 'Some lures are drawn inside images (posters, banners, photographed letters). VeilTrace can read the visible part of this page from a screenshot, on this device, and check the text that is not already page text. Nothing is sent.',
+    run: 'Read text in images',
+    reading: (p) => `Reading the visible screen on this device… ${p}%`,
+    analyzing: 'Checking the text found in images…',
+    done: (n) => `${n} line${n === 1 ? '' : 's'} of text found only in images on the visible screen.`,
+    nothing: 'No text was found in images on the visible screen beyond what the page already shows as text. Scroll and read again to check other parts.',
+    noText: 'No text could be read from the visible screen.',
+    failed: 'The screen could not be read here. Some pages and browsers do not allow a screenshot.',
+    notShowable: 'Inside an image: it cannot be highlighted on the page.',
   },
   ai: {
     title: 'AI second opinion · optional, on this device',
@@ -813,6 +838,18 @@ const ID: Messages = {
     ocrDone: 'Teks sudah dibaca dari gambar. Cocokkan dengan gambarnya dan perbaiki bila perlu, lalu periksa lagi.',
     ocrEmpty: 'Tidak ada teks yang terbaca dari gambar ini. Coba screenshot yang lebih jelas, atau tempel teksnya.',
     ocrFailed: 'Gambar tidak bisa dibaca di perangkat ini. Tempel teksnya saja.',
+  },
+  imageText: {
+    title: 'Teks di dalam gambar · di perangkat ini',
+    intro: 'Sebagian umpan ditulis di dalam gambar (poster, banner, foto surat). VeilTrace dapat membaca bagian halaman yang terlihat dari screenshot, di perangkat ini, lalu memeriksa teks yang belum ada sebagai teks halaman. Tidak ada yang dikirim.',
+    run: 'Baca teks di gambar',
+    reading: (p) => `Membaca layar yang terlihat, di perangkat ini… ${p}%`,
+    analyzing: 'Memeriksa teks yang ditemukan di gambar…',
+    done: (n) => `${n} baris teks hanya ditemukan di dalam gambar pada layar yang terlihat.`,
+    nothing: 'Tidak ada teks di dalam gambar pada layar yang terlihat selain yang sudah ada sebagai teks halaman. Gulir lalu baca lagi untuk memeriksa bagian lain.',
+    noText: 'Tidak ada teks yang terbaca dari layar yang terlihat.',
+    failed: 'Layar tidak bisa dibaca di sini. Beberapa halaman dan browser tidak mengizinkan screenshot.',
+    notShowable: 'Di dalam gambar: tidak bisa di-highlight di halaman.',
   },
   ai: {
     title: 'Pendapat kedua AI · opsional, di perangkat ini',
