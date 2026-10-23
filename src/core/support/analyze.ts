@@ -14,7 +14,7 @@ import type {
   SupportPressure, SupportResult, SupportRuleId, SupportSignalId, SupportSignalKind, SupportTrustContext,
 } from './types.js';
 
-export const SUPPORT_DETECTOR_VERSION = 'sup-0.7.0-exp';
+export const SUPPORT_DETECTOR_VERSION = 'sup-0.8.0-exp';
 
 const CLAUSE_BREAK = /[,;:!?]|\.(?=\s|$)|(?<![\p{L}\p{N}_])(?:and|then|or|but|dan|lalu|kemudian|atau|tapi|tetapi)(?![\p{L}\p{N}_])/u;
 /** Negation distributes over a disjunction ("never install AnyDesk or share your screen"), so "or"/"atau" does not end its scope. */
@@ -29,13 +29,13 @@ const TIERS: readonly Classification[] = ['observed_instruction', 'suspicious_co
 const LEVELS: readonly Level[] = ['low', 'medium', 'high'];
 const EDUCATIONAL = LEXICON.filter((e) => e.signal === 'C.EDUCATIONAL');
 
-const ACTION_OF: Partial<Record<SupportSignalId, SupportAction>> = { 'SC.CONTACT': 'contact', 'SC.RESPOND': 'respond', 'SC.SURVEY': 'survey', 'SA.REMOTE': 'remote-access', 'SA.INSTALL': 'install' };
-const CHANNEL_OF: Partial<Record<SupportSignalId, SupportChannel>> = { 'SX.PHONE': 'phone', 'SX.MOBILE': 'mobile', 'SX.MESSENGER': 'messenger', 'SX.LINK': 'link' };
+const ACTION_OF: Partial<Record<SupportSignalId, SupportAction>> = { 'SC.CONTACT': 'contact', 'SC.RESPOND': 'respond', 'SC.SURVEY': 'survey', 'SA.REMOTE': 'remote-access', 'SA.INSTALL': 'install', 'SA.DISABLE': 'disable-protection' };
+const CHANNEL_OF: Partial<Record<SupportSignalId, SupportChannel>> = { 'SX.PHONE': 'phone', 'SX.MOBILE': 'mobile', 'SX.MESSENGER': 'messenger', 'SX.LINK': 'link', 'SX.APK': 'apk-file' };
 const CLAIM_OF: Partial<Record<SupportSignalId, SupportClaim>> = { 'SI.SUPPORT': 'support', 'SI.BANK': 'bank', 'SI.ADMIN': 'administrator', 'SI.SECURITY': 'security-team', 'SI.OFFICIAL': 'official', 'SI.ORG': 'organization' };
-const PRESSURE_OF: Partial<Record<SupportSignalId, SupportPressure>> = { 'SW.ALERT': 'system-alert', 'SW.ACCOUNT': 'account-alarm', 'ST.THREAT': 'threat', 'SU.URGENCY': 'urgency', 'SP.REWARD': 'reward', 'SP.WON': 'pre-won', 'SO.ILLICIT': 'illicit-access', 'SO.PROXY': 'third-party-redirect' };
-const ORDER: readonly string[] = ['contact', 'respond', 'survey', 'remote-access', 'install', 'phone', 'mobile', 'messenger', 'link', 'support', 'bank', 'administrator', 'security-team', 'official', 'organization',
-  'system-alert', 'account-alarm', 'threat', 'urgency', 'reward', 'pre-won', 'illicit-access', 'third-party-redirect', 'page-rendered-system-alert', 'alert-in-overlay', 'remote-access-request', 'software-install-request',
-  'personal-channel-contact', 'claim-in-user-content'];
+const PRESSURE_OF: Partial<Record<SupportSignalId, SupportPressure>> = { 'SW.ALERT': 'system-alert', 'SW.ACCOUNT': 'account-alarm', 'ST.THREAT': 'threat', 'SU.URGENCY': 'urgency', 'SP.REWARD': 'reward', 'SP.WON': 'pre-won', 'SO.ILLICIT': 'illicit-access', 'SO.PROXY': 'third-party-redirect', 'SD.DOCUMENT': 'document-pretext' };
+const ORDER: readonly string[] = ['contact', 'respond', 'survey', 'remote-access', 'install', 'disable-protection', 'phone', 'mobile', 'messenger', 'link', 'apk-file', 'support', 'bank', 'administrator', 'security-team', 'official', 'organization',
+  'system-alert', 'account-alarm', 'threat', 'urgency', 'reward', 'pre-won', 'illicit-access', 'third-party-redirect', 'document-pretext', 'page-rendered-system-alert', 'alert-in-overlay', 'remote-access-request', 'software-install-request',
+  'protection-disable-request', 'apk-file-in-message', 'personal-channel-contact', 'claim-in-user-content'];
 const ordered = <T extends string>(xs: Iterable<T>): T[] => [...new Set(xs)].sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b));
 
 /** Highest classification each rule can produce; the actual one depends on the signals found (DETECTION_MODEL.md §14). */
@@ -49,6 +49,7 @@ export const SUPPORT_RULES: Readonly<Record<SupportRuleId, { name: string; class
   SR7: { name: 'PRIZE_SURVEY_LURE', classification: 'manipulative_instruction' },
   SR8: { name: 'ILLICIT_ACCESS_SERVICE', classification: 'manipulative_instruction' },
   SR9: { name: 'THIRD_PARTY_REDIRECT', classification: 'manipulative_instruction' },
+  SR10: { name: 'APP_FILE_LURE', classification: 'manipulative_instruction' },
 };
 
 const SUMMARY: Record<SupportRuleId, string> = {
@@ -61,6 +62,7 @@ const SUMMARY: Record<SupportRuleId, string> = {
   SR7: 'The page congratulates the reader on a cash prize they did not enter for and asks them to answer a quiz or questionnaire, often in the name of a company\'s anniversary. Such quizzes are used to lead people to share the link or hand over data or money.',
   SR8: 'The page offers to get into someone else\'s messages, account or phone and directs the reader to a contact. Such services are illegal, and buyers are commonly cheated or blackmailed.',
   SR9: 'A stranger presenting as a buyer, tenant or landlord sends the reader to a relative or another person on a personal number to settle a price or payment. Fake-buyer and payment-redirect scams start this way.',
+  SR10: 'A message offers an Android app file (.apk) presented as an invitation, a parcel photo, a receipt, a ticket or a bill, or asks to install it or to turn off the device\'s protection. Opening such a file installs an app that can read text messages and take over banking apps.',
 };
 
 interface Src {
@@ -89,7 +91,7 @@ function kindOfSignal(s: SupportSignalId): SupportSignalKind {
   if (s.startsWith('SC.') || s.startsWith('SA.')) return 'action';
   if (s.startsWith('SX.')) return 'channel';
   if (s.startsWith('SI.')) return 'claim';
-  if (s.startsWith('SW.') || s.startsWith('ST.') || s.startsWith('SU.') || s.startsWith('SP.') || s.startsWith('SO.')) return 'pressure';
+  if (s.startsWith('SW.') || s.startsWith('ST.') || s.startsWith('SU.') || s.startsWith('SP.') || s.startsWith('SO.') || s.startsWith('SD.')) return 'pressure';
   return 'context';
 }
 
@@ -181,12 +183,12 @@ function directionUnits(sources: readonly Src[], signals: readonly Ob[]): Unit[]
   const units: Unit[] = [];
   for (const src of sources) {
     const here = signals.filter((s) => s.src === src && !s.o.negated);
-    const isChannel = (s: Ob): boolean => s.o.kind === 'channel';
+    const isChannel = (s: Ob): boolean => s.o.kind === 'channel' && s.o.signal !== 'SX.APK';
     const around = signals.filter((s) => s.src.region === src.region && Math.abs(s.src.pos - src.pos) === 1 && isChannel(s) && !s.o.negated);
-    const remoteOrInstall = here.filter((s) => s.o.signal === 'SA.REMOTE' || s.o.signal === 'SA.INSTALL' || s.o.signal === 'SC.RESPOND' || s.o.signal === 'SC.SURVEY');
-    const links = here.filter((s) => s.o.signal === 'SX.LINK');
+    const remoteOrInstall = here.filter((s) => s.o.signal === 'SA.REMOTE' || s.o.signal === 'SA.INSTALL' || s.o.signal === 'SA.DISABLE' || s.o.signal === 'SC.RESPOND' || s.o.signal === 'SC.SURVEY');
+    const links = here.filter((s) => s.o.signal === 'SX.LINK' || s.o.signal === 'SX.APK');
     const contacts = here.filter((s) => s.o.signal === 'SC.CONTACT');
-    const channelsHere = here.filter((s) => isChannel(s) && s.o.signal !== 'SX.LINK');
+    const channelsHere = here.filter((s) => isChannel(s) && s.o.signal !== 'SX.LINK' && s.o.signal !== 'SX.APK');
     const channels = channelsHere.length > 0 ? channelsHere : contacts.length > 0 ? around : [];
     const numberHere = channelsHere.some((s) => s.o.signal !== 'SX.MESSENGER');
     const messengerWithNumber = channelsHere.some((s) => s.o.signal === 'SX.MESSENGER') && numberHere;
@@ -241,7 +243,7 @@ interface Scored {
   modifiers: Array<Omit<SupportModifier, 'evidence'> & { evidence: Array<Ob | string> }>;
 }
 
-const RULE_RANK: Readonly<Record<SupportRuleId, number>> = { SR1: 0, SR2: 1, SR3: 2, SR4: 3, SR6: 4, SR7: 5, SR8: 6, SR9: 7, SR5: 8 };
+const RULE_RANK: Readonly<Record<SupportRuleId, number>> = { SR1: 0, SR2: 1, SR10: 2, SR3: 3, SR4: 4, SR6: 5, SR7: 6, SR8: 7, SR9: 8, SR5: 9 };
 
 function scoreOne(u: Unit, region: RegionInfo, signals: readonly Ob[], cues: readonly Ob[]): Scored {
   // Claims and pressure count when near the direction and addressed to the reader: inside a quotation or code sample, only in the same block.
@@ -252,7 +254,7 @@ function scoreOne(u: Unit, region: RegionInfo, signals: readonly Ob[], cues: rea
   const claims = nearby.filter((p) => p.o.kind === 'claim');
   const actions = ordered(u.actions.map((a) => ACTION_OF[a.o.signal] as SupportAction));
   const channels = ordered(u.channels.map((c) => CHANNEL_OF[c.o.signal] as SupportChannel));
-  const contact = u.channels.some((c) => c.o.signal !== 'SX.LINK');
+  const contact = u.channels.some((c) => c.o.signal !== 'SX.LINK' && c.o.signal !== 'SX.APK');
   // A lure moves the reader into the sender's flow: a reply or choice, a form, or a link (SR6). Calling a published call-center
   // line is how genuine notices end; a personal number or messenger with a claim and a threat is SR3's case.
   const lure = actions.includes('respond') || channels.includes('link');
@@ -263,6 +265,9 @@ function scoreOne(u: Unit, region: RegionInfo, signals: readonly Ob[], cues: rea
   const proxy = nearby.filter((p) => p.o.signal === 'SO.PROXY');
   const remote = actions.includes('remote-access');
   const install = actions.includes('install');
+  const disable = actions.includes('disable-protection');
+  const apk = channels.includes('apk-file');
+  const documents = nearby.filter((p) => p.o.signal === 'SD.DOCUMENT');
   const personal = channels.includes('mobile') || channels.includes('messenger');
   const trust = trustOf(u.src);
   const ugc = trust.includes('user-content');
@@ -273,9 +278,9 @@ function scoreOne(u: Unit, region: RegionInfo, signals: readonly Ob[], cues: rea
   // match first never hides a stronger one.
   const pressure = [...claims, ...threats, ...urgency];
   const candidates: Array<[SupportRuleId, Classification, Ob[]]> = [];
-  if (alerts.length > 0 && (contact || remote || install)) candidates.push(['SR1', 'manipulative_instruction', [...alerts, ...pressure]]);
-  if ((remote || install) && hasClaim && (threats.length > 0 || urgency.length > 0 || untrusted || personal)) {
-    candidates.push(['SR2', threats.length > 0 || (remote && (urgency.length > 0 || ugc)) ? 'manipulative_instruction' : 'suspicious_correlation', pressure]);
+  if (alerts.length > 0 && (contact || remote || install || disable)) candidates.push(['SR1', 'manipulative_instruction', [...alerts, ...pressure]]);
+  if ((remote || install || disable) && hasClaim && (threats.length > 0 || urgency.length > 0 || untrusted || personal)) {
+    candidates.push(['SR2', threats.length > 0 || ((remote || disable) && (urgency.length > 0 || ugc)) ? 'manipulative_instruction' : 'suspicious_correlation', pressure]);
   }
   if (contact && hasClaim && threats.length > 0 && (personal || urgency.length > 0)) {
     candidates.push(['SR3', personal && urgency.length > 0 ? 'manipulative_instruction' : 'suspicious_correlation', pressure]);
@@ -306,6 +311,15 @@ function scoreOne(u: Unit, region: RegionInfo, signals: readonly Ob[], cues: rea
   if (proxy.length > 0 && personal) {
     candidates.push(['SR9', urgency.length > 0 || threats.length > 0 ? 'manipulative_instruction' : 'suspicious_correlation', [...proxy, ...urgency, ...threats]]);
   }
+  // SR10: an app file offered in a message from someone else, or a request to turn off the device's protection. Manipulative when it is presented as a document (invitation, parcel
+  // photo, receipt, ticket, bill), comes with a claim, pressure or an alarm, or with a request to turn off protection; suspicious
+  // when the message only tells the reader to open or install it. A file name alone, or a download page, stays observed.
+  // A message that asks to turn off Play Protect or antivirus, allow unknown sources or grant accessibility is the same scheme's
+  // next step: suspicious alone, manipulative with a claim or pressure.
+  if ((apk || disable) && (untrusted || personal)) {
+    const lured = (apk && (documents.length > 0 || disable)) || hasClaim || urgency.length > 0 || threats.length > 0 || alerts.length > 0;
+    if (lured || install || disable) candidates.push(['SR10', lured ? 'manipulative_instruction' : 'suspicious_correlation', [...documents, ...pressure, ...alerts]]);
+  }
   const [ruleId, cls, used] = candidates.sort((x, y) => TIERS.indexOf(y[1]) - TIERS.indexOf(x[1]) || RULE_RANK[x[0]] - RULE_RANK[y[0]])[0]
     ?? ['SR5', 'observed_instruction', []];
   const base: Level = cls === 'suspicious_correlation' ? 'medium' : 'high';
@@ -335,6 +349,8 @@ function scoreOne(u: Unit, region: RegionInfo, signals: readonly Ob[], cues: rea
   if (usedAlerts.some((o) => trustOf(o.src).some((t) => t === 'overlay' || t === 'dialog'))) indicators.push('alert-in-overlay');
   if (remote) indicators.push('remote-access-request');
   if (install) indicators.push('software-install-request');
+  if (disable) indicators.push('protection-disable-request');
+  if (apk && (untrusted || personal)) indicators.push('apk-file-in-message');
   if (hasClaim && personal) indicators.push('personal-channel-contact');
   if (claims.some((c) => trustOf(c.src).includes('user-content'))) indicators.push('claim-in-user-content');
 

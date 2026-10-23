@@ -53,8 +53,8 @@ Four independent detectors. None of them alerts on a single keyword.
 |---|---|---|
 | **CMD** | Command Execution Manipulation | ClickFix: "press Win+R, paste, Enter"; fake "fix this error" terminal steps |
 | **CRED** | Credential Disclosure Manipulation | "send us the OTP", "kasih liat kode yg masuk ke hp", codes to be forwarded to an "officer", recovery phrases |
-| **PAY** | Payment Manipulation | pay a fee to release a refund or prize, transfer to a personal account, task-job deposits, extortion, gift cards |
-| **SUP** | Support & Authority Impersonation | fake virus alerts with a phone number, "bank CS" asking for AnyDesk or an APK, fake tariff-change notices, prize quizzes in a company's name, phone-tapping services |
+| **PAY** | Payment Manipulation | pay a fee to release a refund or prize, transfer to a personal account, task-job deposits, fixed-return "investments", extortion, gift cards |
+| **SUP** | Support & Authority Impersonation | fake virus alerts with a phone number, "bank CS" asking for AnyDesk or an APK, fake tariff-change notices, prize quizzes in a company's name, phone-tapping services, .apk files sent as wedding invitations or parcel photos, requests to turn off Play Protect |
 
 Each finding keeps **classification** (manipulative / suspicious / observed), **confidence** and **action risk** separate.
 
@@ -88,7 +88,7 @@ Each finding keeps **classification** (manipulative / suspicious / observed), **
 | **Rule-based vs on-device AI** | on the same pages Chrome's built-in model (Gemini Nano) flagged 71% of benign pages; VeilTrace 0%. The AI is therefore not used ([details](docs/AI_EVAL.md)) |
 | **Public Indonesian SMS dataset** (labelled by others) | on its development half, fraud SMS flagged rose from 11 to **94 of 178** after adding SMS-era patterns, with **1 of 318** normal SMS flagged; the test half is locked ([details](docs/EVALUATION_PLAN.md)) |
 | **Devices** | Chrome desktop, Firefox for Android and the web app on iPhone, tested by the team |
-| **Automated tests** | 775 passing: unit, real-browser extraction, end-to-end with the real extension, security and zero-network checks |
+| **Automated tests** | 791 passing: unit, real-browser extraction, end-to-end with the real extension, security and zero-network checks |
 
 Detection quality is tracked with hash-locked, preregistered held-out sets and a real-world field sample collected with local OCR; the protocol and every run are in [docs/README.md](docs/README.md#evaluation-protocol).
 

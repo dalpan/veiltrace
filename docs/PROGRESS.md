@@ -4,6 +4,11 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-23 · App-file lures, turning off protection, fixed-return investment (D-102)
+Gaps chosen from public reports (OJK IASC categories; APK invitations and parcel photos). sup 0.8.0: SR10 APP_FILE_LURE (.apk presented as an invitation, parcel photo, receipt, ticket or bill; requests to turn off Play Protect or allow unknown sources), turning off protection also counts in SR1/SR2. pay 0.7.0: fixed or guaranteed investment returns are pay-to-receive (PR1); down payments and paying in capital are requests. 10 new dev fixtures; pay-dev and sup-dev FP 0; synthetic dev 2,908 → 3,104 of 6,480 scam, benign 0; SMS dev and field sample unchanged. `npm test`: 791 passed; the extractor budget test fails on this machine with and without the change (time budget hit first; extractor untouched). **Next:** release and site rebuild with the new detectors.
+
+---
+
 ## 2026-10-23 · English-first website and app, bilingual landing page (D-101)
 Landing page in English and Indonesian with an EN/ID switch; landing page and app open in English on the first visit, and the visitor's choice carries between them (localStorage, language code only). New product description on the landing page and README. Verified in Chromium against the built site: English on an `id-ID` phone, switch and reload keep Indonesian, the app follows, no horizontal scroll at 390 px, zero external requests; PWA e2e and i18n tests pass. **Next:** owner decides on the single locked runs (v3, SMS test half, synthetic test split).
 

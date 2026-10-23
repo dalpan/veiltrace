@@ -10,7 +10,7 @@ export type PayObjectSignalId = 'PA.AMOUNT' | 'PF.FEE' | 'PF.RELEASE_FEE';
 /** Where the money goes, when that is outside an ordinary checkout. */
 export type PayDestinationSignalId = 'PD.PERSONAL' | 'PD.OFF_PLATFORM' | 'PD.GIFT_CARD' | 'PD.CRYPTO';
 /** Something the reader is promised in return (pay-to-receive), and the clause that ties the payment to it. */
-export type PayReceiveSignalId = 'PR.REFUND' | 'PR.PRIZE' | 'PR.UNLOCK' | 'PR.RECRUIT' | 'PR.JOB' | 'PC.CONDITION';
+export type PayReceiveSignalId = 'PR.REFUND' | 'PR.PRIZE' | 'PR.UNLOCK' | 'PR.RECRUIT' | 'PR.JOB' | 'PR.INVEST' | 'PC.CONDITION';
 /** Pressure. PP.AUTHORITY is a claim only and is never verified. */
 export type PayPressureSignalId = 'PP.THREAT' | 'PP.URGENCY' | 'PP.AUTHORITY' | 'PP.FAMILY';
 export type PaySignalId = PayRequestSignalId | PayObjectSignalId | PayDestinationSignalId | PayReceiveSignalId | PayPressureSignalId
@@ -45,7 +45,7 @@ export interface PayObservation {
 export type PayRuleId = 'PR1' | 'PR2' | 'PR3' | 'PR4';
 export type PayModifierId = 'C.QUOTED' | 'C.REPORTED' | 'C.EDUCATIONAL' | 'C.CODE_EXAMPLE';
 /** What the reader is promised for paying (pay-to-receive schemes). */
-export type PayPromise = 'refund' | 'prize' | 'account-unlock' | 'release' | 'recruitment' | 'job';
+export type PayPromise = 'refund' | 'prize' | 'account-unlock' | 'release' | 'recruitment' | 'job' | 'investment-return';
 export type PayDestination = 'personal-account' | 'off-platform' | 'gift-card' | 'crypto';
 export type PayPressure = 'threat' | 'urgency' | 'claimed-authority' | 'claimed-family';
 /** Observable placement of the request (same heuristic as the credential detector). */

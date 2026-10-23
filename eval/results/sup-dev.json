@@ -1,58 +1,58 @@
 {
   "split": "sup-dev",
   "note": "DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.",
-  "detectorVersion": "sup-0.7.0-exp",
+  "detectorVersion": "sup-0.8.0-exp",
   "extractorVersion": "0.3.0",
   "metrics": {
-    "scenarios": 50,
+    "scenarios": 56,
     "confusion": {
-      "tp": 23,
+      "tp": 26,
       "fp": 0,
-      "tn": 27,
+      "tn": 30,
       "fn": 0
     },
     "precision": {
-      "k": 23,
-      "n": 23,
+      "k": 26,
+      "n": 26,
       "value": 1,
       "ci95": [
-        0.8569,
+        0.8713,
         1
       ]
     },
     "recall": {
-      "k": 23,
-      "n": 23,
+      "k": 26,
+      "n": 26,
       "value": 1,
       "ci95": [
-        0.8569,
+        0.8713,
         1
       ]
     },
     "fpr": {
       "k": 0,
-      "n": 27,
+      "n": 30,
       "value": 0,
       "ci95": [
         0,
-        0.1246
+        0.1135
       ]
     },
     "hardNegativeFpr": {
       "k": 0,
-      "n": 27,
+      "n": 30,
       "value": 0,
       "ci95": [
         0,
-        0.1246
+        0.1135
       ]
     },
     "localization": {
-      "k": 23,
-      "n": 23,
+      "k": 26,
+      "n": 26,
       "value": 1,
       "ci95": [
-        0.8569,
+        0.8713,
         1
       ]
     },
@@ -65,33 +65,33 @@
       ],
       [
         4,
-        14,
+        17,
         0,
         0
       ],
       [
         0,
         0,
-        3,
-        0
+        2,
+        1
       ],
       [
         0,
         0,
         0,
-        20
+        23
       ]
     ],
     "exactClassAgreement": {
-      "k": 46,
-      "n": 50,
-      "value": 0.92,
+      "k": 51,
+      "n": 56,
+      "value": 0.9107,
       "ci95": [
-        0.8116,
-        0.9685
+        0.8074,
+        0.9613
       ]
     },
-    "observedOnNegatives": 14,
+    "observedOnNegatives": 17,
     "byLanguage": {
       "en": {
         "recall": {
@@ -115,21 +115,21 @@
       },
       "id": {
         "recall": {
-          "k": 16,
-          "n": 16,
+          "k": 19,
+          "n": 19,
           "value": 1,
           "ci95": [
-            0.8064,
+            0.8318,
             1
           ]
         },
         "fpr": {
           "k": 0,
-          "n": 17,
+          "n": 20,
           "value": 0,
           "ci95": [
             0,
-            0.1843
+            0.1611
           ]
         }
       }
@@ -300,9 +300,9 @@
       "truth": "malicious",
       "expectedClass": "suspicious_correlation",
       "hardNegative": false,
-      "predicted": "suspicious_correlation",
+      "predicted": "manipulative_instruction",
       "findings": [
-        "SR2:suspicious_correlation"
+        "SR10:manipulative_instruction"
       ],
       "localized": true,
       "clickfixVerdict": "none",
@@ -569,6 +569,63 @@
       "predicted": "manipulative_instruction",
       "findings": [
         "SR2:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SD22-id-undangan-pernikahan-apk",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "SR10:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SD23-id-kurir-foto-paket-apk",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "SR10:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SD24-id-matikan-play-protect",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "SR10:manipulative_instruction"
       ],
       "localized": true,
       "clickfixVerdict": "none",
@@ -1057,6 +1114,63 @@
       "hardNegative": true,
       "predicted": "none",
       "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SN28-id-halaman-unduh-apk-resmi",
+      "lang": "id",
+      "category": "negative",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "SR5:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SN29-id-artikel-waspada-apk-undangan",
+      "lang": "id",
+      "category": "negative",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "SR5:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "paymentVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "SN30-id-panduan-aksesibilitas",
+      "lang": "id",
+      "category": "negative",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "SR5:observed_instruction"
+      ],
       "localized": null,
       "clickfixVerdict": "none",
       "credentialVerdict": "none",

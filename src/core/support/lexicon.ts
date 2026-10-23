@@ -12,6 +12,8 @@ function entry(id: string, signal: SupportLexiconEntry['signal'], lang: Lang, st
 }
 
 const REMOTE_TOOL = '(?:anydesk|teamviewer(?:\\s+quick\\s*support)?|quick\\s*support|rustdesk|ultraviewer|supremo|airdroid|remote\\s+desktop|remote\\s+access\\s+(?:app|tool|software))';
+/** An .apk file name: letters, digits and _ ( ) - before the extension ("Foto_Paket.apk", "undangan-digital.apk"). */
+const APK_FILE = '[\\p{L}\\p{N}_()-]+\\.apk';
 const APP = '(?:apps?|application|software|program|tool|apk|\\.apk|aplikasi|apl|file\\s+apk)';
 
 // Indonesian banks, e-wallets and marketplaces most often named in impersonated notices (sup-0.4.0, D-091). A name is a claim only.
@@ -53,9 +55,22 @@ const ACTIONS: SupportLexiconEntry[] = [
   entry('sup.id.install', 'SA.INSTALL', 'id', 'strong',
     `${B}(?:instal|install|pasang|unduh|download|dl|donlot)\\s+(?:[\\p{L}-]+\\s+){0,2}?${APP}${E}`,
     ['instal aplikasi', 'unduh aplikasi berikut', 'dl apk', 'download aplikasi cek resi']),
+  // Opening or installing an Android app file (.apk) named in the text (sup-0.8.0, D-102).
+  entry('sup.apk_open', 'SA.INSTALL', 'id', 'strong',
+    `${B}(?:buka|bukak|klik|lihat|liat|cek|unduh|download|instal|install|pasang|jalankan|open|tap|click|view)\\s+(?:\\p{L}+\\s+){0,4}?(?:${APK_FILE}|(?:file|berkas)\\s+apk|apk)${E}`,
+    ['buka file undangan.apk', 'klik lihat foto paket.apk', 'download file apk', 'open the invitation.apk']),
+  // Turning off the device's protection, or granting what banking trojans need: unknown sources, accessibility (sup-0.8.0, D-102).
+  entry('sup.id.disable', 'SA.DISABLE', 'id', 'strong',
+    `${B}(?:(?:matikan|mematikan|nonaktifkan|menonaktifkan|non-?aktifkan|disable)\\s+(?:dulu\\s+|sementara\\s+)?(?:fitur\\s+|layanan\\s+)?(?:google\\s+)?(?:play\\s+protect|anti-?virus|perlindungan\\s+(?:browser|perangkat|keamanan|hp|ponsel)|proteksi(?:\\s+(?:browser|perangkat|hp|ponsel))?|windows\\s+defender|firewall|pemindaian\\s+(?:keamanan|aplikasi))|(?:izinkan|aktifkan|centang|berikan\\s+izin)\\s+(?:instal(?:asi)?\\s+(?:aplikasi\\s+)?(?:dari\\s+)?)?(?:sumber\\s+(?:yang\\s+)?(?:tidak|tak)\\s+(?:dikenal|diketahui)|aplikasi\\s+(?:dari\\s+)?(?:sumber\\s+)?(?:tidak|tak)\\s+dikenal)|(?:aktifkan|izinkan|nyalakan|berikan)\\s+(?:izin\\s+|akses\\s+)?(?:layanan\\s+)?aksesibilitas)${E}`,
+    ['matikan Play Protect', 'menonaktifkan perlindungan browser', 'izinkan sumber tidak dikenal', 'aktifkan aksesibilitas']),
+  entry('sup.en.disable', 'SA.DISABLE', 'en', 'strong',
+    `${B}(?:(?:disable|turn\\s+off|deactivate|switch\\s+off|pause)\\s+(?:your\\s+|the\\s+)?(?:google\\s+)?(?:play\\s+protect|anti-?virus|windows\\s+defender|real[\\s-]time\\s+protection|firewall|browser\\s+protection|security\\s+(?:software|protection))|allow\\s+(?:installs?|installation|apps?)\\s+from\\s+unknown\\s+sources|(?:enable|turn\\s+on|allow|grant)\\s+(?:the\\s+)?accessibility\\s+(?:service|permission|access))${E}`,
+    ['disable Play Protect', 'turn off your antivirus', 'allow installs from unknown sources', 'enable accessibility service']),
 ];
 
 const CHANNELS: SupportLexiconEntry[] = [
+  // An Android app file named in the text ("Undangan Pernikahan Digital.apk", "file APK"). Only its presence counts (D-102).
+  entry('sup.apk_file', 'SX.APK', 'en', 'strong', `${B}(?:${APK_FILE}|(?:file|berkas|aplikasi)\\s+apk|apk\\s+file)${E}`, ['undangan.apk', 'Foto_Paket.apk', 'file APK', 'apk file']),
   // A link in the text. Only its presence counts; the address is never reported or judged (no domain lists, D1).
   entry('sup.link', 'SX.LINK', 'en', 'strong',
     `${B}(?:https?://[^\\s<>"']+|www\\.[^\\s<>"']+|[a-z0-9-]+(?:\\.[a-z0-9-]+)*\\.(?:com|id|net|org|xyz|top|site|online|info|link|me|io|app|ly|cc|biz|click|icu|vip|shop)/[^\\s<>"']*)`,
@@ -105,6 +120,14 @@ const CLAIMS: SupportLexiconEntry[] = [
 ];
 
 const PRESSURE: SupportLexiconEntry[] = [
+  // What an app file is presented as: an invitation, a parcel photo or receipt, a traffic ticket, a bill (D-102). Ordinary words;
+  // they only count together with an app file.
+  entry('sup.id.document', 'SD.DOCUMENT', 'id', 'weak',
+    `${B}(?:(?:surat[\\s_-]+)?undangan(?:nya|[\\s_-]+(?:pernikahan|nikah|digital|resmi))?|(?:foto|bukti|cek|lihat|detail|rincian)[\\s_-]+(?:paket|resi|pengiriman|kiriman|barang)|resi(?:nya|[\\s_-]+(?:pengiriman|paket))?|surat[\\s_-]+(?:tilang|panggilan|tagihan|pemberitahuan)|e-?tilang|tilang[\\s_-]+elektronik|tagihan\\s+(?:bpjs|pln|pajak|listrik|kartu\\s+kredit|pinjaman)|(?:struk|nota|faktur)\\s+(?:pembayaran|transaksi))${E}`,
+    ['Surat Undangan Pernikahan Digital', 'undangannya', 'Undangan_Pernikahan', 'foto paket', 'resi pengiriman', 'surat tilang', 'tagihan BPJS']),
+  entry('sup.en.document', 'SD.DOCUMENT', 'en', 'weak',
+    `${B}(?:(?:wedding\\s+)?invitation|(?:parcel|package|delivery)\\s+(?:photo|picture|receipt|details)|tracking\\s+(?:receipt|slip|details)|traffic\\s+(?:ticket|fine)|(?:unpaid\\s+)?invoice)${E}`,
+    ['wedding invitation', 'parcel photo', 'traffic ticket', 'invoice']),
   // A virus, hack or lock asserted about the reader's device or browser; conditionals ("if your PC is infected") are hypothetical.
   entry('sup.en.alert', 'SW.ALERT', 'en', 'strong',
     `${B}(?:(?:your|this)\\s+(?:computer|pc|device|system|browser|phone|mac|windows)\\s+(?:is|has\\s+been|was|may\\s+be)\\s+(?:infected|compromised|hacked|locked|blocked|disabled)|(?:virus(?:es)?|trojans?|malware|spyware|adware)\\s+(?:has\\s+been\\s+|have\\s+been\\s+|were\\s+)?(?:detected|found)\\s+on\\s+(?:your|this)|(?:access\\s+to\\s+)?this\\s+(?:pc|computer)\\s+has\\s+been\\s+blocked|security\\s+breach\\s+detected|do\\s+not\\s+(?:shut\\s+down|restart|turn\\s+off|close)\\s+(?:your\\s+)?(?:computer|pc|this\\s+(?:window|page)))${E}`,

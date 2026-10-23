@@ -1,0 +1,22 @@
+{
+  "id": "SN29-id-artikel-waspada-apk-undangan",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "negative",
+  "threatClass": "T-SUP",
+  "truth": "benign",
+  "expectedClass": "observed_instruction",
+  "hardNegative": true,
+  "pages": [
+    {
+      "url": "https://info.layanan.test/sn29-id-artikel-waspada-apk-undangan",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "description": "Artikel kewaspadaan tentang modus APK undangan",
+  "rationale": "Teks edukasi dengan negasi.",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; scam classes from public reports (APK lures, fixed-return investment, marketplace down payments; D-102), written in own words, labels written before the first run",
+  "created": "2026-10-23",
+  "evidenceWithin": null
+}

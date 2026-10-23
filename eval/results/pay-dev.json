@@ -1,58 +1,58 @@
 {
   "split": "pay-dev",
   "note": "DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.",
-  "detectorVersion": "pay-0.6.0-exp",
+  "detectorVersion": "pay-0.7.0-exp",
   "extractorVersion": "0.3.0",
   "metrics": {
-    "scenarios": 49,
+    "scenarios": 53,
     "confusion": {
-      "tp": 22,
+      "tp": 24,
       "fp": 0,
-      "tn": 27,
+      "tn": 29,
       "fn": 0
     },
     "precision": {
-      "k": 22,
-      "n": 22,
+      "k": 24,
+      "n": 24,
       "value": 1,
       "ci95": [
-        0.8513,
+        0.862,
         1
       ]
     },
     "recall": {
-      "k": 22,
-      "n": 22,
+      "k": 24,
+      "n": 24,
       "value": 1,
       "ci95": [
-        0.8513,
+        0.862,
         1
       ]
     },
     "fpr": {
       "k": 0,
-      "n": 27,
+      "n": 29,
       "value": 0,
       "ci95": [
         0,
-        0.1246
+        0.117
       ]
     },
     "hardNegativeFpr": {
       "k": 0,
-      "n": 27,
+      "n": 29,
       "value": 0,
       "ci95": [
         0,
-        0.1246
+        0.117
       ]
     },
     "localization": {
-      "k": 22,
-      "n": 22,
+      "k": 24,
+      "n": 24,
       "value": 1,
       "ci95": [
-        0.8513,
+        0.862,
         1
       ]
     },
@@ -65,33 +65,33 @@
       ],
       [
         3,
-        18,
+        20,
         0,
         0
       ],
       [
         0,
         0,
-        2,
+        3,
         0
       ],
       [
         0,
         0,
         0,
-        20
+        21
       ]
     ],
     "exactClassAgreement": {
-      "k": 46,
-      "n": 49,
-      "value": 0.9388,
+      "k": 50,
+      "n": 53,
+      "value": 0.9434,
       "ci95": [
-        0.8348,
-        0.979
+        0.8463,
+        0.9806
       ]
     },
-    "observedOnNegatives": 18,
+    "observedOnNegatives": 20,
     "byLanguage": {
       "en": {
         "recall": {
@@ -115,21 +115,21 @@
       },
       "id": {
         "recall": {
-          "k": 16,
-          "n": 16,
+          "k": 18,
+          "n": 18,
           "value": 1,
           "ci95": [
-            0.8064,
+            0.8241,
             1
           ]
         },
         "fpr": {
           "k": 0,
-          "n": 17,
+          "n": 19,
           "value": 0,
           "ci95": [
             0,
-            0.1843
+            0.1682
           ]
         }
       }
@@ -529,6 +529,42 @@
       "predicted": "manipulative_instruction",
       "findings": [
         "PR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PD22-id-investasi-profit-harian",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "PR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PD23-id-dp-rekening-pribadi-buruan",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "suspicious_correlation",
+      "hardNegative": false,
+      "predicted": "suspicious_correlation",
+      "findings": [
+        "PR2:suspicious_correlation"
       ],
       "localized": true,
       "clickfixVerdict": "none",
@@ -990,6 +1026,42 @@
     },
     {
       "id": "PN27-id-toko-bayar-terlebih-dahulu",
+      "lang": "id",
+      "category": "negative",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "PR4:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN28-id-deposito-bunga-tahunan",
+      "lang": "id",
+      "category": "negative",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "PR4:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN29-id-reksa-dana-tanpa-jaminan",
       "lang": "id",
       "category": "negative",
       "truth": "benign",

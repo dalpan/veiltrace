@@ -24,6 +24,12 @@ const REQUESTS: PayLexiconEntry[] = [
   entry('pay.id.pay_obligation', 'PY.PAY', 'id', 'strong',
     `${B}(?:selesaikan\\s+pembayaran|(?:jika|kalau|bila|apabila)\\s+(?:tidak|tdk|ga|gak|ora)\\s+(?:membayar|bayar|mentransfer|transfer)|(?:harus|wajib|segera|mohon)\\s+di\\s?(?:kirim|transfer)(?:kan)?|(?:saldo|deposit)\\s+(?:\\p{L}+\\s+)?(?:harus|wajib|perlu)\\s+(?:di)?isi)${E}`,
     ['selesaikan pembayaran', 'jika tidak membayar', 'harus dikirim', 'saldo tugas harus diisi']),
+  // A down payment ("DP 50% dulu", "uang muka"): a request like any other; it needs an amount or a destination (D-102).
+  entry('pay.id.down_payment', 'PY.PAY', 'id', 'strong', `${B}(?:dp|uang\\s+muka|down\\s*payment)(?:\\s+\\d+\\s?%)?(?:\\s+(?:dulu|dl|duluan))?${E}`, ['DP 50% dulu', 'uang muka', 'DP dl']),
+  // Paying in capital for an "investment" ("setor modal", "investasikan dana", "modal mulai 500rb") (D-102).
+  entry('pay.id.invest_pay', 'PY.PAY', 'id', 'strong',
+    `${B}(?:setor(?:kan)?\\s+modal|(?:investasikan|tanamkan)\\s+(?:dana|modal|uang)|modal\\s+(?:awal\\s+)?(?:minimal|hanya|cuma|mulai(?:\\s+dari)?))${E}`,
+    ['setor modal', 'investasikan dana', 'modal awal minimal', 'modal mulai dari']),
   // Phone-credit (pulsa) requests, a bare account handed over to pay into, and a payment routed through someone (pay-0.5.0).
   entry('pay.id.pulsa', 'PY.PAY', 'id', 'strong',
     `${B}(?:(?:kirim(?:i|in|kan)?|isi(?:kan|in)?|beli(?:kan|in|kn)?|tf(?:in)?)\\s+(?:\\p{L}+\\s+){0,2}?pulsa|ini\\s+(?:no\\.?\\s*)?rek(?:ening)?(?:nya|ku)?|(?:kirim|transfer|tf)(?:kan)?\\s+ke\\s+(?:bank|rek(?:ening)?)|di\\s?transfer\\s+ke\\s+rek(?:ening)?|pembayaran(?:nya)?\\s+(?:harus|agar|supaya|mohon|wajib)\\s+(?:\\p{L}+\\s+)?(?:melalui|lewat|via|ke|di)|(?:hanya|cuma)\\s+(?:melalui|lewat|via|ke)\\s+rek(?:ening)?)${E}`,
@@ -113,6 +119,14 @@ const RECEIVE: PayLexiconEntry[] = [
   entry('pay.en.job', 'PR.JOB', 'en', 'weak',
     `${B}(?:job\\s+offer|you(?:${APOS}ve|\\s+have)\\s+been\\s+(?:hired|selected\\s+for\\s+the\\s+(?:job|position))|new\\s+(?:hire|employee)s?|(?:work|job)\\s+from\\s+home\\s+(?:job|position))${E}`,
     ['job offer', "you've been hired", 'new employees']),
+  // A guaranteed or fixed investment return: a percentage per day or week, a profit that is "fixed", "certain" or "guaranteed",
+  // capital that "doubles", an investment "without risk" (D-102). Interest per month or year (deposits, loans) is not matched.
+  entry('pay.id.invest', 'PR.INVEST', 'id', 'strong',
+    `${B}(?:(?:keuntungan|profit|untung|cuan|hasil)\\s+(?:harian\\s+)?(?:tetap|pasti|dijamin|terjamin|konsisten)|\\d+(?:[.,]\\d+)?\\s?%\\s*(?:per|tiap|setiap|/)\\s*(?:hari|minggu|pekan)|(?:modal|dana|uang)\\s+(?:\\p{L}+\\s+){0,2}?(?:dijamin\\s+)?(?:berlipat(?:\\s+ganda)?|kembali\\s+\\d+\\s?(?:x|kali))|(?:investasi|modal|dana)\\s+(?:\\p{L}+\\s+){0,3}?(?:tanpa|bebas|nol)\\s+risiko|(?:pasti|dijamin)\\s+(?:untung|profit|cuan))${E}`,
+    ['keuntungan tetap', 'profit 5% per hari', 'modal dijamin berlipat', 'investasi tanpa risiko', 'pasti untung']),
+  entry('pay.en.invest', 'PR.INVEST', 'en', 'strong',
+    `${B}(?:guaranteed\\s+(?:returns?|profits?|income|daily\\s+(?:returns?|profits?))|(?:fixed|daily)\\s+(?:returns?|profits?)|\\d+(?:\\.\\d+)?\\s?%\\s*(?:daily|per\\s+day|a\\s+day|per\\s+week|weekly)|risk[\\s-]free\\s+(?:investment|returns?|profits?)|double\\s+your\\s+(?:money|investment|capital))${E}`,
+    ['guaranteed returns', '3% daily', 'risk-free investment', 'double your money']),
   entry('pay.en.recruit', 'PR.RECRUIT', 'en', 'strong',
     `${B}(?:guaranteed\\s+(?:to\\s+pass|admission|acceptance|a\\s+(?:place|spot|seat))|back[\\s-]?door\\s+(?:entry|admission|route)|special\\s+(?:quota|route)\\s+for\\s+(?:a\\s+)?fee)${E}`,
     ['guaranteed to pass', 'backdoor admission']),

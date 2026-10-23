@@ -48,23 +48,23 @@ const PAY_FINDING_KEYS = ['id', 'ruleId', 'classification', 'ruleClassification'
   'trustContext', 'modifiers', 'limitations', 'evidence', 'evidenceTotal'];
 const PAY_RULES = ['PR1', 'PR2', 'PR3', 'PR4'] as const;
 const PAY_SIGNALS = ['PY.PAY', 'PA.AMOUNT', 'PF.FEE', 'PF.RELEASE_FEE', 'PD.PERSONAL', 'PD.OFF_PLATFORM', 'PD.GIFT_CARD', 'PD.CRYPTO',
-  'PR.REFUND', 'PR.PRIZE', 'PR.UNLOCK', 'PR.RECRUIT', 'PR.JOB', 'PC.CONDITION', 'PP.THREAT', 'PP.URGENCY', 'PP.AUTHORITY', 'PP.FAMILY', 'C.NEGATION', 'C.REPORTED', 'C.EDUCATIONAL'] as const;
-const PROMISES = ['refund', 'prize', 'account-unlock', 'release', 'recruitment', 'job'] as const;
+  'PR.REFUND', 'PR.PRIZE', 'PR.UNLOCK', 'PR.RECRUIT', 'PR.JOB', 'PR.INVEST', 'PC.CONDITION', 'PP.THREAT', 'PP.URGENCY', 'PP.AUTHORITY', 'PP.FAMILY', 'C.NEGATION', 'C.REPORTED', 'C.EDUCATIONAL'] as const;
+const PROMISES = ['refund', 'prize', 'account-unlock', 'release', 'recruitment', 'job', 'investment-return'] as const;
 const PAY_DESTINATIONS = ['personal-account', 'off-platform', 'gift-card', 'crypto'] as const;
 const PRESSURES = ['threat', 'urgency', 'claimed-authority', 'claimed-family'] as const;
 const PAY_LIMITS = ['claimed-identity-unverifiable', 'trust-boundary-heuristic', 'amount-not-reported'] as const;
 // M5.3 experimental support section.
 const SUP_FINDING_KEYS = ['id', 'ruleId', 'classification', 'ruleClassification', 'confidence', 'actionRisk', 'requestedActions', 'channels', 'claims',
   'indicators', 'pressures', 'trustContext', 'modifiers', 'limitations', 'evidence', 'evidenceTotal'];
-const SUP_RULES = ['SR1', 'SR2', 'SR3', 'SR4', 'SR5', 'SR6', 'SR7', 'SR8', 'SR9'] as const;
-const SUP_SIGNALS = ['SC.CONTACT', 'SC.RESPOND', 'SC.SURVEY', 'SA.REMOTE', 'SA.INSTALL', 'SX.PHONE', 'SX.MOBILE', 'SX.MESSENGER', 'SX.LINK', 'SI.SUPPORT', 'SI.BANK', 'SI.ADMIN', 'SI.SECURITY', 'SI.OFFICIAL', 'SI.ORG',
-  'SW.ALERT', 'SW.ACCOUNT', 'ST.THREAT', 'SU.URGENCY', 'SP.REWARD', 'SP.WON', 'SO.ILLICIT', 'SO.PROXY', 'SH.UNASSERTED', 'C.NEGATION', 'C.REPORTED', 'C.EDUCATIONAL'] as const;
-const SUP_ACTIONS = ['contact', 'respond', 'survey', 'remote-access', 'install'] as const;
-const SUP_CHANNELS = ['phone', 'mobile', 'messenger', 'link'] as const;
+const SUP_RULES = ['SR1', 'SR2', 'SR3', 'SR4', 'SR5', 'SR6', 'SR7', 'SR8', 'SR9', 'SR10'] as const;
+const SUP_SIGNALS = ['SC.CONTACT', 'SC.RESPOND', 'SC.SURVEY', 'SA.REMOTE', 'SA.INSTALL', 'SA.DISABLE', 'SX.PHONE', 'SX.MOBILE', 'SX.MESSENGER', 'SX.LINK', 'SX.APK', 'SI.SUPPORT', 'SI.BANK', 'SI.ADMIN', 'SI.SECURITY', 'SI.OFFICIAL', 'SI.ORG',
+  'SW.ALERT', 'SW.ACCOUNT', 'ST.THREAT', 'SU.URGENCY', 'SP.REWARD', 'SP.WON', 'SO.ILLICIT', 'SO.PROXY', 'SD.DOCUMENT', 'SH.UNASSERTED', 'C.NEGATION', 'C.REPORTED', 'C.EDUCATIONAL'] as const;
+const SUP_ACTIONS = ['contact', 'respond', 'survey', 'remote-access', 'install', 'disable-protection'] as const;
+const SUP_CHANNELS = ['phone', 'mobile', 'messenger', 'link', 'apk-file'] as const;
 const SUP_CLAIMS = ['support', 'bank', 'administrator', 'security-team', 'official', 'organization'] as const;
 const SUP_INDICATORS = ['page-rendered-system-alert', 'remote-access-request', 'software-install-request', 'personal-channel-contact', 'claim-in-user-content',
-  'alert-in-overlay'] as const;
-const SUP_PRESSURES = ['system-alert', 'account-alarm', 'threat', 'urgency', 'reward', 'pre-won', 'illicit-access', 'third-party-redirect'] as const;
+  'alert-in-overlay', 'protection-disable-request', 'apk-file-in-message'] as const;
+const SUP_PRESSURES = ['system-alert', 'account-alarm', 'threat', 'urgency', 'reward', 'pre-won', 'illicit-access', 'third-party-redirect', 'document-pretext'] as const;
 const SUP_LIMITS = ['claimed-identity-unverifiable', 'trust-boundary-heuristic', 'contact-details-not-reported'] as const;
 const HIGHLIGHT: readonly HighlightStatus[] = ['highlighted', 'invalid-locator', 'not-found', 'frame-inaccessible', 'not-visible'];
 

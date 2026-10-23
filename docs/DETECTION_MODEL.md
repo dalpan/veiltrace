@@ -424,3 +424,19 @@ Tuned on the train and validation splits of the synthetic Indonesian corpus (EVA
 - **Support:** `SA.REMOTE` adds "akses kendali jarak jauh", `SW.ALERT` adds "perangkat Bapak/Ibu", and `SI.SUPPORT` adds "dukungan teknis" and "petugas".
 - **Awareness (all three detectors):** "waspadai/hati-hati (terhadap) pesan/oknum/tautan …" is `C.EDUCATIONAL`, and "pesan/oknum yang mengatasnamakan/mengaku …" is `C.REPORTED`. These cues are detector-local (`src/core/awareness.ts`), so the ClickFix engine 0.3.0 is unchanged.
 - **Dev results:** scam alerted 397 → 2,908 of 6,480, and benign 10 → 0 of 4,455. The SMS dataset dev half and the field sample are unchanged. Not covered: ponzi promises without a requested action, romance loans, charity appeals, document uploads, requests to disable browser protection, and deliberate typos.
+
+## 21. App-file lures, turning off protection, fixed-return investment (D-102): sup 0.8.0, pay 0.7.0 (development data only)
+- **SR10 APP_FILE_LURE (support).** Inputs:
+  - `SX.APK`: an .apk file named in the text, or "file/berkas APK".
+  - `SA.DISABLE`: "matikan Play Protect", "nonaktifkan perlindungan browser/antivirus", "izinkan sumber tidak dikenal", "aktifkan aksesibilitas", and the English equivalents.
+  - `SD.DOCUMENT`: undangan (pernikahan), foto/bukti paket, resi, surat tilang, e-tilang, tagihan BPJS/PLN/pajak; underscores and hyphens in file names count as spaces.
+  - An open/install verb before an .apk (`SA.INSTALL`).
+
+  Decision, only in untrusted content (a message or user post) or with a personal channel:
+  - **manipulative:** an app file with a document pretext or a protection request, or any app file or protection request with a claim, urgency, a threat or an alarm;
+  - **suspicious:** an open/install request or a protection request alone;
+  - **observed:** a file name alone.
+
+  On a site's own page an app file is a download (SR5, observed). `SA.DISABLE` also counts as the action of SR1 (fake alarm) and SR2 (claimed support), and is manipulative under SR2 with urgency or in user content.
+- **PR.INVEST (payment).** "keuntungan/profit tetap, pasti, dijamin", "N% per hari/minggu", "modal dijamin berlipat", "investasi tanpa risiko", "guaranteed returns", "N% daily". A payment request near it is PR1, as with a paid guarantee of selection. Monthly and yearly interest is excluded, so deposits and loans are not matched. `PY.PAY` adds "setor modal", "investasikan dana", "modal mulai/minimal" and "DP/uang muka".
+- **Dev results.** Synthetic: 2,908 → 3,104 of 6,480 scam alerted; benign 0 of 4,455. SMS dev half, field sample, cred-dev and ClickFix dev: unchanged. pay-dev 53 and sup-dev 56, FP 0.

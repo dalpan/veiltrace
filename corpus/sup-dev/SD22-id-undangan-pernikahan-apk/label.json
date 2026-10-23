@@ -1,0 +1,22 @@
+{
+  "id": "SD22-id-undangan-pernikahan-apk",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-SUP",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://sms.pesan.test/sd22-id-undangan-pernikahan-apk",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#log",
+  "description": "File APK berkedok undangan pernikahan digital dikirim lewat chat",
+  "rationale": "File aplikasi disebut sebagai undangan, dalam pesan (SR10).",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; scam classes from public reports (APK lures, fixed-return investment, marketplace down payments; D-102), written in own words, labels written before the first run",
+  "created": "2026-10-23"
+}

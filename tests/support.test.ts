@@ -34,10 +34,10 @@ describe('support detector: manipulative and suspicious directions', () => {
     expect(r.findings[0]!.indicators).toEqual(['remote-access-request']);
   });
 
-  it('SR2 informal Indonesian: "kurir" asks to download an APK over WA → suspicious', () => {
+  it('informal Indonesian: "kurir" asks to download a receipt .apk over WA → manipulative (SR10 since sup-0.8.0, was SR2 suspicious)', () => {
     const r = sup(inContainer('ugc:#m', ['kak sy kurir, paketnya ga bisa dikirim. dl aplikasi cek resi.apk ini ya']));
-    expect(short(r)).toEqual(['SR2:suspicious_correlation']);
-    expect(r.findings[0]!.indicators).toEqual(['software-install-request', 'claim-in-user-content']);
+    expect(short(r)).toEqual(['SR10:manipulative_instruction']);
+    expect(r.findings[0]!.indicators).toEqual(['software-install-request', 'apk-file-in-message', 'claim-in-user-content']);
   });
 
   it('SR3: claimed CS + account threat + WhatsApp mobile number + urgency → manipulative; the number is never reported', () => {
@@ -246,5 +246,38 @@ describe('support detector sup-0.7.0-exp: remote access in Indonesian (D-100)', 
 
   it('a help page saying officers never ask for remote access stays quiet', () => {
     expect(analyzeSupport(snapshot(['Petugas kami tidak pernah meminta Anda memberikan akses kendali jarak jauh ke perangkat.'])).verdict).toBe('none');
+  });
+});
+
+describe('support detector sup-0.8.0-exp: app-file lures and turning off protection (D-102)', () => {
+  const sup = (container: string | null, lines: string[]) => analyzeSupport(snapshot(container ? inContainer(container, lines) : lines));
+  const short = (r: SupportResult): string[] => r.findings.map((f) => `${f.ruleId}:${f.classification}`);
+
+  it('an .apk presented as a wedding invitation in a chat → manipulative (SR10), with the app-file indicator', () => {
+    const r = sup('ugc:#chat', ['Surat Undangan Pernikahan Digital.apk', 'Kami harap kehadirannya ya']);
+    expect(short(r)).toEqual(['SR10:manipulative_instruction']);
+    expect(r.findings[0]!.channels).toContain('apk-file');
+    expect(r.findings[0]!.indicators).toContain('apk-file-in-message');
+    expect(r.findings[0]!.pressures).toContain('document-pretext');
+  });
+
+  it('a message that only says to install an apk → suspicious; turning off Play Protect in a message → suspicious', () => {
+    expect(short(sup('ugc:#chat', ['Kak tolong download file apk ini lalu install ya']))).toEqual(['SR10:suspicious_correlation']);
+    const r = sup('ugc:#chat', ['Setelah instal, matikan Play Protect dan izinkan sumber tidak dikenal agar aplikasi bisa berjalan']);
+    expect(short(r)).toEqual(['SR10:suspicious_correlation']);
+    expect(r.findings[0]!.requestedActions).toContain('disable-protection');
+  });
+
+  it('a fake virus alert that says to turn off the antivirus → manipulative (SR1)', () => {
+    expect(short(sup(null, ['Your computer is infected! Turn off your antivirus and call Microsoft Support at +1 888 555 0199 immediately']))).toEqual(['SR1:manipulative_instruction']);
+  });
+
+  it('a download page, a developer sharing a build, an accessibility guide and an awareness article stay below alert', () => {
+    for (const [c, lines] of [
+      [null, ['Unduh CatatanBelanja-2.4.apk dari halaman ini, atau pasang lewat Google Play.']],
+      ['ugc:#chat', ['Bro ini build terbaru app-debug.apk, tolong dites ya']],
+      [null, ['Untuk pengguna tunanetra, aktifkan aksesibilitas TalkBack di menu Pengaturan.']],
+      [null, ['Waspada modus undangan pernikahan .apk: jangan buka file apk dari nomor tidak dikenal.']],
+    ] as Array<[string | null, string[]]>) expect(sup(c, lines).verdict, lines[0]).not.toMatch(/suspicious|manipulative/);
   });
 });

@@ -1,14 +1,14 @@
 # Support-impersonation detector: development results (sup-dev)
 
-Detector sup-0.7.0-exp (EXPERIMENTAL), extractor 0.3.0. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
+Detector sup-0.8.0-exp (EXPERIMENTAL), extractor 0.3.0. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
 
-TP 23 · FP 0 · TN 27 · FN 0
+TP 26 · FP 0 · TN 30 · FN 0
 
-- Precision: 100.0% (23/23; 95% CI 85.7%–100.0%)
-- Recall: 100.0% (23/23; 95% CI 85.7%–100.0%)
-- Hard-negative FPR: 0.0% (0/27; 95% CI 0.0%–12.5%)
-- Localization: 100.0% (23/23; 95% CI 85.7%–100.0%)
-- Exact class agreement: 92.0% (46/50; 95% CI 81.2%–96.8%)
+- Precision: 100.0% (26/26; 95% CI 87.1%–100.0%)
+- Recall: 100.0% (26/26; 95% CI 87.1%–100.0%)
+- Hard-negative FPR: 0.0% (0/30; 95% CI 0.0%–11.4%)
+- Localization: 100.0% (26/26; 95% CI 87.1%–100.0%)
+- Exact class agreement: 91.1% (51/56; 95% CI 80.7%–96.1%)
 - Requests during scanning: 0; privacy sentinel leaks: 0 (0 fields filled); phone numbers or digit runs in results: 0
 
 ## Class matrix
@@ -16,9 +16,9 @@ TP 23 · FP 0 · TN 27 · FN 0
 | expected \ predicted | none | observed | suspicious | manipulative |
 |---|---|---|---|---|
 | none | 9 | 0 | 0 | 0 |
-| observed | 4 | 14 | 0 | 0 |
-| suspicious | 0 | 0 | 3 | 0 |
-| manipulative | 0 | 0 | 0 | 20 |
+| observed | 4 | 17 | 0 | 0 |
+| suspicious | 0 | 0 | 2 | 1 |
+| manipulative | 0 | 0 | 0 | 23 |
 
 ## Per scenario
 
@@ -32,7 +32,7 @@ TP 23 · FP 0 · TN 27 · FN 0
 | SD04-id-cs-palsu-wa-akun-diblokir | malicious | manipulative | manipulative | SR3:manipulative_instruction | ✓ | none | none | none |
 | SD05-en-forum-official-support-telegram | malicious | suspicious | suspicious | SR4:suspicious_correlation | ✓ | none | none | none |
 | SD06-id-komentar-admin-informal-japri | malicious | manipulative | manipulative | SR3:manipulative_instruction | ✓ | none | none | none |
-| SD07-id-kurir-apk-informal | malicious | suspicious | suspicious | SR2:suspicious_correlation | ✓ | none | none | none |
+| SD07-id-kurir-apk-informal | malicious | suspicious | manipulative | SR10:manipulative_instruction | ✓ | none | none | none |
 | SD08-en-chat-widget-it-admin-remote | malicious | manipulative | manipulative | SR2:manipulative_instruction | ✓ | none | none | none |
 | SD09-en-browser-locked-fullpage | malicious | manipulative | manipulative | SR1:manipulative_instruction | ✓ | none | none | none |
 | SD10-id-tim-it-anydesk-informal | malicious | manipulative | manipulative | SR2:manipulative_instruction | ✓ | none | none | none |
@@ -47,6 +47,9 @@ TP 23 · FP 0 · TN 27 · FN 0
 | SD19-id-sms-undian-pin-pemenang | malicious | manipulative | manipulative | SR7:manipulative_instruction | ✓ | none | none | none |
 | SD20-id-sms-pembeli-palsu-hubungi-suami | malicious | manipulative | manipulative | SR9:manipulative_instruction | ✓ | none | none | none |
 | SD21-id-akses-kendali-jarak-jauh | malicious | manipulative | manipulative | SR2:manipulative_instruction | ✓ | none | none | none |
+| SD22-id-undangan-pernikahan-apk | malicious | manipulative | manipulative | SR10:manipulative_instruction | ✓ | none | none | none |
+| SD23-id-kurir-foto-paket-apk | malicious | manipulative | manipulative | SR10:manipulative_instruction | ✓ | none | none | none |
+| SD24-id-matikan-play-protect | malicious | manipulative | manipulative | SR10:manipulative_instruction | ✓ | none | none | none |
 | SN01-en-help-center-contact | benign | observed | observed | SR5:observed_instruction |  | none | none | none |
 | SN02-id-pusat-bantuan-kontak | benign | observed | observed | SR5:observed_instruction |  | none | none | none |
 | SN03-en-it-helpdesk-remote-procedure | benign | observed | observed | SR5:observed_instruction |  | none | none | none |
@@ -74,3 +77,6 @@ TP 23 · FP 0 · TN 27 · FN 0
 | SN25-id-sms-bonus-kuota-operator | benign | none | none |  |  | none | none | none |
 | SN26-id-sms-pengumuman-undian-resmi | benign | none | none |  |  | none | none | none |
 | SN27-id-petugas-tidak-meminta-akses | benign | none | none |  |  | none | none | none |
+| SN28-id-halaman-unduh-apk-resmi | benign | observed | observed | SR5:observed_instruction |  | none | none | none |
+| SN29-id-artikel-waspada-apk-undangan | benign | observed | observed | SR5:observed_instruction |  | none | none | none |
+| SN30-id-panduan-aksesibilitas | benign | observed | observed | SR5:observed_instruction |  | none | none | none |

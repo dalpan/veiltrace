@@ -1,0 +1,22 @@
+{
+  "id": "PD23-id-dp-rekening-pribadi-buruan",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-PAY",
+  "truth": "malicious",
+  "expectedClass": "suspicious_correlation",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://sms.pesan.test/pd23-id-dp-rekening-pribadi-buruan",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#log",
+  "description": "Penjual meminta DP ke rekening pribadi dengan desakan stok",
+  "rationale": "Bayar ke rekening pribadi dengan desakan dalam pesan (PR2).",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; scam classes from public reports (APK lures, fixed-return investment, marketplace down payments; D-102), written in own words, labels written before the first run",
+  "created": "2026-10-23"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "SD24-id-matikan-play-protect",
+  "split": "sup-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-SUP",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://sms.pesan.test/sd24-id-matikan-play-protect",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#log",
+  "description": "Pesan meminta mematikan Play Protect dan mengizinkan sumber tidak dikenal, dengan desakan",
+  "rationale": "Permintaan mematikan perlindungan + desakan dalam pesan (SR10).",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; scam classes from public reports (APK lures, fixed-return investment, marketplace down payments; D-102), written in own words, labels written before the first run",
+  "created": "2026-10-23"
+}

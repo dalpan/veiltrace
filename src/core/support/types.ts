@@ -4,13 +4,13 @@
 import type { ActionRisk, Classification, Lang, Level, Strength, Verdict } from '../types.js';
 
 /** What the reader is directed to do. */
-export type SupportActionSignalId = 'SC.CONTACT' | 'SC.RESPOND' | 'SC.SURVEY' | 'SA.REMOTE' | 'SA.INSTALL';
+export type SupportActionSignalId = 'SC.CONTACT' | 'SC.RESPOND' | 'SC.SURVEY' | 'SA.REMOTE' | 'SA.INSTALL' | 'SA.DISABLE';
 /** The channel of a contact direction. Phone numbers are matched but never reported. */
-export type SupportChannelSignalId = 'SX.PHONE' | 'SX.MOBILE' | 'SX.MESSENGER' | 'SX.LINK';
+export type SupportChannelSignalId = 'SX.PHONE' | 'SX.MOBILE' | 'SX.MESSENGER' | 'SX.LINK' | 'SX.APK';
 /** Claimed identity: a claim only, never evidence of who wrote the text. */
 export type SupportClaimSignalId = 'SI.SUPPORT' | 'SI.BANK' | 'SI.ADMIN' | 'SI.SECURITY' | 'SI.OFFICIAL' | 'SI.ORG';
 /** Pressure: a page-rendered system or browser alarm, an account alarm, a threat to the account or data, urgency, a reward. */
-export type SupportPressureSignalId = 'SW.ALERT' | 'SW.ACCOUNT' | 'ST.THREAT' | 'SU.URGENCY' | 'SP.REWARD' | 'SP.WON' | 'SO.ILLICIT' | 'SO.PROXY';
+export type SupportPressureSignalId = 'SW.ALERT' | 'SW.ACCOUNT' | 'ST.THREAT' | 'SU.URGENCY' | 'SP.REWARD' | 'SP.WON' | 'SO.ILLICIT' | 'SO.PROXY' | 'SD.DOCUMENT';
 export type SupportSignalId = SupportActionSignalId | SupportChannelSignalId | SupportClaimSignalId | SupportPressureSignalId
   | 'SH.UNASSERTED' | 'C.NEGATION' | 'C.REPORTED' | 'C.EDUCATIONAL';
 export type SupportSignalKind = 'action' | 'channel' | 'claim' | 'pressure' | 'context';
@@ -41,12 +41,12 @@ export interface SupportObservation {
   reported: boolean;
 }
 
-export type SupportRuleId = 'SR1' | 'SR2' | 'SR3' | 'SR4' | 'SR5' | 'SR6' | 'SR7' | 'SR8' | 'SR9';
+export type SupportRuleId = 'SR1' | 'SR2' | 'SR3' | 'SR4' | 'SR5' | 'SR6' | 'SR7' | 'SR8' | 'SR9' | 'SR10';
 export type SupportModifierId = 'C.QUOTED' | 'C.REPORTED' | 'C.EDUCATIONAL' | 'C.CODE_EXAMPLE';
-export type SupportAction = 'contact' | 'respond' | 'survey' | 'remote-access' | 'install';
-export type SupportChannel = 'phone' | 'mobile' | 'messenger' | 'link';
+export type SupportAction = 'contact' | 'respond' | 'survey' | 'remote-access' | 'install' | 'disable-protection';
+export type SupportChannel = 'phone' | 'mobile' | 'messenger' | 'link' | 'apk-file';
 export type SupportClaim = 'support' | 'bank' | 'administrator' | 'security-team' | 'official' | 'organization';
-export type SupportPressure = 'system-alert' | 'account-alarm' | 'threat' | 'urgency' | 'reward' | 'pre-won' | 'illicit-access' | 'third-party-redirect';
+export type SupportPressure = 'system-alert' | 'account-alarm' | 'threat' | 'urgency' | 'reward' | 'pre-won' | 'illicit-access' | 'third-party-redirect' | 'document-pretext';
 /**
  * Observable impersonation indicators: facts about the page, as opposed to what it claims. None of them proves who wrote it.
  * - page-rendered-system-alert: a virus/lock alarm drawn by the web page (browsers and operating systems do not alert inside pages)
@@ -54,9 +54,11 @@ export type SupportPressure = 'system-alert' | 'account-alarm' | 'threat' | 'urg
  * - personal-channel-contact: an official-sounding claim routed to a mobile number or messenger account
  * - claim-in-user-content: an official claim posted inside comments or other user content
  * - alert-in-overlay: the alarm sits in an overlay or dialog covering the page
+ * - protection-disable-request: asks to turn off Play Protect, antivirus or browser protection, allow unknown sources or grant accessibility
+ * - apk-file-in-message: an Android app file (.apk) offered inside a message or user content
  */
 export type ImpersonationIndicator = 'page-rendered-system-alert' | 'remote-access-request' | 'software-install-request' | 'personal-channel-contact'
-  | 'claim-in-user-content' | 'alert-in-overlay';
+  | 'claim-in-user-content' | 'alert-in-overlay' | 'protection-disable-request' | 'apk-file-in-message';
 export type SupportTrustContext = 'user-content' | 'third-party-widget' | 'embedded-frame' | 'dialog' | 'overlay' | 'form';
 export type SupportLimitation = 'claimed-identity-unverifiable' | 'trust-boundary-heuristic' | 'contact-details-not-reported';
 

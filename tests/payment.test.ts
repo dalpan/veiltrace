@@ -238,3 +238,20 @@ describe('payment detector pay-0.6.0-exp: message-scam phrasing (D-100)', () => 
     expect(r.verdict).not.toMatch(/suspicious|manipulative/);
   });
 });
+
+describe('payment detector pay-0.7.0-exp: fixed-return investment and down payments (D-102)', () => {
+  it('paying in capital for a fixed daily profit → manipulative (PR1, investment return)', () => {
+    const r = pay(inContainer('ugc:#chat', ['Gabung sekarang, profit 3% per hari, modal mulai 500rb, transfer ke 1234567890']));
+    expect(short(r)).toEqual(['PR1:manipulative_instruction']);
+    expect(r.findings[0]!.promises).toContain('investment-return');
+  });
+
+  it('a down payment to a personal account with stock pressure → suspicious (PR2)', () => {
+    expect(short(pay(inContainer('ugc:#chat', ['DP 50% dulu ke rekening saya 1234567890, sisanya setelah barang sampai. Stok tinggal 1, buruan.'])))).toEqual(['PR2:suspicious_correlation']);
+  });
+
+  it('a deposit with yearly interest and a mutual fund with a risk warning stay observed', () => {
+    expect(pay(['Deposito dengan bunga tetap 4% per tahun. Setor dana minimal Rp 10.000.000 di kantor cabang.']).verdict).toBe('observed_instruction');
+    expect(pay(['Reksa dana: kinerja masa lalu tidak menjamin kinerja masa depan. Investasi mulai Rp 100.000, bayar lewat virtual account.']).verdict).not.toMatch(/suspicious|manipulative/);
+  });
+});

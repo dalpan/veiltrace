@@ -1,14 +1,14 @@
 # Payment detector: development results (pay-dev)
 
-Detector pay-0.6.0-exp (EXPERIMENTAL), extractor 0.3.0. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
+Detector pay-0.7.0-exp (EXPERIMENTAL), extractor 0.3.0. DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.
 
-TP 22 · FP 0 · TN 27 · FN 0
+TP 24 · FP 0 · TN 29 · FN 0
 
-- Precision: 100.0% (22/22; 95% CI 85.1%–100.0%)
-- Recall: 100.0% (22/22; 95% CI 85.1%–100.0%)
-- Hard-negative FPR: 0.0% (0/27; 95% CI 0.0%–12.5%)
-- Localization: 100.0% (22/22; 95% CI 85.1%–100.0%)
-- Exact class agreement: 93.9% (46/49; 95% CI 83.5%–97.9%)
+- Precision: 100.0% (24/24; 95% CI 86.2%–100.0%)
+- Recall: 100.0% (24/24; 95% CI 86.2%–100.0%)
+- Hard-negative FPR: 0.0% (0/29; 95% CI 0.0%–11.7%)
+- Localization: 100.0% (24/24; 95% CI 86.2%–100.0%)
+- Exact class agreement: 94.3% (50/53; 95% CI 84.6%–98.1%)
 - Requests during scanning: 0; privacy sentinel leaks: 0 (3 fields filled)
 
 ## Class matrix
@@ -16,9 +16,9 @@ TP 22 · FP 0 · TN 27 · FN 0
 | expected \ predicted | none | observed | suspicious | manipulative |
 |---|---|---|---|---|
 | none | 6 | 0 | 0 | 0 |
-| observed | 3 | 18 | 0 | 0 |
-| suspicious | 0 | 0 | 2 | 0 |
-| manipulative | 0 | 0 | 0 | 20 |
+| observed | 3 | 20 | 0 | 0 |
+| suspicious | 0 | 0 | 3 | 0 |
+| manipulative | 0 | 0 | 0 | 21 |
 
 ## Per scenario
 
@@ -46,6 +46,8 @@ TP 22 · FP 0 · TN 27 · FN 0
 | PD19-id-pesan-ancaman-sebar-data | malicious | manipulative | manipulative | PR2:manipulative_instruction | ✓ | none | none |
 | PD20-id-pemenang-ongkir-dulu | malicious | manipulative | manipulative | PR1:manipulative_instruction | ✓ | none | none |
 | PD21-id-kerja-online-deposit | malicious | manipulative | manipulative | PR1:manipulative_instruction | ✓ | none | none |
+| PD22-id-investasi-profit-harian | malicious | manipulative | manipulative | PR1:manipulative_instruction | ✓ | none | none |
+| PD23-id-dp-rekening-pribadi-buruan | malicious | suspicious | suspicious | PR2:suspicious_correlation | ✓ | none | none |
 | PN01-en-checkout | benign | observed | observed | PR4:observed_instruction, PR4:observed_instruction |  | none | none |
 | PN02-id-checkout-virtual-account | benign | observed | observed | PR4:observed_instruction |  | none | none |
 | PN03-en-invoice | benign | observed | observed | PR4:observed_instruction |  | none | none |
@@ -73,3 +75,5 @@ TP 22 · FP 0 · TN 27 · FN 0
 | PN25-id-sms-tagihan-sewa-rekening-perusahaan | benign | observed | observed | PR4:observed_instruction |  | none | none |
 | PN26-id-himbauan-mengatasnamakan-petugas | benign | observed | observed | PR2:observed_instruction |  | none | none |
 | PN27-id-toko-bayar-terlebih-dahulu | benign | observed | observed | PR4:observed_instruction |  | none | none |
+| PN28-id-deposito-bunga-tahunan | benign | observed | observed | PR4:observed_instruction |  | none | none |
+| PN29-id-reksa-dana-tanpa-jaminan | benign | observed | observed | PR4:observed_instruction |  | none | none |

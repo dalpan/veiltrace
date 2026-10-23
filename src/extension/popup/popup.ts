@@ -289,7 +289,7 @@ function renderCoverage(r: ScanReport): HTMLElement {
 function renderAdvice(r: ScanReport, d: Dashboard): HTMLElement {
   const m = t();
   const remote = r.support.findings.some((f) => f.classification !== 'observed_instruction'
-    && (f.requestedActions.includes('remote-access') || f.requestedActions.includes('install')));
+    && (f.requestedActions.includes('remote-access') || f.requestedActions.includes('install') || f.requestedActions.includes('disable-protection')));
   const items: Array<[string, string]> = d.affected.map((c) => [c, m.dash.advice[c]]);
   if (remote) items.push(['remoteAccess', m.dash.advice.remoteAccess]);
   return h('section', { class: 'card advice', 'aria-labelledby': 'advice-title', 'data-advice': items.map(([k]) => k).join(' ') || 'none' },
