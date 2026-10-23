@@ -68,7 +68,12 @@ Each finding keeps **classification** (manipulative / suspicious / observed), **
 | **WhatsApp Web** | Prototype | conversations are read as one user-content region; markup match with the real service not yet verified |
 | **Managed build** for organizations | Ready to pilot | install-time permissions, automatic scanning on, no reporting: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) |
 
-<p align="center"><img src="docs/images/pwa-result.png" alt="Check a message on a phone: a scam message flagged as a manipulative payment request" width="300"></p>
+<p align="center">
+  <img src="docs/images/pwa-result.png" alt="Check a message on a phone: a scam message flagged as a manipulative payment request" width="260">
+  <img src="docs/images/ocr-popup.png" alt="Extension popup: text inside a poster read on the device and flagged as a manipulative payment request" width="300">
+  <img src="docs/images/pwa-ocr.png" alt="Check a message: a chat screenshot with an .apk wedding invitation read on the device and flagged" width="260">
+</p>
+<p align="center"><sub>Left to right: a pasted message, text inside an image on a web page, a chat screenshot. All read and checked on the device.</sub></p>
 
 ## Privacy and security by design
 
