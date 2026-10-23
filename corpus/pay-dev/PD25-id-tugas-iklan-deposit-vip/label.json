@@ -1,0 +1,22 @@
+{
+  "id": "PD25-id-tugas-iklan-deposit-vip",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-PAY",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://sms.pesan.test/pd25-id-tugas-iklan-deposit-vip",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#log",
+  "description": "Kerja sampingan nonton iklan meminta deposit untuk membuka tugas VIP",
+  "rationale": "Deposit sebagai syarat membuka tugas berbayar (PR1).",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; illegal online loans and deposit-based ad/review jobs from public warnings (Satgas PASTI; D-103), written in own words, labels written before the first run",
+  "created": "2026-10-23"
+}

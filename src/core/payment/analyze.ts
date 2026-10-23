@@ -13,7 +13,7 @@ import type {
   PaymentResult, PayTrustContext,
 } from './types.js';
 
-export const PAY_DETECTOR_VERSION = 'pay-0.7.0-exp';
+export const PAY_DETECTOR_VERSION = 'pay-0.8.0-exp';
 
 /** Same clause and sentence breaks as the ClickFix binding, except that a period inside a number ("Rp 150.000") is not a break. */
 const CLAUSE_BREAK = /[,;:!?]|\.(?=\s|$)|(?<![\p{L}\p{N}_])(?:and|then|or|but|dan|lalu|kemudian|atau|tapi|tetapi)(?![\p{L}\p{N}_])/u;
@@ -27,11 +27,11 @@ const DESTINATION_OF: Partial<Record<PaySignalId, PayDestination>> = {
   'PD.PERSONAL': 'personal-account', 'PD.OFF_PLATFORM': 'off-platform', 'PD.GIFT_CARD': 'gift-card', 'PD.CRYPTO': 'crypto',
 };
 const PROMISE_OF: Partial<Record<PaySignalId, PayPromise>> = {
-  'PR.REFUND': 'refund', 'PR.PRIZE': 'prize', 'PR.UNLOCK': 'account-unlock', 'PF.RELEASE_FEE': 'release', 'PR.RECRUIT': 'recruitment', 'PR.JOB': 'job', 'PR.INVEST': 'investment-return',
+  'PR.REFUND': 'refund', 'PR.PRIZE': 'prize', 'PR.UNLOCK': 'account-unlock', 'PF.RELEASE_FEE': 'release', 'PR.RECRUIT': 'recruitment', 'PR.JOB': 'job', 'PR.INVEST': 'investment-return', 'PR.LOAN': 'loan',
 };
 const PRESSURE_OF: Partial<Record<PaySignalId, PayPressure>> = { 'PP.THREAT': 'threat', 'PP.URGENCY': 'urgency', 'PP.AUTHORITY': 'claimed-authority', 'PP.FAMILY': 'claimed-family' };
 /** Reporting order of the finding's lists (deterministic, independent of where the evidence sits on the page). */
-const ORDER: readonly string[] = ['refund', 'prize', 'account-unlock', 'release', 'recruitment', 'job', 'investment-return', 'personal-account', 'off-platform', 'gift-card', 'crypto', 'claimed-authority', 'claimed-family', 'threat', 'urgency'];
+const ORDER: readonly string[] = ['refund', 'prize', 'account-unlock', 'release', 'recruitment', 'job', 'investment-return', 'loan', 'personal-account', 'off-platform', 'gift-card', 'crypto', 'claimed-authority', 'claimed-family', 'threat', 'urgency'];
 const ordered = <T extends string>(xs: Iterable<T>): T[] => [...new Set(xs)].sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b));
 
 /** Highest classification each rule can produce; the actual one depends on the pressure found (DETECTION_MODEL.md §13). */

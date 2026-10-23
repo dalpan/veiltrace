@@ -22,7 +22,7 @@ const REQUESTS: PayLexiconEntry[] = [
     ['bayar', 'transfer', 'lakukan pembayaran', 'kirimkan uang', 'wajib membayar', 'belikan voucher', 'wajib membeli', 'diwajibkan dibayarkan']),
   // Requests phrased as an obligation, a demand under a condition ("jika tidak membayar") or a balance to fill (pay-0.6.0).
   entry('pay.id.pay_obligation', 'PY.PAY', 'id', 'strong',
-    `${B}(?:selesaikan\\s+pembayaran|(?:jika|kalau|bila|apabila)\\s+(?:tidak|tdk|ga|gak|ora)\\s+(?:membayar|bayar|mentransfer|transfer)|(?:harus|wajib|segera|mohon)\\s+di\\s?(?:kirim|transfer)(?:kan)?|(?:saldo|deposit)\\s+(?:\\p{L}+\\s+)?(?:harus|wajib|perlu)\\s+(?:di)?isi)${E}`,
+    `${B}(?:selesaikan\\s+pembayaran|(?:jika|kalau|bila|apabila)\\s+(?:tidak|tdk|ga|gak|ora)\\s+(?:membayar|bayar|mentransfer|transfer)|(?:harus|wajib|segera|mohon)\\s+di\\s?(?:kirim|transfer)(?:kan)?|(?:saldo|deposit)\\s+(?:\\p{L}+\\s+)?(?:harus|wajib|perlu)\\s+(?:di)?isi|isi\\s+saldo(?:\\s+akun)?)${E}`,
     ['selesaikan pembayaran', 'jika tidak membayar', 'harus dikirim', 'saldo tugas harus diisi']),
   // A down payment ("DP 50% dulu", "uang muka"): a request like any other; it needs an amount or a destination (D-102).
   entry('pay.id.down_payment', 'PY.PAY', 'id', 'strong', `${B}(?:dp|uang\\s+muka|down\\s*payment)(?:\\s+\\d+\\s?%)?(?:\\s+(?:dulu|dl|duluan))?${E}`, ['DP 50% dulu', 'uang muka', 'DP dl']),
@@ -114,7 +114,7 @@ const RECEIVE: PayLexiconEntry[] = [
     ['dijamin lulus', 'jalur khusus seleksi bintara', 'lewat jalur belakang', 'uang pelicin', 'orang dalam', 'tanpa Tes ataupun Interview', 'JAMINAN 100%']),
   // A job offer: something the reader is promised to receive. A fee or purchase required for it is pay-to-receive (pay-0.4.0).
   entry('pay.id.job', 'PR.JOB', 'id', 'weak',
-    `${B}(?:panggilan\\s+kerja|lowongan(?:\\s+kerja)?|karyawan\\s+baru|calon\\s+(?:karyawan|pekerja|mitra)|diterima\\s+(?:kerja|bekerja)|siap\\s+kerja|kerja\\s+(?:di\\s?sini|besok)|(?:pekerjaan|kerja)\\s+online|tugas\\s+(?:online|harian|like|follow|review|rating)|komisi\\s+(?:tugas|pekerjaan|harian))${E}`,
+    `${B}(?:panggilan\\s+kerja|lowongan(?:\\s+kerja)?|karyawan\\s+baru|calon\\s+(?:karyawan|pekerja|mitra)|diterima\\s+(?:kerja|bekerja)|siap\\s+kerja|kerja\\s+(?:di\\s?sini|besok)|(?:pekerjaan|kerja)\\s+(?:online|sampingan|paruh\\s+waktu)|part[\\s-]?time|tugas\\s+(?:online|harian|like|follow|review|rating|vip|premium)|komisi\\s+(?:tugas|pekerjaan|harian)|(?:nonton|tonton|menonton)\\s+(?:iklan|video))${E}`,
     ['Panggilan kerja', 'pekerjaan online', 'tugas like', 'komisi pekerjaan', 'lowongan', 'karyawan baru', 'calon mitra', 'siap kerja']),
   entry('pay.en.job', 'PR.JOB', 'en', 'weak',
     `${B}(?:job\\s+offer|you(?:${APOS}ve|\\s+have)\\s+been\\s+(?:hired|selected\\s+for\\s+the\\s+(?:job|position))|new\\s+(?:hire|employee)s?|(?:work|job)\\s+from\\s+home\\s+(?:job|position))${E}`,
@@ -127,6 +127,13 @@ const RECEIVE: PayLexiconEntry[] = [
   entry('pay.en.invest', 'PR.INVEST', 'en', 'strong',
     `${B}(?:guaranteed\\s+(?:returns?|profits?|income|daily\\s+(?:returns?|profits?))|(?:fixed|daily)\\s+(?:returns?|profits?)|\\d+(?:\\.\\d+)?\\s?%\\s*(?:daily|per\\s+day|a\\s+day|per\\s+week|weekly)|risk[\\s-]free\\s+(?:investment|returns?|profits?)|double\\s+your\\s+(?:money|investment|capital))${E}`,
     ['guaranteed returns', '3% daily', 'risk-free investment', 'double your money']),
+  // A loan that is "approved" or "sure to be disbursed" without checks (D-103): a promise; a fee tied to it by a condition is PR1.
+  entry('pay.id.loan', 'PR.LOAN', 'id', 'weak',
+    `${B}(?:(?:pengajuan\\s+)?(?:pinjaman|kredit)\\s+(?:\\p{L}+\\s+){0,3}?(?:telah\\s+|sudah\\s+)?(?:disetujui|di-?acc|pasti\\s+cair|langsung\\s+cair|cepat\\s+cair|siap\\s+(?:di)?cair(?:kan)?)|pengajuan\\s+(?:anda|kamu)\\s+(?:telah\\s+|sudah\\s+)?(?:disetujui|di-?acc)|tanpa\\s+(?:bi\\s+checking|slik(?:\\s+ojk)?|agunan|survei|survey)|pasti\\s+(?:cair|acc|disetujui))${E}`,
+    ['pengajuan pinjaman Anda disetujui', 'pinjaman online pasti cair', 'tanpa BI checking', 'dana pinjaman sudah siap dicairkan']),
+  entry('pay.en.loan', 'PR.LOAN', 'en', 'weak',
+    `${B}(?:(?:your\\s+)?loan\\s+(?:application\\s+)?(?:has\\s+been\\s+|is\\s+)?(?:approved|ready\\s+(?:for|to\\s+be)\\s+disburse(?:ment|d))|guaranteed\\s+(?:loan\\s+)?approval|no\\s+credit\\s+check)${E}`,
+    ['your loan has been approved', 'guaranteed approval', 'no credit check']),
   entry('pay.en.recruit', 'PR.RECRUIT', 'en', 'strong',
     `${B}(?:guaranteed\\s+(?:to\\s+pass|admission|acceptance|a\\s+(?:place|spot|seat))|back[\\s-]?door\\s+(?:entry|admission|route)|special\\s+(?:quota|route)\\s+for\\s+(?:a\\s+)?fee)${E}`,
     ['guaranteed to pass', 'backdoor admission']),
@@ -143,8 +150,8 @@ const RECEIVE: PayLexiconEntry[] = [
     `${B}(?:(?:in\\s+order\\s+)?to|before\\s+(?:we|you)\\s+can|so\\s+(?:that\\s+)?(?:we|you)\\s+can|for\\s+us\\s+to)\\s+(?:receive|claim|release|unlock|unblock|reactivate|activate|withdraw|collect|redeem|restore|recover|unfreeze|process\\s+(?:your\\s+|the\\s+)?(?:refund|prize|withdrawal))${E}`,
     ['to receive', 'to claim', 'before we can release', 'to process your refund']),
   entry('pay.id.condition', 'PC.CONDITION', 'id', 'weak',
-    `${B}(?:(?:agar|supaya|untuk|sebelum|baru)\\s+(?:(?:dapat|bisa)\\s+)?(?:menerima|mencairkan|dicairkan|mengklaim|diklaim|membuka|dibuka|mengaktifkan|diaktifkan|menarik|ditarik|memulihkan|dipulihkan|dilepas|mengambil|diambil|diproses|dikirim)|(?:terlebih|lebih)\\s+dahulu|sebelum\\s+(?:mulai|memulai|bekerja)|(?:cair(?:kan)?|ditarik|tarik)\\s+setelah|(?:setelah|sesudah)\\s+(?:deposit|top\\s*-?up|isi\\s+saldo))${E}`,
-    ['agar dapat dicairkan', 'untuk mengambil', 'terlebih dahulu', 'cairkan setelah deposit', 'untuk mencairkan', 'supaya bisa dibuka']),
+    `${B}(?:(?:agar|supaya|untuk|sebelum|baru)\\s+(?:(?:dapat|bisa)\\s+)?(?:menerima|mencairkan|dicairkan|mengklaim|diklaim|membuka|dibuka|mengaktifkan|diaktifkan|menarik|ditarik|memulihkan|dipulihkan|dilepas|mengambil|diambil|diproses|dikirim|ditransfer)|(?:terlebih|lebih)\\s+dahulu|dulu|dl|duluan|(?:agar|supaya)\\s+(?:dana|uang|saldo|hadiah|paket|pinjaman|komisi)(?:nya)?\\s+(?:(?:dapat|bisa)\\s+)?(?:dicairkan|cair|ditransfer|dikirim|masuk|diproses)|sebelum\\s+(?:mulai|memulai|bekerja)|untuk\\s+(?:mulai|memulai)\\s+(?:tugas|bekerja|kerja)|(?:cair(?:kan)?|ditarik|tarik)\\s+setelah|(?:setelah|sesudah)\\s+(?:deposit|top\\s*-?up|isi\\s+saldo))${E}`,
+    ['agar dapat dicairkan', 'untuk mengambil', 'terlebih dahulu', 'cairkan setelah deposit', 'agar dana bisa ditransfer', 'dulu', 'untuk mencairkan', 'supaya bisa dibuka']),
   entry('pay.id.condition_obligation', 'PC.CONDITION', 'id', 'weak',
     `${B}(?:(?:di)?wajib(?:kan)?\\s+(?:membeli|membayar|dibayar(?:kan)?|bayar)|dengan\\s+syarat|sebagai\\s+syarat|(?:harus|wajib)\\s+(?:sudah\\s+)?di\\s?bayar(?:kan)?)${E}`,
     ['wajib membeli', 'diwajibkan dibayarkan', 'dengan syarat', 'harus sudah di bayarkan']),

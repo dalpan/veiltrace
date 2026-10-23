@@ -48,8 +48,8 @@ const PAY_FINDING_KEYS = ['id', 'ruleId', 'classification', 'ruleClassification'
   'trustContext', 'modifiers', 'limitations', 'evidence', 'evidenceTotal'];
 const PAY_RULES = ['PR1', 'PR2', 'PR3', 'PR4'] as const;
 const PAY_SIGNALS = ['PY.PAY', 'PA.AMOUNT', 'PF.FEE', 'PF.RELEASE_FEE', 'PD.PERSONAL', 'PD.OFF_PLATFORM', 'PD.GIFT_CARD', 'PD.CRYPTO',
-  'PR.REFUND', 'PR.PRIZE', 'PR.UNLOCK', 'PR.RECRUIT', 'PR.JOB', 'PR.INVEST', 'PC.CONDITION', 'PP.THREAT', 'PP.URGENCY', 'PP.AUTHORITY', 'PP.FAMILY', 'C.NEGATION', 'C.REPORTED', 'C.EDUCATIONAL'] as const;
-const PROMISES = ['refund', 'prize', 'account-unlock', 'release', 'recruitment', 'job', 'investment-return'] as const;
+  'PR.REFUND', 'PR.PRIZE', 'PR.UNLOCK', 'PR.RECRUIT', 'PR.JOB', 'PR.INVEST', 'PR.LOAN', 'PC.CONDITION', 'PP.THREAT', 'PP.URGENCY', 'PP.AUTHORITY', 'PP.FAMILY', 'C.NEGATION', 'C.REPORTED', 'C.EDUCATIONAL'] as const;
+const PROMISES = ['refund', 'prize', 'account-unlock', 'release', 'recruitment', 'job', 'investment-return', 'loan'] as const;
 const PAY_DESTINATIONS = ['personal-account', 'off-platform', 'gift-card', 'crypto'] as const;
 const PRESSURES = ['threat', 'urgency', 'claimed-authority', 'claimed-family'] as const;
 const PAY_LIMITS = ['claimed-identity-unverifiable', 'trust-boundary-heuristic', 'amount-not-reported'] as const;

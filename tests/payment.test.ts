@@ -255,3 +255,26 @@ describe('payment detector pay-0.7.0-exp: fixed-return investment and down payme
     expect(pay(['Reksa dana: kinerja masa lalu tidak menjamin kinerja masa depan. Investasi mulai Rp 100.000, bayar lewat virtual account.']).verdict).not.toMatch(/suspicious|manipulative/);
   });
 });
+
+describe('payment detector pay-0.8.0-exp: illegal loans and deposit-based task jobs (D-103)', () => {
+  it('a loan "sure to be paid out" that asks for an admin fee first → manipulative (PR1, loan)', () => {
+    const r = pay(inContainer('ugc:#chat', ['Pinjaman online pasti cair tanpa BI checking. Bayar biaya admin Rp 200.000 dulu, dana langsung cair.']));
+    expect(short(r)).toEqual(['PR1:manipulative_instruction']);
+    expect(r.findings[0]!.promises).toContain('loan');
+  });
+
+  it('a loan ready to be paid out that needs a "data correction" fee → manipulative (PR1)', () => {
+    expect(short(pay(inContainer('ugc:#chat', ['Dana pinjaman sudah siap dicairkan, tapi rekening Anda salah. Bayar biaya perbaikan data Rp 150.000 agar dana bisa ditransfer.']))))
+      .toEqual(['PR1:manipulative_instruction']);
+  });
+
+  it('watching ads or reviewing for pay, with a deposit or balance top-up to start → manipulative (PR1)', () => {
+    expect(short(pay(inContainer('ugc:#chat', ['Kerja sampingan nonton iklan dibayar 50rb per tugas. Untuk membuka tugas VIP, deposit Rp 300.000 dulu ya kak.'])))).toEqual(['PR1:manipulative_instruction']);
+    expect(short(pay(inContainer('ugc:#chat', ['Tugas review hotel, komisi 15%. Isi saldo akun minimal Rp 200.000 untuk mulai tugas pertama.'])))).toEqual(['PR1:manipulative_instruction']);
+  });
+
+  it('a licensed loan page and an instalment reminder are not flagged', () => {
+    expect(pay(['Pinjaman tunai bunga 1,5% per bulan. Tidak ada biaya di muka; biaya provisi dipotong dari dana yang cair.']).verdict).not.toMatch(/suspicious|manipulative/);
+    expect(pay(inContainer('ugc:#chat', ['Cicilan pinjaman bulan ini Rp 950.000 jatuh tempo besok, silakan bayar lewat virtual account di aplikasi.'])).verdict).toBe('observed_instruction');
+  });
+});

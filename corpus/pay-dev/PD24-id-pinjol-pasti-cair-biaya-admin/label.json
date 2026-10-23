@@ -1,0 +1,22 @@
+{
+  "id": "PD24-id-pinjol-pasti-cair-biaya-admin",
+  "split": "pay-dev",
+  "lang": "id",
+  "category": "positive",
+  "threatClass": "T-PAY",
+  "truth": "malicious",
+  "expectedClass": "manipulative_instruction",
+  "hardNegative": false,
+  "pages": [
+    {
+      "url": "https://sms.pesan.test/pd24-id-pinjol-pasti-cair-biaya-admin",
+      "file": "index.html"
+    }
+  ],
+  "steps": [],
+  "evidenceWithin": "#log",
+  "description": "Pinjol \"pasti cair tanpa BI checking\" meminta biaya admin dulu",
+  "rationale": "Biaya di muka sebagai syarat pencairan pinjaman (PR1).",
+  "author": "Claude Code (AI assistant) for the VEILTRACE owner; illegal online loans and deposit-based ad/review jobs from public warnings (Satgas PASTI; D-103), written in own words, labels written before the first run",
+  "created": "2026-10-23"
+}

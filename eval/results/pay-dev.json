@@ -1,71 +1,71 @@
 {
   "split": "pay-dev",
   "note": "DEVELOPMENT data only, written by the same author as the rules. Not a held-out evaluation; not real-world effectiveness.",
-  "detectorVersion": "pay-0.7.0-exp",
+  "detectorVersion": "pay-0.8.0-exp",
   "extractorVersion": "0.3.0",
   "metrics": {
-    "scenarios": 53,
+    "scenarios": 57,
     "confusion": {
-      "tp": 24,
+      "tp": 26,
       "fp": 0,
-      "tn": 29,
+      "tn": 31,
       "fn": 0
     },
     "precision": {
-      "k": 24,
-      "n": 24,
+      "k": 26,
+      "n": 26,
       "value": 1,
       "ci95": [
-        0.862,
+        0.8713,
         1
       ]
     },
     "recall": {
-      "k": 24,
-      "n": 24,
+      "k": 26,
+      "n": 26,
       "value": 1,
       "ci95": [
-        0.862,
+        0.8713,
         1
       ]
     },
     "fpr": {
       "k": 0,
-      "n": 29,
+      "n": 31,
       "value": 0,
       "ci95": [
         0,
-        0.117
+        0.1103
       ]
     },
     "hardNegativeFpr": {
       "k": 0,
-      "n": 29,
+      "n": 31,
       "value": 0,
       "ci95": [
         0,
-        0.117
+        0.1103
       ]
     },
     "localization": {
-      "k": 24,
-      "n": 24,
+      "k": 26,
+      "n": 26,
       "value": 1,
       "ci95": [
-        0.862,
+        0.8713,
         1
       ]
     },
     "classMatrix": [
       [
-        6,
+        7,
         0,
         0,
         0
       ],
       [
         3,
-        20,
+        21,
         0,
         0
       ],
@@ -79,19 +79,19 @@
         0,
         0,
         0,
-        21
+        23
       ]
     ],
     "exactClassAgreement": {
-      "k": 50,
-      "n": 53,
-      "value": 0.9434,
+      "k": 54,
+      "n": 57,
+      "value": 0.9474,
       "ci95": [
-        0.8463,
-        0.9806
+        0.8563,
+        0.9819
       ]
     },
-    "observedOnNegatives": 20,
+    "observedOnNegatives": 21,
     "byLanguage": {
       "en": {
         "recall": {
@@ -115,21 +115,21 @@
       },
       "id": {
         "recall": {
-          "k": 18,
-          "n": 18,
+          "k": 20,
+          "n": 20,
           "value": 1,
           "ci95": [
-            0.8241,
+            0.8389,
             1
           ]
         },
         "fpr": {
           "k": 0,
-          "n": 19,
+          "n": 21,
           "value": 0,
           "ci95": [
             0,
-            0.1682
+            0.1546
           ]
         }
       }
@@ -149,7 +149,7 @@
       "hardNegative": false,
       "predicted": "manipulative_instruction",
       "findings": [
-        "PR2:manipulative_instruction"
+        "PR1:manipulative_instruction"
       ],
       "localized": true,
       "clickfixVerdict": "none",
@@ -330,7 +330,7 @@
       "hardNegative": false,
       "predicted": "manipulative_instruction",
       "findings": [
-        "PR2:manipulative_instruction"
+        "PR1:manipulative_instruction"
       ],
       "localized": true,
       "clickfixVerdict": "none",
@@ -565,6 +565,42 @@
       "predicted": "suspicious_correlation",
       "findings": [
         "PR2:suspicious_correlation"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PD24-id-pinjol-pasti-cair-biaya-admin",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "PR1:manipulative_instruction"
+      ],
+      "localized": true,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PD25-id-tugas-iklan-deposit-vip",
+      "lang": "id",
+      "category": "positive",
+      "truth": "malicious",
+      "expectedClass": "manipulative_instruction",
+      "hardNegative": false,
+      "predicted": "manipulative_instruction",
+      "findings": [
+        "PR1:manipulative_instruction"
       ],
       "localized": true,
       "clickfixVerdict": "none",
@@ -1062,6 +1098,40 @@
     },
     {
       "id": "PN29-id-reksa-dana-tanpa-jaminan",
+      "lang": "id",
+      "category": "negative",
+      "truth": "benign",
+      "expectedClass": "observed_instruction",
+      "hardNegative": true,
+      "predicted": "observed_instruction",
+      "findings": [
+        "PR4:observed_instruction"
+      ],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN30-id-pinjaman-resmi-tanpa-biaya-muka",
+      "lang": "id",
+      "category": "negative",
+      "truth": "benign",
+      "expectedClass": "none",
+      "hardNegative": true,
+      "predicted": "none",
+      "findings": [],
+      "localized": null,
+      "clickfixVerdict": "none",
+      "credentialVerdict": "none",
+      "partial": [],
+      "requestsDuringScan": 0,
+      "fieldsFilled": 0
+    },
+    {
+      "id": "PN31-id-pengingat-cicilan",
       "lang": "id",
       "category": "negative",
       "truth": "benign",

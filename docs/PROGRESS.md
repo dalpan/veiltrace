@@ -4,6 +4,11 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-23 · Illegal online loans and deposit-based task jobs (D-103)
+pay 0.8.0: `PR.LOAN` (approved or "pasti cair" loans, no BI checking) with a fee condition is PR1; ad-watching and review jobs with a deposit or balance top-up are PR1; licensed loan pages and instalment reminders stay below alert. 4 new fixtures (pay-dev 57, FP 0); synthetic, SMS and field-sample results unchanged. Demo gallery caption reworded (it quoted the lure verbatim). Tests: 799 passed in isolation runs; the extractor budget test still fails on this machine with or without the change. **Next:** on-device OCR for screenshots needs an owner decision (runtime dependency).
+
+---
+
 ## 2026-10-23 · App-file lures, turning off protection, fixed-return investment (D-102)
 Gaps chosen from public reports (OJK IASC categories; APK invitations and parcel photos). sup 0.8.0: SR10 APP_FILE_LURE (.apk presented as an invitation, parcel photo, receipt, ticket or bill; requests to turn off Play Protect or allow unknown sources), turning off protection also counts in SR1/SR2. pay 0.7.0: fixed or guaranteed investment returns are pay-to-receive (PR1); down payments and paying in capital are requests. 10 new dev fixtures; pay-dev and sup-dev FP 0; synthetic dev 2,908 → 3,104 of 6,480 scam, benign 0; SMS dev and field sample unchanged. `npm test`: 791 passed; the extractor budget test fails on this machine with and without the change (time budget hit first; extractor untouched). **Next:** release and site rebuild with the new detectors.
 
