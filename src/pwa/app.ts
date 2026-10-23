@@ -6,7 +6,6 @@ import { aggregate, type Category } from '../extension/popup/aggregate.js';
 import { formatCount, MESSAGES, type Lang, type Messages } from '../extension/popup/i18n.js';
 import { checkMessage, isLinkOnly, MAX_MESSAGE_CHARS, type MessageSource } from './message.js';
 import type { OcrApi } from './ocr.js';
-import { cleanOcrLines } from './ocr-text.js';
 
 declare const __VT_VERSION__: string;
 
@@ -201,7 +200,7 @@ async function checkImage(image: Blob): Promise<void> {
   document.body.dataset.ocr = 'running';
   try {
     const ocr = await loadOcr();
-    const lines = cleanOcrLines(await ocr.recognize(image, (p) => show(t().pwa.ocrProgress(Math.round(p * 100)))));
+    const lines = await ocr.recognize(image, (p) => show(t().pwa.ocrProgress(Math.round(p * 100))));
     if (lines.length === 0) {
       show(t().pwa.ocrEmpty);
       document.body.dataset.ocr = 'empty';

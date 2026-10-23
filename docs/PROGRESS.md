@@ -4,6 +4,11 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-23 · OCR: second, adaptive-threshold pass (D-105)
+Preparing the video showed that text on a coloured panel in a white page was not read (global Otsu threshold). Extension and app now run two passes and merge only new lines; the 14 field screenshots keep the same 10 alerts and the poster case is read. New e2e test for the panel case and a unit test for the merge. **Next:** video and submission refresh.
+
+---
+
 ## 2026-10-23 · Version 0.8.0 and documentation refresh
 Extension version 0.8.0 (OCR, new detector classes since 0.7.0). PRODUCT_SPEC status table, README badge and release notes brought up to date; submission materials (local) refreshed to match. **Next:** owner tries "Read text in images" from the toolbar and a screenshot in the app on a phone; publishes the 0.8.0 draft release when ready.
 

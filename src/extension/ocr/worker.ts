@@ -8,6 +8,7 @@ declare const __vtOcrLang: Record<'ind' | 'eng', string>;
 interface TessApi {
   Init(dataPath: null, langs: string, oem: number): number;
   SetImageFile(exif: number, angle: number): number;
+  SetVariable(name: string, value: string): boolean;
   Recognize(monitor: null): number;
   GetUTF8Text(): string;
   Clear(): void;
@@ -43,12 +44,18 @@ scope.onmessage = async (e: MessageEvent<{ id: number; image: ArrayBuffer }>) =>
     const { mod, api } = await ready;
     progress = (p) => scope.postMessage({ id, progress: p });
     mod.FS.writeFile('/input', new Uint8Array(image));
-    if (api.SetImageFile(1, 0) === 1) throw new Error('image');
-    api.Recognize(null);
-    const text = api.GetUTF8Text();
-    api.Clear();
+    // Two passes (D-105): global Otsu reads phone screenshots best; adaptive thresholding also reads text on a coloured panel
+    // (a poster on a white page, which a global threshold turns into one dark block). The popup merges the second pass.
+    const texts: string[] = [];
+    for (const method of ['0', '1']) {
+      api.SetVariable('thresholding_method', method);
+      if (api.SetImageFile(1, 0) === 1) throw new Error('image');
+      api.Recognize(null);
+      texts.push(api.GetUTF8Text());
+      api.Clear();
+    }
     mod.FS.unlink('/input');
-    scope.postMessage({ id, text });
+    scope.postMessage({ id, texts });
   } catch {
     ready = null;
     scope.postMessage({ id, error: true });

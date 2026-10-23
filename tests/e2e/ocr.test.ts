@@ -47,6 +47,26 @@ describe('text in images', () => {
     expect(ext.blocked).toEqual([]);
   }, 150_000);
 
+  it('reads text on a coloured panel inside a white page (second, adaptive-threshold pass)', async () => {
+    const p = await ext.context.newPage();
+    await p.setViewportSize({ width: 620, height: 250 });
+    await p.setContent('<body style="margin:0;background:#fff3c4;font:bold 26px sans-serif;padding:22px;color:#7a1d12">SELAMAT! Anda pemenang undian HUT bank.<br><span style="font-weight:normal;color:#222">Untuk mencairkan hadiah, transfer pajak hadiah Rp 2.500.000 ke rekening petugas hari ini juga.</span></body>');
+    const img = (await p.screenshot()).toString('base64');
+    await p.close();
+    ext.pages.set('https://panel.test/', html(`<div style="font:18px Georgia,serif;max-width:760px;margin:30px auto"><h1>Kue lebaran renyah</h1><p>Campurkan tepung, gula, dan mentega sampai rata, lalu panggang 25 menit.</p><img alt="" style="width:620px" src="data:image/png;base64,${img}"></div>`));
+    const target = await openTarget(ext, 'https://panel.test/');
+    await target.setViewportSize({ width: 1100, height: 700 });
+    const popup = await openPopup(ext, await tabIdOf(ext, target));
+    await scan(popup);
+    const shot = (await target.screenshot()).toString('base64');
+    await popup.evaluate((b64) => {
+      (window as unknown as { __vtTestScreenshot: Blob }).__vtTestScreenshot = new Blob([Uint8Array.from(atob(b64), (c) => c.charCodeAt(0))], { type: 'image/png' });
+    }, shot);
+    await popup.click('#ocr-run');
+    await popup.waitForSelector('#ocr[data-phase="done"], #ocr[data-phase="error"]', { timeout: 120_000 });
+    expect(await popup.getAttribute('#ocr-result .threat-summary', 'data-verdict')).toBe('manipulative_instruction');
+  }, 150_000);
+
   it('says so when the visible screen has no text beyond the page text', async () => {
     ext.pages.set('https://plain.test/', html('<h1>Jadwal kereta</h1><p>Kereta berangkat pukul 08.15 dari peron 2.</p>'));
     const target = await openTarget(ext, 'https://plain.test/');

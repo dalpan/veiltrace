@@ -25,3 +25,11 @@ describe('external dataset harness', () => {
       .toBe('buka https://link.example.invalid/x, hubungi 081200000000, ke 1234567890, file lampiran.apk');
   });
 });
+
+describe('OCR pass merge (D-105)', () => {
+  it('keeps the first pass in order and adds only lines the first pass did not read', async () => {
+    const { mergeOcrPasses } = await import('../src/pwa/ocr-text.js');
+    expect(mergeOcrPasses('Kue lebaran renyah\nCampurkan tepung dan gula', 'Kue lebaran renyah\nSELAMAT Anda pemenang undian\nCampurkan tepung dan gula'))
+      .toEqual(['Kue lebaran renyah', 'Campurkan tepung dan gula', 'SELAMAT Anda pemenang undian']);
+  });
+});

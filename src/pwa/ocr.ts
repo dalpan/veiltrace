@@ -2,9 +2,10 @@
 // shares an image. Tesseract.js runs in a same-origin worker with the core and the Indonesian and English models served
 // from ocr/ next to the app: no CDN, no upload, nothing stored. The image never leaves the device.
 import { createWorker, OEM, type Worker } from 'tesseract.js';
+import { mergeOcrPasses } from './ocr-text.js';
 
 export interface OcrApi {
-  /** Text lines read from the image, top to bottom. `progress` receives 0…1 while the model loads and reads. */
+  /** Cleaned text lines read from the image (two passes merged). `progress` receives 0…1 while the model loads and reads. */
   recognize(image: Blob, progress?: (p: number) => void): Promise<string[]>;
 }
 
@@ -31,8 +32,12 @@ const api: OcrApi = {
     onProgress = progress;
     try {
       const w = await getWorker();
-      const { data } = await w.recognize(image);
-      return data.text.split('\n');
+      // Two passes, as in the extension (D-105): global Otsu, then adaptive thresholding for text on coloured panels.
+      await w.setParameters({ thresholding_method: '0' } as Record<string, string>);
+      const first = (await w.recognize(image)).data.text;
+      await w.setParameters({ thresholding_method: '1' } as Record<string, string>);
+      const second = (await w.recognize(image)).data.text;
+      return mergeOcrPasses(first, second);
     } finally {
       onProgress = undefined;
     }

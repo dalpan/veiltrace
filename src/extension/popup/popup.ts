@@ -4,7 +4,7 @@ import type {
   CredEvidenceItem, CredFindingSummary, EvidenceItem, FindingSummary, PayEvidenceItem, PayFindingSummary, ScanReport, SupportEvidenceItem, SupportFindingSummary,
 } from '../content/report.js';
 import { captureTab, classifyUrl, extensionVersion, getTargetTab, isTabView, runAiText, runHighlight, runImageScan, runScan, type TargetTab, type UrlClass } from './adapter.js';
-import { cleanOcrLines } from '../../pwa/ocr-text.js';
+import { mergeOcrPasses } from '../../pwa/ocr-text.js';
 import { renderAi, resetAi, setupAi } from './ai-panel.js';
 import { autoEnabled, disableAuto, enableAuto, MANAGED } from '../auto/auto.js';
 import { aggregate, CATEGORIES, type Category, type Dashboard, type FindingGroup, type FindingRef } from './aggregate.js';
@@ -396,19 +396,19 @@ const image: { phase: 'idle' | 'running' | 'done' | 'error'; note: string; repor
 let ocrWorker: Worker | null = null;
 let ocrSeq = 0;
 
-function ocrRead(img: Blob, onProgress: (p: number) => void): Promise<string> {
+function ocrRead(img: Blob, onProgress: (p: number) => void): Promise<string[]> {
   ocrWorker ??= new Worker('ocr-worker.js');
   const worker = ocrWorker;
   const id = ++ocrSeq;
-  return img.arrayBuffer().then((buf) => new Promise<string>((resolve, reject) => {
-    const onMsg = (e: MessageEvent<{ id: number; progress?: number; text?: string; error?: boolean }>): void => {
+  return img.arrayBuffer().then((buf) => new Promise<string[]>((resolve, reject) => {
+    const onMsg = (e: MessageEvent<{ id: number; progress?: number; texts?: string[]; error?: boolean }>): void => {
       if (e.data.id !== id) return;
       if (typeof e.data.progress === 'number') {
         onProgress(e.data.progress);
         return;
       }
       worker.removeEventListener('message', onMsg);
-      if (typeof e.data.text === 'string') resolve(e.data.text);
+      if (Array.isArray(e.data.texts)) resolve(e.data.texts);
       else reject(new Error('ocr'));
     };
     worker.addEventListener('message', onMsg);
@@ -424,11 +424,11 @@ async function readImages(): Promise<void> {
   renderImage();
   try {
     const shot = await captureTab(tab.windowId);
-    const text = await ocrRead(shot, (p) => {
+    const [first = '', second = ''] = await ocrRead(shot, (p) => {
       image.note = m().imageText.reading(Math.round(p * 100));
       $('ocr-status').textContent = image.note;
     });
-    const lines = cleanOcrLines(text.split('\n'));
+    const lines = mergeOcrPasses(first, second);
     if (lines.length === 0) {
       Object.assign(image, { phase: 'done', note: m().imageText.noText });
       return;
