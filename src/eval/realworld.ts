@@ -6,6 +6,9 @@ import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { analyze, analyzeCredentials, analyzePayments, analyzeSupport, type PageSnapshot, type Verdict } from '../core/index.js';
+import { cleanOcrLines } from '../pwa/ocr-text.js';
+
+export { cleanOcrLines };
 
 export const DIR = join('corpus', 'realworld');
 export const RECORDS = join(DIR, 'records');
@@ -231,22 +234,6 @@ function arg(name: string): string | undefined {
 }
 
 // ---------- screenshot import (D-096) ----------
-
-/**
- * OCR output is one screen line per line: drops clock times, status-bar fragments and single characters, and joins a line
- * that continues the previous sentence (the previous line has no closing punctuation and this one starts in lower case).
- */
-export function cleanOcrLines(lines: readonly string[]): string[] {
-  const out: string[] = [];
-  for (const raw of lines) {
-    const line = raw.replace(/\s+/gu, ' ').trim();
-    if (!line || /^\d{1,2}[.:]\d{2}(?:\s*[✓√]+)?$/u.test(line) || (line.match(/\p{L}/gu) ?? []).length < 2) continue;
-    const prev = out[out.length - 1];
-    if (prev !== undefined && !/[.!?:;)\]]$/u.test(prev) && /^\p{Ll}/u.test(line)) out[out.length - 1] = `${prev} ${line}`;
-    else out.push(line);
-  }
-  return out;
-}
 
 /** Label sheet for annotators (D-096): a static page, opened offline in any browser, that saves a labels JSON file. */
 export function labelSheet(records: readonly RecordV1[], annotator: string): string {

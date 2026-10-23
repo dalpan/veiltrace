@@ -5,11 +5,14 @@ import type { ScanReport } from '../extension/content/report.js';
 import { aggregate, type Category } from '../extension/popup/aggregate.js';
 import { formatCount, MESSAGES, type Lang, type Messages } from '../extension/popup/i18n.js';
 import { checkMessage, isLinkOnly, MAX_MESSAGE_CHARS, type MessageSource } from './message.js';
+import type { OcrApi } from './ocr.js';
+import { cleanOcrLines } from './ocr-text.js';
 
 declare const __VT_VERSION__: string;
 
 const SHARED_CACHE = 'veiltrace-share';
 const SHARED_KEY = './__shared__';
+const SHARED_IMAGE_KEY = './__shared_image__';
 /** The visitor's EN/ID choice, shared with the landing page on the same origin. English until the visitor chooses. */
 const LANG_KEY = 'veiltrace-lang';
 
@@ -138,6 +141,7 @@ function render(): void {
   select.value = current;
   $<HTMLTextAreaElement>('message').placeholder = m.pwa.placeholder;
   $('check').textContent = m.pwa.check;
+  $('image').textContent = m.pwa.image;
   $('paste').textContent = m.pwa.paste;
   $('clear').textContent = m.pwa.clear;
   $('privacy').textContent = m.pwa.privacy;
@@ -169,6 +173,50 @@ function check(): void {
   $('result').scrollIntoView({ block: 'start', behavior: 'smooth' });
 }
 
+/** Loads the OCR bundle (ocr/ocr.js) the first time an image is checked; it is not part of app.js. */
+let ocrApi: Promise<OcrApi> | null = null;
+function loadOcr(): Promise<OcrApi> {
+  ocrApi ??= new Promise<OcrApi>((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = 'ocr/ocr.js';
+    s.onload = () => {
+      const api = (window as unknown as { __vtOcr?: OcrApi }).__vtOcr;
+      if (api) resolve(api);
+      else reject(new Error('ocr unavailable'));
+    };
+    s.onerror = () => reject(new Error('ocr unavailable'));
+    document.head.append(s);
+  }).catch((e: unknown) => {
+    ocrApi = null;
+    throw e;
+  });
+  return ocrApi;
+}
+
+/** Reads the text of a screenshot on the device, puts it in the message box and checks it. The image is not kept. */
+async function checkImage(image: Blob): Promise<void> {
+  const show = (note: string): void => { state.note = note; $('status').textContent = note; };
+  const box = $<HTMLTextAreaElement>('message');
+  show(t().pwa.ocrProgress(0));
+  document.body.dataset.ocr = 'running';
+  try {
+    const ocr = await loadOcr();
+    const lines = cleanOcrLines(await ocr.recognize(image, (p) => show(t().pwa.ocrProgress(Math.round(p * 100)))));
+    if (lines.length === 0) {
+      show(t().pwa.ocrEmpty);
+      document.body.dataset.ocr = 'empty';
+      return;
+    }
+    box.value = lines.join('\n');
+    check();
+    show(t().pwa.ocrDone);
+    document.body.dataset.ocr = 'done';
+  } catch {
+    show(t().pwa.ocrFailed);
+    document.body.dataset.ocr = 'failed';
+  }
+}
+
 /** Text shared to the app (Android share sheet) arrives through the service worker, which stores it once; read and delete. */
 async function takeShared(): Promise<string | null> {
   if (!new URLSearchParams(location.search).has('shared') || !('caches' in window)) return null;
@@ -177,6 +225,15 @@ async function takeShared(): Promise<string | null> {
   const res = await cache.match(SHARED_KEY);
   await cache.delete(SHARED_KEY);
   return res ? res.text() : null;
+}
+
+/** An image shared to the app arrives the same way; read and delete. */
+async function takeSharedImage(): Promise<Blob | null> {
+  if (!('caches' in window)) return null;
+  const cache = await caches.open(SHARED_CACHE);
+  const res = await cache.match(SHARED_IMAGE_KEY);
+  await cache.delete(SHARED_IMAGE_KEY);
+  return res ? res.blob() : null;
 }
 
 async function main(): Promise<void> {
@@ -195,8 +252,18 @@ async function main(): Promise<void> {
       $<HTMLTextAreaElement>('message').focus();
     }
   });
+  const input = $<HTMLInputElement>('image-input');
+  $('image').addEventListener('click', () => input.click());
+  input.addEventListener('change', () => {
+    const file = input.files?.[0];
+    input.value = '';
+    if (file) void checkImage(file);
+  });
   render();
+  const wasShared = new URLSearchParams(location.search).has('shared');
   const shared = await takeShared().catch(() => null);
+  const sharedImage = wasShared ? await takeSharedImage().catch(() => null) : null;
+  if (sharedImage && !shared) void checkImage(sharedImage);
   if (shared) {
     $<HTMLTextAreaElement>('message').value = shared;
     check();

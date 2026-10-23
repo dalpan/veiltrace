@@ -64,7 +64,7 @@ Each finding keeps **classification** (manipulative / suspicious / observed), **
 |---|---|---|
 | **Chrome / Edge extension** (desktop) | Working | [Install](#install) · scan on click, or opt-in automatic scanning with a toolbar badge |
 | **Firefox extension** (desktop and Android ≥ 128) | Working, tested on Android | `npm run build:firefox` → `dist/extension-firefox` |
-| **"Check a message" web app** (any phone) | Live | **https://veiltrace.click/app/**: paste a message, or share it to the app on Android; works offline once opened |
+| **"Check a message" web app** (any phone) | Live | **https://veiltrace.click/app/**: paste a message or **check a screenshot** (on-device OCR), or share either to the app on Android; works offline once opened |
 | **WhatsApp Web** | Prototype | conversations are read as one user-content region; markup match with the real service not yet verified |
 | **Managed build** for organizations | Ready to pilot | install-time permissions, automatic scanning on, no reporting: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) |
 
@@ -72,7 +72,7 @@ Each finding keeps **classification** (manipulative / suspicious / observed), **
 
 ## Privacy and security by design
 
-- **No network code** in the extension or the app: no server, no telemetry, no remote rules. The app's CSP is `connect-src 'none'`; tests assert zero requests.
+- **Nothing leaves the device.** The extension has no network code: no server, no telemetry, no remote rules. The app's page CSP is `connect-src 'none'`; the only files it ever loads are its own, from veiltrace.click, including the OCR model the first time you check a screenshot. Tests assert both.
 - **Minimal permissions:** `activeTab` + `scripting`. Automatic scanning asks for site access only when the user turns it on, and gives it back when turned off.
 - **Never reads what you type:** form-field values, amounts and phone numbers are never copied into a report (tested with sentinel values).
 - **The page address is never a decision input.** Detection reads content, so it works on trusted domains and cannot be gamed by a fresh domain.

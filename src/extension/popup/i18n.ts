@@ -134,6 +134,12 @@ export interface Messages {
     headlineDetail: Record<'manipulative_instruction' | 'suspicious_correlation' | 'observed_instruction' | 'none', string>;
     yourMessage: string;
     offlineReady: string;
+    /** Screenshot check with on-device OCR (D-104). */
+    image: string;
+    ocrProgress: (percent: number) => string;
+    ocrDone: string;
+    ocrEmpty: string;
+    ocrFailed: string;
   };
   /** Optional on-device AI second opinion (D-093). */
   ai: {
@@ -434,14 +440,14 @@ const EN: Messages = {
   },
   pwa: {
     title: 'Check a message',
-    intro: 'Paste a suspicious message (WhatsApp, SMS, email or text from a website) to see whether it tries to manipulate you.',
+    intro: 'Paste a suspicious message, or check a screenshot of it, to see whether it tries to manipulate you. Screenshots are read on this device.',
     sourceLabel: 'Where is it from?',
     source: { chat: 'Chat (WhatsApp, Telegram…)', sms: 'SMS', email: 'Email', web: 'Text from a website' },
     placeholder: 'Paste the message here…',
     check: 'Check message',
     clear: 'Clear',
     paste: 'Paste from clipboard',
-    shareHint: 'On Android, install this app, then use Share → VeilTrace from WhatsApp or Messages.',
+    shareHint: 'On Android, install this app, then share a message or a screenshot to VeilTrace.',
     privacy: 'Checked on this device only. The message is not sent, saved or shared.',
     empty: 'Paste or share a message first.',
     tooLong: 'Only the first 20,000 characters were checked.',
@@ -455,6 +461,11 @@ const EN: Messages = {
     linkOnly: 'Only a link was pasted. VeilTrace checks what a message says and does not judge web addresses. Paste the whole message, including the text around the link. Do not open the link just to check it.',
     yourMessage: 'Your message',
     offlineReady: 'Ready to work offline.',
+    image: 'Check a screenshot',
+    ocrProgress: (p) => `Reading the text in the image on this device… ${p}%`,
+    ocrDone: 'Text read from the image. Compare it with the image and correct it if needed, then check again.',
+    ocrEmpty: 'No text could be read from this image. Try a sharper screenshot, or paste the text.',
+    ocrFailed: 'The image could not be read on this device. Paste the text instead.',
   },
   ai: {
     title: 'AI second opinion · optional, on this device',
@@ -776,14 +787,14 @@ const ID: Messages = {
   },
   pwa: {
     title: 'Cek pesan',
-    intro: 'Tempel pesan yang mencurigakan (WhatsApp, SMS, email, atau teks dari situs) untuk melihat apakah pesan itu mencoba memanipulasi Anda.',
+    intro: 'Tempel pesan yang mencurigakan, atau periksa screenshot-nya, untuk melihat apakah pesan itu mencoba memanipulasi Anda. Screenshot dibaca di perangkat ini.',
     sourceLabel: 'Dari mana pesannya?',
     source: { chat: 'Chat (WhatsApp, Telegram…)', sms: 'SMS', email: 'Email', web: 'Teks dari situs' },
     placeholder: 'Tempel pesan di sini…',
     check: 'Periksa pesan',
     clear: 'Hapus',
     paste: 'Tempel dari clipboard',
-    shareHint: 'Di Android, pasang aplikasi ini, lalu gunakan Bagikan → VeilTrace dari WhatsApp atau Pesan.',
+    shareHint: 'Di Android, pasang aplikasi ini, lalu bagikan pesan atau screenshot ke VeilTrace.',
     privacy: 'Diperiksa hanya di perangkat ini. Pesan tidak dikirim, disimpan, atau dibagikan.',
     empty: 'Tempel atau bagikan pesan terlebih dahulu.',
     tooLong: 'Hanya 20.000 karakter pertama yang diperiksa.',
@@ -797,6 +808,11 @@ const ID: Messages = {
     linkOnly: 'Yang ditempel hanya tautan. VeilTrace memeriksa isi pesan dan tidak menilai alamat situs. Tempel seluruh pesannya, termasuk teks di sekitar tautan. Jangan membuka tautan hanya untuk mengeceknya.',
     yourMessage: 'Pesan Anda',
     offlineReady: 'Siap dipakai tanpa internet.',
+    image: 'Periksa screenshot',
+    ocrProgress: (p) => `Membaca teks di gambar, di perangkat ini… ${p}%`,
+    ocrDone: 'Teks sudah dibaca dari gambar. Cocokkan dengan gambarnya dan perbaiki bila perlu, lalu periksa lagi.',
+    ocrEmpty: 'Tidak ada teks yang terbaca dari gambar ini. Coba screenshot yang lebih jelas, atau tempel teksnya.',
+    ocrFailed: 'Gambar tidak bisa dibaca di perangkat ini. Tempel teksnya saja.',
   },
   ai: {
     title: 'Pendapat kedua AI · opsional, di perangkat ini',

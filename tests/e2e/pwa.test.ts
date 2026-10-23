@@ -9,7 +9,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 // @ts-expect-error -- plain ESM build script without type declarations
 import { buildPwa } from '../../scripts/build-pwa.mjs';
 
-const TYPES: Record<string, string> = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.png': 'image/png', '.webmanifest': 'application/manifest+json' };
+const TYPES: Record<string, string> = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.gz': 'application/gzip', '.css': 'text/css', '.png': 'image/png', '.webmanifest': 'application/manifest+json' };
 let server: Server;
 let base: string;
 let browser: Browser;
@@ -102,6 +102,50 @@ describe('Cek Pesan PWA', () => {
     expect(await page.evaluate(() => caches.open('veiltrace-share').then((c) => c.match('./__shared__')).then((r) => r === undefined))).toBe(true);
     await context.close();
   });
+
+  it('reads a screenshot on the device (OCR, D-104), checks the text, and only loads its own OCR files', async () => {
+    const art = await browser.newPage({ viewport: { width: 390, height: 300 } });
+    await art.setContent(`<body style="margin:0;background:#e5ddd5;font:16px sans-serif"><div style="background:#fff;margin:12px;padding:10px;border-radius:8px;max-width:300px">
+      Selamat! Anda pemenang undian. Untuk mencairkan hadiah, transfer pajak hadiah Rp 2.500.000 ke rekening petugas hari ini juga.</div></body>`);
+    const png = await art.screenshot();
+    await art.close();
+    const { context, page } = await open();
+    const before = requests.length;
+    await page.setInputFiles('#image-input', { name: 'shot.png', mimeType: 'image/png', buffer: png });
+    await page.waitForFunction(() => ['done', 'empty', 'failed'].includes(document.body.dataset.ocr ?? ''), null, { timeout: 120_000 });
+    expect(await page.evaluate(() => document.body.dataset.ocr)).toBe('done');
+    expect((await page.inputValue('#message')).toLowerCase()).toContain('pemenang undian');
+    expect(await page.getAttribute('.threat', 'data-verdict')).toBe('manipulative_instruction');
+    const during = requests.slice(before);
+    // Only GETs of the app's own static files (this server is the only origin the page can reach); the image is never sent.
+    expect(during.every((r) => r.startsWith('GET /'))).toBe(true);
+    expect(during.some((r) => r.startsWith('GET /ocr/lang/ind.traineddata.gz'))).toBe(true);
+    await context.close();
+  }, 150_000);
+
+  it('a screenshot shared from another app (Android share target) is read and checked the same way', async () => {
+    const art = await browser.newPage({ viewport: { width: 390, height: 260 } });
+    await art.setContent('<body style="margin:0;background:#fff;font:16px sans-serif;padding:12px">Kode OTP untuk rekening Anda perlu diteruskan ke petugas kami lewat WhatsApp hari ini.</body>');
+    const png = await art.screenshot();
+    await art.close();
+    const { context, page } = await open();
+    await page.waitForFunction(() => document.body.dataset.offline === 'ready');
+    await page.reload();
+    await page.evaluate((b64) => {
+      const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+      const dt = new DataTransfer();
+      dt.items.add(new File([bytes], 'shot.png', { type: 'image/png' }));
+      const f = document.createElement('form');
+      f.method = 'POST'; f.action = 'share'; f.enctype = 'multipart/form-data';
+      const i = document.createElement('input'); i.type = 'file'; i.name = 'image'; i.files = dt.files; f.append(i);
+      document.body.append(f); f.submit();
+    }, png.toString('base64'));
+    await page.waitForFunction(() => document.body.dataset.ocr === 'done' || document.body.dataset.ocr === 'failed' || document.body.dataset.ocr === 'empty', null, { timeout: 120_000 });
+    expect(await page.getAttribute('.threat', 'data-verdict')).toBe('manipulative_instruction');
+    expect(page.url()).toBe(base);
+    expect(await page.evaluate(() => caches.open('veiltrace-share').then((c) => c.match('./__shared_image__')).then((r) => r === undefined))).toBe(true);
+    await context.close();
+  }, 150_000);
 
   it('works offline after the first visit', async () => {
     const { context, page } = await open();

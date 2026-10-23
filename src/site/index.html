@@ -83,8 +83,8 @@
     <section class="band split">
       <div>
         <h2><span data-l="en">For messages on your phone too</span><span data-l="id">Juga untuk pesan di HP</span></h2>
-        <p data-l="en">Many scams arrive as chat or text messages. <b>Check a Message</b> checks them right on your phone: paste the message, or on Android simply <b>Share</b> it to VeilTrace. The message is not sent anywhere and never appears in a URL.</p>
-        <p data-l="id">Banyak penipuan datang lewat chat atau SMS. <b>Cek Pesan</b> memeriksa pesan langsung di HP: paste pesannya, atau di Android cukup <b>Share</b> ke VeilTrace. Pesan tidak dikirim ke mana pun dan tidak muncul di URL.</p>
+        <p data-l="en">Many scams arrive as chat or text messages. <b>Check a Message</b> checks them right on your phone: paste the message, pick a <b>screenshot</b>, or on Android simply <b>Share</b> it to VeilTrace. The message is not sent anywhere and never appears in a URL.</p>
+        <p data-l="id">Banyak penipuan datang lewat chat atau SMS. <b>Cek Pesan</b> memeriksa pesan langsung di HP: paste pesannya, pilih <b>screenshot</b>, atau di Android cukup <b>Share</b> ke VeilTrace. Pesan tidak dikirim ke mana pun dan tidak muncul di URL.</p>
         <a class="btn" href="app/"><span data-l="en">Open Check a Message</span><span data-l="id">Buka Cek Pesan</span></a>
       </div>
       <img class="shot phone" src="img/pwa-result-crop.png" data-alt-en="Check a Message on a phone: an &quot;admin fee&quot; scam message marked as manipulative" data-alt-id="Cek Pesan di HP: pesan penipuan 'biaya admin' ditandai manipulatif" alt="Check a Message on a phone: an &quot;admin fee&quot; scam message marked as manipulative" width="390" height="700">
@@ -93,8 +93,8 @@
     <section>
       <h2><span data-l="en">Private by design</span><span data-l="id">Privasi sejak desain</span></h2>
       <ul class="checks">
-        <li data-l="en"><b>No server, no telemetry.</b> Neither the extension nor the app contains network code.</li>
-        <li data-l="id"><b>Tanpa server, tanpa telemetry.</b> Tidak ada network code di extension maupun app.</li>
+        <li data-l="en"><b>No server, no telemetry.</b> The extension contains no network code, and the app only loads its own files from this site. Messages and screenshots never leave your device.</li>
+        <li data-l="id"><b>Tanpa server, tanpa telemetry.</b> Extension tidak punya network code, dan app hanya memuat file miliknya sendiri dari situs ini. Pesan dan screenshot tidak pernah keluar dari perangkat Anda.</li>
         <li data-l="en"><b>Only two permissions:</b> <code>activeTab</code> and <code>scripting</code>. Auto-scan asks for more only when you turn it on.</li>
         <li data-l="id"><b>Hanya dua permission:</b> <code>activeTab</code> dan <code>scripting</code>. Auto-scan meminta izin tambahan hanya saat Anda menyalakannya.</li>
         <li data-l="en"><b>Never reads what you type.</b> Form contents, amounts and phone numbers are never copied into the report.</li>
@@ -165,14 +165,14 @@
     <section id="faq">
       <h2>FAQ</h2>
       <div data-l="en">
-        <details><summary>Does VeilTrace send my data to the internet?</summary><p>No. Every check runs on your device. The extension and the app contain no network code, and this is tested automatically.</p></details>
+        <details><summary>Does VeilTrace send my data to the internet?</summary><p>No. Every check runs on your device, including reading screenshots. The extension contains no network code; the app only loads its own files from this site (the reading model the first time you check a screenshot). Both are tested automatically.</p></details>
         <details><summary>Does VeilTrace guarantee that a page can be trusted?</summary><p>No. VeilTrace reports what it found, with evidence. When there are no findings, it means no known manipulation pattern was recognized, not that the page is guaranteed.</p></details>
         <details><summary>Do I have to click Scan every time?</summary><p>Manual by default, for privacy. You can turn on auto-scan from the popup: pages are checked when they load, and the icon is marked when manipulative content is found.</p></details>
         <details><summary>Why not use AI?</summary><p>We tested on-device AI. It flagged ordinary pages far too often, its reasons could not be checked, and text on the page can talk it into a different answer. VeilTrace uses explainable rules: every warning comes with evidence.</p></details>
         <details><summary>How much does it cost?</summary><p>Free and open source (Apache-2.0).</p></details>
       </div>
       <div data-l="id">
-        <details><summary>Apakah VeilTrace mengirim data saya ke internet?</summary><p>Tidak. Semua pemeriksaan berjalan di perangkat Anda. Extension dan app tidak punya network code; ini diuji otomatis.</p></details>
+        <details><summary>Apakah VeilTrace mengirim data saya ke internet?</summary><p>Tidak. Semua pemeriksaan berjalan di perangkat Anda, termasuk membaca screenshot. Extension tidak punya network code; app hanya memuat file miliknya sendiri dari situs ini (model pembaca teks saat pertama kali memeriksa screenshot). Keduanya diuji otomatis.</p></details>
         <details><summary>Apakah VeilTrace menjamin sebuah halaman bisa dipercaya?</summary><p>Tidak. VeilTrace melaporkan apa yang ditemukan beserta buktinya. Bila tidak ada temuan, artinya tidak ada pola manipulasi yang dikenali, bukan jaminan.</p></details>
         <details><summary>Harus klik Scan setiap kali?</summary><p>Bawaannya manual demi privasi. Anda bisa menyalakan auto-scan dari popup: halaman diperiksa saat dimuat dan ikon diberi tanda bila ada konten manipulatif.</p></details>
         <details><summary>Kenapa tidak memakai AI?</summary><p>Kami sudah menguji AI on-device. AI terlalu sering menandai halaman wajar, alasannya tidak bisa diperiksa, dan bisa dibujuk oleh teks di halaman. VeilTrace memakai rule yang bisa dijelaskan: setiap peringatan punya bukti.</p></details>

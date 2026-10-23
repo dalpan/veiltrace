@@ -4,6 +4,11 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-23 · On-device OCR for screenshots in the app (D-104)
+"Cek Pesan" can check a screenshot: a pick or an Android share is read on the device with Tesseract.js (pinned; Indonesian and English models; files served from the app's origin, loaded only on first use, cached offline). On the owner's 14 field screenshots the OCR path alerts on the same 10 images as the hand-transcribed records, in 2–6 s each on a laptop. New e2e tests for a picked and a shared screenshot; `npm test` 800 passed, with the two load-sensitive timing tests (extractor budget, 5,000-block analyze) failing under full-suite load and passing alone. **Next:** owner tries a screenshot on a phone.
+
+---
+
 ## 2026-10-23 · Illegal online loans and deposit-based task jobs (D-103)
 pay 0.8.0: `PR.LOAN` (approved or "pasti cair" loans, no BI checking) with a fee condition is PR1; ad-watching and review jobs with a deposit or balance top-up are PR1; licensed loan pages and instalment reminders stay below alert. 4 new fixtures (pay-dev 57, FP 0); synthetic, SMS and field-sample results unchanged. Demo gallery caption reworded (it quoted the lure verbatim). Tests: 799 passed in isolation runs; the extractor budget test still fails on this machine with or without the change. **Next:** on-device OCR for screenshots needs an owner decision (runtime dependency).
 

@@ -111,3 +111,13 @@ Residual: the extractor runs in the page's **main world** in tests (`page.evalua
 - Off by default; the production extension installs with `{ permissions: ['activeTab','scripting'], origins: [] }` (tested).
 - When on, pages are analyzed in the tab's isolated world exactly as in manual mode. The only data that leaves the tab is `{verdict, actionable}` for the toolbar badge (unit-tested shape, validated by the receiver). Nothing is stored, logged or sent off the device, and form values are never read.
 - Turning it off unregisters the content script and removes the host permission (E2E-tested).
+
+## On-device OCR in the "Cek Pesan" app (D-104)
+
+| Commitment | Verification |
+|---|---|
+| A screenshot never leaves the device | OCR runs in a same-origin worker; the page CSP keeps `connect-src 'none'`; the e2e test (`tests/e2e/pwa.test.ts`) asserts that only GETs of the app's own files happen and that the read text is checked locally |
+| A shared screenshot is not kept | Stored once in Cache Storage by the service worker and deleted after reading (e2e asserts the entry is gone) |
+| No third-party code or model at run time | Worker, cores and models are bundled with the app and served from its own origin; no CDN; versions pinned in the lockfile |
+| The extension is unchanged | OCR exists only in the app; the extension's permissions, CSP and zero-network checks are unchanged |
+
