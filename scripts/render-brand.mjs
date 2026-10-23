@@ -24,7 +24,7 @@ function socialCard() {
   <div style="font-size:86px;font-weight:700;letter-spacing:-1px;margin-top:24px">Veil<span style="color:#B9C98A">Trace</span></div>
   <div style="font-size:31px;line-height:1.3;color:#C9CFBF;margin-top:10px">Uncover the manipulation behind the page.</div>
   <div style="font-size:24px;line-height:1.4;color:#B9C98A;margin-top:22px">Deteksi indikasi penipuan, social engineering, dan manipulasi di halaman web, pesan, dan gambar, langsung di perangkat.</div>
-  <div style="font-family:${MONO};font-size:17px;letter-spacing:1px;color:#9AA38E;margin-top:30px">CLICKFIX · OTP · PAYMENT · FAKE SUPPORT · OCR</div>
+  <div style="font-family:${MONO};font-size:17px;letter-spacing:1px;color:#9AA38E;margin-top:30px">WEB · MESSAGES · IMAGES · ON-DEVICE · EXPLAINABLE</div>
 </div>
 <img class="shot" src="${img('docs/images/cmd-lure-popup-top.png')}" style="position:absolute;left:700px;top:70px;width:410px">
 <img class="shot" src="${img('docs/images/pwa-result-crop.png')}" style="position:absolute;left:950px;top:250px;width:210px">`);

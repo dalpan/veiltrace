@@ -42,14 +42,14 @@ flowchart LR
 ```
 
 1. **Read-only extraction.** Visible text and its origin (page content, comment, widget, dialog, chat). Form values are never read.
-2. **Contextual correlation.** A requested **action** (run, send a code, pay, contact) only counts together with a manipulative **pretext** (claimed authority, time pressure, threat, promised reward). Context that lowers the result is read too: quotations, news, education, negation ("never share your code").
+2. **Contextual correlation.** A risky **action** the text asks for only counts together with a manipulative **pretext** around it: abuse of authority, pressure, or engineered trust. Context that lowers the result is read too: quotations, news, education and negation.
 3. **Explainable finding.** Every result names its rule, lists the evidence with **Show on page**, and states its limits ("a claimed identity cannot be verified"). VeilTrace never calls a page "safe".
 
 ## What it checks
 
-Four independent detectors. None of them alerts on a single keyword.
+Detectors are modular, and their patterns are data: new scam techniques and new categories are added from real cases without changing the engine. None of them alerts on a single keyword. The four categories today, with examples of what each covers so far:
 
-| Code | Detector | Examples |
+| Code | Detector | Examples (growing) |
 |---|---|---|
 | **CMD** | Command Execution Manipulation | ClickFix: "press Win+R, paste, Enter"; fake "fix this error" terminal steps |
 | **CRED** | Credential Disclosure Manipulation | "send us the OTP", "kasih liat kode yg masuk ke hp", codes to be forwarded to an "officer", recovery phrases |
