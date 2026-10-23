@@ -23,8 +23,8 @@ function socialCard() {
   <img src="${svg('assets/brand/logo.svg')}" style="width:104px;height:104px">
   <div style="font-size:86px;font-weight:700;letter-spacing:-1px;margin-top:24px">Veil<span style="color:#B9C98A">Trace</span></div>
   <div style="font-size:31px;line-height:1.3;color:#C9CFBF;margin-top:10px">Uncover the manipulation behind the page.</div>
-  <div style="font-size:24px;line-height:1.4;color:#B9C98A;margin-top:22px">Deteksi social engineering di halaman web dan pesan WhatsApp, langsung on-device.</div>
-  <div style="font-family:${MONO};font-size:17px;letter-spacing:1px;color:#9AA38E;margin-top:30px">CLICKFIX · OTP · PAYMENT · FAKE SUPPORT</div>
+  <div style="font-size:24px;line-height:1.4;color:#B9C98A;margin-top:22px">Deteksi indikasi penipuan, social engineering, dan manipulasi di halaman web, pesan, dan gambar, langsung di perangkat.</div>
+  <div style="font-family:${MONO};font-size:17px;letter-spacing:1px;color:#9AA38E;margin-top:30px">CLICKFIX · OTP · PAYMENT · FAKE SUPPORT · OCR</div>
 </div>
 <img class="shot" src="${img('docs/images/cmd-lure-popup-top.png')}" style="position:absolute;left:700px;top:70px;width:410px">
 <img class="shot" src="${img('docs/images/pwa-result-crop.png')}" style="position:absolute;left:950px;top:250px;width:210px">`);
@@ -52,8 +52,8 @@ function pwaShot() {
   return PAGE(1600, 900, `
 <div style="position:absolute;left:80px;top:150px;width:760px">
   <img src="${svg('assets/brand/logo.svg')}" style="width:80px;height:80px">
-  <div style="font-size:52px;font-weight:700;line-height:1.15;margin-top:28px">Cek Pesan: pesan WhatsApp diperiksa langsung di HP</div>
-  <div style="font-size:26px;line-height:1.45;color:#C9CFBF;margin-top:24px">Tempel pesan, atau di Android cukup <b>Share</b> dari WhatsApp. Teksnya tidak dikirim ke mana pun dan tidak muncul di URL.</div>
+  <div style="font-size:52px;font-weight:700;line-height:1.15;margin-top:28px">Cek Pesan: pesan dan screenshot diperiksa langsung di HP</div>
+  <div style="font-size:26px;line-height:1.45;color:#C9CFBF;margin-top:24px">Tempel pesan, pilih screenshot, atau di Android cukup <b>Share</b> dari aplikasi chat. Tidak ada yang dikirim ke mana pun dan tidak muncul di URL.</div>
   <div style="font-size:24px;color:#B9C98A;margin-top:28px">veiltrace.click/app</div>
 </div>
 <img class="shot" src="${img('docs/images/pwa-result-crop.png')}" style="position:absolute;left:980px;top:60px;width:460px">`);
