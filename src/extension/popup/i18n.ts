@@ -246,8 +246,10 @@ const EN: Messages = {
   languageLabel: 'Language',
   limitsSummary: 'What VeilTrace can and cannot see',
   limitsText:
-    'VeilTrace analyzes visible page text and some hidden clipboard text, on this device only. It does not examine images, videos, scripts or ' +
-    'content from other sites inside frames, and it can miss instructions worded in unusual ways. A result without findings is not a guarantee.',
+    'VeilTrace analyzes visible page text and some hidden clipboard text, on this device only. On request ("Read text in images"), it also reads ' +
+    'text inside images on the visible part of the page, also on this device. It does not examine videos, audio, scripts, images outside the ' +
+    'visible area or content from other sites inside frames, and it can miss instructions worded in unusual ways or text the reader cannot ' +
+    'make out. A result without findings is not a guarantee.',
   metaIdle: 'Runs on this device only. Nothing is sent anywhere.',
   meta: (engine, extractor, ms) => `Engine ${engine} · extractor ${extractor} · ${ms} ms · on this device only`,
   partialQualifier: ' Part of the page could not be examined (see below).',
@@ -605,8 +607,10 @@ const ID: Messages = {
   languageLabel: 'Bahasa',
   limitsSummary: 'Apa yang bisa dan tidak bisa dilihat VeilTrace',
   limitsText:
-    'VeilTrace menganalisis teks yang terlihat di halaman dan sebagian teks clipboard tersembunyi, hanya di perangkat ini. VeilTrace tidak memeriksa gambar, video, skrip, ' +
-    'atau konten dari situs lain di dalam frame, dan bisa melewatkan instruksi yang ditulis dengan cara tidak biasa. Hasil tanpa temuan bukan jaminan.',
+    'VeilTrace menganalisis teks yang terlihat di halaman dan sebagian teks clipboard tersembunyi, hanya di perangkat ini. Atas permintaan ("Baca teks di gambar"), ' +
+    'VeilTrace juga membaca teks di dalam gambar pada bagian halaman yang terlihat, juga di perangkat ini. VeilTrace tidak memeriksa video, audio, skrip, gambar ' +
+    'di luar layar yang terlihat, atau konten dari situs lain di dalam frame, dan bisa melewatkan instruksi yang ditulis dengan cara tidak biasa atau teks ' +
+    'yang tidak terbaca. Hasil tanpa temuan bukan jaminan.',
   metaIdle: 'Berjalan hanya di perangkat ini. Tidak ada data yang dikirim.',
   meta: (engine, extractor, ms) => `Engine ${engine} · extractor ${extractor} · ${ms} md · hanya di perangkat ini`,
   partialQualifier: ' Sebagian halaman tidak dapat diperiksa (lihat di bawah).',
