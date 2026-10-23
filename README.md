@@ -17,7 +17,7 @@ VeilTrace is a context-based threat analysis platform focused on detecting socia
 
 <p align="center">
   <img alt="License: Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-8F9F5E">
-  <img alt="Version 0.7.0" src="https://img.shields.io/badge/version-0.7.0-8F9F5E">
+  <img alt="Version 0.8.0" src="https://img.shields.io/badge/version-0.8.0-8F9F5E">
   <img alt="Runs on-device" src="https://img.shields.io/badge/runs-on--device-8F9F5E">
   <img alt="Network requests: 0" src="https://img.shields.io/badge/network%20requests-0-8F9F5E">
 </p>

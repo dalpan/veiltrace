@@ -4,6 +4,11 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-23 · Version 0.8.0 and documentation refresh
+Extension version 0.8.0 (OCR, new detector classes since 0.7.0). PRODUCT_SPEC status table, README badge and release notes brought up to date; submission materials (local) refreshed to match. **Next:** owner tries "Read text in images" from the toolbar and a screenshot in the app on a phone; publishes the 0.8.0 draft release when ready.
+
+---
+
 ## 2026-10-23 · Text in images in the extension (D-105)
 Popup button "Read text in images" after a scan: visible-tab capture (activeTab, no new permission), OCR in the extension's own worker (engine and models bundled, network paths stubbed, no forbidden identifiers), page text dropped in the tab, rest analyzed; evidence not highlightable. CSP adds only `'wasm-unsafe-eval'`. Release verified (SBOM lists exactly the OCR engine and two models; new negative test). E2E: image lure read and flagged manipulative, page text not re-analyzed, no highlight offered; plain page says nothing found. **Next:** owner tries it from the toolbar (the real capture path needs a toolbar click).
 
