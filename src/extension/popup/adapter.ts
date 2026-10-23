@@ -12,7 +12,8 @@ export interface TargetTab {
 
 export type UrlClass = 'scannable' | 'restricted' | 'file' | 'unknown';
 
-const RESTRICTED_HOSTS = [/^chromewebstore\.google\.com$/, /^microsoftedge\.microsoft\.com$/];
+/** Extension stores: browsers do not let extensions read them. */
+const RESTRICTED_HOSTS = [/^chromewebstore\.google\.com$/, /^microsoftedge\.microsoft\.com$/, /^addons\.mozilla\.org$/, /^addons\.opera\.com$/];
 
 /** Pages where browsers forbid or we refuse script injection. */
 export function classifyUrl(url: string | undefined): UrlClass {

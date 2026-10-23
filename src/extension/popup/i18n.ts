@@ -526,7 +526,7 @@ const EN: Messages = {
     modeLabel: { manual: 'MANUAL', automatic: 'AUTO' },
     manualText: 'Manual: VeilTrace reads a page only when you click Scan page.',
     automaticText: 'Automatic: VeilTrace checks pages as they load and change, and marks the toolbar icon with "!" when it finds manipulative content.',
-    consent: 'Chrome will ask you to let VeilTrace read all websites. Pages are still analyzed only on this device: nothing is sent, stored or shared, and form values are never read. It applies to pages opened or reloaded afterwards, and you can turn it off here or in Chrome settings at any time.',
+    consent: 'Your browser will ask you to let VeilTrace read all websites. Pages are still analyzed only on this device: nothing is sent, stored or shared, and form values are never read. It applies to pages opened or reloaded afterwards, and you can turn it off here or in Chrome settings at any time.',
     managedText: 'Automatic scanning is turned on by your organization. Pages are still analyzed only on this device; nothing is reported to your organization or anyone else.',
     enable: 'Turn on automatic scanning',
     disable: 'Turn off automatic scanning',
@@ -584,10 +584,10 @@ const EN: Messages = {
   errors: {
     noPageTitle: 'No page to scan', noPageDetail: 'Open a web page, then click the VeilTrace button again.',
     restrictedTitle: 'This page cannot be scanned',
-    restrictedDetail: 'Browser-protected pages (such as chrome:// pages, the Chrome Web Store and other extensions) do not allow extensions to read them.',
+    restrictedDetail: 'Browser-protected pages (such as the browser\'s internal pages, extension stores and other extensions) do not allow extensions to read them.',
     accessTitle: 'VeilTrace could not access this page',
     accessDetail: 'The page may block extensions or may have changed. Reload the page and try again.',
-    fileDetail: 'To scan local files, turn on "Allow access to file URLs" for VeilTrace in chrome://extensions.',
+    fileDetail: 'To scan local files, turn on "Allow access to file URLs" for VeilTrace on your browser\'s extensions page.',
     badReportTitle: 'Scan failed', badReportDetail: 'The scan returned unexpected data and was discarded.',
   },
 };
@@ -885,7 +885,7 @@ const ID: Messages = {
     modeLabel: { manual: 'MANUAL', automatic: 'OTOMATIS' },
     manualText: 'Manual: VeilTrace membaca halaman hanya saat Anda menekan Pindai halaman.',
     automaticText: 'Otomatis: VeilTrace memeriksa halaman saat dimuat dan berubah, dan memberi tanda "!" pada ikon toolbar jika menemukan konten manipulatif.',
-    consent: 'Chrome akan meminta izin agar VeilTrace dapat membaca semua situs. Halaman tetap dianalisis hanya di perangkat ini: tidak ada yang dikirim, disimpan, atau dibagikan, dan isian formulir tidak pernah dibaca. Berlaku untuk halaman yang dibuka atau dimuat ulang setelahnya, dan dapat dimatikan di sini atau di pengaturan Chrome kapan saja.',
+    consent: 'Browser akan meminta izin agar VeilTrace dapat membaca semua situs. Halaman tetap dianalisis hanya di perangkat ini: tidak ada yang dikirim, disimpan, atau dibagikan, dan isian formulir tidak pernah dibaca. Berlaku untuk halaman yang dibuka atau dimuat ulang setelahnya, dan dapat dimatikan di sini atau di pengaturan Chrome kapan saja.',
     managedText: 'Pemindaian otomatis diaktifkan oleh organisasi Anda. Halaman tetap dianalisis hanya di perangkat ini; tidak ada yang dilaporkan ke organisasi Anda atau pihak lain.',
     enable: 'Aktifkan pemindaian otomatis',
     disable: 'Matikan pemindaian otomatis',
@@ -943,10 +943,10 @@ const ID: Messages = {
   errors: {
     noPageTitle: 'Tidak ada halaman untuk dipindai', noPageDetail: 'Buka sebuah halaman web, lalu klik tombol VeilTrace lagi.',
     restrictedTitle: 'Halaman ini tidak dapat dipindai',
-    restrictedDetail: 'Halaman yang dilindungi browser (seperti halaman chrome://, Chrome Web Store, dan ekstensi lain) tidak mengizinkan ekstensi membacanya.',
+    restrictedDetail: 'Halaman yang dilindungi browser (seperti halaman internal browser, toko ekstensi, dan ekstensi lain) tidak mengizinkan ekstensi membacanya.',
     accessTitle: 'VeilTrace tidak dapat mengakses halaman ini',
     accessDetail: 'Halaman mungkin memblokir ekstensi atau sudah berubah. Muat ulang halaman lalu coba lagi.',
-    fileDetail: 'Untuk memindai file lokal, aktifkan "Izinkan akses ke URL file" untuk VeilTrace di chrome://extensions.',
+    fileDetail: 'Untuk memindai file lokal, aktifkan "Izinkan akses ke URL file" untuk VeilTrace di halaman ekstensi browser Anda.',
     badReportTitle: 'Pemindaian gagal', badReportDetail: 'Pemindaian mengembalikan data yang tidak terduga dan data itu dibuang.',
   },
 };

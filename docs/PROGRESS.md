@@ -4,6 +4,11 @@ Newest entry first. Each entry: date, milestone, what was done, verification, wh
 
 ---
 
+## 2026-10-23 · Browser coverage and WhatsApp Web tested (D-106)
+E2E suite runnable in Microsoft Edge (`npm run test:e2e:edge`): extension, OCR and security suites pass in Edge 155. Mozilla's add-on linter on the Firefox build: the 9.4 MB OCR worker blocked parsing; it is now four packaged files under 4 MB each, and the linter reports 0 errors and 0 warnings. Popup text and all materials are browser-neutral; WhatsApp Web tested by the owner. **Next:** owner replaces the unpacked folder with the 0.8.0 ZIP (the reloaded folder was an older 0.7.0 build).
+
+---
+
 ## 2026-10-23 · OCR: second, adaptive-threshold pass (D-105)
 Preparing the video showed that text on a coloured panel in a white page was not read (global Otsu threshold). Extension and app now run two passes and merge only new lines; the 14 field screenshots keep the same 10 alerts and the poster case is read. New e2e test for the panel case and a unit test for the merge. **Next:** video and submission refresh.
 

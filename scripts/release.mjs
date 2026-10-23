@@ -38,13 +38,13 @@ function toolVersion(pkg) {
 }
 
 /**
- * Third-party code in the artifact (D-105): only the OCR engine and its two models, inside ocr-worker.js. Listed so the SBOM
+ * Third-party code in the artifact (D-105): only the OCR engine and its two models (ocr-core.js, ocr-lang-*.js). Listed so the SBOM
  * says exactly what is distributed; scripts/verify-release.mjs accepts this list and nothing else.
  */
 export const THIRD_PARTY_COMPONENTS = [
-  { type: 'library', name: 'tesseract.js-core', version: '7.0.0', licenses: [{ license: { id: 'Apache-2.0' } }], purl: 'pkg:npm/tesseract.js-core@7.0.0', properties: [{ name: 'veiltrace:file', value: 'ocr-worker.js' }, { name: 'veiltrace:modified', value: 'network paths replaced by a stub that throws' }] },
-  { type: 'data', name: 'tessdata-ind-4.0.0_best_int', version: '1.0.0', licenses: [{ license: { id: 'Apache-2.0' } }], purl: 'pkg:npm/%40tesseract.js-data/ind@1.0.0', properties: [{ name: 'veiltrace:file', value: 'ocr-worker.js' }] },
-  { type: 'data', name: 'tessdata-eng-4.0.0_best_int', version: '1.0.0', licenses: [{ license: { id: 'Apache-2.0' } }], purl: 'pkg:npm/%40tesseract.js-data/eng@1.0.0', properties: [{ name: 'veiltrace:file', value: 'ocr-worker.js' }] },
+  { type: 'library', name: 'tesseract.js-core', version: '7.0.0', licenses: [{ license: { id: 'Apache-2.0' } }], purl: 'pkg:npm/tesseract.js-core@7.0.0', properties: [{ name: 'veiltrace:file', value: 'ocr-core.js' }, { name: 'veiltrace:modified', value: 'network paths replaced by a stub that throws' }] },
+  { type: 'data', name: 'tessdata-ind-4.0.0_best_int', version: '1.0.0', licenses: [{ license: { id: 'Apache-2.0' } }], purl: 'pkg:npm/%40tesseract.js-data/ind@1.0.0', properties: [{ name: 'veiltrace:file', value: 'ocr-lang-ind.js' }] },
+  { type: 'data', name: 'tessdata-eng-4.0.0_best_int', version: '1.0.0', licenses: [{ license: { id: 'Apache-2.0' } }], purl: 'pkg:npm/%40tesseract.js-data/eng@1.0.0', properties: [{ name: 'veiltrace:file', value: 'ocr-lang-eng.js' }] },
 ];
 
 export async function release({ out = 'release', candidate = false } = {}) {
@@ -72,7 +72,7 @@ export async function release({ out = 'release', candidate = false } = {}) {
         type: 'application', name: 'veiltrace-chromium', version,
         licenses: [{ license: { id: 'Apache-2.0' } }],
         hashes: [{ alg: 'SHA-256', content: sha256(zip) }],
-        properties: [{ name: 'veiltrace:source-commit', value: commit }, { name: 'veiltrace:third-party-code', value: 'ocr-worker.js only (OCR engine and models)' }],
+        properties: [{ name: 'veiltrace:source-commit', value: commit }, { name: 'veiltrace:third-party-code', value: 'ocr-core.js, ocr-lang-ind.js, ocr-lang-eng.js only (OCR engine and models)' }],
       },
     },
     components: THIRD_PARTY_COMPONENTS,

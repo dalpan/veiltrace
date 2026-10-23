@@ -14,25 +14,38 @@ export const TEST_HOST_PERMISSIONS = ['https://*.test/*', 'https://*.example/*']
 const FORBIDDEN = ['fetch(', 'XMLHttpRequest', 'WebSocket', 'sendBeacon', 'eval(', 'new Function', 'URLSearchParams', 'sendMessage', 'onMessage', 'onConnect', 'onMessageExternal', 'importScripts'];
 
 /**
- * The OCR worker (D-105): the Tesseract engine (tesseract.js-core, SIMD LSTM build, wasm embedded) with its unused network
- * paths (fetching the wasm or a lazy file by URL) replaced by a stub that throws, the Indonesian and English models as
- * gzip+base64 strings, and src/extension/ocr/worker.ts. The result is checked for every forbidden identifier.
+ * The OCR worker (D-105), in four files so each stays under the 4 MB that Mozilla's add-on linter can parse:
+ *   ocr-worker.js     src/extension/ocr/worker.ts; loads the three below with importScripts (packaged files only: CSP
+ *                     script-src 'self')
+ *   ocr-core.js       the Tesseract engine (tesseract.js-core, SIMD LSTM build, wasm embedded), its unused network paths
+ *                     (fetching the wasm or a lazy file by URL) replaced by a stub that throws
+ *   ocr-lang-ind.js   the Indonesian model, gzip+base64
+ *   ocr-lang-eng.js   the English model, gzip+base64
+ * Every file is checked for the forbidden identifiers; only ocr-worker.js may call importScripts.
  */
-export async function buildOcrWorker() {
+export const OCR_FILES = ['ocr-worker.js', 'ocr-core.js', 'ocr-lang-ind.js', 'ocr-lang-eng.js'];
+const MAX_PARSE_BYTES = 4 * 1024 * 1024;
+
+export async function buildOcrFiles() {
   const core = readFileSync('node_modules/tesseract.js-core/tesseract-core-simd-lstm.wasm.js', 'utf8')
     .replaceAll('fetch(', '__vtNoNetwork(').replaceAll('XMLHttpRequest', '__vtNoXhr');
-  const lang = Object.fromEntries(['ind', 'eng'].map((l) => [l, readFileSync(`node_modules/@tesseract.js-data/${l}/4.0.0_best_int/${l}.traineddata.gz`).toString('base64')]));
+  const lang = (l) => `self.__vtOcrLang = self.__vtOcrLang || {};\nself.__vtOcrLang.${l} = ${JSON.stringify(readFileSync(`node_modules/@tesseract.js-data/${l}/4.0.0_best_int/${l}.traineddata.gz`).toString('base64'))};\n`;
   const worker = await build({ entryPoints: ['src/extension/ocr/worker.ts'], bundle: true, format: 'iife', platform: 'browser', target: 'chrome110', legalComments: 'none', minifySyntax: true, logLevel: 'warning', write: false });
-  const code = [
-    '// VeilTrace OCR worker. Includes the Tesseract OCR engine (tesseract.js-core 7.0.0, Apache-2.0) and the tessdata 4.0.0_best_int',
-    '// Indonesian and English models (Apache-2.0). Network paths of the engine are disabled.',
-    'var __vtNoNetwork=function(){throw new Error("VeilTrace: network disabled")},__vtNoXhr=void 0;',
-    `var __vtOcrLang=${JSON.stringify(lang)};`,
-    core,
-    worker.outputFiles[0].text,
-  ].join('\n');
-  for (const bad of FORBIDDEN) if (code.includes(bad)) throw new Error(`ocr-worker.js contains ${bad}`);
-  return code;
+  const files = {
+    'ocr-worker.js': worker.outputFiles[0].text,
+    'ocr-core.js': [
+      '// VeilTrace OCR engine: tesseract.js-core 7.0.0 (Apache-2.0). Network paths are disabled.',
+      'var __vtNoNetwork=function(){throw new Error("VeilTrace: network disabled")},__vtNoXhr=void 0;',
+      core,
+    ].join('\n'),
+    'ocr-lang-ind.js': '// tessdata 4.0.0_best_int Indonesian model (Apache-2.0)\n' + lang('ind'),
+    'ocr-lang-eng.js': '// tessdata 4.0.0_best_int English model (Apache-2.0)\n' + lang('eng'),
+  };
+  for (const [name, code] of Object.entries(files)) {
+    for (const bad of FORBIDDEN) if (code.includes(bad) && !(bad === 'importScripts' && name === 'ocr-worker.js')) throw new Error(`${name} contains ${bad}`);
+    if (Buffer.byteLength(code) >= MAX_PARSE_BYTES) throw new Error(`${name} is too large for the add-on linter`);
+  }
+  return files;
 }
 
 /** Firefox (desktop and Android ≥ 128, where MV3 is fully supported): event-page background and a gecko id (D-086). */
@@ -69,7 +82,7 @@ export async function buildExtension({ test = false, firefox = false, managed = 
   await build({ ...common, entryPoints: ['src/extension/content/index.ts'], outfile: join(outdir, 'content.js'), globalName: 'VeiltraceContent' });
   await build({ ...common, entryPoints: ['src/extension/auto/content-auto.ts'], outfile: join(outdir, 'auto.js'), define });
   await build({ ...common, entryPoints: ['src/extension/background/worker.ts'], outfile: join(outdir, 'background.js'), define });
-  writeFileSync(join(outdir, 'ocr-worker.js'), await buildOcrWorker());
+  for (const [name, code] of Object.entries(await buildOcrFiles())) writeFileSync(join(outdir, name), code);
   copyFileSync('src/extension/popup/popup.html', join(outdir, 'popup.html'));
   copyFileSync('src/extension/popup/popup.css', join(outdir, 'popup.css'));
   for (const [name, png] of Object.entries(icons())) writeFileSync(join(outdir, 'icons', name), png);

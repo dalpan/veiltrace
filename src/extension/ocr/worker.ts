@@ -1,9 +1,11 @@
 /// <reference lib="webworker" />
-// OCR worker of the extension (D-105): reads a screenshot of the visible tab on the device with the Tesseract engine. The build
-// prepends the engine (tesseract.js-core, its network paths replaced by stubs that throw) and the Indonesian and English
-// models as gzip+base64 strings, so nothing is fetched: the worker has no network code. It answers only its own popup.
+// OCR worker of the extension (D-105): reads a screenshot of the visible tab on the device with the Tesseract engine. The engine
+// (its network paths replaced by stubs that throw) and the Indonesian and English models (gzip+base64) are packaged files,
+// loaded with importScripts on first use; CSP script-src 'self' allows nothing else. The worker answers only its own popup.
 declare const TesseractCore: (opts: Record<string, unknown>) => Promise<TessModule>;
 declare const __vtOcrLang: Record<'ind' | 'eng', string>;
+
+// Loaded by importScripts in init(); kept as globals of this worker only.
 
 interface TessApi {
   Init(dataPath: null, langs: string, oem: number): number;
@@ -29,6 +31,7 @@ async function gunzip(b64: string): Promise<Uint8Array> {
 }
 
 async function init(): Promise<{ mod: TessModule; api: TessApi }> {
+  scope.importScripts('ocr-core.js', 'ocr-lang-ind.js', 'ocr-lang-eng.js');
   const mod = await TesseractCore({ TesseractProgress: (pct: number) => progress?.(Math.max(0, (pct - 30) / 70)) });
   for (const lang of ['ind', 'eng'] as const) mod.FS.writeFile(`${lang}.traineddata`, await gunzip(__vtOcrLang[lang]));
   const api = new mod.TessBaseAPI();

@@ -67,11 +67,11 @@ describe('artifact verification', () => {
     expect(manifest.source.commit).toMatch(/^[0-9a-f]{40}$|^unknown$/);
     expect(manifest.notice).toMatch(/do not establish authenticity/);
     expect(manifest.releaseType).toBe('development');
-    // D-105: the only third-party code is the OCR engine and its two models, all inside ocr-worker.js.
+    // D-105: the only third-party code is the OCR engine and its two models, in ocr-core.js and ocr-lang-*.js.
     expect(manifest.sbom.thirdPartyComponents).toBe(3);
     const sbom = JSON.parse(readFileSync(join(dir, manifest.sbom.file), 'utf8'));
     expect(sbom.components.map((c: { name: string }) => c.name).sort()).toEqual(['tessdata-eng-4.0.0_best_int', 'tessdata-ind-4.0.0_best_int', 'tesseract.js-core']);
-    expect(sbom.components.every((c: { properties: Array<{ value: string }> }) => c.properties.some((p) => p.value === 'ocr-worker.js'))).toBe(true);
+    expect(sbom.components.every((c: { properties: Array<{ value: string }> }) => c.properties.some((p) => /^ocr-(core|lang-ind|lang-eng)\.js$/.test(p.value)))).toBe(true);
     expect(sbom.metadata.component.hashes[0].content).toBe(manifest.artifact.sha256);
     const zip = readZip(readFileSync(join(dir, manifest.artifact.file)));
     expect([...zip.keys()].sort()).toEqual(manifest.files.map((f: { path: string }) => f.path).sort());

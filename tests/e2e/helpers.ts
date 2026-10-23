@@ -40,7 +40,8 @@ export async function launchExtension(kind: 'test' | 'prod' | 'managed', uiLang:
   const dir = await extensionDir(kind);
   mkdirSync(join(tmpdir(), 'veiltrace-e2e'), { recursive: true });
   const context = await chromium.launchPersistentContext(mkdtempSync(join(tmpdir(), 'veiltrace-e2e', 'profile-')), {
-    channel: 'chromium',
+    // VT_E2E_CHANNEL=msedge runs the same tests in an installed Microsoft Edge (any Chromium browser Playwright supports).
+    channel: process.env.VT_E2E_CHANNEL ?? 'chromium',
     headless: true,
     viewport: { width: 1280, height: 800 },
     locale: uiLang,

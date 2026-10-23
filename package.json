@@ -44,7 +44,9 @@
     "brand": "node scripts/render-brand.mjs",
     "build:site": "node scripts/build-site.mjs",
     "deploy:site": "node scripts/deploy-site.mjs",
-    "external": "node scripts/external.mjs"
+    "external": "node scripts/external.mjs",
+    "test:e2e:edge": "VT_E2E_CHANNEL=msedge vitest run tests/e2e",
+    "lint:firefox": "npm run build:firefox && npx --yes web-ext@8.3.0 lint -s dist/extension-firefox"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

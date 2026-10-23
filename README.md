@@ -62,10 +62,11 @@ Each finding keeps **classification** (manipulative / suspicious / observed), **
 
 | Surface | Status | How |
 |---|---|---|
-| **Chrome / Edge extension** (desktop) | Working | [Install](#install) · scan on click, or opt-in automatic scanning with a toolbar badge; **read text in images** on the visible screen (on-device OCR) |
-| **Firefox extension** (desktop and Android ≥ 128) | Working, tested on Android | `npm run build:firefox` → `dist/extension-firefox` |
+| **Browser extension: Chromium browsers** (Chrome, Edge, and the same build for Brave, Opera, Vivaldi) | Working; automated tests run in Chromium and Microsoft Edge | [Install](#install) · scan on click, or opt-in automatic scanning with a toolbar badge; **read text in images** on the visible screen (on-device OCR) |
+| **Browser extension: Firefox** (desktop and Android ≥ 128) | Working, tested on Android; passes Mozilla's add-on linter (`npm run lint:firefox`) | `npm run build:firefox` → `dist/extension-firefox` |
 | **"Check a message" web app** (any phone) | Live | **https://veiltrace.click/app/**: paste a message or **check a screenshot** (on-device OCR), or share either to the app on Android; works offline once opened |
-| **WhatsApp Web** | Prototype | conversations are read as one user-content region; markup match with the real service not yet verified |
+| **WhatsApp Web** | Working, tested by the team | open a chat and scan: messages are read as content from someone else (for example an OTP to be forwarded is flagged) |
+| **Safari** | Planned | needs packaging as a Safari Web Extension with Xcode |
 | **Managed build** for organizations | Ready to pilot | install-time permissions, automatic scanning on, no reporting: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) |
 
 <p align="center">
@@ -92,19 +93,19 @@ Each finding keeps **classification** (manipulative / suspicious / observed), **
 | **Genuine pages and messages** | a genuine bank OTP SMS, checkouts with virtual accounts, official job ads and news about scams are **not flagged** (0 of 103 benign development pages) |
 | **Rule-based vs on-device AI** | on the same pages Chrome's built-in model (Gemini Nano) flagged 71% of benign pages; VeilTrace 0%. The AI is therefore not used ([details](docs/AI_EVAL.md)) |
 | **Public Indonesian SMS dataset** (labelled by others) | on its development half, fraud SMS flagged rose from 11 to **94 of 178** after adding SMS-era patterns, with **1 of 318** normal SMS flagged; the test half is locked ([details](docs/EVALUATION_PLAN.md)) |
-| **Devices** | Chrome desktop, Firefox for Android and the web app on iPhone, tested by the team |
+| **Browsers and devices** | Chrome and Edge on desktop (automated tests run in both), WhatsApp Web, Firefox for Android and the web app on iPhone, tested by the team |
 | **Automated tests** | 799 passing: unit, real-browser extraction, end-to-end with the real extension, security and zero-network checks |
 
 Detection quality is tracked with hash-locked, preregistered held-out sets and a real-world field sample collected with local OCR; the protocol and every run are in [docs/README.md](docs/README.md#evaluation-protocol).
 
 ## Install
 
-**Chrome / Edge:** download `veiltrace-chromium.zip` from https://veiltrace.click/#install and unzip it, or build it yourself:
+**Chromium browsers (Chrome, Edge, Brave, Opera, Vivaldi):** download `veiltrace-chromium.zip` from https://veiltrace.click/#install and unzip it, or build it yourself:
 ```bash
 npm ci
 npm run build:ext            # → dist/extension
 ```
-Then `chrome://extensions` → Developer mode → **Load unpacked** → the folder. Open a page, click the VeilTrace icon, press **Scan page**.
+Open the browser's extensions page (`chrome://extensions`, `edge://extensions`, `brave://extensions`, `opera://extensions` or `vivaldi://extensions`), turn on Developer mode, choose **Load unpacked** and select the folder. Open a page, click the VeilTrace icon, press **Scan page**. To update, replace the folder with the new ZIP's contents and press reload on the extensions page (the popup header shows the version).
 
 **Firefox (desktop or Android):** `npm run build:firefox`, then load `dist/extension-firefox` temporarily (`about:debugging`, or `npx web-ext run -t firefox-android` over USB). Permanent installation needs a Mozilla-signed XPI.
 
@@ -134,6 +135,8 @@ docs/              technical documentation and decision records: start at docs/R
 ```bash
 npm ci && npx playwright install chromium
 npm run check                        # typecheck + lint + all tests
+npm run test:e2e:edge                # the end-to-end tests in an installed Microsoft Edge
+npm run lint:firefox                 # Mozilla's add-on linter on the Firefox build
 npm run eval -- run --split dev      # ClickFix dev evaluation (also eval:cred, eval:pay, eval:support)
 npm run realworld -- import <dir>    # add real screenshots via local OCR (see corpus/realworld/README.md)
 npm run release && npm run release:verify
