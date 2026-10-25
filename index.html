@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+  <title>VeilTrace · Uncover the manipulation behind the page</title>
+  <meta name="description" content="VeilTrace helps uncover threats hidden behind digital content. With context-aware analysis that puts privacy first, it detects signs of fraud, social engineering and manipulation, and explains the risk behind them.">
+  <meta property="og:title" content="VeilTrace · Uncover the manipulation behind the page">
+  <meta property="og:description" content="VeilTrace helps uncover threats hidden behind digital content. With context-aware analysis that puts privacy first, it detects signs of fraud, social engineering and manipulation, and explains the risk behind them.">
+  <meta property="og:image" content="https://veiltrace.click/social-card.jpg">
+  <meta property="og:url" content="https://veiltrace.click/">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="site.css">
+  <script src="site.js" defer></script>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="./"><img src="img/logo.svg" alt="" width="36" height="36"><span>Veil<b>Trace</b></span></a>
+    <nav>
+      <a href="#how"><span data-l="en">How it works</span><span data-l="id">Cara kerja</span></a>
+      <a href="#install">Install</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://github.com/dalpan/veiltrace">GitHub</a>
+    </nav>
+    <div class="lang" role="group" aria-label="Language">
+      <button id="lang-en" type="button" class="lang-btn" lang="en" aria-pressed="true">EN</button>
+      <button id="lang-id" type="button" class="lang-btn" lang="id" aria-pressed="false">ID</button>
+    </div>
+    <a class="btn compact" href="app/"><span data-l="en">Check a message</span><span data-l="id">Cek Pesan</span></a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-text">
+        <p class="eyebrow"><span data-l="en">OPEN SOURCE · ON-DEVICE · NO SERVER</span><span data-l="id">OPEN SOURCE · ON-DEVICE · TANPA SERVER</span></p>
+        <h1><span data-l="en">Uncover the manipulation behind the page.</span><span data-l="id">Ungkap manipulasi di balik halaman dan pesan.</span></h1>
+        <p class="lead" data-l="en">VeilTrace helps uncover threats hidden behind digital content. With context-aware analysis that puts privacy first, VeilTrace detects signs of fraud, social engineering and manipulation, and explains the risk behind them.</p>
+        <p class="lead" data-l="id">VeilTrace membantu mengungkap ancaman yang tersembunyi di balik konten digital. Dengan analisis kontekstual yang mengutamakan privasi, VeilTrace mendeteksi indikasi penipuan, social engineering, dan manipulasi serta menjelaskan risiko di baliknya.</p>
+        <div class="cta">
+          <a class="btn" href="#install">Install extension</a>
+          <a class="btn ghost" href="app/"><span data-l="en">Try Check a Message on your phone</span><span data-l="id">Coba Cek Pesan di HP</span></a>
+        </div>
+      </div>
+      <div class="hero-shots">
+        <img class="shot page" src="img/cmd-lure-page.png" data-alt-en="A fictional blog with a fake CAPTCHA telling the reader to press Win+R, Ctrl+V, Enter" data-alt-id="Halaman blog fiktif dengan CAPTCHA palsu yang menyuruh menekan Win+R, Ctrl+V, Enter" alt="A fictional blog with a fake CAPTCHA telling the reader to press Win+R, Ctrl+V, Enter" width="1280" height="760">
+        <img class="shot popup" src="img/cmd-lure-popup-top.png" data-alt-en="VeilTrace popup: manipulative content detected, Command Execution category" data-alt-id="Popup VeilTrace: konten manipulatif terdeteksi, kategori Command Execution" alt="VeilTrace popup: manipulative content detected, Command Execution category" width="560" height="640">
+      </div>
+    </section>
+
+    <section class="band">
+      <h2><span data-l="en">Why it is needed</span><span data-l="id">Kenapa dibutuhkan</span></h2>
+      <p class="sub"><span data-l="en">Today's attacks rarely break into systems. They break into people.</span><span data-l="id">Serangan hari ini jarang membobol sistem. Yang dibobol adalah manusia.</span></p>
+      <div class="grid three">
+        <div class="stat"><b>517%</b><span data-l="en">rise in ClickFix (fake CAPTCHA) attacks in the first half of 2025, according to ESET</span><span data-l="id">kenaikan serangan ClickFix (CAPTCHA palsu) di paruh pertama 2025, menurut ESET</span></div>
+        <div class="stat"><b>Rp 7 T</b><span data-l="en">in scam losses reported to OJK's Indonesia Anti-Scam Centre in about one year</span><span data-l="id">kerugian penipuan yang dilaporkan ke Indonesia Anti-Scam Centre OJK dalam sekitar satu tahun</span></div>
+        <div class="stat"><b><span data-l="en">Thousands</span><span data-l="id">Ribuan</span></b><span data-l="en">of devices targeted by ClickFix campaigns every day, according to Microsoft Threat Intelligence</span><span data-l="id">perangkat disasar kampanye ClickFix setiap hari, menurut Microsoft Threat Intelligence</span></div>
+      </div>
+      <p class="note" data-l="en">Lures often appear on legitimate sites (comment sections, chat widgets, forums) or arrive as messages. Blocklists judge the site's address, but what is dangerous is the instruction itself.</p>
+      <p class="note" data-l="id">Lure sering muncul di situs resmi (kolom komentar, chat widget, forum) atau lewat pesan. Blocklist menilai alamat situs, padahal yang berbahaya adalah isi instruksinya.</p>
+    </section>
+
+    <section id="how">
+      <h2><span data-l="en">How it works</span><span data-l="id">Cara kerja</span></h2>
+      <div class="grid three">
+        <div class="card step"><i>01</i><h3>Read-only extraction</h3><p data-l="en">Reads the visible text and where it comes from: comments, widgets, dialogs or chat. Form contents are never read.</p><p data-l="id">Membaca teks yang terlihat dan asal kontennya: komentar, widget, dialog, atau chat. Isi form tidak pernah dibaca.</p></div>
+        <div class="card step"><i>02</i><h3>Contextual correlation</h3><p data-l="en">Links a risky action the text asks for with the psychological manipulation around it: abuse of authority, pressure, engineered trust.</p><p data-l="id">Mengaitkan tindakan berisiko yang diminta teks dengan manipulasi psikologis di sekitarnya: penyalahgunaan otoritas, tekanan, rekayasa kepercayaan.</p></div>
+        <div class="card step"><i>03</i><h3>Explainable evidence</h3><p data-l="en">Every finding comes with its reason and evidence that can be highlighted on the page. A single keyword never triggers a warning. Text inside images can be read on request, on the device.</p><p data-l="id">Setiap temuan punya alasan dan bukti yang bisa di-highlight langsung di halaman. Satu keyword saja tidak pernah memicu peringatan. Teks di dalam gambar bisa dibaca atas permintaan, di perangkat.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2><span data-l="en">Modular detectors</span><span data-l="id">Detector modular</span></h2>
+      <p class="sub"><span data-l="en">Patterns are data, so new techniques and categories are added from real cases. The four categories today, with examples:</span><span data-l="id">Pola deteksi berupa data, sehingga modus dan kategori baru ditambahkan dari kasus nyata. Empat kategori saat ini, beserta contohnya:</span></p>
+      <div class="grid two">
+        <div class="card"><code>CMD</code><h3>Command Execution</h3><p data-l="en">Fake CAPTCHAs ("press Win+R, Ctrl+V, Enter", ClickFix) and "fix this error" steps in a terminal.</p><p data-l="id">CAPTCHA palsu "tekan Win+R, Ctrl+V, Enter" (ClickFix), "perbaiki error" lewat terminal.</p></div>
+        <div class="card"><code>CRED</code><h3>Credential Disclosure</h3><p data-l="en">Requests for OTP codes, passwords or recovery phrases, including in slang.</p><p data-l="id">Permintaan kode OTP, password, atau recovery phrase, termasuk dalam bahasa gaul.</p></div>
+        <div class="card"><code>PAY</code><h3>Payment Manipulation</h3><p data-l="en">Pay first to release a refund or prize, transfers to personal accounts, job-offer uniform fees, "investments" with a fixed daily profit, gift cards.</p><p data-l="id">Bayar dulu agar refund atau hadiah cair, transfer ke rekening pribadi, biaya seragam lowongan, "investasi" dengan profit harian tetap, gift card.</p></div>
+        <div class="card"><code>SUP</code><h3>Support &amp; Authority Impersonation</h3><p data-l="en">Fake virus alerts, a "bank CS" asking you to install AnyDesk or an APK, fake tariff notices, prize quizzes, phone-tapping services, .apk files sent as wedding invitations or parcel photos.</p><p data-l="id">Fake virus alert, "CS bank" meminta AnyDesk/APK, notifikasi tarif palsu, kuis berhadiah, jasa sadap, file .apk berkedok undangan nikah atau foto paket.</p></div>
+      </div>
+    </section>
+
+    <section class="band split">
+      <div>
+        <h2><span data-l="en">For messages on your phone too</span><span data-l="id">Juga untuk pesan di HP</span></h2>
+        <p data-l="en">Many scams arrive as chat or text messages. <b>Check a Message</b> checks them right on your phone: paste the message, pick a <b>screenshot</b>, or on Android simply <b>Share</b> it to VeilTrace. The message is not sent anywhere and never appears in a URL.</p>
+        <p data-l="id">Banyak penipuan datang lewat chat atau SMS. <b>Cek Pesan</b> memeriksa pesan langsung di HP: paste pesannya, pilih <b>screenshot</b>, atau di Android cukup <b>Share</b> ke VeilTrace. Pesan tidak dikirim ke mana pun dan tidak muncul di URL.</p>
+        <a class="btn" href="app/"><span data-l="en">Open Check a Message</span><span data-l="id">Buka Cek Pesan</span></a>
+      </div>
+      <img class="shot phone" src="img/pwa-result-crop.png" data-alt-en="Check a Message on a phone: an &quot;admin fee&quot; scam message marked as manipulative" data-alt-id="Cek Pesan di HP: pesan penipuan 'biaya admin' ditandai manipulatif" alt="Check a Message on a phone: an &quot;admin fee&quot; scam message marked as manipulative" width="390" height="700">
+    </section>
+
+    <section>
+      <h2><span data-l="en">Private by design</span><span data-l="id">Privasi sejak desain</span></h2>
+      <ul class="checks">
+        <li data-l="en"><b>No server, no telemetry.</b> The extension contains no network code, and the app only loads its own files from this site. Messages and screenshots never leave your device.</li>
+        <li data-l="id"><b>Tanpa server, tanpa telemetry.</b> Extension tidak punya network code, dan app hanya memuat file miliknya sendiri dari situs ini. Pesan dan screenshot tidak pernah keluar dari perangkat Anda.</li>
+        <li data-l="en"><b>Only two permissions:</b> <code>activeTab</code> and <code>scripting</code>, also for reading text in images. Auto-scan asks for more only when you turn it on.</li>
+        <li data-l="id"><b>Hanya dua permission:</b> <code>activeTab</code> dan <code>scripting</code>, termasuk untuk membaca teks di gambar. Auto-scan meminta izin tambahan hanya saat Anda menyalakannya.</li>
+        <li data-l="en"><b>Never reads what you type.</b> Form contents, amounts and phone numbers are never copied into the report.</li>
+        <li data-l="id"><b>Tidak membaca yang Anda ketik.</b> Isi form, nominal uang, dan nomor telepon tidak pernah disalin ke report.</li>
+        <li data-l="en"><b>The URL is never a basis for the decision,</b> so trusted sites are still checked.</li>
+        <li data-l="id"><b>URL tidak pernah jadi dasar keputusan,</b> sehingga situs tepercaya tetap diperiksa.</li>
+        <li data-l="en"><b>Open source</b> (Apache-2.0): the detection rules can be read and the build can be reproduced.</li>
+        <li data-l="id"><b>Open source</b> (Apache-2.0): rule deteksi bisa dibaca dan build bisa direproduksi.</li>
+      </ul>
+    </section>
+
+    <section id="install" class="band">
+      <h2><span data-l="en">Install and download</span><span data-l="id">Install dan download</span></h2>
+      <div class="grid two">
+        <div class="card">
+          <h3>Chrome, Edge, Brave, Opera, Vivaldi</h3>
+          <ol data-l="en">
+            <li>Download <a href="download/veiltrace-chromium.zip" download>veiltrace-chromium.zip</a> and extract it.</li>
+            <li>Open the browser's extensions page: <code>chrome://extensions</code>, <code>edge://extensions</code>, <code>brave://extensions</code>, <code>opera://extensions</code> or <code>vivaldi://extensions</code>.</li>
+            <li>Turn on <b>Developer mode</b>.</li>
+            <li>Click <b>Load unpacked</b> and select the extracted folder.</li>
+            <li>Pin the VeilTrace icon, open a page, then click <b>Scan</b>.</li>
+            <li>To update: replace the folder with the new ZIP's contents and press reload. The version is shown in the popup header.</li>
+          </ol>
+          <ol data-l="id">
+            <li>Unduh <a href="download/veiltrace-chromium.zip" download>veiltrace-chromium.zip</a> lalu ekstrak.</li>
+            <li>Buka halaman ekstensi browser: <code>chrome://extensions</code>, <code>edge://extensions</code>, <code>brave://extensions</code>, <code>opera://extensions</code>, atau <code>vivaldi://extensions</code>.</li>
+            <li>Aktifkan <b>Developer mode</b>.</li>
+            <li>Klik <b>Load unpacked</b> dan pilih folder hasil ekstrak.</li>
+            <li>Sematkan (pin) ikon VeilTrace, buka halaman, lalu klik <b>Scan</b>.</li>
+            <li>Untuk update: ganti isi folder dengan isi ZIP baru lalu tekan reload. Versinya tampil di header popup.</li>
+          </ol>
+          <p class="small"><span data-l="en">SHA-256 checksums:</span><span data-l="id">Checksum SHA-256:</span> <a href="download/SHA256SUMS">SHA256SUMS</a></p>
+        </div>
+        <div class="card">
+          <h3><span data-l="en">Phone (Android &amp; iPhone)</span><span data-l="id">HP (Android &amp; iPhone)</span></h3>
+          <ol data-l="en">
+            <li>Open <a href="app/">veiltrace.click/app</a>.</li>
+            <li>Android (Chrome): menu ⋮ → <b>Install app</b>. iPhone (Safari): <b>Share</b> → <b>Add to Home Screen</b>.</li>
+            <li>Android: in your chat app, long-press a message → <b>Share</b> → <b>VeilTrace</b>. iPhone: copy the message and paste it.</li>
+          </ol>
+          <ol data-l="id">
+            <li>Buka <a href="app/">veiltrace.click/app</a>.</li>
+            <li>Android (Chrome): menu ⋮ → <b>Install app</b>. iPhone (Safari): <b>Share</b> → <b>Add to Home Screen</b>.</li>
+            <li>Android: di aplikasi chat, tekan lama pesan → <b>Share</b> → <b>VeilTrace</b>. iPhone: copy pesan lalu paste.</li>
+          </ol>
+        </div>
+        <div class="card">
+          <h3>Firefox (desktop &amp; Android)</h3>
+          <ol data-l="en">
+            <li>Download <a href="download/veiltrace-firefox.zip" download>veiltrace-firefox.zip</a> (not yet signed by Mozilla).</li>
+            <li>Desktop: open <code>about:debugging</code> → <b>This Firefox</b> → <b>Load Temporary Add-on</b> → select <code>manifest.json</code>.</li>
+            <li>Android: install with <code>web-ext run -t firefox-android</code> from a computer.</li>
+          </ol>
+          <ol data-l="id">
+            <li>Unduh <a href="download/veiltrace-firefox.zip" download>veiltrace-firefox.zip</a> (belum ditandatangani Mozilla).</li>
+            <li>Desktop: buka <code>about:debugging</code> → <b>This Firefox</b> → <b>Load Temporary Add-on</b> → pilih <code>manifest.json</code>.</li>
+            <li>Android: pasang lewat <code>web-ext run -t firefox-android</code> dari komputer.</li>
+          </ol>
+        </div>
+        <div class="card">
+          <h3><span data-l="en">Organizations</span><span data-l="id">Organisasi</span></h3>
+          <p data-l="en">A managed build can be installed across an organization through browser enterprise policy (Chrome, Edge and other Chromium browsers) and an internal update server, with auto-scan on from the start. No central server and no reporting.</p>
+          <p data-l="id">Managed build bisa di-install serentak lewat enterprise policy browser (Chrome, Edge, dan browser Chromium lain) dan internal update server, dengan auto-scan aktif sejak terpasang. Tanpa server pusat dan tanpa reporting.</p>
+          <p><a href="https://github.com/dalpan/veiltrace/blob/main/docs/DEPLOYMENT.md"><span data-l="en">Deployment guide →</span><span data-l="id">Panduan deployment →</span></a></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <h2>FAQ</h2>
+      <div data-l="en">
+        <details><summary>Does VeilTrace send my data to the internet?</summary><p>No. Every check runs on your device, including reading screenshots. The extension contains no network code; the app only loads its own files from this site (the reading model the first time you check a screenshot). Both are tested automatically.</p></details>
+        <details><summary>Does VeilTrace guarantee that a page can be trusted?</summary><p>No. VeilTrace reports what it found, with evidence. When there are no findings, it means no known manipulation pattern was recognized, not that the page is guaranteed.</p></details>
+        <details><summary>Do I have to click Scan every time?</summary><p>Manual by default, for privacy. You can turn on auto-scan from the popup: pages are checked when they load, the icon is marked when manipulative content is found, and VeilTrace warns on the page at risky moments: a manipulative page, a command copied to your clipboard (it is replaced by a warning), an Android app download, or a code or password field on a flagged page.</p></details>
+        <details><summary>Why not use AI?</summary><p>We tested on-device AI. It flagged ordinary pages far too often, its reasons could not be checked, and text on the page can talk it into a different answer. VeilTrace uses explainable rules: every warning comes with evidence.</p></details>
+        <details><summary>How much does it cost?</summary><p>Free and open source (Apache-2.0).</p></details>
+      </div>
+      <div data-l="id">
+        <details><summary>Apakah VeilTrace mengirim data saya ke internet?</summary><p>Tidak. Semua pemeriksaan berjalan di perangkat Anda, termasuk membaca screenshot. Extension tidak punya network code; app hanya memuat file miliknya sendiri dari situs ini (model pembaca teks saat pertama kali memeriksa screenshot). Keduanya diuji otomatis.</p></details>
+        <details><summary>Apakah VeilTrace menjamin sebuah halaman bisa dipercaya?</summary><p>Tidak. VeilTrace melaporkan apa yang ditemukan beserta buktinya. Bila tidak ada temuan, artinya tidak ada pola manipulasi yang dikenali, bukan jaminan.</p></details>
+        <details><summary>Harus klik Scan setiap kali?</summary><p>Bawaannya manual demi privasi. Anda bisa menyalakan auto-scan dari popup: halaman diperiksa saat dimuat, ikon diberi tanda bila ada konten manipulatif, dan VeilTrace memperingatkan langsung di halaman pada momen berisiko: halaman manipulatif, perintah yang disalin ke clipboard (diganti dengan peringatan), unduhan aplikasi Android, atau kolom kode dan kata sandi di halaman yang ditandai.</p></details>
+        <details><summary>Kenapa tidak memakai AI?</summary><p>Kami sudah menguji AI on-device. AI terlalu sering menandai halaman wajar, alasannya tidak bisa diperiksa, dan bisa dibujuk oleh teks di halaman. VeilTrace memakai rule yang bisa dijelaskan: setiap peringatan punya bukti.</p></details>
+        <details><summary>Berapa harganya?</summary><p>Gratis dan open source (Apache-2.0).</p></details>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p><img src="img/logo.svg" alt="" width="24" height="24"> VeilTrace · Apache-2.0 · <a href="https://github.com/dalpan/veiltrace">github.com/dalpan/veiltrace</a></p>
+    <p class="small" data-l="en">Made by Danang Avan Maulana, author of the book <a href="https://id.shp.ee/RDd5H7Uq">Hack the Human</a>.</p>
+    <p class="small" data-l="id">Dibuat oleh Danang Avan Maulana, penulis buku <a href="https://id.shp.ee/RDd5H7Uq">Hack the Human</a>.</p>
+  </footer>
+</body>
+</html>

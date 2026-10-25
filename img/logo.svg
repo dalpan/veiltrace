@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="512" height="512" role="img" aria-label="VeilTrace">
+  <!-- VeilTrace mark: an eye (reading the page) inside trace ticks (pointing at the evidence). Same geometry as scripts/icons.mjs. -->
+  <rect x="1" y="1" width="30" height="30" rx="7" fill="#121510" stroke="#3D4739" stroke-width="0.7"/>
+  <path d="M5 16 A13.75 13.75 0 0 1 27 16 A13.75 13.75 0 0 1 5 16 Z" fill="none" stroke="#EEF0E6" stroke-width="1.8" stroke-linejoin="round"/>
+  <circle cx="16" cy="16" r="3.6" fill="#B9C98A"/>
+  <circle cx="16" cy="16" r="1.4" fill="#121510"/>
+  <path d="M16 4V7.5M16 24.5V28" stroke="#B9C98A" stroke-width="1.6" stroke-linecap="round"/>
+</svg>
