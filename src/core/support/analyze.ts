@@ -11,7 +11,7 @@ import type { Block, Classification, Level, PageSnapshot, Verdict } from '../typ
 import { SUPPORT_LEXICON } from './lexicon.js';
 import type {
   ImpersonationIndicator, SupportAction, SupportChannel, SupportClaim, SupportFinding, SupportLimitation, SupportModifier, SupportObservation,
-  SupportPressure, SupportResult, SupportRuleId, SupportSignalId, SupportSignalKind, SupportTrustContext,
+  SupportPressure, SupportResult, SupportRuleId, SupportSignalId, SupportSignalKind, SupportTrustContext, SupportLexiconEntry,
 } from './types.js';
 
 export const SUPPORT_DETECTOR_VERSION = 'sup-0.8.0-exp';
@@ -101,9 +101,9 @@ function reportedText(signal: SupportSignalId, text: string): string {
   return text.replace(/\d{5,}/gu, (d) => '•'.repeat(d.length)).replace(/@[\p{L}\p{N}_.]+/gu, '@•');
 }
 
-function match(src: Src): Ob[] {
+function match(src: Src, lexicon: readonly SupportLexiconEntry[]): Ob[] {
   const raw: Array<{ id: string; signal: SupportSignalId; strong: boolean; s: number; e: number }> = [];
-  for (const entry of SUPPORT_LEXICON) {
+  for (const entry of lexicon) {
     for (const m of src.norm.text.matchAll(entry.pattern)) {
       if (m[0].length === 0) continue;
       let signal = entry.signal;
@@ -386,7 +386,12 @@ function cluster(units: Unit[]): Array<{ region: RegionInfo; units: Unit[] }> {
   return out;
 }
 
-export function analyzeSupport(snapshot: PageSnapshot): SupportResult {
+/**
+ * `extra`: additional lexicon entries from a verified organization rule pack (D-109). They add signals of the existing
+ * types and never replace or remove built-in entries; without them the result is exactly the built-in detector's.
+ */
+export function analyzeSupport(snapshot: PageSnapshot, options: { extra?: readonly SupportLexiconEntry[] } = {}): SupportResult {
+  const lexicon: readonly SupportLexiconEntry[] = options.extra && options.extra.length > 0 ? [...SUPPORT_LEXICON, ...options.extra] : SUPPORT_LEXICON;
   const regions = buildRegions(snapshot.blocks.slice(0, MAX_BLOCKS));
   const sources: Src[] = regions.flatMap((r) => r.blocks.map((b, i) => {
     const text = b.text.slice(0, MAX_BLOCK_CHARS);
@@ -395,7 +400,7 @@ export function analyzeSupport(snapshot: PageSnapshot): SupportResult {
   const signals: Ob[] = [];
   const cues: Ob[] = [];
   for (const src of sources) {
-    for (const ob of match(src)) (ob.o.kind === 'context' ? cues : signals).push(ob);
+    for (const ob of match(src, lexicon)) (ob.o.kind === 'context' ? cues : signals).push(ob);
   }
   bindContext(signals, cues);
 

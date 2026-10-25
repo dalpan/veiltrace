@@ -14,8 +14,13 @@ Preparing the video showed that text on a coloured panel in a white page was not
 
 ---
 
+## 2026-10-25 · Signed organization rule packs (D-109)
+Managed build: a security team signs extra patterns (Ed25519) and pushes them by browser policy; installs verify offline and use them in the credential, payment and support detectors. Keys built in, `storage` only in managed/TEST builds, production unchanged. Tool: `scripts/rulepack.mjs`; guide: DEPLOYMENT.md §9. Unit and e2e tests: a signed pack flags a new pattern, a changed one is ignored. `release:verify` fails if a release trusts the test-only key. Also fixed: the popup reads its tab before loading packs (a closed tab was missed), and the popup labels for five newer payment/support signals were missing (typecheck now clean). Tests: 819 unit and e2e pass; the extractor budget test is timing-sensitive and passes on rerun.
+
+---
+
 ## 2026-10-25 · Plain-language result and on-page warnings (D-107, D-108)
-After an honest review (the product reported but did not intervene, and spoke to specialists): the popup and the app open with a plain card (what is asked, why it is a warning sign, what to do), with the dashboard under Technical details. With automatic scanning on, a guard warns on the page at four moments: manipulative page, command copied to the clipboard (replaced), `.apk` download link (held), secret field on a flagged page. Extractor 0.3.1 skips the guard element. Tests: all unit and e2e pass (545), guard and dashboard suites also in Edge, release verified, Firefox linter 0 errors. **Next:** signed rule packs for organizations (owner request, item 3).
+After an honest review (the product reported but did not intervene, and spoke to specialists): the popup and the app open with a plain card (what is asked, why it is a warning sign, what to do), with the dashboard under Technical details. With automatic scanning on, a guard warns on the page at four moments: manipulative page, command copied to the clipboard (replaced), `.apk` download link (held), secret field on a flagged page. Extractor 0.3.1 skips the guard element. Tests: all unit and e2e pass (545), guard and dashboard suites also in Edge, release verified, Firefox linter 0 errors. **Next:** signed rule packs for organizations (done the same day, D-109).
 
 ---
 

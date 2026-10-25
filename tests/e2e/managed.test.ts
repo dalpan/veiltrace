@@ -13,7 +13,9 @@ describe('managed build', () => {
   it('manifest: same permissions plus host access granted at install; no optional permissions', async () => {
     const m = JSON.parse(readFileSync(join(await extensionDir('managed'), 'manifest.json'), 'utf8'));
     expect(m.name).toBe('VeilTrace (Managed)');
-    expect(m.permissions).toEqual(['activeTab', 'scripting']);
+    // D-109: storage only to read the organization's rule-pack policy.
+    expect(m.permissions).toEqual(['activeTab', 'scripting', 'storage']);
+    expect(m.storage).toEqual({ managed_schema: 'managed-schema.json' });
     expect(m.host_permissions).toEqual(['http://*/*', 'https://*/*']);
     expect(m.optional_host_permissions).toBeUndefined();
   });

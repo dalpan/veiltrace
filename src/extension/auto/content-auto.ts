@@ -6,8 +6,10 @@ import type { ScanReport } from '../content/report.js';
 import { summarize } from './auto.js';
 import { sendAutoSummary } from './channel.js';
 import { createGuard, GUARD_ATTR } from '../guard/guard.js';
+import { loadRulePacks } from '../rulepack/load.js';
+import type { RulePack } from '../rulepack/pack.js';
 
-declare const VeiltraceContent: { scan: (options: { keepHighlight: boolean }) => ScanReport };
+declare const VeiltraceContent: { scan: (options: { keepHighlight: boolean; packs: unknown[] }) => ScanReport };
 
 /**
  * Wait for the page to settle after a change (but never longer than MAX_WAIT_MS, so a page that changes constantly, such
@@ -23,6 +25,8 @@ let lastScan = -Infinity;
 let timer: ReturnType<typeof setTimeout> | undefined;
 let pendingSince: number | undefined;
 let lastSent = '';
+/** Organization rule packs (D-109), verified once when the page loads; none outside the managed and TEST builds. */
+let packs: RulePack[] = [];
 /** On-page warnings at the moment of action (D-108); only here, with automatic scanning on. */
 const guard = window.top === window ? createGuard() : null;
 
@@ -39,7 +43,7 @@ function run(): void {
   lastScan = performance.now();
   let summary;
   try {
-    const report = VeiltraceContent.scan({ keepHighlight: true });
+    const report = VeiltraceContent.scan({ keepHighlight: true, packs });
     guard?.onReport(report);
     summary = summarize(report);
   } catch {
@@ -70,5 +74,5 @@ const observer = new MutationObserver((records) => {
 if (window.top === window) {
   observer.observe(document.documentElement, { childList: true, subtree: true, characterData: true });
   document.addEventListener('visibilitychange', () => { if (!document.hidden) schedule(); });
-  run();
+  void loadRulePacks().then((p) => { packs = p; }).finally(run);
 }

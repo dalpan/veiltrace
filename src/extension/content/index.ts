@@ -8,6 +8,7 @@ import { analyzeSupport } from '../../core/support/analyze.js';
 import { EXTRACTOR_VERSION, extractSnapshot } from '../../extract/extract.js';
 import { buildAiPayload, type AiPayload } from '../ai/payload.js';
 import { clearHighlight, highlight, type HighlightResult } from './highlight.js';
+import { compileExtras, parsePacks } from '../rulepack/pack.js';
 import { imageOnlyLines, ocrLines } from './image-text.js';
 import { buildReport, type ScanReport } from './report.js';
 
@@ -25,7 +26,9 @@ function shadowRootAdapter(): ((el: Element) => ShadowRoot | null) | undefined {
 }
 
 /** `keepHighlight`: automatic rescans (D-081) must not remove a highlight the user just asked for. */
-export function scan(options: { timeBudgetMs?: number; keepHighlight?: boolean } = {}): ScanReport {
+/** `packs`: organization rule packs (D-109), already verified by the caller and validated again here. */
+export function scan(options: { timeBudgetMs?: number; keepHighlight?: boolean; packs?: unknown } = {}): ScanReport {
+  const extra = compileExtras(parsePacks(options.packs));
   if (!options.keepHighlight) clearHighlight();
   const getShadowRoot = shadowRootAdapter();
   const t0 = performance.now();
@@ -37,13 +40,13 @@ export function scan(options: { timeBudgetMs?: number; keepHighlight?: boolean }
   const result = analyze(snapshot);
   const t2 = performance.now();
   // Experimental credential detector (M5.1): independent of, and never changing, the ClickFix result above.
-  const cred = analyzeCredentials(snapshot);
+  const cred = analyzeCredentials(snapshot, { extra: extra.cred });
   const t3 = performance.now();
   // Experimental payment-manipulation detector (M5.2): also independent; reads block text only.
-  const pay = analyzePayments(snapshot);
+  const pay = analyzePayments(snapshot, { extra: extra.pay });
   const t4 = performance.now();
   // Experimental fake-support and impersonation detector (M5.3): also independent; reads block text only.
-  const sup = analyzeSupport(snapshot);
+  const sup = analyzeSupport(snapshot, { extra: extra.sup });
   const t5 = performance.now();
   return buildReport(snapshot, result, { engine: result.engineVersion, extractor: EXTRACTOR_VERSION },
     { extractMs: t1 - t0, analyzeMs: t2 - t1, credentialMs: t3 - t2, paymentMs: t4 - t3, supportMs: t5 - t4 }, cred, pay, sup);
@@ -54,7 +57,8 @@ export function scan(options: { timeBudgetMs?: number; keepHighlight?: boolean }
  * page already has as text are dropped (the page text stays in the tab); the rest is analyzed as page content. The evidence has
  * no locator: text inside an image cannot be highlighted on the page.
  */
-export function imageScan(input: unknown): ScanReport | null {
+export function imageScan(input: unknown, packs?: unknown): ScanReport | null {
+  const extra = compileExtras(parsePacks(packs));
   const lines = ocrLines(input);
   if (!lines) return null;
   const getShadowRoot = shadowRootAdapter();
@@ -68,11 +72,11 @@ export function imageScan(input: unknown): ScanReport | null {
   const t0 = performance.now();
   const result = analyze(snapshot);
   const t1 = performance.now();
-  const cred = analyzeCredentials(snapshot);
+  const cred = analyzeCredentials(snapshot, { extra: extra.cred });
   const t2 = performance.now();
-  const pay = analyzePayments(snapshot);
+  const pay = analyzePayments(snapshot, { extra: extra.pay });
   const t3 = performance.now();
-  const sup = analyzeSupport(snapshot);
+  const sup = analyzeSupport(snapshot, { extra: extra.sup });
   const t4 = performance.now();
   return buildReport(snapshot, result, { engine: result.engineVersion, extractor: 'ocr' },
     { extractMs: 0, analyzeMs: t1 - t0, credentialMs: t2 - t1, paymentMs: t3 - t2, supportMs: t4 - t3 }, cred, pay, sup);

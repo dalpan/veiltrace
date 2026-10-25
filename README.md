@@ -67,7 +67,7 @@ Each finding keeps **classification** (manipulative / suspicious / observed), **
 | **"Check a message" web app** (any phone) | Live | **https://veiltrace.click/app/**: paste a message or **check a screenshot** (on-device OCR), or share either to the app on Android; works offline once opened |
 | **WhatsApp Web** | Working, tested by the team | open a chat and scan: messages are read as content from someone else (for example an OTP to be forwarded is flagged) |
 | **Safari** | Planned | needs packaging as a Safari Web Extension with Xcode |
-| **Managed build** for organizations | Ready to pilot | install-time permissions, automatic scanning on, no reporting: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) |
+| **Managed build** for organizations | Ready to pilot | install-time permissions, automatic scanning on, no reporting; **signed rule packs** let a security team push new scam patterns by policy, verified offline: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) |
 
 <p align="center">
   <img src="docs/images/pwa-result.png" alt="Check a message on a phone: a scam message flagged as a manipulative payment request" width="260">

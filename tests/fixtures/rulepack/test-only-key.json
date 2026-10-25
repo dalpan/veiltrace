@@ -1,0 +1,6 @@
+{
+  "note": "TEST ONLY. Trusted only by the TEST build (dist/extension-test) to sign rule packs in e2e tests. Never trusted by release or managed builds.",
+  "kid": "veiltrace-test",
+  "publicKey": "6rfSFWPZk4ZdOBUyMIchGuovrBCR0BRuF69yFCzrQgA=",
+  "privatePem": "-----BEGIN PRIVATE KEY-----\nMC4CAQAwBQYDK2VwBCIEIL2bcRXrsv3U3Z0UG/dmJqkwGfnragifJuJCwy6j59gp\n-----END PRIVATE KEY-----\n"
+}

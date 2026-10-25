@@ -4,7 +4,7 @@
 //   dist/extension-test  e2e only (D-013): + host permissions for fictional test hosts, + ?tab= targeting
 // Test-only code is compiled out of the production popup (define __VT_TEST__=false + dead-code removal).
 import { build } from 'esbuild';
-import { copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { icons } from './icons.mjs';
 
@@ -65,8 +65,22 @@ export function firefoxManifest(manifest) {
  */
 export function managedManifest(manifest) {
   const { optional_host_permissions: origins, ...rest } = manifest;
-  return { ...rest, name: 'VeilTrace (Managed)', host_permissions: origins };
+  // `storage` only to read the `rulePacks` policy (D-109, chrome.storage.managed); nothing is written.
+  return { ...rest, name: 'VeilTrace (Managed)', host_permissions: origins, permissions: [...rest.permissions, 'storage'], storage: { managed_schema: 'managed-schema.json' } };
 }
+
+/** Policy schema of the managed build (D-109): signed rule pack envelopes from the organization's security team. */
+export const MANAGED_SCHEMA = {
+  type: 'object',
+  properties: {
+    rulePacks: {
+      title: 'VeilTrace organization rule packs',
+      description: 'Signed rule pack envelopes ({ kid, payload, sig }) made with scripts/rulepack.mjs. Unsigned or unknown-key packs are ignored.',
+      type: 'array',
+      items: { type: 'object', properties: { kid: { type: 'string' }, payload: { type: 'string' }, sig: { type: 'string' } } },
+    },
+  },
+};
 
 /**
  * `ai`: include the optional on-device AI panel (D-095: experimental, off in the standard, Firefox and managed builds after
@@ -77,7 +91,11 @@ export async function buildExtension({ test = false, firefox = false, managed = 
   rmSync(outdir, { recursive: true, force: true });
   mkdirSync(join(outdir, 'icons'), { recursive: true });
   const common = { bundle: true, format: 'iife', platform: 'browser', target: 'chrome110', legalComments: 'none', minifySyntax: true, logLevel: 'warning' };
-  const define = { __VT_TEST__: String(test), __VT_MANAGED__: String(managed), __VT_AI__: String(ai) };
+  // Organization rule packs (D-109): trusted public keys are built in. TEST build: the test-only key; managed build: the
+  // organization's keys from deploy/rulepack-keys.json; other builds: none (packs are ignored).
+  const keys = test ? [JSON.parse(readFileSync('tests/fixtures/rulepack/test-only-key.json', 'utf8'))].map(({ kid, publicKey }) => ({ kid, publicKey }))
+    : managed && existsSync('deploy/rulepack-keys.json') ? JSON.parse(readFileSync('deploy/rulepack-keys.json', 'utf8')) : [];
+  const define = { __VT_TEST__: String(test), __VT_MANAGED__: String(managed), __VT_AI__: String(ai), __VT_RULEPACK_KEYS__: JSON.stringify(keys) };
   await build({ ...common, entryPoints: ['src/extension/popup/popup.ts'], outfile: join(outdir, 'popup.js'), define });
   await build({ ...common, entryPoints: ['src/extension/content/index.ts'], outfile: join(outdir, 'content.js'), globalName: 'VeiltraceContent' });
   await build({ ...common, entryPoints: ['src/extension/auto/content-auto.ts'], outfile: join(outdir, 'auto.js'), define });
@@ -92,7 +110,9 @@ export async function buildExtension({ test = false, firefox = false, managed = 
     manifest.name = 'VeilTrace (TEST BUILD)';
     manifest.host_permissions = TEST_HOST_PERMISSIONS;
   }
+  if (test) manifest.permissions = [...manifest.permissions, 'storage'];
   const final = managed ? managedManifest(manifest) : manifest;
+  if (managed) writeFileSync(join(outdir, 'managed-schema.json'), JSON.stringify(MANAGED_SCHEMA, null, 2) + '\n');
   writeFileSync(join(outdir, 'manifest.json'), JSON.stringify(firefox ? firefoxManifest(final) : final, null, 2) + '\n');
   return outdir;
 }

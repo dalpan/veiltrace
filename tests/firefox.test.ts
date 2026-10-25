@@ -24,14 +24,15 @@ describe('Firefox manifest', () => {
 });
 
 describe('managed manifest (D-089)', () => {
-  it('turns the optional http(s) access into install-time host access and changes nothing else', async () => {
+  it('turns the optional http(s) access into install-time host access, adds storage for rule packs (D-109) and changes nothing else', async () => {
     // @ts-expect-error -- plain ESM build script without type declarations
     const { managedManifest } = await import('../scripts/build-extension.mjs');
     const chromium = JSON.parse(readFileSync('src/extension/manifest.json', 'utf8'));
     const m = managedManifest(chromium);
     expect(m.host_permissions).toEqual(chromium.optional_host_permissions);
     expect(m.optional_host_permissions).toBeUndefined();
-    expect(m.permissions).toEqual(chromium.permissions);
+    expect(m.permissions).toEqual([...chromium.permissions, 'storage']);
+    expect(m.storage).toEqual({ managed_schema: 'managed-schema.json' });
     expect(m.content_security_policy).toEqual(chromium.content_security_policy);
   });
 });

@@ -78,13 +78,14 @@ export interface ScanCall {
   callMs: number;
 }
 
-export async function runScan(tabId: number): Promise<ScanCall> {
+export async function runScan(tabId: number, packs: unknown[] = []): Promise<ScanCall> {
   const t0 = performance.now();
   await ensureContent(tabId);
   const t1 = performance.now();
   const [res] = await chrome.scripting.executeScript({
     target: { tabId }, world: 'ISOLATED',
-    func: () => (globalThis as unknown as { VeiltraceContent: { scan: () => unknown } }).VeiltraceContent.scan(),
+    func: (p: unknown[]) => (globalThis as unknown as { VeiltraceContent: { scan: (o: { packs: unknown[] }) => unknown } }).VeiltraceContent.scan({ packs: p }),
+    args: [packs],
   });
   const t2 = performance.now();
   return { raw: res?.result, injectMs: t1 - t0, callMs: t2 - t1 };
@@ -101,12 +102,12 @@ export async function runAiText(tabId: number): Promise<unknown> {
 }
 
 /** OCR lines of the visible tab, filtered and analyzed in the tab (D-105); validated by the caller. */
-export async function runImageScan(tabId: number, lines: readonly string[]): Promise<unknown> {
+export async function runImageScan(tabId: number, lines: readonly string[], packs: unknown[] = []): Promise<unknown> {
   await ensureContent(tabId);
   const [res] = await chrome.scripting.executeScript({
     target: { tabId }, world: 'ISOLATED',
-    func: (l: string[]) => (globalThis as unknown as { VeiltraceContent: { imageScan: (x: unknown) => unknown } }).VeiltraceContent.imageScan(l),
-    args: [[...lines]],
+    func: (l: string[], p: unknown[]) => (globalThis as unknown as { VeiltraceContent: { imageScan: (x: unknown, y: unknown) => unknown } }).VeiltraceContent.imageScan(l, p),
+    args: [[...lines], packs],
   });
   return res?.result;
 }

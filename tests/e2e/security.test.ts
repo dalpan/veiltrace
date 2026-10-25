@@ -109,7 +109,8 @@ describe('production build', () => {
     expect(prod.web_accessible_resources).toBeUndefined();
     expect(prod.content_security_policy.extension_pages).toContain("connect-src 'none'");
     expect(prod.name).toBe('VeilTrace');
-    expect(test.permissions).toEqual(['activeTab', 'scripting']);
+    // D-109: the TEST build reads test rule packs from storage; the production build above has no storage permission.
+    expect(test.permissions).toEqual(['activeTab', 'scripting', 'storage']);
     expect(test.host_permissions).toEqual(['https://*.test/*', 'https://*.example/*']);
     const prodPopup = readFileSync(join(await extensionDir('prod'), 'popup.js'), 'utf8');
     expect(prodPopup).not.toContain('URLSearchParams');

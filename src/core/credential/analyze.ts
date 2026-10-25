@@ -9,7 +9,7 @@ import type { Block, Classification, FieldKind, FormField, FormInfo, Level, Page
 import { CRED_LEXICON } from './lexicon.js';
 import type {
   CredFinding, CredModifier, CredObservation, CredOverride, CredPretextSignalId, CredRuleId, CredSignalId, CredSignalKind,
-  CredSourceRef, CredentialResult, SecretSignalId, SecretType, TrustContext,
+  CredSourceRef, CredentialResult, SecretSignalId, SecretType, TrustContext, CredLexiconEntry,
 } from './types.js';
 
 export const CRED_DETECTOR_VERSION = 'cred-0.3.0-exp';
@@ -108,9 +108,9 @@ function makeObs(src: Src, signal: CredSignalId, entryId: string, nStart: number
   };
 }
 
-function match(src: Src): Ob[] {
+function match(src: Src, lexicon: readonly CredLexiconEntry[]): Ob[] {
   const raw: Array<{ id: string; signal: CredSignalId; strong: boolean; s: number; e: number }> = [];
-  for (const entry of CRED_LEXICON) {
+  for (const entry of lexicon) {
     for (const m of src.norm.text.matchAll(entry.pattern)) {
       if (m[0].length > 0) raw.push({ id: entry.id, signal: entry.signal, strong: entry.strength === 'strong', s: m.index, e: m.index + m[0].length });
     }
@@ -378,13 +378,18 @@ function refKey(r: CredSourceRef): string {
   return r.type === 'block' ? `b:${r.blockId}` : `f:${r.fieldId}`;
 }
 
-export function analyzeCredentials(snapshot: PageSnapshot): CredentialResult {
+/**
+ * `extra`: additional lexicon entries from a verified organization rule pack (D-109). They add signals of the existing
+ * types and never replace or remove built-in entries; without them the result is exactly the built-in detector's.
+ */
+export function analyzeCredentials(snapshot: PageSnapshot, options: { extra?: readonly CredLexiconEntry[] } = {}): CredentialResult {
+  const lexicon: readonly CredLexiconEntry[] = options.extra && options.extra.length > 0 ? [...CRED_LEXICON, ...options.extra] : CRED_LEXICON;
   const regions = buildRegions(snapshot.blocks.slice(0, MAX_BLOCKS));
   const sources = buildSources(snapshot, regions);
   const signals: Ob[] = [];
   const cues: Ob[] = [];
   for (const src of sources) {
-    for (const ob of match(src)) (ob.o.kind === 'context' ? cues : signals).push(ob);
+    for (const ob of match(src, lexicon)) (ob.o.kind === 'context' ? cues : signals).push(ob);
     const kind = src.field?.kind;
     if (kind && SECRET_OF_FIELD[kind]) signals.push(makeObs(src, 'F.SECRET_FIELD', `structural.field.${kind}`, 0, src.norm.text.length));
   }

@@ -81,3 +81,21 @@ Deployment outline (not yet performed end to end):
 4. Verify on a pilot machine: `chrome://policy`, `chrome://extensions` (installed, not removable), a demo lure shows the "!" badge.
 
 Exact platform conditions for self-hosted force-install (domain join, cloud management, MDM) must be checked against current Chrome Enterprise and Microsoft Edge documentation (§3).
+
+## 9. Organization rule packs (D-109)
+
+A security team can push new scam patterns to every managed install, with no server, from a closed network as well. A pack is data: extra lexicon entries for the credential, payment and support detectors. It cannot change rules, thresholds or the ClickFix engine. Each pack is signed with the organization's Ed25519 key, and the managed build only accepts packs signed by keys built into it.
+
+1. **Create a key (once, on an offline machine):** `node scripts/rulepack.mjs keygen <kid> <dir>`. This writes `<kid>.private.pem` (keep it secret, never commit it) and `<kid>.public.json`.
+2. **Trust the key in the build:** put the public JSON in `deploy/rulepack-keys.json` (an array, one entry per key), then run `npm run build:managed`. The build gets `storage`, used only to read the policy, and a `managed-schema.json`.
+3. **Write a pack:** see `deploy/rulepack/example-pack.json`. An entry is valid only if:
+   - its detector is `cred`, `pay` or `sup`;
+   - its signal is one that detector already has (for example `PR.PRIZE`, `SI.OFFICIAL`, `S.OTP`);
+   - its pattern is a regular expression of at most 300 characters, with no nested quantifiers, matched against lower-cased normalized text;
+   - it has at least one example the pattern matches.
+
+   A pack holds at most 500 entries.
+4. **Sign it:** `node scripts/rulepack.mjs sign pack.json <kid> <kid>.private.pem > envelope.json`. Check it with `node scripts/rulepack.mjs verify envelope.json <kid>.public.json`.
+5. **Distribute it:** set the `rulePacks` policy for the extension to an array of envelopes. On Windows that is under `Software\Policies\Google\Chrome\3rdparty\extensions\<extension id>\policy`; on macOS it is a configuration profile; Edge uses its own equivalent paths. Installs read the policy when a page is scanned, verify every signature offline, and ignore any pack that is unsigned, changed or signed by an unknown key.
+
+The popup footer names the packs in use. Evidence from a pack keeps the pack id in its entry id (`pack:<pack id>:<entry id>`), so a finding can be traced to the pack that caused it. Nothing is reported back to the organization (D-048).

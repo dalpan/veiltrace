@@ -28,6 +28,8 @@ export interface Messages {
   limitsText: string;
   metaIdle: string;
   meta: (engine: string, extractor: string, ms: number) => string;
+  /** Organization rule packs in use (D-109). */
+  rulePacks: (ids: string) => string;
   partialQualifier: string;
   classification: Record<Classification, string>;
   findingTitle: Record<Classification, string>;
@@ -276,6 +278,7 @@ const EN: Messages = {
     'make out. A result without findings is not a guarantee.',
   metaIdle: 'Runs on this device only. Nothing is sent anywhere.',
   meta: (engine, extractor, ms) => `Engine ${engine} · extractor ${extractor} · ${ms} ms · on this device only`,
+  rulePacks: (ids) => `organization rule pack: ${ids}`,
   partialQualifier: ' Part of the page could not be examined (see below).',
   classification: { manipulative_instruction: 'Manipulative', suspicious_correlation: 'Suspicious', observed_instruction: 'Observed' },
   findingTitle: { manipulative_instruction: 'Manipulative instruction', suspicious_correlation: 'Suspicious instruction', observed_instruction: 'Observed instruction' },
@@ -421,7 +424,7 @@ const EN: Messages = {
     signal: {
       'PY.PAY': 'Payment request', 'PA.AMOUNT': 'Amount', 'PF.FEE': 'Fee', 'PF.RELEASE_FEE': 'Fee to release or unlock', 'PD.PERSONAL': 'Personal account',
       'PD.OFF_PLATFORM': 'Outside the platform', 'PD.GIFT_CARD': 'Gift cards', 'PD.CRYPTO': 'Cryptocurrency', 'PR.REFUND': 'Refund or held money',
-      'PR.PRIZE': 'Prize', 'PR.UNLOCK': 'Account unlock', 'PR.RECRUIT': 'Guaranteed selection', 'PR.JOB': 'Job offer', 'PC.CONDITION': 'Payment as a condition', 'PP.THREAT': 'Threat', 'PP.FAMILY': 'Claimed family member', 'PP.URGENCY': 'Urgency',
+      'PR.PRIZE': 'Prize', 'PR.UNLOCK': 'Account unlock', 'PR.RECRUIT': 'Guaranteed selection', 'PR.JOB': 'Job offer', 'PR.INVEST': 'Investment return', 'PR.LOAN': 'Loan approval', 'PC.CONDITION': 'Payment as a condition', 'PP.THREAT': 'Threat', 'PP.FAMILY': 'Claimed family member', 'PP.URGENCY': 'Urgency',
       'PP.AUTHORITY': 'Claimed support or authority', 'C.NEGATION': 'Negation', 'C.REPORTED': 'Reported speech', 'C.EDUCATIONAL': 'Educational context',
     },
     amountHidden: '(amount on the page; the value is not shown)',
@@ -465,7 +468,7 @@ const EN: Messages = {
       medium: 'Action risk: medium. Contacting a fake support line can lead to requests for money, codes or access.',
     },
     signal: {
-      'SC.CONTACT': 'Contact direction', 'SC.RESPOND': 'Reply, link or form request', 'SC.SURVEY': 'Quiz or questionnaire', 'SA.REMOTE': 'Remote access request', 'SA.INSTALL': 'Install request', 'SX.PHONE': 'Phone number',
+      'SC.CONTACT': 'Contact direction', 'SC.RESPOND': 'Reply, link or form request', 'SC.SURVEY': 'Quiz or questionnaire', 'SA.REMOTE': 'Remote access request', 'SA.INSTALL': 'Install request', 'SA.DISABLE': 'Request to turn off a protection', 'SX.APK': 'App file (APK)', 'SD.DOCUMENT': 'Document lure', 'SX.PHONE': 'Phone number',
       'SX.MOBILE': 'Mobile number', 'SX.MESSENGER': 'Messaging app', 'SX.LINK': 'Link', 'SI.SUPPORT': 'Claimed support', 'SI.BANK': 'Claimed bank',
       'SI.ADMIN': 'Claimed administrator', 'SI.SECURITY': 'Claimed security team', 'SI.OFFICIAL': 'Claimed official or rank', 'SW.ALERT': 'Device alarm', 'ST.THREAT': 'Threat',
       'SU.URGENCY': 'Urgency', 'SW.ACCOUNT': 'Account alarm', 'SP.REWARD': 'Reward', 'SP.WON': 'Unentered prize', 'SO.ILLICIT': 'Illegal access offer', 'SO.PROXY': 'Redirect to a relative or proxy', 'SI.ORG': 'Claimed company or institution', 'SH.UNASSERTED': 'Condition or attribution', 'C.NEGATION': 'Negation', 'C.REPORTED': 'Reported speech', 'C.EDUCATIONAL': 'Educational context',
@@ -664,6 +667,7 @@ const ID: Messages = {
     'yang tidak terbaca. Hasil tanpa temuan bukan jaminan.',
   metaIdle: 'Berjalan hanya di perangkat ini. Tidak ada data yang dikirim.',
   meta: (engine, extractor, ms) => `Engine ${engine} · extractor ${extractor} · ${ms} md · hanya di perangkat ini`,
+  rulePacks: (ids) => `rule pack organisasi: ${ids}`,
   partialQualifier: ' Sebagian halaman tidak dapat diperiksa (lihat di bawah).',
   classification: { manipulative_instruction: 'Manipulatif', suspicious_correlation: 'Mencurigakan', observed_instruction: 'Teramati' },
   findingTitle: { manipulative_instruction: 'Instruksi manipulatif', suspicious_correlation: 'Instruksi mencurigakan', observed_instruction: 'Instruksi teramati' },
@@ -809,7 +813,7 @@ const ID: Messages = {
     signal: {
       'PY.PAY': 'Permintaan pembayaran', 'PA.AMOUNT': 'Nominal', 'PF.FEE': 'Biaya', 'PF.RELEASE_FEE': 'Biaya pencairan atau buka blokir', 'PD.PERSONAL': 'Rekening pribadi',
       'PD.OFF_PLATFORM': 'Di luar platform', 'PD.GIFT_CARD': 'Kartu hadiah', 'PD.CRYPTO': 'Aset kripto', 'PR.REFUND': 'Refund atau dana tertahan',
-      'PR.PRIZE': 'Hadiah', 'PR.UNLOCK': 'Pembukaan akun', 'PR.RECRUIT': 'Jaminan lulus seleksi', 'PR.JOB': 'Tawaran kerja', 'PC.CONDITION': 'Pembayaran sebagai syarat', 'PP.THREAT': 'Ancaman', 'PP.FAMILY': 'Mengaku keluarga', 'PP.URGENCY': 'Desakan',
+      'PR.PRIZE': 'Hadiah', 'PR.UNLOCK': 'Pembukaan akun', 'PR.RECRUIT': 'Jaminan lulus seleksi', 'PR.JOB': 'Tawaran kerja', 'PR.INVEST': 'Imbal hasil investasi', 'PR.LOAN': 'Pencairan pinjaman', 'PC.CONDITION': 'Pembayaran sebagai syarat', 'PP.THREAT': 'Ancaman', 'PP.FAMILY': 'Mengaku keluarga', 'PP.URGENCY': 'Desakan',
       'PP.AUTHORITY': 'Mengaku petugas atau otoritas', 'C.NEGATION': 'Negasi', 'C.REPORTED': 'Kalimat dilaporkan', 'C.EDUCATIONAL': 'Konteks edukasi',
     },
     amountHidden: '(nominal di halaman; nilainya tidak ditampilkan)',
@@ -853,7 +857,7 @@ const ID: Messages = {
       medium: 'Risiko tindakan: sedang. Menghubungi layanan palsu dapat berujung pada permintaan uang, kode, atau akses.',
     },
     signal: {
-      'SC.CONTACT': 'Arahan menghubungi', 'SC.RESPOND': 'Permintaan balasan, tautan, atau formulir', 'SC.SURVEY': 'Kuis atau kuesioner', 'SA.REMOTE': 'Permintaan akses jarak jauh', 'SA.INSTALL': 'Permintaan instalasi', 'SX.PHONE': 'Nomor telepon',
+      'SC.CONTACT': 'Arahan menghubungi', 'SC.RESPOND': 'Permintaan balasan, tautan, atau formulir', 'SC.SURVEY': 'Kuis atau kuesioner', 'SA.REMOTE': 'Permintaan akses jarak jauh', 'SA.INSTALL': 'Permintaan instalasi', 'SA.DISABLE': 'Permintaan mematikan perlindungan', 'SX.APK': 'File aplikasi (APK)', 'SD.DOCUMENT': 'Umpan dokumen', 'SX.PHONE': 'Nomor telepon',
       'SX.MOBILE': 'Nomor ponsel', 'SX.MESSENGER': 'Aplikasi pesan', 'SX.LINK': 'Tautan', 'SI.SUPPORT': 'Mengaku petugas', 'SI.BANK': 'Mengaku pihak bank',
       'SI.ADMIN': 'Mengaku admin', 'SI.SECURITY': 'Mengaku tim keamanan', 'SI.OFFICIAL': 'Mengaku pejabat atau berpangkat', 'SW.ALERT': 'Alarm perangkat', 'ST.THREAT': 'Ancaman',
       'SU.URGENCY': 'Desakan', 'SW.ACCOUNT': 'Alarm akun', 'SP.REWARD': 'Hadiah', 'SP.WON': 'Hadiah tanpa ikut', 'SO.ILLICIT': 'Tawaran akses ilegal', 'SO.PROXY': 'Dialihkan ke kerabat atau perantara', 'SI.ORG': 'Mengaku perusahaan atau instansi', 'SH.UNASSERTED': 'Pengandaian atau kutipan', 'C.NEGATION': 'Negasi', 'C.REPORTED': 'Kalimat dilaporkan', 'C.EDUCATIONAL': 'Konteks edukasi',

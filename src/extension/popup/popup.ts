@@ -10,6 +10,8 @@ import { autoEnabled, disableAuto, enableAuto, MANAGED } from '../auto/auto.js';
 import { aggregate, CATEGORIES, type Category, type Dashboard, type FindingGroup, type FindingRef } from './aggregate.js';
 import { detectLang, formatCount, MESSAGES, type HighlightKey, type Lang, type Messages } from './i18n.js';
 import { plainItems } from './plain.js';
+import { loadRulePacks } from '../rulepack/load.js';
+import type { RulePack } from '../rulepack/pack.js';
 import { parseHighlightResult, parseScanReport } from './validate.js';
 
 declare const __VT_TEST__: boolean;
@@ -37,11 +39,13 @@ interface State {
   modeNote: 'denied' | 'failed' | null;
   /** Whether the technical details under the plain view are open (D-107). */
   techOpen: boolean;
+  /** Verified organization rule packs (D-109); empty outside the managed and TEST builds. */
+  packs: RulePack[];
 }
 
 const state: State = {
   lang: detectLang(typeof chrome !== 'undefined' && chrome.i18n ? chrome.i18n.getUILanguage() : navigator.language),
-  phase: 'idle', tab: null, urlClass: 'unknown', report: null, error: null, scannedOnce: false, totalMs: 0, highlights: new Map(), auto: false, modeNote: null, techOpen: false,
+  phase: 'idle', tab: null, urlClass: 'unknown', report: null, error: null, scannedOnce: false, totalMs: 0, highlights: new Map(), auto: false, modeNote: null, techOpen: false, packs: [],
 };
 
 const t = (): Messages => MESSAGES[state.lang];
@@ -396,7 +400,7 @@ function render(): void {
   $('limits-summary').textContent = m.limitsSummary;
   $('limits').textContent = m.limitsText;
   $('meta').textContent = state.report && state.phase === 'done'
-    ? m.meta(engineLabel(state.report), state.report.extractorVersion, state.totalMs)
+    ? m.meta(engineLabel(state.report), state.report.extractorVersion, state.totalMs) + (state.packs.length > 0 ? ` · ${m.rulePacks(state.packs.map((p) => p.id).join(', '))}` : '')
     : m.metaIdle;
   const result = $('result');
   if (state.error) {
@@ -459,13 +463,14 @@ async function readImages(): Promise<void> {
     }
     image.note = m().imageText.analyzing;
     renderImage();
-    const report = parseScanReport(await runImageScan(tab.id, lines));
+    const report = parseScanReport(await runImageScan(tab.id, lines, state.packs));
     if (!report) throw new Error('report');
     Object.assign(image, { phase: 'done', report, note: report.counts.blocks > 0 ? m().imageText.done(report.counts.blocks) : m().imageText.nothing });
   } catch {
     Object.assign(image, { phase: 'error', note: m().imageText.failed, report: null });
   } finally {
-    if (image.phase === 'running') image.phase = 'error';
+    // The awaits above can leave the phase unchanged on an unexpected path; never leave the panel spinning.
+    if ((image.phase as string) === 'running') image.phase = 'error';
     renderImage();
   }
 }
@@ -512,7 +517,7 @@ async function scan(): Promise<void> {
   document.body.dataset.injections = String(Number(document.body.dataset.injections ?? '0') + 1);
   const t0 = performance.now();
   try {
-    const call = await runScan(tab.id);
+    const call = await runScan(tab.id, state.packs);
     const report = parseScanReport(call.raw);
     if (!report) {
       Object.assign(state, { phase: 'error', error: 'badReport' });
@@ -573,7 +578,11 @@ async function main(): Promise<void> {
   $('mode-toggle').addEventListener('click', () => void toggleMode());
   if (await isTabView()) document.documentElement.classList.add('fluid');
   state.auto = await autoEnabled();
+  // Resolve the tab first: the popup describes the page the user opened it on, whatever the pack load costs.
+  const packs = loadRulePacks();
   state.tab = await getTargetTab().catch(() => null);
+  state.packs = await packs;
+  document.body.dataset.rulepacks = state.packs.map((p) => p.id).join(' ');
   state.urlClass = classifyUrl(state.tab?.url);
   if (!state.tab) Object.assign(state, { phase: 'error', error: 'noPage' });
   // Chrome withholds the URL of pages an extension may not access (chrome://, other extensions, the Web Store).

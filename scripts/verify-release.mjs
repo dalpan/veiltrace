@@ -9,6 +9,7 @@ import { readZip } from './lib/zip.mjs';
 
 /** The only third-party code a release may ship (D-105): the OCR engine and its Indonesian and English models. */
 const ALLOWED_THIRD_PARTY = ['tessdata-eng-4.0.0_best_int@1.0.0:Apache-2.0', 'tessdata-ind-4.0.0_best_int@1.0.0:Apache-2.0', 'tesseract.js-core@7.0.0:Apache-2.0'];
+const TEST_RULEPACK_KEY = JSON.parse(readFileSync(new URL('../tests/fixtures/rulepack/test-only-key.json', import.meta.url), 'utf8')).publicKey;
 
 const sha256 = (b) => createHash('sha256').update(b).digest('hex');
 
@@ -91,6 +92,8 @@ export function verifyRelease(dir) {
   for (const [path, data] of entries) {
     const text = data.toString('utf8');
     for (const marker of ['Mozilla Public License', 'lightningcss', 'node_modules']) if (text.includes(marker)) fail(`${path} contains "${marker}"`);
+    // D-109: the test-only rule pack key is trusted by the TEST build alone.
+    if (text.includes(TEST_RULEPACK_KEY)) fail(`${path} trusts the test-only rule pack key`);
   }
   for (const [path, data] of entries) {
     if (!path.endsWith('.js')) continue;

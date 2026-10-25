@@ -1,0 +1,27 @@
+{
+  "format": "veiltrace-rulepack",
+  "v": 1,
+  "id": "example-unit-2026-11",
+  "issuer": "Example security team",
+  "issued": "2026-11-01",
+  "entries": [
+    {
+      "id": "bansos-kilat",
+      "detector": "pay",
+      "signal": "PR.PRIZE",
+      "lang": "id",
+      "strength": "weak",
+      "pattern": "bansos\\s+kilat",
+      "examples": ["program Bansos Kilat"]
+    },
+    {
+      "id": "petugas-satuan",
+      "detector": "sup",
+      "signal": "SI.OFFICIAL",
+      "lang": "id",
+      "strength": "weak",
+      "pattern": "petugas\\s+satuan\\s+siber",
+      "examples": ["petugas satuan siber"]
+    }
+  ]
+}

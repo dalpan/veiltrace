@@ -389,3 +389,17 @@ The category is "Penangkalan", but VeilTrace only reported. With automatic scann
 4. **A secret field** (password, one-time code, PIN, card security code, judged by attributes only, never the value) focused on a page with credential, payment or support findings.
 
 The warnings are the extension's own text (`textContent`), in a shadow root that is closed in released builds (open only in the TEST build for e2e) and styled through CSSOM. The extractor skips `[data-veiltrace-guard]` (extractor 0.3.1). There is no new permission, no messaging and no network. D-004 now reads: never claim complete, guaranteed or real-time protection; automatic scanning is described exactly as badge plus these four warnings (CLAUDE.md updated). E2E: `tests/e2e/guard.test.ts`, which also checks that an ordinary page, including a reader copying a visible command, gets no warning.
+
+### D-109 · Accepted (owner request) · 2026-10-25 · Signed organization rule packs (managed build)
+"Patterns are data" was true in the source but not for an organization: new patterns needed a new build. A security team can now publish a **rule pack**, which is extra lexicon entries for the credential, payment and support detectors. The pack is signed with the organization's Ed25519 key and delivered by browser policy (`rulePacks`, `chrome.storage.managed`).
+- **Trust:** public keys are built into the managed build (`deploy/rulepack-keys.json`), and verification uses WebCrypto (`crypto.subtle.verify` with Ed25519), offline. The production and Firefox builds have no keys and no `storage` permission, so packs are ignored there. The managed build adds `storage` only to read the policy, plus `managed-schema.json`. The TEST build trusts a test-only key (`tests/fixtures/rulepack/test-only-key.json`, labelled TEST ONLY) and also reads `chrome.storage.local` for e2e.
+- **Limits of a pack** (`src/extension/rulepack/pack.ts`):
+  - detectors `cred`, `pay` and `sup` only, never the ClickFix engine;
+  - signals of the existing types only, never context cues;
+  - patterns of at most 300 characters, no nested quantifiers, and each entry must match its own examples;
+  - at most 500 entries per pack and 20 packs.
+
+  Packs add signals; they never replace or remove built-in entries, and without a pack every result is unchanged. Core detectors take an optional `extra` lexicon, and the core stays pure.
+- **Flow:** the popup loads and verifies packs and passes them to the tab with `executeScript` arguments. The tab validates them again and compiles them. `auto.js` loads them itself. Evidence entry ids carry the pack id, and the popup footer names the packs in use.
+- **Tooling:** `scripts/rulepack.mjs` (keygen, sign, verify). The procedure is in DEPLOYMENT.md §9.
+- **Tests:** `tests/rulepack.test.ts` covers validation, signatures and the effect on the detectors. `tests/e2e/rulepack.test.ts` uses the real extension: a signed pack flags a page that was not flagged, and a changed pack is ignored.
