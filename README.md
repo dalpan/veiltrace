@@ -62,7 +62,7 @@ Each finding keeps **classification** (manipulative / suspicious / observed), **
 
 | Surface | Status | How |
 |---|---|---|
-| **Browser extension: Chromium browsers** (Chrome, Edge, and the same build for Brave, Opera, Vivaldi) | Working; automated tests run in Chromium and Microsoft Edge | [Install](#install) · scan on click, or opt-in automatic scanning with a toolbar badge; **read text in images** on the visible screen (on-device OCR) |
+| **Browser extension: Chromium browsers** (Chrome, Edge, and the same build for Brave, Opera, Vivaldi) | Working; automated tests run in Chromium and Microsoft Edge | [Install](#install) · scan on click, or opt-in automatic scanning with a toolbar badge and **on-page warnings at risky moments** (a manipulative page, a command copied to the clipboard, an `.apk` download, a secret field on a flagged page); **read text in images** on the visible screen (on-device OCR) |
 | **Browser extension: Firefox** (desktop and Android ≥ 128) | Working, tested on Android; passes Mozilla's add-on linter (`npm run lint:firefox`) | `npm run build:firefox` → `dist/extension-firefox` |
 | **"Check a message" web app** (any phone) | Live | **https://veiltrace.click/app/**: paste a message or **check a screenshot** (on-device OCR), or share either to the app on Android; works offline once opened |
 | **WhatsApp Web** | Working, tested by the team | open a chat and scan: messages are read as content from someone else (for example an OTP to be forwarded is flagged) |

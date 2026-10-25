@@ -1,9 +1,11 @@
 // auto.js: registered together with content.js only while automatic scanning is on (D-081). Runs in the tab's isolated
 // world and calls the same scan() the popup uses, when the page has loaded and again when it changes (debounced and
-// capped), then reports the page-level summary for the toolbar badge. Nothing else leaves the tab.
+// capped), then reports the page-level summary for the toolbar badge, and drives the on-page guard (D-108). Nothing else
+// leaves the tab.
 import type { ScanReport } from '../content/report.js';
 import { summarize } from './auto.js';
 import { sendAutoSummary } from './channel.js';
+import { createGuard, GUARD_ATTR } from '../guard/guard.js';
 
 declare const VeiltraceContent: { scan: (options: { keepHighlight: boolean }) => ScanReport };
 
@@ -21,6 +23,8 @@ let lastScan = -Infinity;
 let timer: ReturnType<typeof setTimeout> | undefined;
 let pendingSince: number | undefined;
 let lastSent = '';
+/** On-page warnings at the moment of action (D-108); only here, with automatic scanning on. */
+const guard = window.top === window ? createGuard() : null;
 
 function run(): void {
   timer = undefined;
@@ -35,7 +39,9 @@ function run(): void {
   lastScan = performance.now();
   let summary;
   try {
-    summary = summarize(VeiltraceContent.scan({ keepHighlight: true }));
+    const report = VeiltraceContent.scan({ keepHighlight: true });
+    guard?.onReport(report);
+    summary = summarize(report);
   } catch {
     return;
   }
@@ -55,7 +61,7 @@ function schedule(): void {
 }
 
 /** The highlight overlay is the extension's own element; its appearance and removal must not trigger a rescan. */
-const ownNode = (n: Node): boolean => n instanceof Element && n.hasAttribute('data-veiltrace-highlight');
+const ownNode = (n: Node): boolean => n instanceof Element && (n.hasAttribute('data-veiltrace-highlight') || n.hasAttribute(GUARD_ATTR));
 const observer = new MutationObserver((records) => {
   if (records.every((r) => ownNode(r.target) || [...r.addedNodes, ...r.removedNodes].some(ownNode))) return;
   schedule();

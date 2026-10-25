@@ -4,7 +4,7 @@
 import type { Block, BlockContext, CopyTrigger, FieldKind, FormDestination, FormField, FormInfo, HiddenCopyCandidate, PageSnapshot, PartialReason } from '../core/types.js';
 
 /** 0.2.0-m5 adds structural form fields (M5.1); 0.3.0 marks incoming web-chat messages as user content (D-088). */
-export const EXTRACTOR_VERSION = '0.3.0';
+export const EXTRACTOR_VERSION = '0.3.1';
 
 export interface ExtractOptions {
   maxNodes?: number;
@@ -437,6 +437,8 @@ export function extractSnapshot(doc: Document, options: ExtractOptions = {}): Ex
     if (node.nodeType !== 1) return;
     const el = node as Element;
     if (SKIP_TAGS.has(el.tagName)) return;
+    // The extension's own on-page warnings (D-108) are not page content.
+    if (el.hasAttribute('data-veiltrace-guard')) return;
 
     const style = inh.win.getComputedStyle(el);
     const notRendered = style.display === 'none';

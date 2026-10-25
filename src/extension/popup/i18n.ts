@@ -150,6 +150,21 @@ export interface Messages {
     doLabel: string;
     technical: string;
   };
+  /** On-page warnings at the moment of action, with automatic scanning on (D-108). */
+  guard: {
+    brand: string;
+    dismiss: string;
+    cancel: string;
+    proceed: string;
+    pageTitle: string;
+    clipboardTitle: string;
+    clipboardText: string;
+    clipboardReplacement: string;
+    apkTitle: string;
+    apkText: string;
+    secretTitle: string;
+    secretText: string;
+  };
   /** Text in images on the visible screen, read on the device (D-105). */
   imageText: {
     title: string;
@@ -491,6 +506,20 @@ const EN: Messages = {
     ocrEmpty: 'No text could be read from this image. Try a sharper screenshot, or paste the text.',
     ocrFailed: 'The image could not be read on this device. Paste the text instead.',
   },
+  guard: {
+    brand: 'VEILTRACE · WARNING',
+    dismiss: 'I understand',
+    cancel: 'Cancel download',
+    proceed: 'Download anyway',
+    pageTitle: 'This page shows signs of manipulation',
+    clipboardTitle: 'Do not paste this',
+    clipboardText: 'This page tried to put a command on your clipboard. VeilTrace replaced it with this warning. Never paste anything from a web page into Run (Win+R), a terminal or PowerShell: real verification never asks for it.',
+    clipboardReplacement: 'VeilTrace blocked a command this web page tried to copy. Do not run commands from web pages.',
+    apkTitle: 'Android app file (.apk)',
+    apkText: 'Apps from outside the official store, sent as invitations, parcel photos, bills or "support" apps, can read your text messages and take over banking apps. Download only if you know exactly where it comes from.',
+    secretTitle: 'Careful before you type a code or password',
+    secretText: 'This page asks for a code, password or PIN and shows signs of manipulation. Type secrets only on a site you opened yourself, and never give them to someone who contacted you.',
+  },
   plain: {
     title: { manipulative_instruction: 'Stop: this content shows signs of manipulation', suspicious_correlation: 'Be careful: this content shows signs often seen in scams' },
     ask: {
@@ -549,7 +578,7 @@ const EN: Messages = {
     title: 'Scan mode',
     modeLabel: { manual: 'MANUAL', automatic: 'AUTO' },
     manualText: 'Manual: VeilTrace reads a page only when you click Scan page.',
-    automaticText: 'Automatic: VeilTrace checks pages as they load and change, and marks the toolbar icon with "!" when it finds manipulative content.',
+    automaticText: 'Automatic: VeilTrace checks pages as they load and change, marks the toolbar icon with "!" when it finds manipulative content, and warns on the page at risky moments: a manipulative page, a command copied to your clipboard, an Android app (.apk) download, a code or password field on a flagged page.',
     consent: 'Your browser will ask you to let VeilTrace read all websites. Pages are still analyzed only on this device: nothing is sent, stored or shared, and form values are never read. It applies to pages opened or reloaded afterwards, and you can turn it off here or in Chrome settings at any time.',
     managedText: 'Automatic scanning is turned on by your organization. Pages are still analyzed only on this device; nothing is reported to your organization or anyone else.',
     enable: 'Turn on automatic scanning',
@@ -865,6 +894,20 @@ const ID: Messages = {
     ocrEmpty: 'Tidak ada teks yang terbaca dari gambar ini. Coba screenshot yang lebih jelas, atau tempel teksnya.',
     ocrFailed: 'Gambar tidak bisa dibaca di perangkat ini. Tempel teksnya saja.',
   },
+  guard: {
+    brand: 'VEILTRACE · PERINGATAN',
+    dismiss: 'Saya mengerti',
+    cancel: 'Batalkan unduhan',
+    proceed: 'Tetap unduh',
+    pageTitle: 'Halaman ini menunjukkan tanda manipulasi',
+    clipboardTitle: 'Jangan tempel ini',
+    clipboardText: 'Halaman ini mencoba menaruh perintah di clipboard Anda. VeilTrace menggantinya dengan peringatan ini. Jangan pernah menempelkan apa pun dari halaman web ke Run (Win+R), terminal, atau PowerShell: verifikasi asli tidak pernah memintanya.',
+    clipboardReplacement: 'VeilTrace memblokir perintah yang coba disalin halaman web ini. Jangan jalankan perintah dari halaman web.',
+    apkTitle: 'File aplikasi Android (.apk)',
+    apkText: 'Aplikasi dari luar toko resmi, yang dikirim sebagai undangan, foto paket, tagihan, atau aplikasi "bantuan", bisa membaca SMS dan mengambil alih aplikasi bank. Unduh hanya jika Anda tahu pasti asalnya.',
+    secretTitle: 'Hati-hati sebelum mengetik kode atau kata sandi',
+    secretText: 'Halaman ini meminta kode, kata sandi, atau PIN dan menunjukkan tanda manipulasi. Ketik rahasia hanya di situs yang Anda buka sendiri, dan jangan pernah memberikannya kepada orang yang menghubungi Anda.',
+  },
   plain: {
     title: { manipulative_instruction: 'Berhenti dulu: konten ini menunjukkan tanda manipulasi', suspicious_correlation: 'Hati-hati: konten ini memiliki tanda yang sering muncul di penipuan' },
     ask: {
@@ -923,7 +966,7 @@ const ID: Messages = {
     title: 'Mode pemindaian',
     modeLabel: { manual: 'MANUAL', automatic: 'OTOMATIS' },
     manualText: 'Manual: VeilTrace membaca halaman hanya saat Anda menekan Pindai halaman.',
-    automaticText: 'Otomatis: VeilTrace memeriksa halaman saat dimuat dan berubah, dan memberi tanda "!" pada ikon toolbar jika menemukan konten manipulatif.',
+    automaticText: 'Otomatis: VeilTrace memeriksa halaman saat dimuat dan berubah, memberi tanda "!" pada ikon toolbar jika menemukan konten manipulatif, dan memperingatkan langsung di halaman pada momen berisiko: halaman manipulatif, perintah yang disalin ke clipboard, unduhan aplikasi Android (.apk), serta kolom kode atau kata sandi di halaman yang ditandai.',
     consent: 'Browser akan meminta izin agar VeilTrace dapat membaca semua situs. Halaman tetap dianalisis hanya di perangkat ini: tidak ada yang dikirim, disimpan, atau dibagikan, dan isian formulir tidak pernah dibaca. Berlaku untuk halaman yang dibuka atau dimuat ulang setelahnya, dan dapat dimatikan di sini atau di pengaturan Chrome kapan saja.',
     managedText: 'Pemindaian otomatis diaktifkan oleh organisasi Anda. Halaman tetap dianalisis hanya di perangkat ini; tidak ada yang dilaporkan ke organisasi Anda atau pihak lain.',
     enable: 'Aktifkan pemindaian otomatis',

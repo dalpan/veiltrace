@@ -14,6 +14,11 @@ Preparing the video showed that text on a coloured panel in a white page was not
 
 ---
 
+## 2026-10-25 · Plain-language result and on-page warnings (D-107, D-108)
+After an honest review (the product reported but did not intervene, and spoke to specialists): the popup and the app open with a plain card (what is asked, why it is a warning sign, what to do), with the dashboard under Technical details. With automatic scanning on, a guard warns on the page at four moments: manipulative page, command copied to the clipboard (replaced), `.apk` download link (held), secret field on a flagged page. Extractor 0.3.1 skips the guard element. Tests: all unit and e2e pass (545), guard and dashboard suites also in Edge, release verified, Firefox linter 0 errors. **Next:** signed rule packs for organizations (owner request, item 3).
+
+---
+
 ## 2026-10-23 · Version 0.8.0 and documentation refresh
 Extension version 0.8.0 (OCR, new detector classes since 0.7.0). PRODUCT_SPEC status table, README badge and release notes brought up to date; submission materials (local) refreshed to match. **Next:** owner tries "Read text in images" from the toolbar and a screenshot in the app on a phone; publishes the 0.8.0 draft release when ready.
 
