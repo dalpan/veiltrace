@@ -4,6 +4,7 @@
 import type { ScanReport } from '../extension/content/report.js';
 import { aggregate, type Category } from '../extension/popup/aggregate.js';
 import { formatCount, MESSAGES, type Lang, type Messages } from '../extension/popup/i18n.js';
+import { plainItems } from '../extension/popup/plain.js';
 import { checkMessage, isLinkOnly, MAX_MESSAGE_CHARS, type MessageSource } from './message.js';
 import type { OcrApi } from './ocr.js';
 
@@ -115,12 +116,17 @@ function renderResult(r: ScanReport): Child[] {
   return [
     h('div', { class: `card threat tone-${head.tone}`, 'data-verdict': d.highest },
       h('div', { class: 'panel-label' }, m.pwa.assessment), h('h3', {}, head.title), h('p', {}, m.pwa.headlineDetail[d.highest]),
-      h('div', { class: 'cats' }, `${m.dash.statActionable}: ${formatCount(d.actionable, state.lang)} · ${m.dash.statCategories}: ${d.affected.length > 0 ? d.affected.map((c) => m.dash.categoryCode[c]).join(' · ') : m.dash.noCategories}`)),
-    h('div', { class: 'card advice', 'data-advice': advice.map(([k]) => k).join(' ') || 'none' }, h('div', { class: 'panel-label' }, m.dash.adviceTitle),
+      // Plain view (D-107): what the message asks and why that is a warning sign; the finding cards are technical details.
+      ...plainItems(r, d, m).map((it) => h('div', { class: 'plain-item', 'data-category': it.category },
+        h('div', { class: 'plain-label' }, m.plain.askLabel), h('p', { class: 'plain-ask' }, it.ask),
+        it.why && h('div', { class: 'plain-label' }, m.plain.whyLabel), it.why && h('p', {}, it.why)))),
+    h('div', { class: 'card advice', 'data-advice': advice.map(([k]) => k).join(' ') || 'none' }, h('div', { class: 'panel-label' }, d.actionable > 0 ? m.plain.doLabel : m.dash.adviceTitle),
       advice.length > 0 ? h('ul', {}, ...advice.map(([k, x]) => h('li', { 'data-advice': k }, x))) : h('p', {}, m.dash.adviceNone)),
     h('div', { class: 'card' }, h('div', { class: 'panel-label' }, m.pwa.yourMessage), markedMessage(state.text.slice(0, MAX_MESSAGE_CHARS), all.flatMap((x) => x.evidence.map(([, e]) => e)))),
-    ...alerting.map(card),
-    observed.length > 0 && h('details', { class: 'observed' }, h('summary', {}, m.dash.observedTitle(observed.length)), ...observed.map(card)),
+    all.length > 0 && h('details', { class: 'tech' }, h('summary', {}, m.plain.technical),
+      h('div', { class: 'cats' }, `${m.dash.statActionable}: ${formatCount(d.actionable, state.lang)} · ${m.dash.statCategories}: ${d.affected.length > 0 ? d.affected.map((c) => m.dash.categoryCode[c]).join(' · ') : m.dash.noCategories}`),
+      ...alerting.map(card),
+      observed.length > 0 && h('details', { class: 'observed' }, h('summary', {}, m.dash.observedTitle(observed.length)), ...observed.map(card))),
   ];
 }
 

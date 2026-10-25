@@ -4,7 +4,7 @@ import type { Page } from 'playwright';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { perfPages } from '../../src/eval/perfpages.js';
 import { MULTI_THREAT_BODY } from '../fixtures/dashboard-page.js';
-import { html, launchExtension, scanUrl, shot, type Loaded } from './helpers.js';
+import { html, launchExtension, openPopup, openTarget, scanUrl, shot, tabIdOf, type Loaded } from './helpers.js';
 
 let en: Loaded;
 let id: Loaded;
@@ -12,7 +12,7 @@ beforeAll(async () => { [en, id] = await Promise.all([launchExtension('test', 'e
 afterAll(async () => { await Promise.all([en.context.close(), id.context.close()]); });
 
 const RANK = { manipulative_instruction: 2, suspicious_correlation: 1, observed_instruction: 0 } as Record<string, number>;
-const cards = (p: Page) => p.$$eval('#result > article.finding, #result > .finding-group > article.finding', (els) => els.map((e) => ({
+const cards = (p: Page) => p.$$eval('#result > details.tech > article.finding, #result > details.tech > .finding-group > article.finding', (els) => els.map((e) => ({
   category: e.getAttribute('data-category'), cls: e.getAttribute('data-classification'), risk: e.getAttribute('data-risk'), fid: e.getAttribute('data-finding-id'),
 })));
 /** Page-text snippets only: placeholders for withheld amounts and numbers are UI text and are translated. */
@@ -24,6 +24,10 @@ describe('unified threat dashboard', () => {
     en.pages.set('https://multi.test/', html(MULTI_THREAT_BODY));
     const { popup } = await scanUrl(en, 'https://multi.test/');
     expect(await popup.getAttribute('.threat-summary', 'data-verdict')).toBe('manipulative_instruction');
+    // Plain view first (D-107): what is asked, why it is a warning sign, what to do; one item per affected category.
+    expect(await popup.getAttribute('.plain', 'data-verdict')).toBe('manipulative_instruction');
+    expect(await popup.$$eval('.plain-item', (els) => els.map((e) => e.getAttribute('data-category')))).toHaveLength(3);
+    expect(await popup.textContent('.plain h2')).toBe('Stop: this content shows signs of manipulation');
     expect(await popup.textContent('.threat-summary h2')).toBe('Manipulative content detected');
     expect(await popup.textContent('.stat[data-stat="actionable"] dd')).toBe('4');
     expect(await popup.textContent('.stat[data-stat="categories"] dd')).toBe('CMD · CRED · PAY · SUP');
@@ -158,5 +162,22 @@ describe('unified threat dashboard', () => {
       expect(await noHorizontalOverflow(popup), `width ${width}`).toBe(true);
       expect(await popup.$$eval('.snippet', (els) => els.every((e) => e.getBoundingClientRect().right <= window.innerWidth))).toBe(true);
     }
+  });
+});
+
+describe('plain view (D-107)', () => {
+  it('opens with the plain card visible and the technical dashboard collapsed, in Indonesian too', async () => {
+    id.pages.set('https://plain-id.test/', html(MULTI_THREAT_BODY));
+    const target = await openTarget(id, 'https://plain-id.test/');
+    const popup = await openPopup(id, await tabIdOf(id, target));
+    await popup.click('#scan');
+    await popup.waitForSelector('body[data-state="done"]');
+    expect(await popup.isVisible('.plain')).toBe(true);
+    expect(await popup.textContent('.plain h2')).toBe('Berhenti dulu: konten ini menunjukkan tanda manipulasi');
+    expect(await popup.$$eval('.plain-label', (els) => els.slice(0, 3).map((e) => e.textContent))).toEqual(['Yang diminta dari Anda', 'Kenapa ini tanda bahaya', 'Yang sebaiknya dilakukan']);
+    expect(await popup.getAttribute('details.tech', 'open')).toBeNull();
+    expect(await popup.isVisible('.threat-summary')).toBe(false);
+    await popup.click('details.tech > summary');
+    expect(await popup.isVisible('.threat-summary')).toBe(true);
   });
 });

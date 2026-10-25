@@ -141,6 +141,15 @@ export interface Messages {
     ocrEmpty: string;
     ocrFailed: string;
   };
+  /** Plain-language result for non-technical readers (D-107). */
+  plain: {
+    title: Record<'manipulative_instruction' | 'suspicious_correlation', string>;
+    ask: Record<'command' | 'credential' | 'payment' | 'support', string>;
+    askLabel: string;
+    whyLabel: string;
+    doLabel: string;
+    technical: string;
+  };
   /** Text in images on the visible screen, read on the device (D-105). */
   imageText: {
     title: string;
@@ -481,6 +490,19 @@ const EN: Messages = {
     ocrDone: 'Text read from the image. Compare it with the image and correct it if needed, then check again.',
     ocrEmpty: 'No text could be read from this image. Try a sharper screenshot, or paste the text.',
     ocrFailed: 'The image could not be read on this device. Paste the text instead.',
+  },
+  plain: {
+    title: { manipulative_instruction: 'Stop: this content shows signs of manipulation', suspicious_correlation: 'Be careful: this content shows signs often seen in scams' },
+    ask: {
+      command: 'Run a command on your computer (for example through Win+R or a terminal).',
+      credential: 'Give away a code, a password or a recovery phrase.',
+      payment: 'Pay or transfer money.',
+      support: 'Contact, install for, or follow someone who claims to be official.',
+    },
+    askLabel: 'What it asks you to do',
+    whyLabel: 'Why this is a warning sign',
+    doLabel: 'What to do',
+    technical: 'Technical details',
   },
   imageText: {
     title: 'Text in images · on this device',
@@ -842,6 +864,19 @@ const ID: Messages = {
     ocrDone: 'Teks sudah dibaca dari gambar. Cocokkan dengan gambarnya dan perbaiki bila perlu, lalu periksa lagi.',
     ocrEmpty: 'Tidak ada teks yang terbaca dari gambar ini. Coba screenshot yang lebih jelas, atau tempel teksnya.',
     ocrFailed: 'Gambar tidak bisa dibaca di perangkat ini. Tempel teksnya saja.',
+  },
+  plain: {
+    title: { manipulative_instruction: 'Berhenti dulu: konten ini menunjukkan tanda manipulasi', suspicious_correlation: 'Hati-hati: konten ini memiliki tanda yang sering muncul di penipuan' },
+    ask: {
+      command: 'Menjalankan perintah di komputer Anda (misalnya lewat Win+R atau terminal).',
+      credential: 'Memberikan kode, kata sandi, atau frasa pemulihan.',
+      payment: 'Membayar atau mentransfer uang.',
+      support: 'Menghubungi, menginstal sesuatu untuk, atau mengikuti pihak yang mengaku resmi.',
+    },
+    askLabel: 'Yang diminta dari Anda',
+    whyLabel: 'Kenapa ini tanda bahaya',
+    doLabel: 'Yang sebaiknya dilakukan',
+    technical: 'Detail teknis',
   },
   imageText: {
     title: 'Teks di dalam gambar · di perangkat ini',

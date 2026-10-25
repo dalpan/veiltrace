@@ -113,6 +113,8 @@ export async function openPopup(l: Loaded, tabId: number): Promise<Page> {
 export async function scan(popup: Page): Promise<string> {
   await popup.click('#scan');
   await popup.waitForSelector('body[data-state="done"], body[data-state="error"]');
+  // The dashboard sits under "Technical details" (D-107); the tests inspect it, so open it as a user would.
+  if (await popup.$('details.tech:not([open]) > summary')) await popup.click('details.tech > summary');
   return (await popup.getAttribute('body', 'data-state')) as string;
 }
 

@@ -9,6 +9,7 @@ import { renderAi, resetAi, setupAi } from './ai-panel.js';
 import { autoEnabled, disableAuto, enableAuto, MANAGED } from '../auto/auto.js';
 import { aggregate, CATEGORIES, type Category, type Dashboard, type FindingGroup, type FindingRef } from './aggregate.js';
 import { detectLang, formatCount, MESSAGES, type HighlightKey, type Lang, type Messages } from './i18n.js';
+import { plainItems } from './plain.js';
 import { parseHighlightResult, parseScanReport } from './validate.js';
 
 declare const __VT_TEST__: boolean;
@@ -34,11 +35,13 @@ interface State {
   /** Opt-in automatic scanning (D-081) and the last outcome of a mode change. */
   auto: boolean;
   modeNote: 'denied' | 'failed' | null;
+  /** Whether the technical details under the plain view are open (D-107). */
+  techOpen: boolean;
 }
 
 const state: State = {
   lang: detectLang(typeof chrome !== 'undefined' && chrome.i18n ? chrome.i18n.getUILanguage() : navigator.language),
-  phase: 'idle', tab: null, urlClass: 'unknown', report: null, error: null, scannedOnce: false, totalMs: 0, highlights: new Map(), auto: false, modeNote: null,
+  phase: 'idle', tab: null, urlClass: 'unknown', report: null, error: null, scannedOnce: false, totalMs: 0, highlights: new Map(), auto: false, modeNote: null, techOpen: false,
 };
 
 const t = (): Messages => MESSAGES[state.lang];
@@ -310,7 +313,7 @@ function renderReport(r: ScanReport): Child[] {
     + (r.payment.findingsTotal - r.payment.findings.length) + (r.support.findingsTotal - r.support.findings.length);
   const observedCount = d.observed.reduce((n, g) => n + g.members.length, 0);
   const alertCount = d.groups.reduce((n, g) => n + g.members.length, 0);
-  return [
+  const technical: Child[] = [
     renderSummary(r, d),
     renderOverview(d),
     renderCoverage(r),
@@ -320,6 +323,27 @@ function renderReport(r: ScanReport): Child[] {
     observedCount > 0 && h('details', { class: 'observed' }, h('summary', {}, m.dash.observedTitle(observedCount)), ...d.observed.map((g) => renderGroup(r, g, num))),
     hidden > 0 && h('p', { class: 'context', 'data-more': 'findings' }, m.moreFindings(hidden)),
   ];
+  // Plain view first (D-107); the dashboard stays one click away and keeps its state across re-renders.
+  const tech = h('details', { class: 'tech', ...(state.techOpen ? { open: '' } : {}) }, h('summary', {}, m.plain.technical), ...technical);
+  tech.addEventListener('toggle', () => { state.techOpen = (tech as HTMLDetailsElement).open; });
+  return [renderPlain(r, d), tech];
+}
+
+/** The plain-language card (D-107): what the content asks, why that is a warning sign, what to do. */
+function renderPlain(r: ScanReport, d: Dashboard): HTMLElement {
+  const m = t();
+  if (d.highest !== 'manipulative_instruction' && d.highest !== 'suspicious_correlation') {
+    const head = m.dash.headline[d.highest];
+    return h('section', { class: 'card plain tone-neutral', 'data-verdict': d.highest },
+      h('h2', {}, head.title), h('p', {}, head.detail), h('p', { class: 'plain-note' }, m.dash.adviceNone));
+  }
+  const tone = d.highest === 'manipulative_instruction' ? 'danger' : 'warning';
+  return h('section', { class: `card plain tone-${tone}`, 'data-verdict': d.highest },
+    h('h2', {}, m.plain.title[d.highest]),
+    ...plainItems(r, d, m).map((it) => h('div', { class: 'plain-item', 'data-category': it.category },
+      h('p', { class: 'plain-label' }, m.plain.askLabel), h('p', { class: 'plain-ask' }, it.ask),
+      it.why && h('p', { class: 'plain-label' }, m.plain.whyLabel), it.why && h('p', {}, it.why),
+      h('p', { class: 'plain-label' }, m.plain.doLabel), h('p', { class: 'plain-do' }, it.advice))));
 }
 
 function renderError(kind: ErrorKind): HTMLElement {

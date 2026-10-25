@@ -47,3 +47,11 @@ details.observed > summary { cursor: pointer; color: var(--muted); font: 600 13p
 footer { max-width: 720px; margin: 0 auto; padding: 8px 16px 28px; color: var(--muted); font-size: 13px; }
 .meta { font: 11px var(--mono); }
 .brand .logo { flex: none; }
+
+/* Plain view (D-107). */
+.plain-item { margin-top: 12px; }
+.plain-label { font: 600 11px var(--mono); letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
+.plain-ask { font-weight: 600; font-size: 16px; margin: 2px 0 0; }
+.plain-item p { margin: 2px 0 0; }
+details.tech { margin-top: 12px; }
+details.tech > summary { cursor: pointer; padding: 10px 0; color: var(--muted); }

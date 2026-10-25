@@ -51,6 +51,9 @@ describe('Cek Pesan PWA', () => {
     await page.click('#check');
     expect(await page.getAttribute('.threat', 'data-verdict')).toBe('manipulative_instruction');
     expect(await page.textContent('.threat h3')).toBe('Konten manipulatif terdeteksi');
+    // Plain view (D-107): what is asked, in plain words; the finding cards wait under "Detail teknis".
+    expect(await page.textContent('.plain-item[data-category="credential"] .plain-ask')).toBe('Memberikan kode, kata sandi, atau frasa pemulihan.');
+    expect(await page.getAttribute('details.tech', 'open')).toBeNull();
     expect(await page.getAttribute('.advice', 'data-advice')).toBe('credential');
     expect(await page.$$eval('article.finding', (els) => els.map((e) => e.getAttribute('data-category')))).toContain('credential');
     expect(await page.$$eval('.message mark', (els) => els.map((e) => e.textContent))).toEqual(expect.arrayContaining(['kasih liat', 'angka yg barusan masuk ke hp lu']));
